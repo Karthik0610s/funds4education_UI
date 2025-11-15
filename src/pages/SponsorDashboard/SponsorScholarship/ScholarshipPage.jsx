@@ -93,8 +93,8 @@ const ScholarshipPage = () => {
   <>
     <Header variant="scholarship" />
 
-    <div className="scholarship-page">
-      <h2 className="page-title">My Sponsored Scholarships</h2>
+    <div className="scholarship-page mt-5">
+      <h2 className="page-title mt-5">My Sponsored Scholarships</h2>
       <p className="page-subtitle">
         Manage your scholarships and filter them by status or title.
       </p>
