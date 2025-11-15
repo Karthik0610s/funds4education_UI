@@ -5,12 +5,13 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import logo from "../../assests/Logo.png";
 import { routePath as RP } from "../router/routepath";
 import "./header.css";
-
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/slices/authSlice";
 const Header = ({ variant = "public" }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
-
+const dispatch = useDispatch();
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) section.scrollIntoView({ behavior: "smooth" });
@@ -115,8 +116,9 @@ const Header = ({ variant = "public" }) => {
       <header className="header">
         <div className="header-container">
           {/* LOGO */}
-          <div className="header-left" onClick={() => {
-    localStorage.clear(); // or remove specific keys
+          <div className="header-left"   onClick={() => {
+    localStorage.clear();
+    dispatch(logout());  // reset redux
     navigate(RP.home);
   }}>
             <img src={logo} alt="VidyaSetu Logo" className="logo" />
