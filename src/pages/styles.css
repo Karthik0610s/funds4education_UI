@@ -1524,6 +1524,36 @@ padding: 4px 10px;
   text-align: center;
     margin-top: 4%;
 }
+.scholarship-container {
+  
+  margin: auto;
+  padding: 0 20px;
+}
+
+.page-content {
+  padding-left: 0; /* Ensure same alignment */
+}
+
+.scholarship-eligibility-header {
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+.scholarship-eligibility-header h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.scholarship-detail-container {
+  padding-left: 0 !important;  /* Ensures perfect alignment */
+}
+
+.scholarship-view-text ul {
+  padding-left: 20px;
+}
+
+
 
 /* --- Hero Section --- */
 .hero {
