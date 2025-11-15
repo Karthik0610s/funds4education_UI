@@ -167,9 +167,14 @@ export default function SponsorSignUpPage() {
         <input
           type="text"
           value={basicDetails.sponsorName}
-          onChange={(e) =>
-            setBasicDetails({ ...basicDetails, sponsorName: e.target.value })
-          }
+          onChange={(e) => {
+  const value = e.target.value;
+
+  if (/^[A-Za-z\s]*$/.test(value)) {
+    setBasicDetails({ ...basicDetails, sponsorName: value });
+  }
+}}
+
           className={errors.sponsorName ? "input-error" : ""}
           placeholder="Organization / Sponsor Name"
         />
@@ -201,9 +206,16 @@ export default function SponsorSignUpPage() {
         <input
           type="email"
           value={basicDetails.email}
-          onChange={(e) =>
-            setBasicDetails({ ...basicDetails, email: e.target.value })
-          }
+              onChange={(e) => {
+      const value = e.target.value;
+
+      // allow only letters, numbers, @ and . WHILE typing
+      if (/^[A-Za-z0-9@.]*$/.test(value)) {
+        setBasicDetails({ ...basicDetails, email: value });
+      }
+
+}}
+
           className={errors.email ? "input-error" : ""}
           placeholder="Email"
         />

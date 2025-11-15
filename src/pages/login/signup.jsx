@@ -42,7 +42,7 @@ export default function SignUpPage() {
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^[0-9]{0,10}$/;
-  const courseRegex = /^[A-Za-z\s]{1,150}$/;
+  const courseRegex = /^[A-Za-z\s.]{1,150}$/;
   const collegeRegex = /^[A-Za-z\s]{1,250}$/;
   const yearRegex = /^[0-9]{4}$/;
 
@@ -260,13 +260,21 @@ const payload = {
             <div className="row">
               <div className="form-group">
                 <label>Email *</label>
-                <input
-                  type="email"
-                  value={basicDetails.email}
-                  onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
-                  className={errors.email ? "input-error" : ""}
-                  placeholder="Email"
-                />
+<input
+  type="email"
+  value={basicDetails.email}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // allow only letters, numbers, @ and dot while typing
+    if (/^[A-Za-z0-9@.]*$/.test(value)) {
+      setBasicDetails({ ...basicDetails, email: value });
+    }
+  }}
+  className={errors.email ? "input-error" : ""}
+  placeholder="Email"
+/>
+
                 {errors.email && <p className="error-text">{errors.email}</p>}
               </div>
               <div className="form-group">

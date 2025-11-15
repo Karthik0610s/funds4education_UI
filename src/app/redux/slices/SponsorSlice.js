@@ -37,37 +37,30 @@ export const { setLoading, addData, setError } = sponsorSlice.actions;
 export default sponsorSlice.reducer;
 
 // Action to add a new sponsor
-export const addNewSponsor = async (data, dispatch, navigate) => {
-  try {
-    dispatch(setLoading());
+export const addNewSponsor = async (data, dispatch) => {
+    try {
+        debugger;
+        dispatch(setLoading()); // Set loading before making the API request
+        const res = await addNewSponsorReq(data); // Call API to add a sponsor
 
-    const res = await addNewSponsorReq(data); // API call
+        // Fetch updated list of sponsors after adding a new one
+        await dispatch(fetchSponsorList());
 
-    // Refresh the sponsor list
-    await dispatch(fetchSponsorList());
-
-    // Success popup (wait for user to click OK)
-    await Swal.fire({
-      text: "Sponsor added successfully!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-
-    // ⭐ Navigate AFTER popup OK click
-    navigate("/login");
-
-  } catch (error) {
-    dispatch(setError());
-
-    Swal.fire({
-      text: "Error! Try Again!",
-      icon: "error",
-    });
-
-    throw error;
-  }
+        // Optionally show success notification
+        Swal.fire({
+          text: "Sponsor added successfully!",
+          icon: "success",
+        });
+        return res.data;
+    } catch (error) {
+        dispatch(setError()); // Handle error if API fails
+        Swal.fire({
+            text: "Error! Try Again!",
+            icon: "error",
+        });
+        throw error; // Throw the error to be handled elsewhere
+    }
 };
-
 
 // Action to update a sponsor
 export const updateSponsor = async (data, dispatch) => {

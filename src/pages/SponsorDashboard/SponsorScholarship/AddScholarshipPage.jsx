@@ -281,7 +281,7 @@ const safeJoin = (val) => {
                 regex = scholarshipNameRegex; // letters/numbers/spaces only, max 350
                 break;
             case "description":
-            case "eligibilityCriteria":
+
 
                 regex = text500; // allows ., - , and space
                 break;

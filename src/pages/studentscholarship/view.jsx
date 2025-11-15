@@ -29,7 +29,8 @@ const ScholarshipViewPage = () => {
             alert("Application link not available.");
         }
     } else {
-        navigate("/login");
+        navigate("/login", { state: { userType: "student" } });
+
     }
 };
     useEffect(() => {
