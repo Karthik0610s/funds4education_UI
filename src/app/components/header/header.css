@@ -247,3 +247,64 @@
     display: block;
   }
 }
+.signup-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 28px;
+  width: 340px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  position: relative;
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 18px;
+}
+
+.role-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.role-button.student {
+  background: #4a90e2;
+  color: white;
+}
+
+.role-button.sponsor {
+  background: #50c878;
+  color: white;
+}
+
+.role-button.institution {
+  background: #f5a623;
+  color: white;
+}
+
+.role-button:hover {
+  opacity: 0.8;
+}
+
+.close-btn {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}

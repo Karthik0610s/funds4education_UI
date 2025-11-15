@@ -1522,6 +1522,7 @@ padding: 4px 10px;
   background: #f9f9f9;
   padding: 40px 80px;
   text-align: center;
+    margin-top: 4%;
 }
 
 /* --- Hero Section --- */
@@ -4139,6 +4140,7 @@ padding: 8px;
     color: #1a1a1a;
     background: #f9f9f9;
    text-align: left;
+   margin-top: 9%;
     
 }
 }

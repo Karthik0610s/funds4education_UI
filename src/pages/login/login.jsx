@@ -82,30 +82,29 @@ debugger;
   window.addEventListener("message", handleMessage);
 };*/
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    let newErrors = { identifier: "", password: "" };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  let newErrors = { identifier: "", password: "", userType: "" };
 
-    if (!identifier.trim())
-      newErrors.identifier = "Username or Email is required";
-    if (!password.trim()) newErrors.password = "Password is required";
+  if (!userType) newErrors.userType = "Please select a user type";
+  if (!identifier.trim()) newErrors.identifier = "Username or Email is required";
+  if (!password.trim()) newErrors.password = "Password is required";
 
-    setErrors(newErrors);
+  setErrors(newErrors);
 
-    if (!newErrors.identifier && !newErrors.password) {
-      dispatch(loginUser({ username: identifier, password, userType }))
-        .unwrap()
-        .then((res) => {
-          const roleId = res.roleId;
-          if (roleId === 1) navigate("/student-dashboard");
-          else if (roleId === 2) navigate("/sponsor-dashboard");
-          else if (roleId === 4) navigate("/institution-dashboard");
-        })
-        .catch(() => {
-          // Let Redux handle error — don't add local form error here
-        });
-    }
-  };
+  if (newErrors.identifier || newErrors.password || newErrors.userType) return;
+
+  dispatch(loginUser({ username: identifier, password, userType }))
+    .unwrap()
+    .then((res) => {
+      const roleId = res.roleId;
+      if (roleId === 1) navigate("/student-dashboard");
+      else if (roleId === 2) navigate("/sponsor-dashboard");
+      else if (roleId === 4) navigate("/institution-dashboard");
+    })
+    .catch(() => {});
+};
+
 
   return (
   <div className="login-page">
@@ -116,17 +115,28 @@ debugger;
         <p>
           Don’t have an account yet?{" "}
           <Link
-            to={
-              userType === "student"
-                ? RP.signup
-                : userType === "sponsor"
-                ? RP.signupSponsor
-                : RP.signupInstitution
-            }
-            state={{ userType }}
-          >
-            Sign Up
-          </Link>
+         to="#"
+         onClick={(e) => {
+          e.preventDefault();
+
+         if (!userType) {
+          setErrors((prev) => ({ ...prev, userType: "Please select a user type" }));
+         return;
+         }
+
+         const path =
+         userType === "student"
+         ? RP.signup
+         : userType === "sponsor"
+         ? RP.signupSponsor
+         : RP.signupInstitution;
+
+         navigate(path, { state: { userType } });
+         }}
+>
+  Sign Up
+</Link>
+
         </p>
 
         <div className="user-radio-group">
@@ -141,7 +151,7 @@ debugger;
               />
               <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
             </label>
-          ))}
+          ))} {errors.userType && <p className="error">{errors.userType}</p>}
         </div>
 
         {/* === Username / Email === */}

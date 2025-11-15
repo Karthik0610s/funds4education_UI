@@ -102,13 +102,21 @@ const AddScholarshipModal = ({ show, handleClose, scholarship }) => {
         classes,
         courses,
     } = useSelector((state) => state.sponsorScholarship);
-const [filters, setFilters] = useState({
+/*const [filters, setFilters] = useState({
   religion: [],
   country: [],
   state: [],
   gender: [],
   className: [],
   course: [],
+});*/
+const [filters, setFilters] = useState({
+  religion: null,
+  country: null,
+  state: null,
+  gender: null,
+  className: null,
+  course: null,
 });
 // ✅ SafeJoin prevents .join() crashes when a field isn't an array
 const safeJoin = (val) => {
@@ -130,14 +138,22 @@ const safeJoin = (val) => {
                 });
 
                 // Set filters for dropdowns
-                setFilters({
+                /*setFilters({
                     religion: scholarship.religion_ID ? String(scholarship.religion_ID) : "",
                     country: scholarship.country_ID ? String(scholarship.country_ID) : "",
                     state: scholarship.state_ID ? String(scholarship.state_ID) : "",
                     gender: scholarship.gender_ID ? String(scholarship.gender_ID) : "",
                     className: scholarship.class_ID ? String(scholarship.class_ID) : "",
                     course: "", // will set after courses fetch
-                });
+                });*/
+                setFilters({
+    religion: scholarship.religion_ID ?? null,
+    country: scholarship.country_ID ?? null,
+    state: scholarship.state_ID ?? null,
+    gender: scholarship.gender_ID ?? null,
+    className: scholarship.class_ID ?? null,
+    course: null, // will set after courses fetch
+});
 
                 // Fetch courses for saved class
                 if (scholarship.class_ID) {
@@ -164,14 +180,22 @@ const safeJoin = (val) => {
         dispatch(fetchGenders());
         dispatch(fetchClasses());
     }, [show, scholarship, dispatch]);
-    useEffect(() => {
+   /* useEffect(() => {
         if (scholarship && scholarship.class_ID && courses.length > 0) {
             setFilters(prev => ({
                 ...prev,
                 course: scholarship.course_ID ? String(scholarship.course_ID) : ""
             }));
         }
-    }, [courses, scholarship]);
+    }, [courses, scholarship]);*/
+    useEffect(() => {
+    if (scholarship && scholarship.class_ID && courses.length > 0) {
+        setFilters(prev => ({
+            ...prev,
+            course: scholarship.course_ID ?? null
+        }));
+    }
+}, [courses, scholarship]);
 
 
     // --- Clear function ---
@@ -191,16 +215,29 @@ const safeJoin = (val) => {
         setFormData({ ...formData, uploadedFiles: null });
     };
     const handleFilterChange = (e) => {
-        debugger;
-        const { name, value } = e.target;
-        const parsedValue = value === "" ? null : parseInt(value);
-        setFilters({ ...filters, [name]: value });
+    const { name, value } = e.target;
 
-        if (name === "className" && parsedValue) {
-            dispatch(fetchCoursesByClass(parsedValue));
-            setFilters((prev) => ({ ...prev, course: "" }));
-        }
-    };
+    // Convert dropdown values to int (except empty string -> null)
+    const parsedValue = value === "" ? null : parseInt(value);
+
+    // Update state with numeric ID
+    setFilters(prev => ({
+        ...prev,
+        [name]: parsedValue
+    }));
+
+    // When class changes → fetch courses for that class
+    if (name === "className" && parsedValue) {
+        dispatch(fetchCoursesByClass(parsedValue));
+
+        // Reset course dropdown on class change
+        setFilters(prev => ({
+            ...prev,
+            course: null
+        }));
+    }
+};
+
     // --- File change handler ---
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
@@ -599,9 +636,9 @@ const payload = {
                         </div>
 
                         {/* --- Filters Section --- */}
-<div className="filters-section mb-4">
+{/*<div className="filters-section mb-4">
   <div className="row">
-    {/* Religion Dropdown */}
+   
     <div className="form-group col-4">
       <label>Religion</label>
       <Select
@@ -658,7 +695,7 @@ const payload = {
   </div>
 
   <div className="row mt-2">
-    {/* Gender Dropdown */}
+    
     <div className="form-group col-4">
       <label>Gender</label>
       <Select
@@ -714,7 +751,141 @@ const payload = {
       />
     </div>
   </div>
-                        </div>
+                        </div>*/}
+
+                        {/*kamali single select*/}
+<div className="mb-4">
+
+  {/* Row 1 */}
+  <div className="row">
+    {/* Religion */}
+    <div className="form-group col-6">
+      <label>Religion</label>
+      <select
+        name="religion"
+        className="form-control"
+        value={filters.religion ?? ""}
+        onChange={(e) => setFilters({ ...filters, religion: Number(e.target.value) || null })}
+      >
+        <option value="">Select Religion</option>
+        {religions.map(r => (
+          <option key={r.id} value={r.id}>
+            {r.religion_Name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Country */}
+    <div className="form-group col-6">
+      <label>Country</label>
+      <select
+        name="country"
+        className="form-control"
+        value={filters.country ?? ""}
+        onChange={(e) => setFilters({ ...filters, country: Number(e.target.value) || null })}
+      >
+        <option value="">Select Country</option>
+        {countries.map(c => (
+          <option key={c.id} value={c.id}>
+            {c.country_Name}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* Row 2 */}
+  <div className="row mt-3">
+    {/* State */}
+    <div className="form-group col-6">
+      <label>State</label>
+      <select
+        name="state"
+        className="form-control"
+        value={filters.state ?? ""}
+        onChange={(e) => setFilters({ ...filters, state: Number(e.target.value) || null })}
+      >
+        <option value="">Select State</option>
+        {states.map(s => (
+          <option key={s.id} value={s.id}>
+            {s.state_Name}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    {/* Gender */}
+    <div className="form-group col-6">
+      <label>Gender</label>
+      <select
+  name="gender"
+  className="form-control"
+  value={filters.gender ?? ""}
+  onChange={(e) => setFilters({ ...filters, gender: Number(e.target.value) || null })}
+>
+  <option value="">Select Gender</option>
+  {genders.map(g => (
+    <option key={g.gender_ID} value={g.gender_ID}>
+      {g.gender_Name}
+    </option>
+  ))}
+</select>
+    </div>
+  </div>
+
+  {/* Row 3 */}
+  <div className="row mt-3">
+    {/* Class */}
+    <div className="form-group col-6">
+      <label>Class</label>
+      {/*<select
+        name="className"
+        className="form-control"
+        value={filters.className ?? ""}
+        onChange={(e) => setFilters({ ...filters, className: Number(e.target.value) || null })}
+      >
+        <option value="">Select Class</option>
+        {classes.map(cls => (
+          <option key={cls.classId} value={cls.classId}>
+            {cls.className}
+          </option>
+        ))}
+      </select>*/}
+      <select name="className" value={filters.className ?? ""} onChange={handleFilterChange}>
+  <option value="">Select Class</option>
+  {classes.map(cls => (
+    <option key={cls.classId} value={cls.classId}>
+      {cls.className}
+    </option>
+  ))}
+</select>
+    </div>
+
+    {/* Course */}
+    <div className="form-group col-6">
+      <label>Course</label>
+      <select
+        name="course"
+        className="form-control"
+        disabled={!filters.className}
+        value={filters.course ?? ""}
+        onChange={(e) => setFilters({ ...filters, course: Number(e.target.value) || null })}
+      >
+        <option value="">Select Course</option>
+        {courses.map(c => (
+          <option key={c.courseId} value={c.courseId}>
+            {c.courseName}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+</div>
+
+
+
                         <div className="row">
                             <div className="form-group col-4">
                                 <label>Min % / CGPA</label>

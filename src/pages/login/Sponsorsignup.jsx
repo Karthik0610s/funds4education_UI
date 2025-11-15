@@ -26,6 +26,11 @@ export default function SponsorSignUpPage() {
     const usernameRegex = /^[A-Za-z]{1,150}$/;
     const passwordRegex =
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+    const websiteOrLinkedInRegex =
+       /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$|^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9_-]+\/?$/;
+
+
+
 
     // --- Step validation ---
     const validateStep = () => {
@@ -39,8 +44,14 @@ export default function SponsorSignUpPage() {
                 stepErrors.email = "Invalid email (use .com, .org, .edu, etc).";
             if (!basicDetails.phone || !phoneRegex.test(basicDetails.phone))
                 stepErrors.phone = "Phone number must be 10 digits.";
-            if (!basicDetails.website)
-                stepErrors.website = "Website/LinkedIn link is required.";
+            if (
+  !basicDetails.website ||
+  !websiteOrLinkedInRegex.test(basicDetails.website)
+) {
+  stepErrors.website =
+    "Enter a valid Website or LinkedIn URL (https://...).";
+}
+
         }
 
         if (step === 1) {
@@ -77,7 +88,7 @@ export default function SponsorSignUpPage() {
 
     try {
         await addNewSponsor(data, dispatch);
-        alert("Sponsor registered successfully!");
+//alert("Sponsor registered successfully!");
         setBasicDetails({ sponsorName: "", orgType: "", email: "", phone: "", website: "" });
         setVerification({ username: "", password: "" });
         setStep(0);

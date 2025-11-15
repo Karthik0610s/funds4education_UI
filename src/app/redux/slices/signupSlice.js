@@ -35,7 +35,8 @@ export const { setLoading, setUser, setError } = signupSlice.actions;
 export default signupSlice.reducer;
 
 // ✅ Action to insert (signup)
-export const insertNewUser = (data) => async (dispatch) => {
+// ✅ Action to insert (signup)
+export const insertNewUser = (data, navigate) => async (dispatch) => {
   try {
     dispatch(setLoading());
 
@@ -43,20 +44,24 @@ export const insertNewUser = (data) => async (dispatch) => {
 
     dispatch(setUser(res.data)); // store user if API returns it
 
-    Swal.fire({
+    await Swal.fire({
       text: res.message || "Signup successful!",
       icon: "success",
-   
+      confirmButtonText: "OK",
     });
-    
+
+    // ⭐ Navigate AFTER user clicks OK
+    navigate("/login"); 
   } catch (error) {
     dispatch(setError());
+
     Swal.fire({
       text: error.message || "Signup failed. Try again!",
       icon: "error",
     });
   }
 };
+
 
 
 // ✅ Action to update user profile//
