@@ -1,0 +1,320 @@
+.scholarship-page {
+  font-family: 'Inter', sans-serif;
+  color: #1a1a1a;
+  background: #f9f9f9;
+  padding: 40px 80px;
+}
+
+/* --- Hero Section --- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+.hero-left img {
+  width: 360px;
+  height: auto;
+  margin: 0;
+}
+
+.hero-right {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-right h1 {
+  font-size: 28px;  /* Main heading */
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.hero-right p {
+  font-size: 15px;  /* Body text */
+  font-weight: 400;
+  color: #0F1B1A;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  margin-top: auto;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  background: #275F5B;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* --- Bottom Section --- */
+.content-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.matches {
+  flex: 2;
+  min-width: 320px;
+}
+
+.matches h2 {
+  font-size: 20px;  /* Section heading */
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.match-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.match-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.match-info {
+  flex: 1;
+}
+
+.match-info h3 {
+  font-size: 16px;  /* Card title */
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #072928;
+}
+
+.match-info p {
+  font-size: 14px;  /* Body text */
+  font-weight: 400;
+  color: #0F1B1A;
+  margin: 2px 0;
+}
+
+.deadline {
+  font-size: 12px; /* Small text */
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.apply-btn {
+  background: #275F5B;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 16px;
+}
+
+/* --- Summary Section --- */
+.summary-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.financial-summary {
+  background: #184B49;
+  color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.financial-summary h3 {
+  font-size: 25px;
+  font-weight: 600;
+  margin-bottom: auto;
+  margin-top: auto;
+}
+
+.financial-summary .amount {
+  font-size: 28px;  /* Big bold amount */
+  font-weight: 700;
+}
+
+.budget-bar {
+  background: #0E2D2F; /* Green background */
+  border-radius: 6px;
+  height: 10px;
+  margin: 10px 0;
+  overflow: hidden; /* Important: ensures inner bar stays inside rounded corners */
+}
+
+.progress-bar {
+  height: 100%;
+  background: #FFFFFF; /* White progress */
+  width: 70%; /* Change this to your progress % */
+  border-radius: 6px 0 0 6px; /* Round only left side */
+  transition: width 0.3s ease;
+}
+
+
+.download-btn {
+  font-size: 15px;
+  font-weight: 600;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #164e3f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.applications h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.application-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+}
+
+.status {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-right {
+    align-items: center;
+  }
+
+  .hero-right p {
+    text-align: center;
+    color: #2A5A59;
+
+
+  }
+
+  .content-section {
+    flex-direction: column;
+  }
+
+  .matches,
+  .summary-section {
+    width: 100%;
+  }
+}
+.title-with-tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 110%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 240px;   /* control how wide the card can grow */
+  min-width: 220px;   /* prevent too small */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  white-space: normal;
+  z-index: 20;
+}
+
+
+.tooltip h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tooltip p {
+  margin: 5px 0;
+}
+
+.tooltip a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  left: -8px;
+  top: 20px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #fff;
+  filter: drop-shadow(-1px 0 1px rgba(0,0,0,0.1));
+}
+
+/* Show only when hovering the heading */
+.title-with-tooltip:hover .tooltip {
+  display: block;
+}
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.tooltip-header .amount {
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.tooltip-header .why {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  margin: 0;
+}
+
+.tooltip-header .why a {
+  color: #2A5A59;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-right:25px;
+}
+
+.tooltip-header .icon {
+  width: 16px;
+  height: 16px;
+  color: green; /* same as in your image */
+}

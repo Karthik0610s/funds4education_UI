@@ -1,0 +1,249 @@
+/* ==============================
+   HEADER CONTAINER
+============================== */
+.header {
+  font-family: "Poppins", sans-serif;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f3f4f6;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(57, 109, 112, 0.1);
+}
+
+/* ✅ Centers all content within max width */
+.header-container {
+  width: 100%;
+  padding: 1px 40px 0px 0px;
+  /* gives spacing on both sides */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* logo left, nav+auth spread */
+  box-sizing: border-box;
+ 
+  position: relative;
+  z-index: 10;
+}
+
+
+/* ==============================
+   LOGO + BRAND
+============================== */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  height: 40px;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #396d70;
+  letter-spacing: 0.5px;
+}
+
+/* ==============================
+   NAVIGATION
+============================== */
+
+.nav-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 40px;
+}
+
+/* Center nav items */
+.nav-bar {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  gap: 36px;
+}
+
+/* Right aligned links */
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: 20px;
+}
+
+.nav-bar a,
+.nav-links a {
+  text-decoration: none;
+  color: #1a3742;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-bar a:hover,
+.nav-links a:hover {
+  color: #ff8a00;
+}
+
+/* ==============================
+   AUTH LINKS (RIGHT)
+============================== */
+
+.header-right a {
+  text-decoration: none;
+  color: #1a3742;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.header-right a:hover {
+  color: #ff8a00;
+}
+
+/* ==============================
+   ICONS & BUTTONS
+============================== */
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  background-color: #395b61;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-text {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.action-btn {
+  background-color: #396d70;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn:hover {
+  background-color: #2f5557;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #396d70;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 1024px) {
+  .nav-bar {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-wrap: wrap;
+    
+    /*justify-content: center;*/
+  }
+
+  .nav-wrapper {
+    flex-direction: column;
+    margin-left: 0;
+    gap: 10px;
+  }
+
+  .nav-bar {
+    gap: 20px;
+  }
+}
+/* ==============================
+   RESPONSIVE MENU
+============================== */
+.menu-icon {
+  display: none;
+  color: #1a3742;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+@media (max-width: 920px) {
+  .menu-icon {
+    display: block;
+  }
+
+  .nav-menu {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(57, 109, 112, 0.1);
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    transition: all 0.3s ease;
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .nav-wrapper,
+  .nav-links,
+  .header-right {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .nav-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+@media (max-width: 920px) {
+  .header-container {
+    padding: 10px 20px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .brand {
+    font-size: 1.4rem;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}

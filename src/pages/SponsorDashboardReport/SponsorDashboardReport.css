@@ -1,0 +1,233 @@
+/* Main Card */
+.dashboard {
+ 
+  width: 900px;
+  margin: 40px auto;          /* centers horizontally */
+  padding: 5px 40px 36px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 10px 0 2px 0;
+  color: #1a2e22;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #3e4e44;
+  margin-bottom: 22px;
+  margin-top: 0;
+  line-height: 1.5;
+}
+
+/* Status Card */
+.status-card {
+  background: #f6faf7;
+  border-radius: 12px;
+  border: 1px solid #e2e8e4;
+  padding: 38px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+
+.status-label {
+  font-size: 1.4rem;
+  margin-top: 1px;
+  font-weight: 600;
+  color: #444;
+  margin: 0;
+}
+
+.status-active {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* space between tick and text */
+  font-weight: bold;
+  color: #28a745; /* green example */
+}
+
+.status-dot {
+  width: 16px;
+  height: 16px;
+}
+
+
+.status-message {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.btn.btn-active {
+  background: #0a3c2f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.btn-active:hover {
+  background: #145c47;
+}
+
+/* Ad Performance */
+.performance {
+  margin-bottom: 28px;
+}
+
+.performance h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1a2e22;
+}
+
+.graph-container {
+  background: #f7fbfc;
+  border-radius: 8px;
+  border: 1px solid #e2e8e4;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.stats div {
+  text-align: center;
+}
+
+.stats p {
+  font-size: 0.9rem;
+  color: #3e4e44;
+  margin-bottom: 2px;
+}
+
+.stats h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a2e22;
+  margin: 0;
+}
+
+/* Ad Preview */
+.ad-preview {
+  margin-top: 10px;
+}
+
+.ad-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a2e22;
+}
+
+.ad-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.preview-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f6faf7;
+  border-radius: 10px;
+  border: 1px solid #e2e8e4;
+  padding: 10px 18px;
+
+  /* Add these */
+  width: 500px;   /* set your required width */
+  height: 80px;  /* set your required height */
+}
+
+.preview-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a2e22;
+  margin: 0 0 5px 0;
+}
+
+.preview-card p {
+  font-size: 0.9rem;
+  color: #3e4e44;
+  margin: 0;
+}
+
+.btn.btn-report {
+  background: #0a3c2f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.btn-report:hover {
+  background: #145c47;
+}
+
+/* Footer */
+/*.footer {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: #7a8b7f;
+  margin: 12px auto;
+  max-width: 540px;
+}*/
+
+.footer a {
+  color: #7a8b7f;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #0a3c2f;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .dashboard {
+    width: 98vw;
+    padding: 18px 4vw;
+  }
+
+  .ad-row {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

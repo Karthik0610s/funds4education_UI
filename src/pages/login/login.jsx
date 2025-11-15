@@ -1,0 +1,220 @@
+import React, { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import login from "../../app/assests/login.jpg";
+import "../../pages/styles.css";
+import {
+  FaLinkedin,
+  FaInstagram,
+  FaTwitter,
+  FaPinterest,
+  FaFacebook,
+} from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { routePath as RP } from "../../app/components/router/routepath";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../app/redux/slices/authSlice";
+
+export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({ identifier: "", password: "" });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [userType, setUserType] = useState(location.state?.userType || "");
+
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
+// ✅ Update API base URL to match your backend
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://localhost:44315/api/Auth";
+
+const handleOAuthLogin = (provider) => {
+  if (!userType) {
+    alert("Please select or provide user type before login.");
+    return;
+  }
+
+  // Redirect to backend OAuth endpoint
+  //window.location.href = `${API_BASE_URL}/${provider}/login?role=${userType}`;
+  window.location.href = `https://localhost:44315/api/Auth/${provider}/${userType}/login`;
+};
+/*const handleOAuthLogin = async (provider) => {
+  if (!userType) {
+    alert("Please select or provide user type before login.");
+    return;
+  }
+debugger;
+  const loginUrl = `https://localhost:44315/api/Auth/${provider}/${userType}/login`;
+
+  // Open OAuth login popup
+  const popup = window.open(loginUrl, "_blank", "width=500,height=600");
+
+  // Listen for backend message (token info)
+  const handleMessage = (event) => {
+    // Validate message origin
+    if (!event.origin.includes("localhost")) return;
+
+    const data = event.data;
+    if (data?.token) {
+      // ✅ Save token data to localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("name", data.name);
+      localStorage.setItem("roleId", data.roleId);
+      localStorage.setItem("roleName", data.roleName);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("username", data.username);
+
+      // ✅ Close popup
+      popup.close();
+
+      // ✅ Navigate based on role
+      if (data.roleName === "Student") navigate("/student-dashboard");
+      else if (data.roleName === "Sponsor") navigate("/sponsor-dashboard");
+      else if (data.roleName === "Institution") navigate("/institution-dashboard");
+    }
+
+    // Cleanup listener
+    window.removeEventListener("message", handleMessage);
+  };
+
+  window.addEventListener("message", handleMessage);
+};*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let newErrors = { identifier: "", password: "" };
+
+    if (!identifier.trim())
+      newErrors.identifier = "Username or Email is required";
+    if (!password.trim()) newErrors.password = "Password is required";
+
+    setErrors(newErrors);
+
+    if (!newErrors.identifier && !newErrors.password) {
+      dispatch(loginUser({ username: identifier, password, userType }))
+        .unwrap()
+        .then((res) => {
+          const roleId = res.roleId;
+          if (roleId === 1) navigate("/student-dashboard");
+          else if (roleId === 2) navigate("/sponsor-dashboard");
+          else if (roleId === 4) navigate("/institution-dashboard");
+        })
+        .catch(() => {
+          // Let Redux handle error — don't add local form error here
+        });
+    }
+  };
+
+  return (
+  <div className="login-page">
+    <div className="login-card">
+      {/* === Left: Form === */}
+      <form className="login-form" onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        <p>
+          Don’t have an account yet?{" "}
+          <Link
+            to={
+              userType === "student"
+                ? RP.signup
+                : userType === "sponsor"
+                ? RP.signupSponsor
+                : RP.signupInstitution
+            }
+            state={{ userType }}
+          >
+            Sign Up
+          </Link>
+        </p>
+
+        <div className="user-radio-group">
+          {["student", "sponsor", "institution"].map((type) => (
+            <label key={type} className="user-radio-label">
+              <input
+                type="radio"
+                name="userType"
+                value={type}
+                checked={userType === type}
+                onChange={(e) => setUserType(e.target.value)}
+              />
+              <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
+            </label>
+          ))}
+        </div>
+
+        {/* === Username / Email === */}
+        <div className="form-group">
+          <label>Username or Email</label>
+          <input
+            type="text"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            placeholder="Enter username or email"
+          />
+          {errors.identifier && <p className="error">{errors.identifier}</p>}
+        </div>
+
+        {/* === Password === */}
+        <div className="form-group password-field">
+          <label>Password</label>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            className="toggle-password"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+          </button>
+          {errors.password && <p className="error">{errors.password}</p>}
+        </div>
+
+        <button type="submit" disabled={loading} className="login-btn">
+          {loading ? "Logging in..." : "LOGIN"}
+        </button>
+
+        {error && <p className="error global">{error}</p>}
+
+        {/* Divider */}
+        <div className="divider">
+          <span>or login with</span>
+        </div>
+
+        <div className="social-buttons">
+          <button onClick={() => handleOAuthLogin("google")}>
+            <FcGoogle /> Google
+          </button>
+          <button onClick={() => handleOAuthLogin("facebook")}>
+            <FaFacebook /> Facebook
+          </button>
+          <button onClick={() => handleOAuthLogin("linkedin")}>
+            <FaLinkedin /> LinkedIn
+          </button>
+          <button onClick={() => handleOAuthLogin("instagram")}>
+            <FaInstagram /> Instagram
+          </button>
+          <button onClick={() => handleOAuthLogin("twitter")}>
+            <FaTwitter /> X
+          </button>
+          <button onClick={() => handleOAuthLogin("pinterest")}>
+            <FaPinterest /> Pinterest
+          </button>
+        </div>
+      </form>
+
+      {/* === Right: Illustration === */}
+      <div
+        className="login-illustration"
+        style={{ backgroundImage: `url(${login})` }}
+      ></div>
+    </div>
+  </div>
+);
+
+}

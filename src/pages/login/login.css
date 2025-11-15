@@ -1,0 +1,156 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f4f6;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 1200px;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+.login-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1D4F56;
+  margin-bottom: 0.5rem;
+}
+
+.login-form p {
+  font-size: 0.875rem;
+  color: #1D4F56;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1D4F56;
+  margin-bottom: 0.25rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  outline: none;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.password-group {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 25px;
+  bottom: 0;
+  right: 10px;
+  margin: auto 3px; /* vertically centers */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #1D4F56;
+  height: fit-content;
+}
+
+.login-btn {
+  width: 100%;
+  background-color: #1D4F56;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 1rem;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.divider div {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #d1d5db;
+}
+
+.divider span {
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  color: #1D4F56;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social-buttons button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+  color: #1D4F56;
+}
+
+.login-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e6f0f1;
+}
+
+.login-illustration img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+}
+.social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+  color: #1D4F56;
+  background-color: #fff;
+}

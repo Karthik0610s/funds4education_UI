@@ -1,0 +1,536 @@
+/* ======= GLOBAL STYLES ======= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body, .scholarship-card, .sidebar, .main-content {
+  font-family: 'Poppins', sans-serif !important;
+  color: #1f2937;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  display: flex;
+  background-color: #f9fafb;
+  color: #1f2937;
+  min-height: 100vh;
+}
+
+/* ======= SIDEBAR ======= */
+.sidebar {
+  width: 250px;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.filter-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.filter-group label {
+  display: block;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 7px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-top: 5px;
+  background: #f9fafb;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+/* ======= MAIN CONTENT ======= */
+.main-content {
+  flex: 1;
+  padding: 20px 30px;
+  /*overflow-y: auto; /* ✅ scroll restored */
+  /*overflow-x: hidden;*/
+  background-color: #f9fafb;
+  scrollbar-width: thin;
+}
+
+.main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+/* ======= TABS ======= */
+.tab-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tab-group {
+  display: flex;
+  gap: 10px;
+}
+
+.tab {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  background: #ff7e29;
+  color: #fff;
+  border-color: #ff7e29;
+}
+
+/* ======= CONTENT LAYOUT ======= */
+/*.content-layout {
+  display: grid;
+  grid-template-columns: 2fr 0.9fr;
+  gap: 1.5rem;
+  align-items: start;
+}*/
+/* ======= CONTENT LAYOUT ======= */
+.content-layout {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* wider main area, flexible sidebar */
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* ======= GRID ======= */
+/*.scholarship-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  align-items: stretch;
+  overflow: visible; 
+}
+*/
+.scholarship-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* ✅ responsive */
+  gap: 18px;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* ======= SCHOLARSHIP CARD ======= */
+.scholarship-card {
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  padding: 24px 20px 18px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #eee;
+  min-height: 240px; 
+  max-height: auto;
+  overflow: visible; 
+    cursor: pointer; 
+
+}
+
+.scholarship-card:hover {
+background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ffffff; /* make text white on hover */
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+}
+
+/* ======= FEATURED TAG ======= */
+.featured-tag {
+  position: absolute;
+  top: -10px; /* ✅ floats outside card */
+  left: 14px;
+  background: #10b981;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+/* ======= CARD HEADER (LOGO + DATE) ======= */
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.card-logo {
+  width: 85px;
+  height: 40px;
+  object-fit: contain;
+  margin-left: 0;
+}
+
+/* ======= DAYS LEFT BADGE ======= */
+.deadline-badge {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.8rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  z-index: 3;
+}
+
+.deadline-badge.warning {
+  background-color: #ffb347;
+}
+
+.deadline-badge.urgent {
+  background-color: #ff4d4d;
+}
+
+/* ======= CARD BODY ======= */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ✅ consistent left alignment */
+  justify-content: space-between;
+  flex-grow: 1;
+  text-align: left;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.card-title {
+  text-align: left;
+  align-self: flex-start;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  min-height: 42px; /* ✅ consistent title space */
+}
+
+.scholarship-card p {
+  font-size: 0.85rem;
+  color: #374151;
+  margin: 3px 0;
+  line-height: 1.4;
+  display: block; /* ✅ allows text to wrap naturally */
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  text-align: left;
+  width: 100%;
+}
+
+.scholarship-card p strong {
+  font-weight: 600;
+  color: #111827;
+  display: inline-block;
+  min-width: 90px; 
+}
+
+/* ======= FOOTER ======= */
+.card-footer-updated {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: right;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 6px;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* ======= FEATURED SIDEBAR ======= */
+/*.featured-sidebar {
+  width: 280px;
+  max-height: 200px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f1f1;
+   overflow-y: auto;  
+  overflow-x: hidden; 
+}*/
+.featured-sidebar {
+    width: 100%;
+    max-width: 360px;
+    min-width: 250px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f1f1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 450px;
+}
+.featured-header {
+  background: linear-gradient(90deg, #003cbf, #0072ff);
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 16px;
+  font-size: 1rem;
+  border-radius: 10px 10px 0 0;
+}
+
+.featured-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.featured-logo {
+  width: 55px;
+  height: 35px;
+  object-fit: contain;
+}
+
+.featured-title {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.9rem;
+}
+
+.featured-deadline {
+  font-size: 0.8rem;
+  color: #374151;
+}
+
+/* ======= RESPONSIVE DESIGN ======= */
+@media (max-width: 1400px) {
+  .scholarship-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .scholarship-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .content-layout {
+    flex-direction: column;
+  }
+
+ 
+}
+.student-navbar {
+  background: #ffffff;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  z-index: 99;
+  position: sticky;
+  top: 70px; /* 👈 equal to your header height */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.student-navbar nav {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.student-navbar nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.student-navbar nav a:hover,
+.student-navbar nav a.active {
+  color: #ff6600;
+}
+
+.user-info h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.guest-banner {
+  position: sticky;
+  top: 70px; /* 👈 Adjust this to match your header height */
+  z-index: 80;
+  background: #fffae5;
+  color: #7a5900;
+  padding: 0.8rem;
+  margin: 0;
+  border: 1px solid #ffe08a;
+  border-radius: 0;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 🔹 Logout Button Styling */
+.logout-btn {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #e63946; /* red tone */
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(230, 57, 70, 0.2);
+}
+
+.logout-btn:hover {
+  background-color: #d62828;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(214, 40, 40, 0.25);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(214, 40, 40, 0.2);
+}
+
+/* 🔹 Optional - Sidebar alignment improvement */
+.sidebar .logout-btn {
+  display: block;
+  text-align: center;
+  margin: 32px auto 0;
+  max-width: 200px;
+}
+
+/* 🔹 Responsive: On smaller screens */
+@media (max-width: 768px) {
+  .logout-btn {
+    width: 90%;
+    margin: 20px auto;
+    font-size: 15px;
+  }
+}
+.clear-filters-btn {
+  width: 100%;
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-filters-btn:hover {
+  background-color: #e68900;
+  transform: translateY(-2px);
+}
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.pagination-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.pagination-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 500;
+  color: #333;
+}
+@media (max-width: 1400px) {
+  .content-layout {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .scholarship-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .content-layout {
+    grid-template-columns: 1fr; /* ✅ stack on smaller widths */
+  }
+
+ 
+
+  .scholarship-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+.scholarship-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f3f3f3;
+  border-radius: 20px;
+  padding: 6px 12px;
+  width: 280px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.search-box .search-icon {
+  color: #888;
+  margin-right: 8px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+}
+
