@@ -50,15 +50,15 @@ const scholarshipSlice = createSlice({
           ? payload.upcoming
           : state.data.upcoming,
       };*/
-      addData: (state, { payload }) => {
-  state.loading = false;
-  state.error = false;
+    addData: (state, { payload }) => {
+      state.loading = false;
+      state.error = false;
 
-  // Preserve all existing arrays while only replacing live/upcoming
-  if (payload.live) state.data.live = payload.live;
-  if (payload.upcoming) state.data.upcoming = payload.upcoming;
-},
-    
+      // Preserve all existing arrays while only replacing live/upcoming
+      if (payload.live) state.data.live = payload.live;
+      if (payload.upcoming) state.data.upcoming = payload.upcoming;
+    },
+
     addFeatured: (state, { payload }) => {
       state.loading = false;
       state.error = false;
@@ -86,12 +86,12 @@ const scholarshipSlice = createSlice({
     clearSelectedScholarship: (state) => {
       state.selectedScholarship = null;
     },
-        setApplications: (state, { payload }) => {
+    setApplications: (state, { payload }) => {
       state.loading = false;
       state.error = false;
       state.data.applications = Array.isArray(payload) ? payload : [];
     },
-     updateApplicationStatusInState: (state, { payload }) => {
+    updateApplicationStatusInState: (state, { payload }) => {
       const { applicationId, status, modifiedBy } = payload;
 
       const index = state.data.applications.findIndex(
@@ -129,51 +129,51 @@ export default scholarshipSlice.reducer;
 //
 export const fetchScholarshipList =
   (filters = { statusType: "live" }) =>
-  async (dispatch, getState) => {
-    try {
-      debugger;
-      dispatch(setLoading());
-
-      const currentData =
-        getState().scholarship?.data || { live: [], upcoming: [], featured: [] };
-
-      // 🟩 Case 1: If "both" is requested (fetch parallel)
-      if (filters.statusType === "both") {
-        const [liveRes, upcomingRes] = await Promise.all([
-          fetchScholarshipByStatusReq({ ...filters, statusType: "live" }),
-          fetchScholarshipByStatusReq({ ...filters, statusType: "upcoming" }),
-        ]);
-
-        const liveList = !liveRes.error ? liveRes.data : [];
-        const upcomingList = !upcomingRes.error ? upcomingRes.data : [];
-
-        dispatch(addData({ live: liveList, upcoming: upcomingList }));
-        return;
-      }
-
-      // 🟦 Case 2: Normal single-status call
-      const res = await fetchScholarshipByStatusReq(filters);
-      debugger;
-      const list = !res.error && Array.isArray(res.data) ? res.data : [];
-
-      if (filters.statusType === "live") {
+    async (dispatch, getState) => {
+      try {
         debugger;
-        dispatch(addData({ live: list, upcoming: currentData.upcoming }));
-      } else if (filters.statusType === "upcoming") {
-        dispatch(addData({ live: currentData.live, upcoming: list }));
-      } else {
-        // fallback — treat as live
-        dispatch(addData({ live: list, upcoming: currentData.upcoming }));
+        dispatch(setLoading());
+
+        const currentData =
+          getState().scholarship?.data || { live: [], upcoming: [], featured: [] };
+
+        // 🟩 Case 1: If "both" is requested (fetch parallel)
+        if (filters.statusType === "both") {
+          const [liveRes, upcomingRes] = await Promise.all([
+            fetchScholarshipByStatusReq({ ...filters, statusType: "live" }),
+            fetchScholarshipByStatusReq({ ...filters, statusType: "upcoming" }),
+          ]);
+
+          const liveList = !liveRes.error ? liveRes.data : [];
+          const upcomingList = !upcomingRes.error ? upcomingRes.data : [];
+
+          dispatch(addData({ live: liveList, upcoming: upcomingList }));
+          return;
+        }
+
+        // 🟦 Case 2: Normal single-status call
+        const res = await fetchScholarshipByStatusReq(filters);
+        debugger;
+        const list = !res.error && Array.isArray(res.data) ? res.data : [];
+
+        if (filters.statusType === "live") {
+          debugger;
+          dispatch(addData({ live: list, upcoming: currentData.upcoming }));
+        } else if (filters.statusType === "upcoming") {
+          dispatch(addData({ live: currentData.live, upcoming: list }));
+        } else {
+          // fallback — treat as live
+          dispatch(addData({ live: list, upcoming: currentData.upcoming }));
+        }
+      } catch (error) {
+        dispatch(setError());
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error?.message || "Something went wrong while fetching scholarships.",
+        });
       }
-    } catch (error) {
-      dispatch(setError());
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error?.message || "Something went wrong while fetching scholarships.",
-      });
-    }
-  };
+    };
 
 //
 // ✅ Fetch featured scholarships (green tag + right sidebar)
@@ -252,42 +252,43 @@ export const fetchScholarshipById = (id) => async (dispatch) => {
 //
 export const fetchApplicationsBySponsor =
   (sponsorId, status = "") =>
-  async (dispatch) => {
-    try {
-      if (!sponsorId) {
-        Swal.fire({
-          icon: "warning",
-          title: "Missing Sponsor ID",
-          text: "Sponsor ID is required to fetch applications.",
-        });
-        return;
-      }
-     dispatch(setLoading());
+    async (dispatch) => {
+      try {
+        if (!sponsorId) {
+          Swal.fire({
+            icon: "warning",
+            title: "Missing Sponsor ID",
+            text: "Sponsor ID is required to fetch applications.",
+          });
+          return;
+        }
+        dispatch(setLoading());
 
-      const res = await fetchApplicationsBySponsorReq(sponsorId, status);
+        const res = await fetchApplicationsBySponsorReq(sponsorId, status);
 
-      if (!res.error) {
-        dispatch(setApplications(res.data));
-      } else {
+        if (!res.error) {
+          dispatch(setApplications(res.data));
+        } else {
+          dispatch(setError());
+          Swal.fire({
+            icon: "error",
+            title: "Error Loading Applications",
+            text: res.errorMsg || "Unable to fetch student applications at this time.",
+          });
+        }
+      } catch (error) {
         dispatch(setError());
         Swal.fire({
           icon: "error",
-          title: "Error",
-          text: res.errorMsg || "Failed to load applications.",
+          title: "Error Fetching Applications",
+          text:
+            error?.errorMsg ||
+            error?.message ||
+            "Something went wrong while fetching student applications.",
         });
       }
-    } catch (error) {
-      dispatch(setError());
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text:
-          error?.errorMsg ||
-          error?.message ||
-          "Something went wrong while fetching applications.",
-      });
-    }
-  };
+    };
+
 //
 // ✅ 4️⃣ Fetch dropdown data
 //
@@ -298,7 +299,7 @@ export const fetchDropdownData = () => async (dispatch) => {
     const res = await fetchDropdownDataReq();
 
     if (!res.error) {
-      const { countries, states, genders, religions, classList ,courses} = res.data;
+      const { countries, states, genders, religions, classList, courses } = res.data;
 
       // Normalize data (handles both API naming differences)
       const normalized = {
@@ -322,7 +323,7 @@ export const fetchDropdownData = () => async (dispatch) => {
           id: cl.id ?? cl.classId,
           name: cl.className ?? cl.name,
         })),
-        courses:courses.map((cl) => ({
+        courses: courses.map((cl) => ({
           id: cl.id ?? cl.courseId,
           name: cl.name ?? cl.courseName,
         })),
@@ -341,46 +342,46 @@ export const fetchDropdownData = () => async (dispatch) => {
 };
 
 
-     
+
 export const updateApplicationStatus =
   (applicationId, status, modifiedBy) =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading());
-      const res = await updateApplicationStatusReq(
-        applicationId,
-        status,
-        modifiedBy
-      );
-
-      if (!res.error) {
-        dispatch(
-          updateApplicationStatusInState({
-            applicationId,
-            status,
-            modifiedBy,
-          })
+    async (dispatch) => {
+      try {
+        dispatch(setLoading());
+        const res = await updateApplicationStatusReq(
+          applicationId,
+          status,
+          modifiedBy
         );
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: "Status updated successfully",
-          timer: 1500,
-        });
-      } else {
+
+        if (!res.error) {
+          dispatch(
+            updateApplicationStatusInState({
+              applicationId,
+              status,
+              modifiedBy,
+            })
+          );
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Status updated successfully",
+            timer: 1500,
+          });
+        } else {
+          dispatch(setError());
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: res.errorMsg,
+          });
+        }
+      } catch (err) {
         dispatch(setError());
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: res.errorMsg,
+          text: err?.message || "Failed to update application status",
         });
       }
-    } catch (err) {
-      dispatch(setError());
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err?.message || "Failed to update application status",
-      });
-    }
-  };
+    };
