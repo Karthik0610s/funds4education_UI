@@ -56,8 +56,6 @@ export const addNewSponsor = async (data, dispatch, navigate) => {
     // ⭐ Navigate AFTER popup OK click
     navigate("/login");
 
-    return res.data;
-
   } catch (error) {
     dispatch(setError());
 

@@ -256,14 +256,20 @@ export default function SponsorSignUpPage() {
       <div className="form-group">
         <label>Username *</label>
         <input
-          type="text"
-          value={verification.username}
-          onChange={(e) =>
-            setVerification({ ...verification, username: e.target.value })
-          }
-          className={errors.username ? "input-error" : ""}
-          placeholder="Choose username"
-        />
+  type="text"
+  placeholder="Username"
+  value={verification.username}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // allow only letters, numbers, underscore
+    if (/^[A-Za-z0-9_]*$/.test(value)) {
+      setVerification({ ...verification, username: value });
+    }
+  }}
+  className={errors.username ? "input-error" : ""}
+/>
+
         {errors.username && <p className="error-text">{errors.username}</p>}
       </div>
 
