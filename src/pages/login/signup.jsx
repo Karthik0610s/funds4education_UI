@@ -5,10 +5,13 @@ import { insertNewUser } from "../../app/redux/slices/signupSlice";
 import { routePath as RP } from "../../app/components/router/routepath";
 import { useNavigate } from "react-router-dom";
 import "../../pages/styles.css";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function SignUpPage() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState("student"); // default to student
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const [basicDetails, setBasicDetails] = useState({
     firstName: "",
@@ -36,7 +39,7 @@ export default function SignUpPage() {
   // --- Validation regex ---
   const nameRegex = /^[A-Za-z]{0,150}$/;
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu)$/;
-  const usernameRegex = /^[A-Za-z]{0,150}$/;
+  const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^[0-9]{0,10}$/;
   const courseRegex = /^[A-Za-z\s]{1,150}$/;
@@ -493,28 +496,47 @@ const payload = {
               <div className="form-group">
                 <label>Username *</label>
                 <input
-                  type="text"
-                  placeholder="Username"
-                  value={verification.username}
-                  onChange={(e) =>
-                    usernameRegex.test(e.target.value) &&
-                    setVerification({ ...verification, username: e.target.value })
-                  }
-                  className={errors.username ? "input-error" : ""}
-                />
+  type="text"
+  placeholder="Username"
+  value={verification.username}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // allow only valid characters while typing
+    if (/^[A-Za-z0-9_]*$/.test(value)) {
+      setVerification({ ...verification, username: value });
+    }
+  }}
+  className={errors.username ? "input-error" : ""}
+/>
+
                 {errors.username && <p className="error-text">{errors.username}</p>}
               </div>
               <div className="form-group">
-                <label>Password *</label>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={verification.password}
-                  onChange={(e) => setVerification({ ...verification, password: e.target.value })}
-                  className={errors.password ? "input-error" : ""}
-                />
-                {errors.password && <p className="error-text">{errors.password}</p>}
-              </div>
+  <label>Password *</label>
+
+  <div className="password-wrapper">
+    <input
+      type={showPassword ? "text" : "password"}
+      placeholder="Password"
+      value={verification.password}
+      onChange={(e) =>
+        setVerification({ ...verification, password: e.target.value })
+      }
+      className={errors.password ? "input-error" : ""}
+    />
+
+    <span
+      className="password-toggle"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+    </span>
+  </div>
+
+  {errors.password && <p className="error-text">{errors.password}</p>}
+</div>
+
             </div>
           </div>
         )}

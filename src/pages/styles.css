@@ -5543,3 +5543,25 @@ h2, h3, p {
   margin-top: 1rem;
 }*/
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for eye icon */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  font-size: 22px;
+  color: #555;
+}
+
+.password-toggle:hover {
+  color: #000;
+}

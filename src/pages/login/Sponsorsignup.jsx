@@ -4,6 +4,9 @@ import { routePath as RP } from "../../app/components/router/routepath";
 import "../../pages/styles.css";
 import { useDispatch } from "react-redux";
 import { addNewSponsor, fetchSponsorList } from "../../app/redux/slices/SponsorSlice"; 
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
+
 export default function SponsorSignUpPage() {
     const [step, setStep] = useState(0);
     const [userType, setUserType] = useState("sponsor"); // default to sponsor
@@ -15,7 +18,7 @@ export default function SponsorSignUpPage() {
         phone: "",
         website: "",
     });
-
+    const [showPassword, setShowPassword] = useState(false);
     const [verification, setVerification] = useState({ username: "", password: "" });
     const [errors, setErrors] = useState({});
 
@@ -23,7 +26,7 @@ export default function SponsorSignUpPage() {
     const nameRegex = /^[A-Za-z\s]{1,150}$/;
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|org|net|edu|co\.in)$/;
     const phoneRegex = /^[0-9]{10}$/;
-    const usernameRegex = /^[A-Za-z]{1,150}$/;
+    const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
     const passwordRegex =
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
     const websiteOrLinkedInRegex =
@@ -210,15 +213,19 @@ export default function SponsorSignUpPage() {
       <div className="form-group">
         <label>Phone *</label>
         <input
-          type="text"
-          maxLength={10}
-          value={basicDetails.phone}
-          onChange={(e) =>
-            setBasicDetails({ ...basicDetails, phone: e.target.value })
-          }
-          className={errors.phone ? "input-error" : ""}
-          placeholder="Phone Number"
-        />
+         type="text"
+         maxLength={10}
+         value={basicDetails.phone}
+         onChange={(e) => {
+         const value = e.target.value;
+         if (/^\d*$/.test(value)) {
+        setBasicDetails({ ...basicDetails, phone: value });
+        }
+      }}
+       className={errors.phone ? "input-error" : ""}
+      placeholder="Phone Number"
+      />
+
         {errors.phone && <p className="error-text">{errors.phone}</p>}
       </div>
     </div>
@@ -261,18 +268,30 @@ export default function SponsorSignUpPage() {
       </div>
 
       <div className="form-group">
-        <label>Password *</label>
-        <input
-          type="password"
-          value={verification.password}
-          onChange={(e) =>
-            setVerification({ ...verification, password: e.target.value })
-          }
-          className={errors.password ? "input-error" : ""}
-          placeholder="Password"
-        />
-        {errors.password && <p className="error-text">{errors.password}</p>}
-      </div>
+  <label>Password *</label>
+
+  <div className="password-wrapper">
+    <input
+      type={showPassword ? "text" : "password"}
+      placeholder="Password"
+      value={verification.password}
+      onChange={(e) =>
+        setVerification({ ...verification, password: e.target.value })
+      }
+      className={errors.password ? "input-error" : ""}
+    />
+
+    <span
+      className="password-toggle"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+    </span>
+  </div>
+
+  {errors.password && <p className="error-text">{errors.password}</p>}
+</div>
+
     </div>
   </div>
 )}
