@@ -228,6 +228,11 @@ export const fetchApplicationsBySponsorReq = async (sponsorId, status = "") => {
 
     return { error: false, data: _data, message: "", errorMsg: "" };
   } catch (err) {
+    // ✅ Handle 404 separately → return empty array (no scholarships)
+    if (err.response?.status === 404) {
+      return { error: false, data: [], message: "", errorMsg: "" };
+    }
+
     const errorMsg = err.response
       ? err.response.data.detail ||
         err.response.data.message ||
