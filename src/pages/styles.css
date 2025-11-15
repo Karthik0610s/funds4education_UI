@@ -2400,6 +2400,8 @@ input:not([type="radio"]) {
 .login-form p a {
   color: #1d4f56;
   text-decoration: underline;
+  display: inline-block; /* or block */
+  margin-bottom: 10px;   /* now the space will appear */
 }
 
 /* === Inputs === */
@@ -5308,7 +5310,7 @@ h2, h3, p {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.5rem;
   margin-bottom: 0.75rem;
 }
 

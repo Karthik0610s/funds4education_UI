@@ -13,6 +13,7 @@ export default function SponsorApplications() {
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
+    debugger;
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
