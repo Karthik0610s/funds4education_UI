@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApplicationsBySponsor , updateApplicationStatus} from "../../app/redux/slices/ScholarshipSlice"; // adjust path if needed
+import { fetchApplicationsBySponsor, updateApplicationStatus } from "../../app/redux/slices/ScholarshipSlice"; // adjust path if needed
 import "../styles.css";
 import Swal from "sweetalert2";
 export default function SponsorApplications() {
@@ -13,68 +13,69 @@ export default function SponsorApplications() {
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
+    debugger;
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
 
   const normalize = (s) => (s || "").toLowerCase();
 
-const handleUpdateStatus = (id, newStatus) => {
-  const modifiedBy = localStorage.getItem("name") || "SponsorUser";
-  const sponsorId = localStorage.getItem("userId");
+  const handleUpdateStatus = (id, newStatus) => {
+    const modifiedBy = localStorage.getItem("name") || "SponsorUser";
+    const sponsorId = localStorage.getItem("userId");
 
-  const actionText =
-    newStatus === "Approved"
-      ? "approve"
-      : newStatus === "Rejected"
-      ? "reject"
-      : newStatus === "Funded"
-      ? "fund"
-      : "update";
-
-  Swal.fire({
-    title: `Are you sure you want to ${actionText} this application?`,
-    text:
+    const actionText =
       newStatus === "Approved"
-        ? "Once approved, this student will be eligible for funding."
+        ? "approve"
         : newStatus === "Rejected"
-        ? "Once rejected, this student cannot reapply for this scholarship."
-        : "Confirm your action.",
-    icon:
-      newStatus === "Approved"
-        ? "success"
-        : newStatus === "Rejected"
-        ? "warning"
-        : "info",
-    showCancelButton: true,
-    confirmButtonText: `Yes, ${actionText}`,
-    cancelButtonText: "Cancel",
-    confirmButtonColor:
-      newStatus === "Approved"
-        ? "#4CAF50"
-        : newStatus === "Rejected"
-        ? "#e74c3c"
-        : "#3498db",
-    cancelButtonColor: "#999",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      // ✅ Dispatch API call
-      await dispatch(updateApplicationStatus(id, newStatus, modifiedBy));
+          ? "reject"
+          : newStatus === "Funded"
+            ? "fund"
+            : "update";
 
-      setTimeout(() => {
-        dispatch(fetchApplicationsBySponsor(sponsorId));
-      }, 800);
+    Swal.fire({
+      title: `Are you sure you want to ${actionText} this application?`,
+      text:
+        newStatus === "Approved"
+          ? "Once approved, this student will be eligible for funding."
+          : newStatus === "Rejected"
+            ? "Once rejected, this student cannot reapply for this scholarship."
+            : "Confirm your action.",
+      icon:
+        newStatus === "Approved"
+          ? "success"
+          : newStatus === "Rejected"
+            ? "warning"
+            : "info",
+      showCancelButton: true,
+      confirmButtonText: `Yes, ${actionText}`,
+      cancelButtonText: "Cancel",
+      confirmButtonColor:
+        newStatus === "Approved"
+          ? "#4CAF50"
+          : newStatus === "Rejected"
+            ? "#e74c3c"
+            : "#3498db",
+      cancelButtonColor: "#999",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // ✅ Dispatch API call
+        await dispatch(updateApplicationStatus(id, newStatus, modifiedBy));
 
-      Swal.fire({
-        icon: "success",
-        title: "Updated!",
-        text: `Application has been ${newStatus.toLowerCase()} successfully.`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    }
-  });
-};
+        setTimeout(() => {
+          dispatch(fetchApplicationsBySponsor(sponsorId));
+        }, 800);
+
+        Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: `Application has been ${newStatus.toLowerCase()} successfully.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    });
+  };
 
 
   // 💬 Handle local messaging UI (not stored in backend)
@@ -134,51 +135,53 @@ const handleUpdateStatus = (id, newStatus) => {
                   </span>
                 </div>
 
-<div className="application-actions">
-  {["pending", "submitted", "under review"].includes(normalize(app.status)) && (
-    <>
-      <button
-        className="btn btn-approve"
-        onClick={() => handleUpdateStatus(app.applicationId, "Approved")}
-      >
-        Approve
-      </button>
-      <button
-        className="btn btn-reject"
-        onClick={() => handleUpdateStatus(app.applicationId, "Rejected")}
-      >
-        Reject
-      </button>
-    </>
-  )}
+                <div className="application-actions">
+                  {["pending", "submitted", "under review"].includes(normalize(app.status)) && (
+                    <>
+                      <button
+                        className="btn btn-approve"
+                        onClick={() => handleUpdateStatus(app.applicationId, "Approved")}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="btn btn-reject"
+                        onClick={() => handleUpdateStatus(app.applicationId, "Rejected")}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
 
-  {normalize(app.status) === "approved" && (
-    <button
-      className="btn btn-fund"
-      onClick={() => handleUpdateStatus(app.applicationId, "Funded")}
-    >
-      Fund Student
-    </button>
-  )}
+                  {normalize(app.status) === "approved" && (
+                    <button
+                      className="btn btn-fund"
+                      onClick={() => handleUpdateStatus(app.applicationId, "Funded")}
+                    >
+                      Fund Student
+                    </button>
+                  )}
 
-  <button
-    className="btn btn-message"
-    onClick={() =>
-      setSelectedStudent({
-        ...app,
-        messages: app.messages || [],
-      })
-    }
-  >
-    Messages ({(app.messages || []).length})
-  </button>
-</div>
+                  <button
+                    className="btn btn-message"
+                    onClick={() =>
+                      setSelectedStudent({
+                        ...app,
+                        messages: app.messages || [],
+                      })
+                    }
+                  >
+                    Messages ({(app.messages || []).length})
+                  </button>
+                </div>
 
               </div>
             ))
           ) : (
-            <p className="empty">No applications found.</p>
-          )}
+            <div style={{ textAlign: "center", padding: "40px" }}>
+              <h3>No scholarships added</h3>
+              <p>Add scholarship to get applications</p>
+            </div>)}
         </div>
       </div>
 

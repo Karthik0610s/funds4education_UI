@@ -1,4 +1,4 @@
-import React,{useEffect}from 'react'
+import React,{useEffect}from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from '../app/components/header/header';
 import "../pages/styles.css";
@@ -272,7 +272,7 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
     <h2 className="benefits-subtitle">Benefits</h2>
 
     <h1 className="benefits-title">
-      Free <span>Scholarship</span> <br /> Provider By Schdent
+      Free <span>Scholarship</span> <br /> Provider By VidyāSetu
     </h1>
 
     <p className="benefits-description">
@@ -330,7 +330,7 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
     {/* Right Side — Stats + Paragraph */}
     <div className="achievement-info">
        <div className="achievement-header">
-    <h3 className="achievement-subtitle">Achievement</h3>
+    <h2 className="achievement-subtitle">Achievements</h2>
     <h1 className="achievement-title">
       An <span>Educational</span> Service <br /> With Rapid Development
     </h1>
