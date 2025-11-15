@@ -228,8 +228,10 @@ export const fetchApplicationsBySponsorReq = async (sponsorId, status = "") => {
 
     return { error: false, data: _data, message: "", errorMsg: "" };
   } catch (err) {
-    // ✅ Handle 404 separately → return empty array (no scholarships)
-    if (err.response?.status === 404) {
+    // 🎯 If API says "no data" or returns 404 → treat it as success with empty array
+    const status = err.response?.status;
+
+    if (status === 404) {
       return { error: false, data: [], message: "", errorMsg: "" };
     }
 
@@ -244,6 +246,7 @@ export const fetchApplicationsBySponsorReq = async (sponsorId, status = "") => {
     return { error: true, data: [], message: "", errorMsg };
   }
 };
+
 
 //
 // ✅ 5️⃣ Update Application Status (Approve / Reject)
