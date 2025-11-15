@@ -74,8 +74,7 @@ const [imgError, setImgError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const activeFilters = {
-        statusType: activeTab, // live/upcoming
-        classId: filters.class !== "All" ? filters.class : null,
+        statusType: "both",        classId: filters.class !== "All" ? filters.class : null,
         countryId: filters.country !== "All" ? filters.country : null,
         genderId: filters.gender !== "All" ? filters.gender : null,
         religionId: filters.religion !== "All" ? filters.religion : null,

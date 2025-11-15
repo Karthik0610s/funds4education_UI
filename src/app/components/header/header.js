@@ -9,16 +9,15 @@ import "./header.css";
 const Header = ({ variant = "public" }) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) section.scrollIntoView({ behavior: "smooth" });
   };
 
-  // ✅ Toggles the hamburger menu
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
-  // ✅ Conditionally render menu items based on variant
   const renderVariantLinks = () => {
     switch (variant) {
       case "public":
@@ -46,9 +45,22 @@ const Header = ({ variant = "public" }) => {
               </a>
               <Link to={RP.studentdashboard}>Scholarships</Link>
             </div>
+
             <div className="header-right">
               <Link to="/login">Login</Link>
-              <Link to="/signup">Sign Up</Link>
+
+             <Link
+             to="#"
+             className="signup-btn"
+             onClick={(e) => {
+             e.preventDefault();    
+             setShowSignupModal(true);
+             }}
+             >
+              Sign Up
+            </Link>
+
+
               <Link to={RP.resetPassword}>Reset Password</Link>
             </div>
           </div>
@@ -57,7 +69,7 @@ const Header = ({ variant = "public" }) => {
       case "student-profile":
         return (
           <div className="header-actions">
-            <Link to="/login">Login</Link>
+            <Link to="/login" state={{ userType: "student" }} >Login</Link>
             <FiBell size={22} className="cursor-pointer" />
             <div className="icon-circle">
               <span className="icon-text">?</span>
@@ -93,49 +105,70 @@ const Header = ({ variant = "public" }) => {
           </div>
         );
 
-      case "sponsordashboardreport":
-        return (
-          <div className="nav-links">
-            <Link to="">Dashboard</Link>
-            <Link to="">Campaigns</Link>
-            <Link to="">Reports</Link>
-          </div>
-        );
-
-      case "sponsoraddashboard":
-        return (
-          <div className="nav-links">
-            <Link to="">Dashboard</Link>
-            <Link to="">AdCampaigns</Link>
-            <Link to="">Settings</Link>
-          </div>
-        );
-
       default:
         return null;
     }
   };
 
   return (
-    <header className="header">
-      <div className="header-container">
-        {/* === LEFT: LOGO === */}
-        <div className="header-left" onClick={() => navigate(RP.home)}>
-          <img src={logo} alt="VidyaSetu Logo" className="logo" />
-          <span className="brand">VidyāSetu</span>
-        </div>
+    <>
+      <header className="header">
+        <div className="header-container">
+          {/* LOGO */}
+          <div className="header-left" onClick={() => navigate(RP.home)}>
+            <img src={logo} alt="VidyaSetu Logo" className="logo" />
+            <span className="brand">VidyāSetu</span>
+          </div>
 
-        {/* === MENU ICON === */}
-        <div className="menu-icon" onClick={toggleMenu}>
-          {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-        </div>
+          {/* HAMBURGER */}
+          <div className="menu-icon" onClick={toggleMenu}>
+            {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+          </div>
 
-        {/* === NAVIGATION VARIANT === */}
-        <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
-          {renderVariantLinks()}
-        </nav>
-      </div>
-    </header>
+          {/* NAV CONTENT */}
+          <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
+            {renderVariantLinks()}
+          </nav>
+        </div>
+      </header>
+
+      {/* ⭐ SIGNUP MODAL */}
+      {showSignupModal && (
+        <div className="signup-modal">
+          <div className="modal-content">
+            <h2>Select Your Account Type</h2>
+
+            <button
+              className="role-button student"
+              onClick={() => navigate("/signup")}
+            >
+              Student
+            </button>
+
+            <button
+              className="role-button sponsor"
+              onClick={() => navigate("/sponsor/signup")}
+            >
+              Sponsor
+            </button>
+
+            <button
+              className="role-button institution"
+              onClick={() => navigate("/institution/signup")}
+            >
+              Institution
+            </button>
+
+            <span
+              className="close-btn"
+              onClick={() => setShowSignupModal(false)}
+            >
+              ✖
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
