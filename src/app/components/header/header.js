@@ -115,7 +115,10 @@ const Header = ({ variant = "public" }) => {
       <header className="header">
         <div className="header-container">
           {/* LOGO */}
-          <div className="header-left" onClick={() => navigate(RP.home)}>
+          <div className="header-left" onClick={() => {
+    localStorage.clear(); // or remove specific keys
+    navigate(RP.home);
+  }}>
             <img src={logo} alt="VidyaSetu Logo" className="logo" />
             <span className="brand">VidyāSetu</span>
           </div>
