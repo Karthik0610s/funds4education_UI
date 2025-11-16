@@ -118,13 +118,6 @@ const [filters, setFilters] = useState({
   className: null,
   course: null,
 });
-// ✅ SafeJoin prevents .join() crashes when a field isn't an array
-const safeJoin = (val) => {
-  if (!val) return null;
-  if (Array.isArray(val)) return val.join(",");
-  if (typeof val === "string" || typeof val === "number") return val.toString();
-  return null;
-};
 
     useEffect(() => {
         if (show) {
@@ -426,20 +419,20 @@ if (formData.maxFamilyIncome && formData.maxFamilyIncome.length > 350) {
 const payload = {
   ...formData,
   minPercentageOrCGPA: formData.minPercentageOrCGPA || null,
-  maxFamilyIncome: formData.maxFamilyIncome || null,
-  scholarshipAmount: formData.benefits || null,
-  documents: formData.documents || null,
-  uploadedFiles: null,
+    maxFamilyIncome: formData.maxFamilyIncome || null,
+    scholarshipAmount: formData.benefits || null,
+    documents: formData.documents || null,
+    uploadedFiles: null,
 
-  // ✅ Use safeJoin to avoid "join is not a function" error
-  religion_ID: safeJoin(filters.religion),
-  country_ID: safeJoin(filters.country),
-  state_ID: safeJoin(filters.state),
-  gender_ID: safeJoin(filters.gender),
-  class_ID: safeJoin(filters.className),
-  course_ID: safeJoin(filters.course),
+religion_ID: filters.religion,
+            religion_ID: filters.religion ? parseInt(filters.religion) : 0,
+            country_ID: filters.country ? parseInt(filters.country) : 0,
+            state_ID: filters.state ? parseInt(filters.state) : 0,
+            gender_ID: filters.gender ? parseInt(filters.gender) :0,
+            class_ID: filters.className || 0,
+            course_ID: filters.course || 0,
 
-  id: scholarship ? scholarship.id : 0,
+    id: scholarship ? scholarship.id : 0,
 };
 
         try {
@@ -765,7 +758,7 @@ const payload = {
         name="religion"
         className="form-control"
         value={filters.religion ?? ""}
-        onChange={(e) => setFilters({ ...filters, religion: Number(e.target.value) || null })}
+        onChange={(e) => setFilters({ ...filters, religion: Number(e.target.value) || 0 })}
       >
         <option value="">Select Religion</option>
         {religions.map(r => (
@@ -783,7 +776,7 @@ const payload = {
         name="country"
         className="form-control"
         value={filters.country ?? ""}
-        onChange={(e) => setFilters({ ...filters, country: Number(e.target.value) || null })}
+        onChange={(e) => setFilters({ ...filters, country: Number(e.target.value) || 0 })}
       >
         <option value="">Select Country</option>
         {countries.map(c => (
@@ -804,7 +797,7 @@ const payload = {
         name="state"
         className="form-control"
         value={filters.state ?? ""}
-        onChange={(e) => setFilters({ ...filters, state: Number(e.target.value) || null })}
+        onChange={(e) => setFilters({ ...filters, state: Number(e.target.value) || 0 })}
       >
         <option value="">Select State</option>
         {states.map(s => (
@@ -822,7 +815,7 @@ const payload = {
   name="gender"
   className="form-control"
   value={filters.gender ?? ""}
-  onChange={(e) => setFilters({ ...filters, gender: Number(e.target.value) || null })}
+  onChange={(e) => setFilters({ ...filters, gender: Number(e.target.value) || 0 })}
 >
   <option value="">Select Gender</option>
   {genders.map(g => (
@@ -870,7 +863,7 @@ const payload = {
         className="form-control"
         disabled={!filters.className}
         value={filters.course ?? ""}
-        onChange={(e) => setFilters({ ...filters, course: Number(e.target.value) || null })}
+        onChange={(e) => setFilters({ ...filters, course: Number(e.target.value) || 0 })}
       >
         <option value="">Select Course</option>
         {courses.map(c => (
