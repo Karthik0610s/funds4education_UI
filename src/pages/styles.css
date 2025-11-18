@@ -907,6 +907,117 @@ text-align: center;
   background: #f9fafb;
   font-family: Arial, sans-serif;
 }
+/* ==========================================================
+   SPONSOR DASHBOARD — MOBILE CSS (unique classes, no conflict)
+========================================================== */
+@media (max-width: 768px) {
+
+ 
+
+  /* ------------------------------------
+     MOBILE BAR BELOW HEADER
+  ------------------------------------ */
+  .sponsor-mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    position: fixed;
+    top: 60px;  /* your existing header height */
+    left: 0;
+    width: 100%;
+    z-index: 7000;
+  }
+
+  .sponsor-mobile-btn {
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #0f2b3d;
+    padding: 4px;
+  }
+
+  .sponsor-mobile-username {
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f2b3d;
+  }
+
+  /* Push content below header + mobile bar */
+  .main-section {
+    margin-top: 120px !important;
+     
+    margin-top: calc(var(--header-height) + var(--mobile-bar-height)) !important;
+  
+  }
+
+  /* ------------------------------------
+     DRAWER PANEL
+  ------------------------------------ */
+  .sponsor-drawer {
+    position: fixed;
+    top: 120px;  /* header + bar */
+    left: 0;
+    width: 78%;
+    max-width: 300px;
+    height: calc(100vh - 120px);
+    background: #ffffff;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    z-index: 9000;
+    padding: 20px 18px;
+    box-shadow: 3px 0 14px rgba(0,0,0,0.22);
+    overflow-y: auto;
+  }
+
+  .sponsor-drawer.open {
+    transform: translateX(0);
+  }
+
+  /* ------------------------------------
+     OVERLAY (DO NOT COVER HEADER/BAR)
+  ------------------------------------ */
+  .sponsor-drawer-overlay {
+    position: fixed;
+    top: 120px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 120px);
+    background: rgba(0,0,0,0.45);
+    z-index: 8500;
+  }
+
+  /* ------------------------------------
+     DRAWER NAV ITEMS
+  ------------------------------------ */
+  .sponsor-drawer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .sponsor-drawer-item {
+    padding: 12px;
+    font-size: 17px;
+    border-radius: 6px;
+    text-align: left;
+    background: transparent;
+    color: #333;
+  }
+
+  .sponsor-drawer-item:hover {
+    background: #eef8ff;
+  }
+
+  .sponsor-drawer-item.logout {
+    color: red;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    text-align: center;
+  }
+}
 
 /* Profile */
 .profile {
@@ -1236,10 +1347,35 @@ text-align: center;
   display: flex;
   flex-direction: column;
 }*/
+/* --------- MOBILE MODE --------- */
+@media (max-width: 768px) {
+  .sponsor-mobile-bar {
+    display: flex !important;
+  }
+
+  .sponsor-drawer {
+    display: block;
+  }
+}
+
+/* --------- DESKTOP MODE --------- */
+@media (min-width: 769px) {
+  .sponsor-mobile-bar {
+    display: none !important;
+  }
+
+  .sponsor-drawer {
+    display: none !important;
+  }
+
+  .sponsor-drawer-overlay {
+    display: none !important;
+  }
+}
 
 .dashboard-main {
   flex: 1;
-  padding: 20px;
+  padding: 30px;
   overflow-y: auto;
 }
 /*scholarshipdsicover.css*/
