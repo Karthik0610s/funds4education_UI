@@ -102,77 +102,61 @@ const AddScholarshipModal = ({ show, handleClose, scholarship }) => {
         classes,
         courses,
     } = useSelector((state) => state.sponsorScholarship);
-/*const [filters, setFilters] = useState({
-  religion: [],
-  country: [],
-  state: [],
-  gender: [],
-  className: [],
-  course: [],
-});*/
 const [filters, setFilters] = useState({
-  religion: null,
-  country: null,
-  state: null,
-  gender: null,
-  className: null,
-  course: null,
+  religion: "",
+  country: "",
+  state: "",
+  gender: "",
+  className: "",
+  course: "",
 });
 
-    useEffect(() => {
-        if (show) {
-            if (scholarship) {
-                // Set form data
-                setFormData({
-                    ...initialData,
-                    ...scholarship,
-                    startDate: scholarship.startDate ? scholarship.startDate.split("T")[0] : "",
-                    endDate: scholarship.endDate ? scholarship.endDate.split("T")[0] : "",
-                });
+   useEffect(() => {
+  if (show) {
+    if (scholarship) {
+      setFormData({
+        ...initialData,
+        ...scholarship,
+        startDate: scholarship.startDate?.split("T")[0] || "",
+        endDate: scholarship.endDate?.split("T")[0] || "",
+      });
 
-                // Set filters for dropdowns
-                /*setFilters({
-                    religion: scholarship.religion_ID ? String(scholarship.religion_ID) : "",
-                    country: scholarship.country_ID ? String(scholarship.country_ID) : "",
-                    state: scholarship.state_ID ? String(scholarship.state_ID) : "",
-                    gender: scholarship.gender_ID ? String(scholarship.gender_ID) : "",
-                    className: scholarship.class_ID ? String(scholarship.class_ID) : "",
-                    course: "", // will set after courses fetch
-                });*/
-                setFilters({
-    religion: scholarship.religion_ID ?? null,
-    country: scholarship.country_ID ?? null,
-    state: scholarship.state_ID ?? null,
-    gender: scholarship.gender_ID ?? null,
-    className: scholarship.class_ID ?? null,
-    course: null, // will set after courses fetch
-});
+      setFilters({
+        religion: scholarship.religion_ID?.toString() || "",
+        country: scholarship.country_ID?.toString() || "",
+        state: scholarship.state_ID?.toString() || "",
+        gender: scholarship.gender_ID?.toString() || "",
+        className: scholarship.class_ID?.toString() || "",
+        course: "", // set after fetching
+      });
 
-                // Fetch courses for saved class
-                if (scholarship.class_ID) {
-                    dispatch(fetchCoursesByClass(scholarship.class_ID));
-                }
-            } else {
-                // Add mode
-                setFormData({ ...initialData, sponsorId: localStorage.getItem("userId"), createdBy: localStorage.getItem("name") });
-                setFilters({
-                    religion: "",
-                    country: "",
-                    state: "",
-                    gender: "",
-                    className: "",
-                    course: "",
-                });
-            }
-        }
+      if (scholarship.class_ID) {
+        dispatch(fetchCoursesByClass(scholarship.class_ID));
+      }
+    } else {
+      setFormData({
+        ...initialData,
+        sponsorId: localStorage.getItem("userId"),
+        createdBy: localStorage.getItem("name"),
+      });
 
-        // Fetch dropdown data
-        dispatch(fetchReligions());
-        dispatch(fetchCountries());
-        dispatch(fetchStates());
-        dispatch(fetchGenders());
-        dispatch(fetchClasses());
-    }, [show, scholarship, dispatch]);
+      setFilters({
+        religion: "",
+        country: "",
+        state: "",
+        gender: "",
+        className: "",
+        course: "",
+      });
+    }
+  }
+
+  dispatch(fetchReligions());
+  dispatch(fetchCountries());
+  dispatch(fetchStates());
+  dispatch(fetchGenders());
+  dispatch(fetchClasses());
+}, [show, scholarship, dispatch]);
    /* useEffect(() => {
         if (scholarship && scholarship.class_ID && courses.length > 0) {
             setFilters(prev => ({
@@ -183,12 +167,62 @@ const [filters, setFilters] = useState({
     }, [courses, scholarship]);*/
     useEffect(() => {
     if (scholarship && scholarship.class_ID && courses.length > 0) {
+      debugger;
         setFilters(prev => ({
             ...prev,
             course: scholarship.course_ID ?? null
         }));
     }
 }, [courses, scholarship]);
+
+/*const handleReactSelect = (name, selectedOptions, list) => {
+  const selectedValues = selectedOptions.map(o => o.value);
+
+  // Handle ALL
+  if (selectedValues.includes("ALL")) {
+    const allValues = list.map(item => item.value).join(",");
+    setFilters(prev => ({ ...prev, [name]: allValues }));
+  } else {
+    const valueString = selectedValues.join(",");  // "1,2,3"
+    setFilters(prev => ({ ...prev, [name]: valueString }));
+  }
+};*/
+
+
+const getSelectValue = (valueStr, list, labelKey, valueKey) => {
+  if (!valueStr) return [];
+
+  const ids = valueStr.split(",").filter(v => v);
+  const allIds = list.map(x => x[valueKey].toString());
+
+  // Show ONLY ALL if all values are selected
+  if (ids.length === allIds.length) {
+    return [{ label: "ALL", value: "ALL" }];
+  }
+
+  // Show normal selected values
+  return ids.map(id => ({
+    label: list.find(x => x[valueKey].toString() === id)?.[labelKey],
+    value: id
+  }));
+};
+
+const handleReactSelect = (key, selected, allOptions, setFilters) => {
+  if (!selected || selected.length === 0) {
+    setFilters(prev => ({ ...prev, [key]: "" }));
+    return;
+  }
+
+  const allValues = allOptions.map(o => o.value);
+  const isAllSelected = selected.some(item => item.value === "ALL");
+
+  if (isAllSelected) {
+    setFilters(prev => ({ ...prev, [key]: allValues.join(",") }));
+  } else {
+    const ids = selected.map(o => o.value);
+    setFilters(prev => ({ ...prev, [key]: ids.join(",") }));
+  }
+};
 
 
     // --- Clear function ---
@@ -424,13 +458,14 @@ const payload = {
     documents: formData.documents || null,
     uploadedFiles: null,
 
-religion_ID: filters.religion,
-            religion_ID: filters.religion ? parseInt(filters.religion) : 0,
-            country_ID: filters.country ? parseInt(filters.country) : 0,
-            state_ID: filters.state ? parseInt(filters.state) : 0,
-            gender_ID: filters.gender ? parseInt(filters.gender) :0,
-            class_ID: filters.className || 0,
-            course_ID: filters.course || 0,
+ // ⛔ DON'T parseInt these anymore
+  religion_ID: filters.religion || "",
+  country_ID: filters.country || "",
+  state_ID: filters.state || "",
+  gender_ID: filters.gender || "",
+  class_ID: filters.className || "",
+  course_ID: filters.course || "",
+
 
     id: scholarship ? scholarship.id : 0,
 };
@@ -629,129 +664,192 @@ religion_ID: filters.religion,
                         </div>
 
                         {/* --- Filters Section --- */}
-{/*<div className="filters-section mb-4">
-  <div className="row">
-   
-    <div className="form-group col-4">
-      <label>Religion</label>
-      <Select
-        isMulti
-        name="religion"
-        options={religions.map((r) => ({
-          value: r.id,
-          label: r.religion_Name,
-        }))}
-        value={religions
-          .filter((r) => filters.religion?.includes(String(r.id)))
-          .map((r) => ({ value: r.id, label: r.religion_Name }))}
-        onChange={(selected) =>
-          setFilters({
-            ...filters,
-            religion: selected.map((s) => s.value.toString()),
-          })
-        }
-        placeholder="Select Religion(s)"
-        classNamePrefix="select"
-      />
-    </div>
-                                <div className="form-group col-4">
-                                    <label>Country</label>
-                                    <select name="country" value={filters.country} onChange={handleFilterChange}>
-                                        <option value="">Select Country</option>
-                                        {countries.map(c => (
-                                            <option key={c.id} value={c.id}>{c.country_Name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-<div className="form-group col-4">
-      <label>State</label>
-      <Select
-        isMulti
-        name="state"
-        options={states.map((s) => ({
-          value: s.id,
-          label: s.state_Name,
-        }))}
-        value={states
-          .filter((s) => filters.state?.includes(String(s.id)))
-          .map((s) => ({ value: s.id, label: s.state_Name }))}
-        onChange={(selected) =>
-          setFilters({
-            ...filters,
-            state: selected.map((s) => s.value.toString()),
-          })
-        }
-        placeholder="Select State(s)"
-        classNamePrefix="select"
-      />
-    </div>
-  </div>
+                    <div className="mb-4">
 
-  <div className="row mt-2">
-    
-    <div className="form-group col-4">
-      <label>Gender</label>
-      <Select
-        isMulti
-        name="gender"
-        options={genders.map((g) => ({
-          value: g.gender_ID,
-          label: g.gender_Name,
-        }))}
-        value={genders
-          .filter((g) => filters.gender?.includes(String(g.gender_ID)))
-          .map((g) => ({ value: g.gender_ID, label: g.gender_Name }))}
-        onChange={(selected) =>
-          setFilters({
-            ...filters,
-            gender: selected.map((s) => s.value.toString()),
-          })
-        }
-        placeholder="Select Gender(s)"
-        classNamePrefix="select"
-      />
-    </div>
-                                <div className="form-group col-4">
-                                    <label>Class</label>
-                                    <select name="className" value={filters.className} onChange={handleFilterChange}>
-                                        <option value="">Select Class</option>
-                                        {classes.map(cls => (
-                                            <option key={cls.classId} value={cls.classId}>{cls.className}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="form-group col-4">
-      <label>Course</label>
-      <Select
-        isMulti
-        name="course"
-        isDisabled={!filters.className?.length}
-        options={courses.map((c) => ({
-          value: c.courseId,
-          label: c.courseName,
-        }))}
-        value={courses
-          .filter((c) => filters.course?.includes(String(c.courseId)))
-          .map((c) => ({ value: c.courseId, label: c.courseName }))}
-        onChange={(selected) =>
-          setFilters({
-            ...filters,
-            course: selected.map((s) => s.value.toString()),
-          })
-        }
-        placeholder="Select Course(s)"
-        classNamePrefix="select"
-      />
-    </div>
-  </div>
-                        </div>*/}
+      {/* Row 1 */}
+      <div className="row">
 
-                        {/*kamali single select*/}
+        {/* Religion */}
+        <div className="form-group col-6">
+          <label>Religion</label>
+          <Select
+            isMulti
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...religions.map(r => ({ label: r.religion_Name, value: r.id.toString() }))
+            ]}
+            value={getSelectValue(filters.religion, religions, "religion_Name", "id")}
+            onChange={(selected) =>
+              handleReactSelect(
+                "religion",
+                selected,
+                religions.map(r => ({ label: r.religion_Name, value: r.id.toString() })),
+                setFilters
+              )
+            }
+          />
+        </div>
+
+        {/* Country */}
+        <div className="form-group col-6">
+          <label>Country</label>
+          <Select
+            isMulti
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...countries.map(c => ({ label: c.country_Name, value: c.id.toString() }))
+            ]}
+            value={getSelectValue(filters.country, countries, "country_Name", "id")}
+            onChange={(selected) =>
+              handleReactSelect(
+                "country",
+                selected,
+                countries.map(c => ({ label: c.country_Name, value: c.id.toString() })),
+                setFilters
+              )
+            }
+          />
+        </div>
+      </div>
+
+      {/* Row 2 */}
+      <div className="row mt-3">
+
+        {/* State */}
+        <div className="form-group col-6">
+          <label>State</label>
+          <Select
+            isMulti
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...states.map(s => ({ label: s.state_Name, value: s.id.toString() }))
+            ]}
+            value={getSelectValue(filters.state, states, "state_Name", "id")}
+            onChange={(selected) =>
+              handleReactSelect(
+                "state",
+                selected,
+                states.map(s => ({ label: s.state_Name, value: s.id.toString() })),
+                setFilters
+              )
+            }
+          />
+        </div>
+
+        {/* Gender */}
+        <div className="form-group col-6">
+          <label>Gender</label>
+          <Select
+            isMulti
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...genders.map(g => ({ label: g.gender_Name, value: g.gender_ID.toString() }))
+            ]}
+            value={getSelectValue(filters.gender, genders, "gender_Name", "gender_ID")}
+            onChange={(selected) =>
+              handleReactSelect(
+                "gender",
+                selected,
+                genders.map(g => ({ label: g.gender_Name, value: g.gender_ID.toString() })),
+                setFilters
+              )
+            }
+          />
+        </div>
+      </div>
+
+      {/* Row 3 */}
+      <div className="row mt-3">
+
+        {/* Class */}
+        <div className="form-group col-6">
+          <label>Class</label>
+          {/*<Select
+            isMulti
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...classes.map(cls => ({ label: cls.className, value: cls.classId.toString() }))
+            ]}
+            value={getSelectValue(filters.className, classes, "className", "classId")}
+            onChange={(selected) => {
+              handleReactSelect(
+                "className",
+                selected,
+                classes.map(cls => ({ label: cls.className, value: cls.classId.toString() })),
+                setFilters
+              );
+
+              const first = selected?.find(x => x.value !== "ALL");
+              if (first) {
+                dispatch(fetchCoursesByClass(Number(first.value)));
+              }
+            }}
+          />*/}
+         <Select
+  isMulti
+  options={[
+    { label: "ALL", value: "ALL" },
+    ...classes.map(cls => ({ label: cls.className, value: cls.classId.toString() }))
+  ]}
+  value={getSelectValue(filters.className, classes, "className", "classId")}
+  onChange={(selected) => {
+    // Store selected class IDs as "1,2,3"
+    handleReactSelect(
+      "className",
+      selected,
+      classes.map(cls => ({ label: cls.className, value: cls.classId.toString() })),
+      setFilters
+    );
+
+    // Reset course when class changes
+    setFilters(prev => ({ ...prev, course: "" }));
+
+    // Generate "1,2,3" CSV from selected values
+    const selectedIds = selected
+      ?.filter(x => x.value !== "ALL")
+      .map(x => x.value)
+      .join(",");
+
+    if (selectedIds) {
+      dispatch(fetchCoursesByClass(selectedIds));
+    }
+  }}
+/>
+
+
+        </div>
+
+        {/* Course */}
+        <div className="form-group col-6">
+          <label>Course</label>
+          <Select
+            isMulti
+            isDisabled={!filters.className}
+            options={[
+              { label: "ALL", value: "ALL" },
+              ...courses.map(c => ({ label: c.courseName, value: c.courseId.toString() }))
+            ]}
+            value={getSelectValue(filters.course, courses, "courseName", "courseId")}
+            onChange={(selected) =>
+              handleReactSelect(
+                "course",
+                selected,
+                courses.map(c => ({ label: c.courseName, value: c.courseId.toString() })),
+                setFilters
+              )
+            }
+          />
+        </div>
+      </div>
+    </div>
+
+
+                        {/*kamali single select
 <div className="mb-4">
 
-  {/* Row 1 */}
+
   <div className="row">
-    {/* Religion */}
+ 
     <div className="form-group col-6">
       <label>Religion</label>
       <select
@@ -769,8 +867,7 @@ religion_ID: filters.religion,
       </select>
     </div>
 
-    {/* Country */}
-    <div className="form-group col-6">
+     <div className="form-group col-6">
       <label>Country</label>
       <select
         name="country"
@@ -788,9 +885,9 @@ religion_ID: filters.religion,
     </div>
   </div>
 
-  {/* Row 2 */}
+  
   <div className="row mt-3">
-    {/* State */}
+  
     <div className="form-group col-6">
       <label>State</label>
       <select
@@ -808,7 +905,7 @@ religion_ID: filters.religion,
       </select>
     </div>
 
-    {/* Gender */}
+   
     <div className="form-group col-6">
       <label>Gender</label>
       <select
@@ -827,9 +924,9 @@ religion_ID: filters.religion,
     </div>
   </div>
 
-  {/* Row 3 */}
+ 
   <div className="row mt-3">
-    {/* Class */}
+
     <div className="form-group col-6">
       <label>Class</label>
       {/*<select
@@ -844,8 +941,8 @@ religion_ID: filters.religion,
             {cls.className}
           </option>
         ))}
-      </select>*/}
-      <select name="className" value={filters.className ?? ""} onChange={handleFilterChange}>
+      </select>*/
+      /*<select name="className" value={filters.className ?? ""} onChange={handleFilterChange}>
   <option value="">Select Class</option>
   {classes.map(cls => (
     <option key={cls.classId} value={cls.classId}>
@@ -855,7 +952,7 @@ religion_ID: filters.religion,
 </select>
     </div>
 
-    {/* Course */}
+    
     <div className="form-group col-6">
       <label>Course</label>
       <select
@@ -875,7 +972,7 @@ religion_ID: filters.religion,
     </div>
   </div>
 
-</div>
+</div>*/}
 
 
 

@@ -24,7 +24,8 @@ body, .scholarship-card, .sidebar, .main-content {
   padding: 22px 18px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  margin-top: 10px;
+ 
 }
 
 .filter-title {
@@ -34,7 +35,7 @@ body, .scholarship-card, .sidebar, .main-content {
 }
 
 .filter-group label {
-  display: block;
+ 
   font-weight: 500;
   margin-top: 12px;
 }

@@ -55,12 +55,14 @@ export const fetchScholarshipByStatusReq = async (filters = {}) => {
     const params = {};
     params.StatusType = statusType; // 🔹 Note: capital S to match backend
 
-    if (filters.classId != null) params.Class_ID = filters.classId; // 🔹 matches @Class_ID
-    if (filters.countryId != null) params.Country_ID = filters.countryId;
-    if (filters.courseId != null) params.Course_ID = filters.courseId;
-    if (filters.stateId != null) params.State_ID = filters.stateId;
-    if (filters.religionId != null) params.Religion_ID = filters.religionId;
-    if (filters.genderId != null) params.Gender_ID = filters.genderId;
+if (filters.classId?.length) params.Class_ID = filters.classId.join(',');
+
+if (filters.countryId?.length) params.Country_ID = filters.countryId.join(',');
+if (filters.courseId?.length) params.Course_ID = filters.courseId.join(',');
+if (filters.stateId?.length) params.State_ID = filters.stateId.join(',');
+if (filters.religionId?.length) params.Religion_ID = filters.religionId.join(',');
+if (filters.genderId?.length) params.Gender_ID = filters.genderId.join(',');
+
 
     const url = `${ApiKey.Scholarship}/status`;
     const res = await publicAxios.get(url, { params });

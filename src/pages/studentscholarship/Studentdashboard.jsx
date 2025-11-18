@@ -39,14 +39,22 @@ const [imgError, setImgError] = useState(false);
 
   const [activeTab, setActiveTab] = useState("live");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState({
+  /*const [filters, setFilters] = useState({
     class: "All",
     country: "All",
     gender: "All",
     religion: "All",
     state: "All",
     course: "All",
-  });
+  });*/
+  const [filters, setFilters] = useState({
+  class: [],
+  country: [],
+  gender: [],
+  religion: [],
+  state: [],
+  course: [],
+});
 
   const [dropdownData, setDropdownData] = useState({
     countries: [],
@@ -74,12 +82,14 @@ const [imgError, setImgError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const activeFilters = {
-        statusType: "both",        classId: filters.class !== "All" ? filters.class : null,
-        countryId: filters.country !== "All" ? filters.country : null,
-        genderId: filters.gender !== "All" ? filters.gender : null,
-        religionId: filters.religion !== "All" ? filters.religion : null,
-        stateId: filters.state !== "All" ? filters.state : null,
-        courseId: filters.course !== "All" ? filters.course : null,
+        statusType: "both",      
+  classId: filters.class.length ? filters.class : null,
+  countryId: filters.country.length ? filters.country : null,
+  genderId: filters.gender.length ? filters.gender : null,
+  religionId: filters.religion.length ? filters.religion : null,
+  stateId: filters.state.length ? filters.state : null,
+  courseId: filters.course.length ? filters.course : null,
+
       };
 
       await dispatch(fetchScholarshipList(activeFilters));
@@ -169,14 +179,23 @@ const [imgError, setImgError] = useState(false);
   );
 
   const clearAllFilters = () => {
-    setFilters({
+    /*setFilters({
       class: "All",
       country: "All",
       gender: "All",
       religion: "All",
       state: "All",
       course: "All",
-    });
+    });*/
+    setFilters({
+  class: [],
+  country: [],
+  gender: [],
+  religion: [],
+  state: [],
+  course: [],
+});
+
   };
 
   return (
@@ -204,7 +223,7 @@ const [imgError, setImgError] = useState(false);
   </div>
 )}
 
-      {userId && roleId && (
+     {userId && roleId ? (
         <div className="student-navbar">
           <div className="user-info">
             <h2>{name ?? "Student"}</h2>
@@ -220,7 +239,7 @@ const [imgError, setImgError] = useState(false);
             <Link to={RP.studentwallet}>Wallet</Link>
           </nav>
         </div>
-      )}
+     ) : null}
   {/* ⭐ MOBILE FILTER ICON */}
     <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
       <FaFilter />
@@ -234,36 +253,82 @@ const [imgError, setImgError] = useState(false);
         <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
           ✕ Close
         </div>
-          <div>
+         
             <div className="filter-title">Category</div>
 
             <div className="filter-group">
-              {[
-                { key: "class", label: "Class", options: dropdownData.classList },
-                { key: "country", label: "Country", options: dropdownData.countries },
-                { key: "gender", label: "Gender", options: dropdownData.genders },
-                { key: "religion", label: "Religion", options: dropdownData.religions },
-                { key: "state", label: "State", options: dropdownData.states },
-                { key: "course", label: "Course", options: dropdownData.courses },
-              ].map(({ key, label, options }) => (
-                <div key={key}>
-                  <label>Select {label}</label>
-                  <select
-                    value={filters[key]}
-                    onChange={(e) =>
-                      setFilters({ ...filters, [key]: e.target.value })
-                    }
-                  >
-                    <option value="All">All</option>
-                    {options.map((opt) => (
-                      <option key={opt.id} value={opt.id}>
-                        {opt.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-            </div>
+  {[
+    { key: "class", label: "Class", options: dropdownData.classList },
+    { key: "country", label: "Country", options: dropdownData.countries },
+    { key: "gender", label: "Gender", options: dropdownData.genders },
+    { key: "religion", label: "Religion", options: dropdownData.religions },
+    { key: "state", label: "State", options: dropdownData.states },
+    { key: "course", label: "Course", options: dropdownData.courses },
+  ].map(({ key, label, options }) => (
+    <div key={key} className="filter-dropdown">
+     <button
+    className="dropdown-toggle"
+    onClick={() =>
+      setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
+    }
+  >
+    <span>{label}</span>
+    <span className="arrow">▼</span>
+  </button>
+
+      {filters[`show_${key}`] && (
+       <div className="dropdown-menu">
+  {/* Select All */}
+  <label className="checkbox-row">
+    <input
+      type="checkbox"
+      checked={filters[key].length === options.length}
+      onChange={() => {
+        if (filters[key].length === options.length) {
+          setFilters((prev) => ({ ...prev, [key]: [] }));
+        } else {
+          setFilters((prev) => ({
+            ...prev,
+            [key]: options.map((opt) => opt.id),
+          }));
+        }
+      }}
+    />
+    <span>Select All</span>
+  </label>
+
+  {/* All options */}
+  {options.map((opt) => (
+    <label key={opt.id} className="checkbox-row">
+      <input
+        type="checkbox"
+        checked={filters[key].includes(opt.id)}
+        onChange={(e) => {
+          if (e.target.checked) {
+            setFilters((prev) => ({
+              ...prev,
+              [key]: [...prev[key], opt.id],
+            }));
+          } else {
+            setFilters((prev) => ({
+              ...prev,
+              [key]: prev[key].filter((v) => v !== opt.id),
+            }));
+          }
+        }}
+        
+      />
+      <span>{opt.name}</span>
+      
+    </label>
+  ))}
+</div>
+
+      )}
+    </div>
+  ))}
+</div>
+
 
             <button className="clear-filters-btn" onClick={clearAllFilters}>
               Clear All Filters
@@ -274,7 +339,7 @@ const [imgError, setImgError] = useState(false);
     Logout
   </button>
 ) : null}
-          </div>
+          
         </aside>
 
         {/* Main Content */}
