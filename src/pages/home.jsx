@@ -218,7 +218,7 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
 
     {/* ===== Text Slides ===== */}
     <div className="carousel-text-slide">
-      <h2>About VIDYĀSETU</h2>
+      <h2>About VidyāSetu</h2>
       <p>
         VidyāSetu is a digital platform designed to connect deserving students with
         sponsors and institutions. It simplifies scholarship management, making
