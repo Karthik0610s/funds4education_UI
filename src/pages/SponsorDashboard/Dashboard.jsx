@@ -158,7 +158,7 @@ export default function SponsorDashboard() {
           </Link>
           <Link to="/sponsor-dashboard/report" className="nav-link">
             Reports
-          </Link> */}
+          </Link> 
           <Link to={RP.ViewSponsorProfile} className="nav-link">
             Profile
           </Link>
