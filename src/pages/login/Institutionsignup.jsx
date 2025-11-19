@@ -76,7 +76,7 @@ const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com(\.(au|edu|in|org))?|e
       case "address":
         setInstitutionDetails((prev) => ({
           ...prev,
-          [name]: value.replace(/[^A-Za-z0-9\s\-./]/g, "").slice(0, 200),
+          [name]: value.replace(/[^A-Za-z0-9\s\-.,/]/g, "").slice(0, 200),
         }));
         break;
 
