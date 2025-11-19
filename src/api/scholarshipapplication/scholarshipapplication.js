@@ -1,10 +1,10 @@
 import { authAxios, publicAxios } from "../config";
 import { ApiKey } from "../endpoint";
 
-export const fetchScholarshipApplicationListReq = async () => {
+export const fetchScholarshipApplicationListReq = async (studentId) => {
   try {
     debugger;
-    const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}`);
+    const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}/${studentId}`);
 
     const _data = res.data;
     return { error: false, data: _data, message: "", errorMsg: "" };
