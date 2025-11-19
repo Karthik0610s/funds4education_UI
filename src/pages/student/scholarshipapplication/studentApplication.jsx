@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../../app/components/header/header";
 import {
-  fetchScholarshipApplicationList,
+  fetchScholarshipApplicationListbyStudent,
   deleteScholarshipApplication,
 } from "../../../app/redux/slices/scholarshipApplicationSlice";
 import Swal from "sweetalert2";
@@ -21,10 +21,11 @@ const location = useLocation();
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
+    const studentId = localStorage.getItem("userId");
 
   useEffect(() => {
     debugger;
-    dispatch(fetchScholarshipApplicationList());
+    dispatch(fetchScholarshipApplicationListbyStudent(studentId));
   }, [dispatch]);
 
   // Filtered applications based on status
@@ -71,7 +72,7 @@ useEffect(() => {
       if (result.isConfirmed) {
         await deleteScholarshipApplication(appId, dispatch);
         Swal.fire("Deleted!", "Application has been deleted.", "success");
-        dispatch(fetchScholarshipApplicationList());
+        dispatch(fetchScholarshipApplicationListbyStudent());
       }
     });
   };
@@ -80,7 +81,7 @@ useEffect(() => {
   const handleModalSubmit = () => {
     setShowModal(false);
     setSelectedApplication(null);
-    dispatch(fetchScholarshipApplicationList());
+    dispatch(fetchScholarshipApplicationListbyStudent());
   };
 
   return (

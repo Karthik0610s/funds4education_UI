@@ -4,6 +4,7 @@ import {
   addNewScholarshipApplicationReq,
   deleteScholarshipApplicationReq,
   fetchScholarshipApplicationListReq,
+  fetchScholarshipApplicationListbyStudentReq,
   updateScholarshipApplicationReq,
 } from "../../../api/scholarshipapplication/scholarshipapplication";
 
@@ -110,11 +111,25 @@ export const deleteScholarshipApplication = async (data, dispatch) => {
 };
 
 // Action to fetch the scholarshipApplication list
-export const fetchScholarshipApplicationList = () => async (dispatch) => {
+export const fetchScholarshipApplicationList = (studentId) => async (dispatch) => {
   try {
     debugger;
     dispatch(setLoading()); // Set loading before making the API request
-    const res = await fetchScholarshipApplicationListReq(); // Fetch scholarshipApplication list from API
+    const res = await fetchScholarshipApplicationListReq(studentId); // Fetch scholarshipApplication list from API
+    dispatch(addData(res.data)); // Dispatch the data to Redux state
+  } catch (error) {
+    dispatch(setError()); // Handle error if API fails
+    Swal.fire({
+      text: "Failed to load scholarshipApplications",
+      icon: "error",
+    });
+  }
+};
+export const fetchScholarshipApplicationListbyStudent = (studentId) => async (dispatch) => {
+  try {
+    debugger;
+    dispatch(setLoading()); // Set loading before making the API request
+    const res = await fetchScholarshipApplicationListbyStudentReq(studentId); // Fetch scholarshipApplication list from API
     dispatch(addData(res.data)); // Dispatch the data to Redux state
   } catch (error) {
     dispatch(setError()); // Handle error if API fails

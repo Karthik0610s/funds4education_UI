@@ -1,10 +1,26 @@
 import { authAxios, publicAxios } from "../config";
 import { ApiKey } from "../endpoint";
 
-export const fetchScholarshipApplicationListReq = async () => {
+export const fetchScholarshipApplicationListReq = async (studentId) => {
   try {
     debugger;
-    const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}`);
+    const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}/${studentId}`);
+
+    const _data = res.data;
+    return { error: false, data: _data, message: "", errorMsg: "" };
+  } catch (err) {
+    let error;
+    if (err.response) error = err.response.data.message || "Response error";
+    else if (err.request) error = "Request error";
+    else error = "Something went wrong please try again later";
+    throw { error: true, data: "", message: "", errorMsg: error };
+  }
+};
+export const fetchScholarshipApplicationListbyStudentReq
+ = async (studentId) => {
+  try {
+    debugger;
+    const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}/byStudent/${studentId}`);
 
     const _data = res.data;
     return { error: false, data: _data, message: "", errorMsg: "" };
