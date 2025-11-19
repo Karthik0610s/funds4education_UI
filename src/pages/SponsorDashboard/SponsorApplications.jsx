@@ -3,11 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApplicationsBySponsor, updateApplicationStatus } from "../../app/redux/slices/ScholarshipSlice"; // adjust path if needed
 import "../styles.css";
 import Swal from "sweetalert2";
+import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
+import { logout } from "../../app/redux/slices/authSlice";
+import { useNavigate, Link } from "react-router-dom";
+
 export default function SponsorApplications() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.scholarship);
   const applications = data.applications || [];
+const name = localStorage.getItem("name") || "Student";
+ const navigate = useNavigate();
 
+// logout
+const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
   const [filter, setFilter] = useState("All");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [newMessage, setNewMessage] = useState("");
@@ -103,8 +114,19 @@ export default function SponsorApplications() {
   if (error) return <p className="error">Error loading applications.</p>;
 
   return (
-    <div className="page">
-      <div className="container">
+    
+    <div className="page-split">
+    
+     <div className="left-container">
+    <SponsorLayout name={name} handleLogout={handleLogout} />
+  </div>
+
+  
+      <div className="right-container">
+     <div className="mobile-sponsor">
+        <SponsorLayout name={name} handleLogout={handleLogout} />
+      </div>
+    <div className="container">
         <h2 className="page-title">Student Applications</h2>
 
         {/* Filter */}
@@ -225,5 +247,6 @@ export default function SponsorApplications() {
         </div>
       )}
     </div>
+</div>
   );
 }

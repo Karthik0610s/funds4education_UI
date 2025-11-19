@@ -14,7 +14,9 @@ import {
 } from "../../../app/redux/slices/sponsorscholarshipSlice";
 import AddScholarshipModal from "./AddScholarshipPage";
 import "../../styles.css";
-
+import SponsorLayout from "../../../pages/SponsorDashboard/SponsorLayout";
+import { logout } from "../../../app/redux/slices/authSlice";
+import { useNavigate, Link } from "react-router-dom";
 const ScholarshipPage = () => {
   const dispatch = useDispatch();
 
@@ -22,7 +24,14 @@ const ScholarshipPage = () => {
   const { data, loading = false } = useSelector(
     (state) => state.sponsorScholarship || {}
   );
+const name = localStorage.getItem("name") || "Student";
+ const navigate = useNavigate();
 
+// logout
+const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
   // ✅ Ensure data is always an array
   const scholarships = Array.isArray(data) ? data : [];
   console.log("Redux data:", data);
@@ -93,114 +102,138 @@ const ScholarshipPage = () => {
   <>
     <Header variant="scholarship" />
 
-    <div className="scholarship-page mt-5">
-      <h2 className="page-title mt-5">My Sponsored Scholarships</h2>
-      <p className="page-subtitle">
-        Manage your scholarships and filter them by status or title.
-      </p>
+    <div className="page-split">
 
-      <div className="scholarship-actions">
-        <input
-          type="text"
-          placeholder="Search by title..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          style={{ padding: "0.5rem", width: "200px" }}
-        />
-
-        <div className="scholarship-actions-right">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="applications-filter"
-          >
-            <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Closed">Closed</option>
-          </select>
-
-          <button
-            className="applications-btn-new"
-            onClick={handleAddScholarship}
-          >
-            + New Scholarship
-          </button>
-        </div>
+      {/* LEFT — Desktop sidebar */}
+      <div className="left-container">
+        <SponsorLayout name={name} handleLogout={handleLogout} />
       </div>
 
-      <div className="scholarship-table">
-        <div className="table-header">
-          <span>Title</span>
-          <span>Amount</span>
-          <span>Scholarship Limit</span>
-          <span>Status</span>
-          <span>Deadline</span>
-          <span>Actions</span>
+      {/* RIGHT — Main Content */}
+      <div className="right-container">
+
+        {/* MOBILE SponsorLayout */}
+        <div className="mobile-sponsor">
+          <SponsorLayout name={name} handleLogout={handleLogout} />
         </div>
 
-        {loading ? (
-          <p className="loading-text">Loading scholarships...</p>
-        ) : displayedScholarships.length > 0 ? (
-          displayedScholarships.map((scholarship) => (
-            <div key={scholarship.id} className="table-row">
-              <span className="title" data-label="Title">
-                {/* <FaGraduationCap className="icon" />{" "} */}
-                {scholarship.scholarshipName || "N/A"}
-              </span>
+        <div className="container">
+          <div className="scholarship-page mt-5">
 
-              <span data-label="Amount">
-                {/* <FaMoneyBillWave className="icon" /> $ */}
-                {scholarship.benefits ?? "0"}
-              </span>
+            <h2 className="page-title mt-5">My Sponsored Scholarships</h2>
 
-              <span data-label="Scholarship Limit">
-                {/* <FaUsers className="icon" />{" "} */}
-                {scholarship.scholarshipLimit ?? "-"}
-              </span>
+            <p className="page-subtitle">
+              Manage your scholarships and filter them by status or title.
+            </p>
 
-              <span data-label="Status">
-                <span
-                  className={`status ${
-                    scholarship.status?.toLowerCase() || ""
-                  }`}
+            <div className="scholarship-actions">
+              <input
+                type="text"
+                placeholder="Search by title..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{ padding: "0.5rem", width: "200px" }}
+              />
+
+              <div className="scholarship-actions-right">
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="applications-filter"
                 >
-                  {scholarship.status || "N/A"}
-                </span>
-              </span>
+                  <option value="All">All</option>
+                  <option value="Active">Active</option>
+                  <option value="Closed">Closed</option>
+                </select>
 
-              <span data-label="Deadline">
-                {scholarship.endDate ? scholarship.endDate.split("T")[0] : "-"}
-              </span>
-
-             <span className="actions" data-label="Actions">
-  <div className="actions-buttons">
-    <button className="btn-view">View</button>
-    <button className="btn-edit" onClick={() => handleEdit(scholarship)}>
-      Edit
-    </button>
-    <button className="btn-danger" onClick={() => handleDelete(scholarship.id)}>
-      Delete
-    </button>
-  </div>
-</span>
+                <button
+                  className="applications-btn-new"
+                  onClick={handleAddScholarship}
+                >
+                  + New Scholarship
+                </button>
+              </div>
             </div>
-          ))
-        ) : (
-          <p className="applications-no-results">
-            No scholarships found for <strong>{filter}</strong>.
-          </p>
-        )}
-      </div>
 
-      <AddScholarshipModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onSubmit={handleModalSubmit}
-        scholarship={selectedScholarship}
-      />
+            <div className="scholarship-table">
+              <div className="table-header">
+                <span>Title</span>
+                <span>Amount</span>
+                <span>Scholarship Limit</span>
+                <span>Status</span>
+                <span>Deadline</span>
+                <span>Actions</span>
+              </div>
+
+              {loading ? (
+                <p className="loading-text">Loading scholarships...</p>
+              ) : displayedScholarships.length > 0 ? (
+                displayedScholarships.map((scholarship) => (
+                  <div key={scholarship.id} className="table-row">
+                    <span className="title" data-label="Title">
+                      {scholarship.scholarshipName || "N/A"}
+                    </span>
+
+                    <span data-label="Amount">
+                      {scholarship.benefits ?? "0"}
+                    </span>
+
+                    <span data-label="Scholarship Limit">
+                      {scholarship.scholarshipLimit ?? "-"}
+                    </span>
+
+                    <span data-label="Status">
+                      <span
+                        className={`status ${scholarship.status?.toLowerCase() || ""}`}
+                      >
+                        {scholarship.status || "N/A"}
+                      </span>
+                    </span>
+
+                    <span data-label="Deadline">
+                      {scholarship.endDate ? scholarship.endDate.split("T")[0] : "-"}
+                    </span>
+
+                    <span className="actions" data-label="Actions">
+                      <div className="actions-buttons">
+                        <button className="btn-view">View</button>
+                        <button
+                          className="btn-edit"
+                          onClick={() => handleEdit(scholarship)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn-danger"
+                          onClick={() => handleDelete(scholarship.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="applications-no-results">
+                  No scholarships found for <strong>{filter}</strong>.
+                </p>
+              )}
+            </div>
+
+            <AddScholarshipModal
+              show={showModal}
+              handleClose={() => setShowModal(false)}
+              onSubmit={handleModalSubmit}
+              scholarship={selectedScholarship}
+            />
+
+          </div>
+        </div>
+      </div>
     </div>
   </>
 );
+
 
 
 };

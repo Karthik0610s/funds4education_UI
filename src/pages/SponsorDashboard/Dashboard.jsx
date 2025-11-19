@@ -10,7 +10,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { logout } from "../../app/redux/slices/authSlice";
 import { fetchApplicationsBySponsor } from "../../app/redux/slices/ScholarshipSlice";
-
+import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { routePath as RP } from "../../app/components/router/routepath";
 
 export default function SponsorDashboard() {
@@ -85,16 +85,26 @@ export default function SponsorDashboard() {
 
   return (
     <div className="dashboard-container">
+      <SponsorLayout name={name} handleLogout={handleLogout}></SponsorLayout>
       {/* ⭐ MOBILE BAR */}
-      <div className="sponsor-mobile-bar">
-        <button className="sponsor-mobile-btn" onClick={() => setDrawerOpen(!drawerOpen)}>
-          ☰
-        </button>
+    {/* <div className="sponsor-mobile-bar">
+  <button
+    className="sponsor-mobile-btn"
+    onClick={() => setDrawerOpen(!drawerOpen)}
+  >
+    ☰
+  </button>
 
-        <span className="sponsor-mobile-username">{name}</span>
-      </div>
+  <div className="sponsor-mobile-center">
+    <span className="sponsor-mobile-username">{name}</span>
+  </div>
 
-      {/* ⭐ OVERLAY */}
+  
+  <div className="sponsor-mobile-right"></div>
+</div>
+
+
+     
       {drawerOpen && (
         <div
           className="sponsor-drawer-overlay"
@@ -102,7 +112,7 @@ export default function SponsorDashboard() {
         ></div>
       )}
 
-      {/* ⭐ DRAWER */}
+     
       <aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
         <nav className="sponsor-drawer-nav">
 
@@ -136,7 +146,7 @@ export default function SponsorDashboard() {
       </aside>
 
       {/* Destop Sidebar */}
-      <aside className="sidebar">
+     {/* <aside className="sidebar">
         <div className="profile">
           <div className="avatar">👤</div>
           <div>
@@ -163,7 +173,7 @@ export default function SponsorDashboard() {
             Profile
           </Link>
         </nav>
-        {/* ✅ Logout Button */}
+       
         <div style={{ marginTop: "auto", padding: "1rem" }}>
           <button onClick={handleLogout} className="logout-button">
             Logout
@@ -172,7 +182,7 @@ export default function SponsorDashboard() {
 
 
 
-      </aside>
+      </aside>*/}
 
 
       {/* ⭐ MAIN CONTENT */}
@@ -234,35 +244,44 @@ export default function SponsorDashboard() {
             ))}
           </div> */}
           <div className="students-list">
-            {approvedApplications.map((s, i) => (
-              <div key={i} className="student-card">
-                <div className="student-info">
-                  <img src={student1} alt={s.firstName} className="student-avatar" />
+  {approvedApplications.map((s, i) => (
+    <div key={i} className="student-card">
+      <div className="student-info">
 
-                  <div>
-                    <h4>{s.firstName} {s.lastName}</h4>
+        <img src={student1} alt={s.firstName} className="student-avatar" />
 
-                    {/* Scholarship Name */}
-                    <p>{s.scholarshipName}</p>
+      <div className="student-details">
 
-                    {/* Scholarship Amount */}
-                    <p className="muted">Amount: ₹{s.amount}</p>
+  <p className="student-name">
+    <strong>{s.firstName} {s.lastName}</strong>
+    <span className="sch-name"> - {s.scholarshipName}</span>
+  </p>
 
-                    {/* Application Date */}
-                    <p className="muted">
-                      Applied On: {new Date(s.applicationDate).toLocaleDateString()}
-                    </p>
+  <div className="info-row">
+    <span className="label">Amount</span>
+    <span className="value">₹{s.amount}</span>
+  </div>
 
-                    {/* Status */}
-                    <p className="muted">Status: {s.status}</p>
+  <div className="info-row">
+    <span className="label">Applied On</span>
+    <span className="value">
+      {new Date(s.applicationDate).toLocaleDateString()}
+    </span>
+  </div>
 
-                  </div>
-                </div>
+  {/* STATUS + BUTTON ROW */}
+  <div className="status-action-row">
+    <span className="status-badge">{s.status}</span>
+    <button className="msg-btn">Message</button>
+  </div>
 
-                <button className="msg-btn">Message</button>
-              </div>
-            ))}
-          </div>
+</div>
+
+      </div>
+    </div>
+  ))}
+</div>
+
 
           <div className="applications">
             <div className="app-header">
@@ -308,7 +327,9 @@ export default function SponsorDashboard() {
                       <p>
                         <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
                       </p>
-                      <span className="status"><strong>{s.status.toUpperCase()}</strong></span>
+<span className={`status ${s.status.toLowerCase()}`}>
+  <strong>{s.status.toUpperCase()}</strong>
+</span>
                     </div>
 
                     <div className="app-row">

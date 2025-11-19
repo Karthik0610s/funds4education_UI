@@ -309,24 +309,24 @@ const payload = {
               <div className="form-group">
                 <label>Gender *</label>
                 <div className="gender-group">
-                  <label>
+                  <label>   Male
+                  </label>
                     <input
                       type="radio"
                       name="gender"
                       checked={basicDetails.gender === "Male"}
                       onChange={() => setBasicDetails({ ...basicDetails, gender: "Male" })}
                     />
-                    Male
+                 
+                  <label>  Female
                   </label>
-                  <label>
                     <input
                       type="radio"
                       name="gender"
                       checked={basicDetails.gender === "Female"}
                       onChange={() => setBasicDetails({ ...basicDetails, gender: "Female" })}
                     />
-                    Female
-                  </label>
+                  
                 </div>
                 {errors.gender && <p className="error-text">{errors.gender}</p>}
               </div>
