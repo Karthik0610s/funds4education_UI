@@ -26,7 +26,7 @@ const dispatch = useDispatch();
           <div className="nav-wrapper">
             <div className="nav-bar">
               <Link to="/">Home</Link>
-              <a
+             { /*<a
                 href="#benefits-section"
                 onClick={(e) => {
                   e.preventDefault();
@@ -34,8 +34,14 @@ const dispatch = useDispatch();
                 }}
               >
                 About Us
-              </a>
-              <a
+              </a>*/}
+              <Link 
+  to="/"
+  state={{ scrollTo: "benefits-section" }}
+>
+  About Us
+</Link>
+              {/*<a
                 href="#category-section"
                 onClick={(e) => {
                   e.preventDefault();
@@ -43,7 +49,7 @@ const dispatch = useDispatch();
                 }}
               >
                 Category
-              </a>
+              </a>*/}
               <Link to={RP.studentdashboard}>Scholarships</Link>
             </div>
 
@@ -62,7 +68,7 @@ const dispatch = useDispatch();
             </Link>
 
 
-              <Link to={RP.resetPassword}>Reset Password</Link>
+              {/* <Link to={RP.resetPassword}>Reset Password</Link> */}
             </div>
           </div>
         );

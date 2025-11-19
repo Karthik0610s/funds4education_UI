@@ -638,16 +638,33 @@ header .language-selector {
 }
 
 .scholarship-card h3 {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #1f2937;
-  margin: 0;
+    align-items: flex-start;
+    color: #000;
+    display: flex;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    margin-top: 5px;
+     margin-bottom: 5px;
+    font-size: 13px;
+
+}
+.card-body p + p {
+  margin-top: 10px;
 }
 
 .scholarship-card p {
   margin: 0.25rem 0;
 }
-
+@media (hover: hover) {
+  .scholarship-card:hover {
+    background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+    color: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+  }
+}
 .scholarship-card .btn-view {
   background-color: #396D70;
   color: #ffffff;
@@ -5511,6 +5528,11 @@ h2, h3, p {
 .scholarship-detail-container:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+.applications-header {
+  text-align: center;      /* optional */
+  margin-bottom: 20px; 
+      margin-top: 50px;    /* optional spacing */
 }
 
 /* 🗓️ Deadline Info */

@@ -19,6 +19,7 @@ const scholarshipApplicationSlice = createSlice({
       state.loading = true;
     },
     addData: (state, { payload }) => {
+      debugger;
       state.loading = false;
       state.error = false;
       state.data = payload;
@@ -111,6 +112,7 @@ export const deleteScholarshipApplication = async (data, dispatch) => {
 // Action to fetch the scholarshipApplication list
 export const fetchScholarshipApplicationList = () => async (dispatch) => {
   try {
+    debugger;
     dispatch(setLoading()); // Set loading before making the API request
     const res = await fetchScholarshipApplicationListReq(); // Fetch scholarshipApplication list from API
     dispatch(addData(res.data)); // Dispatch the data to Redux state

@@ -16,17 +16,17 @@ import { routePath as RP } from "../../app/components/router/routepath";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
 const StudentDashboard = () => {
- const [showFilter, setShowFilter] = useState(false);
-const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
- //const logoUrl1 = `https://localhost:44315/Scholarship/Scholarship-1/${s.logoName}`;
+  const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
+  //const logoUrl1 = `https://localhost:44315/Scholarship/Scholarship-1/${s.logoName}`;
   const { data = {}, loading = false } = useSelector(
     (state) => state.scholarship || {}
   );
   const { live = [], upcoming = [], featured = [] } = data;
-const [imgError, setImgError] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const roleId =
     useSelector((state) => state.auth.roleId) ||
@@ -48,13 +48,13 @@ const [imgError, setImgError] = useState(false);
     course: "All",
   });*/
   const [filters, setFilters] = useState({
-  class: [],
-  country: [],
-  gender: [],
-  religion: [],
-  state: [],
-  course: [],
-});
+    class: [],
+    country: [],
+    gender: [],
+    religion: [],
+    state: [],
+    course: [],
+  });
 
   const [dropdownData, setDropdownData] = useState({
     countries: [],
@@ -82,13 +82,13 @@ const [imgError, setImgError] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const activeFilters = {
-        statusType: "both",      
-  classId: filters.class.length ? filters.class : null,
-  countryId: filters.country.length ? filters.country : null,
-  genderId: filters.gender.length ? filters.gender : null,
-  religionId: filters.religion.length ? filters.religion : null,
-  stateId: filters.state.length ? filters.state : null,
-  courseId: filters.course.length ? filters.course : null,
+        statusType: "both",
+        classId: filters.class.length ? filters.class : null,
+        countryId: filters.country.length ? filters.country : null,
+        genderId: filters.gender.length ? filters.gender : null,
+        religionId: filters.religion.length ? filters.religion : null,
+        stateId: filters.state.length ? filters.state : null,
+        courseId: filters.course.length ? filters.course : null,
 
       };
 
@@ -188,42 +188,85 @@ const [imgError, setImgError] = useState(false);
       course: "All",
     });*/
     setFilters({
-  class: [],
-  country: [],
-  gender: [],
-  religion: [],
-  state: [],
-  course: [],
-});
+      class: [],
+      country: [],
+      gender: [],
+      religion: [],
+      state: [],
+      course: [],
+    });
 
   };
+  const ads = [
+  {
+    title: "🎓 Online MBA Degree",
+    text: "UGC Approved | EMI Available",
+    button: "Apply Now",
+  },
+  {
+    title: "💻 Full Stack Development Course",
+    text: "Job Guarantee Program",
+    button: "Enroll Now",
+  },
+  {
+    title: "📚 IELTS Online Coaching",
+    text: "Live Online Classes",
+    button: "Start Learning",
+  },
 
+  // ⭐ Extra ads added below
+  {
+    title: "🧠 Data Science Certification",
+    text: "Learn AI, ML & Python | Online",
+    button: "Join Today",
+  },
+  {
+    title: "🌍 Study Abroad Consultancy",
+    text: "Free Guidance & Visa Support",
+    button: "Book Free Call",
+  },
+  {
+    title: "🧑‍💼 Digital Marketing Course",
+    text: "Internship & Placement Support",
+    button: "Register Now",
+  },
+];
+
+  const [currentAd, setCurrentAd] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentAd((prev) => (prev + 1) % ads.length);
+    }, 3000); // 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div>
       <Header variant="student-profile" />
-<div className="mobile-header">
-  <div className="mobile-menu-btn" onClick={() => setShowMobileMenu(true)}>
-    ☰
-  </div>
+      <div className="mobile-header">
+        <div className="mobile-menu-btn" onClick={() => setShowMobileMenu(true)}>
+          ☰
+        </div>
 
-  <h2 className="mobile-user-name">{name ?? "Student"}</h2>
-</div>
+        <h2 className="mobile-user-name">{name ?? "Student"}</h2>
+      </div>
 
-{/* ⭐ MOBILE MENU DRAWER */}
-{showMobileMenu && (
-  <div className="mobile-menu-drawer">
-    <div className="close-menu" onClick={() => setShowMobileMenu(false)}>✕</div>
+      {/* ⭐ MOBILE MENU DRAWER */}
+      {showMobileMenu && (
+        <div className="mobile-menu-drawer">
+          <div className="close-menu" onClick={() => setShowMobileMenu(false)}>✕</div>
 
-    <Link to="/student-dashboard">Dashboard</Link>
-    <Link to="/application">Applications</Link>
-    <Link to="/scholarship-match">Matches</Link>
-    <Link to={RP.studentmessages}>Messages</Link>
-    <Link to={RP.ViewStudentProfile}>Profile</Link>
-    <Link to={RP.studentwallet}>Wallet</Link>
-  </div>
-)}
+          <Link to="/student-dashboard">Dashboard</Link>
+          <Link to="/application">Applications</Link>
+          {/* <Link to="/scholarship-match">Matches</Link>
+    <Link to={RP.studentmessages}>Messages</Link> */}
+          <Link to={RP.ViewStudentProfile}>Profile</Link>
+          {/* <Link to={RP.studentwallet}>Wallet</Link> */}
+        </div>
+      )}
 
-     {userId && roleId ? (
+      {userId && roleId ? (
         <div className="student-navbar">
           <div className="user-info">
             <h2>{name ?? "Student"}</h2>
@@ -233,118 +276,118 @@ const [imgError, setImgError] = useState(false);
               Dashboard
             </Link>
             <Link to="/application">Applications</Link>
-            <Link to="/scholarship-match">Matches</Link>
-            <Link to={RP.studentmessages}>Messages</Link>
+            {/* <Link to="/scholarship-match">Matches</Link>
+            <Link to={RP.studentmessages}>Messages</Link> */}
             <Link to={RP.ViewStudentProfile}>Profile</Link>
-            <Link to={RP.studentwallet}>Wallet</Link>
+            {/* <Link to={RP.studentwallet}>Wallet</Link> */}
           </nav>
         </div>
-     ) : null}
-  {/* ⭐ MOBILE FILTER ICON */}
-    <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
-      <FaFilter />
-      <span style={{ marginLeft: "6px" }}>Filters</span>
-    </div>
+      ) : null}
+      {/* ⭐ MOBILE FILTER ICON */}
+      <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
+        <FaFilter />
+        <span style={{ marginLeft: "6px" }}>Filters</span>
+      </div>
       <div className="dashboard-container">
         {/* Sidebar Filters */}
-          <aside className={`sidebar ${showFilter ? "mobile-open" : ""}`}>
-        
-        {/* ⭐ MOBILE CLOSE BUTTON */}
-        <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
-          ✕ Close
-        </div>
-         
-            <div className="filter-title">Category</div>
+        <aside className={`sidebar ${showFilter ? "mobile-open" : ""}`}>
 
-            <div className="filter-group">
-  {[
-    { key: "class", label: "Class", options: dropdownData.classList },
-    { key: "country", label: "Country", options: dropdownData.countries },
-    { key: "gender", label: "Gender", options: dropdownData.genders },
-    { key: "religion", label: "Religion", options: dropdownData.religions },
-    { key: "state", label: "State", options: dropdownData.states },
-    { key: "course", label: "Course", options: dropdownData.courses },
-  ].map(({ key, label, options }) => (
-    <div key={key} className="filter-dropdown">
-     <button
-    className="dropdown-toggle"
-    onClick={() =>
-      setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
-    }
-  >
-    <span>{label}</span>
-    <span className="arrow">▼</span>
-  </button>
+          {/* ⭐ MOBILE CLOSE BUTTON */}
+          <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
+            ✕ Close
+          </div>
 
-      {filters[`show_${key}`] && (
-       <div className="dropdown-menu">
-  {/* Select All */}
-  <label className="checkbox-row">
-    <input
-      type="checkbox"
-      checked={filters[key].length === options.length}
-      onChange={() => {
-        if (filters[key].length === options.length) {
-          setFilters((prev) => ({ ...prev, [key]: [] }));
-        } else {
-          setFilters((prev) => ({
-            ...prev,
-            [key]: options.map((opt) => opt.id),
-          }));
-        }
-      }}
-    />
-    <span>Select All</span>
-  </label>
+          <div className="filter-title">Category</div>
 
-  {/* All options */}
-  {options.map((opt) => (
-    <label key={opt.id} className="checkbox-row">
-      <input
-        type="checkbox"
-        checked={filters[key].includes(opt.id)}
-        onChange={(e) => {
-          if (e.target.checked) {
-            setFilters((prev) => ({
-              ...prev,
-              [key]: [...prev[key], opt.id],
-            }));
-          } else {
-            setFilters((prev) => ({
-              ...prev,
-              [key]: prev[key].filter((v) => v !== opt.id),
-            }));
-          }
-        }}
-        
-      />
-      <span>{opt.name}</span>
-      
-    </label>
-  ))}
-</div>
+          <div className="filter-group">
+            {[
+              { key: "class", label: "Class", options: dropdownData.classList },
+              { key: "country", label: "Country", options: dropdownData.countries },
+              { key: "gender", label: "Gender", options: dropdownData.genders },
+              { key: "religion", label: "Religion", options: dropdownData.religions },
+              { key: "state", label: "State", options: dropdownData.states },
+              { key: "course", label: "Course", options: dropdownData.courses },
+            ].map(({ key, label, options }) => (
+              <div key={key} className="filter-dropdown">
+                <button
+                  className="dropdown-toggle"
+                  onClick={() =>
+                    setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
+                  }
+                >
+                  <span>{label}</span>
+                  <span className="arrow">▼</span>
+                </button>
 
-      )}
-    </div>
-  ))}
-</div>
+                {filters[`show_${key}`] && (
+                  <div className="dropdown-menu">
+                    {/* Select All */}
+                    <label className="checkbox-row">
+                      <input
+                        type="checkbox"
+                        checked={filters[key].length === options.length}
+                        onChange={() => {
+                          if (filters[key].length === options.length) {
+                            setFilters((prev) => ({ ...prev, [key]: [] }));
+                          } else {
+                            setFilters((prev) => ({
+                              ...prev,
+                              [key]: options.map((opt) => opt.id),
+                            }));
+                          }
+                        }}
+                      />
+                      <span>Select All</span>
+                    </label>
+
+                    {/* All options */}
+                    {options.map((opt) => (
+                      <label key={opt.id} className="checkbox-row">
+                        <input
+                          type="checkbox"
+                          checked={filters[key].includes(opt.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFilters((prev) => ({
+                                ...prev,
+                                [key]: [...prev[key], opt.id],
+                              }));
+                            } else {
+                              setFilters((prev) => ({
+                                ...prev,
+                                [key]: prev[key].filter((v) => v !== opt.id),
+                              }));
+                            }
+                          }}
+
+                        />
+                        <span>{opt.name}</span>
+
+                      </label>
+                    ))}
+                  </div>
+
+                )}
+              </div>
+            ))}
+          </div>
 
 
-            <button className="clear-filters-btn" onClick={clearAllFilters}>
-              Clear All Filters
+          <button className="clear-filters-btn" onClick={clearAllFilters}>
+            Clear All Filters
+          </button>
+
+          {userId ? (
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
             </button>
+          ) : null}
 
-            {userId ? (
-  <button className="logout-btn" onClick={handleLogout}>
-    Logout
-  </button>
-) : null}
-          
         </aside>
 
         {/* Main Content */}
         <main className="main-content">
-          <span style={{fontSize:"34px"}}> Scholarships for Indian Students</span>
+          <span style={{ fontSize: "34px" }}> Scholarships for Indian Students</span>
 
           {/* Search Box */}
           <div className="search-box mb-3">
@@ -395,34 +438,33 @@ const [imgError, setImgError] = useState(false);
                   const isFeatured = featuredIds.includes(
                     s.id || s.scholarshipId
                   );
- // ✅ Clean logo name (remove trailing | and spaces)
-  const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
+                  // ✅ Clean logo name (remove trailing | and spaces)
+                  const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
 
-  // ✅ Encode spaces and special chars in file name
-  const encodedLogoName = encodeURIComponent(cleanLogoName);
+                  // ✅ Encode spaces and special chars in file name
+                  const encodedLogoName = encodeURIComponent(cleanLogoName);
 
-  // ✅ Build proper image URL
- const imageUrl =
-    s.logoPath && cleanLogoName
-      ? `${baseUrl}/${s.logoPath
-          .replace(/^.*Scholarship[\\/]/, "Scholarship/")
-          .replace(/\\/g, "/")}/${encodedLogoName}`
-      : "/images/before.png";
+                  // ✅ Build proper image URL
+                  const imageUrl =
+                    s.logoPath && cleanLogoName
+                      ? `${baseUrl}/${s.logoPath
+                        .replace(/^.*Scholarship[\\/]/, "Scholarship/")
+                        .replace(/\\/g, "/")}/${encodedLogoName}`
+                      : "/images/before.png";
 
-  // ✅ Create alt text without extension
-  const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
+                  // ✅ Create alt text without extension
+                  const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
 
-  // ✅ Detect if file is an image
-  const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
-    console.log("image",imageUrl);
+                  // ✅ Detect if file is an image
+                  const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
+                  console.log("image", imageUrl);
                   return (
                     <div
                       className="scholarship-card"
                       key={i}
                       onClick={() =>
                         navigate(
-                          `${RP.scholarshipViewPage}?id=${
-                            s.id || s.scholarshipId
+                          `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId
                           }`
                         )
                       }
@@ -432,9 +474,8 @@ const [imgError, setImgError] = useState(false);
                       )}
                       {activeTab === "live" && daysLeftText && (
                         <div
-                          className={`deadline-badge ${
-                            diffDays <= 1 ? "urgent" : "warning"
-                          }`}
+                          className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"
+                            }`}
                         >
                           {daysLeftText}
                         </div>
@@ -448,16 +489,16 @@ const [imgError, setImgError] = useState(false);
                             className="card-logo"
                           />*/}
                           {isImage ? (
-            <img
-              src={imageUrl}
-              alt={altText}
-              className="card-logo"
-             onError={() => setImgError(true)}
-            />
-          ) : (
-            <div className="alt-logo-text">{}</div>
-          )}
-          
+                            <img
+                              src={imageUrl}
+                              alt={altText}
+                              className="card-logo"
+                              onError={() => setImgError(true)}
+                            />
+                          ) : (
+                            <div className="alt-logo-text">{ }</div>
+                          )}
+
                         </div>
                       </div>
 
@@ -466,33 +507,39 @@ const [imgError, setImgError] = useState(false);
                           {s.name ?? "Untitled Scholarship"}
                         </h3>
                         <p>
-                          <strong>🏆 Award:</strong>{" "}
+                          <strong>🏆 Award</strong>
+                          <br />
                           {s.amount ?? "Not specified"}
                         </p>
+
                         <p>
-                          <strong>🎓 Eligibility:</strong>{" "}
+                          <strong>🎓 Eligibility</strong>
+                          <br />
                           {s.eligibility ?? "Not specified"}
                         </p>
 
+
                         {!daysLeftText && (
                           <p className="deadline-line">
-                            <strong>📅 Deadline:</strong>{" "}
+                            <strong>📅 Deadline:</strong>
+                            <br />
                             {endDate
                               ? endDate.toLocaleDateString("en-GB", {
-                                  day: "numeric",
-                                  month: "long",
-                                  year: "numeric",
-                                })
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })
                               : "N/A"}
                           </p>
                         )}
+
 
                         <div className="card-footer-updated">
                           Last Updated On{" "}
                           {s.lastUpdatedDate
                             ? new Date(s.lastUpdatedDate)
-                                .toISOString()
-                                .split("T")[0]
+                              .toISOString()
+                              .split("T")[0]
                             : "N/A"}
                         </div>
                       </div>
@@ -501,168 +548,82 @@ const [imgError, setImgError] = useState(false);
                 })
               )}
             </div>
-           {/*<div className="scholarship-grid">
-  {loading ? (
-    <p>Loading scholarships...</p>
-  ) : currentScholarships.length === 0 ? (
-    <p>
-      {activeTab === "live"
-        ? "No live scholarships currently available."
-        : "No upcoming scholarships yet."}
-    </p>
-  ) : (
-    currentScholarships.map((s, i) => {
-      const endDate = s.endDate ? new Date(s.endDate) : null;
-      const daysLeftText = getDaysLeftText(s.endDate);
-      const diffDays = endDate
-        ? Math.ceil((endDate - today) / 86400000)
-        : null;
-      const isFeatured = featuredIds.includes(s.id || s.scholarshipId);
 
-      // ✅ Construct image URL from backend path and name
-      const imageUrl =
-        s.logoPath && s.logoName
-          ? `${baseUrl}/Scholarship/${s.logoName.split("|")[0]}`
-          : "/images/before.png";
-
-      return (
-        <div
-          className="scholarship-card"
-          key={i}
-          onClick={() =>
-            navigate(
-              `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId}`
-            )
-          }
-        >
-          {!activeTab.includes("upcoming") && isFeatured && (
-            <div className="featured-tag">Featured</div>
-          )}
-
-          {activeTab === "live" && daysLeftText && (
-            <div
-              className={`deadline-badge ${
-                diffDays <= 1 ? "urgent" : "warning"
-              }`}
-            >
-              {daysLeftText}
-            </div>
-          )}
-
-          <div className="card-header-flex">
-            <div className="logo-wrapper">
-              <img
-                src={imageUrl}
-                alt={s.logoName?.split("|")[0] || "Scholarship Logo"}
-                className="card-logo"
-                onError={(e) => (e.target.src = "/images/before.png")}
-              />
-            </div>
-          </div>
-
-          <div className="card-body">
-            <h3 className="card-title">{s.name ?? "Untitled Scholarship"}</h3>
-            <p>
-              <strong>🏆 Award:</strong> {s.amount ?? "Not specified"}
-            </p>
-            <p>
-              <strong>🎓 Eligibility:</strong> {s.eligibility ?? "Not specified"}
-            </p>
-
-            {!daysLeftText && (
-              <p className="deadline-line">
-                <strong>📅 Deadline:</strong>{" "}
-                {endDate
-                  ? endDate.toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
-                  : "N/A"}
-              </p>
-            )}
-
-            <div className="card-footer-updated">
-              Last Updated On{" "}
-              {s.lastUpdatedDate
-                ? new Date(s.lastUpdatedDate).toISOString().split("T")[0]
-                : "N/A"}
-            </div>
-          </div>
-        </div>
-      );
-    })
-  )}
-</div>;*/}
-
+            <div className="ads-container">
+              <div className="ad-box">
+                <h4>{ads[currentAd].title}</h4>
+                <p>{ads[currentAd].text}</p>
+                <button>{ads[currentAd].button}</button>
+              </div>
+           
             {/* Featured Sidebar */}
             <aside className="featured-sidebar">
-  <div className="featured-header">Featured Scholarships</div>
+              <div className="featured-header">Featured Scholarships</div>
 
-  {featuredScholarships.length === 0 ? (
-    <p style={{ padding: "12px" }}>No featured scholarships found.</p>
-  ) : (
-    featuredScholarships.map((s, i) => {
-     // const baseUrl = "https://localhost:44315";
+              {featuredScholarships.length === 0 ? (
+                <p style={{ padding: "12px" }}>No featured scholarships found.</p>
+              ) : (
+                featuredScholarships.map((s, i) => {
+                  // const baseUrl = "https://localhost:44315";
 
-      // ✅ Clean logo name (remove trailing | and spaces)
-      const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
+                  // ✅ Clean logo name (remove trailing | and spaces)
+                  const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
 
-      // ✅ Encode spaces and special chars in file name
-      const encodedLogoName = encodeURIComponent(cleanLogoName);
+                  // ✅ Encode spaces and special chars in file name
+                  const encodedLogoName = encodeURIComponent(cleanLogoName);
 
-      // ✅ Build proper image URL (handles Scholarship, SchAppForm, etc.)
-     const imageUrl =
-    s.logoPath && cleanLogoName
-      ? `${baseUrl}/${s.logoPath
-          .replace(/^.*Scholarship[\\/]/, "Scholarship/")
-          .replace(/\\/g, "/")}/${encodedLogoName}`
-      : "/images/before.png";
+                  // ✅ Build proper image URL (handles Scholarship, SchAppForm, etc.)
+                  const imageUrl =
+                    s.logoPath && cleanLogoName
+                      ? `${baseUrl}/${s.logoPath
+                        .replace(/^.*Scholarship[\\/]/, "Scholarship/")
+                        .replace(/\\/g, "/")}/${encodedLogoName}`
+                      : "/images/before.png";
 
-  // ✅ Create alt text without extension
-  const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
+                  // ✅ Create alt text without extension
+                  const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
 
-  // ✅ Detect if file is an image
-  const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
+                  // ✅ Detect if file is an image
+                  const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
 
-      console.log("image", imageUrl);
+                  console.log("image", imageUrl);
 
-      return (
-        <div className="featured-item" key={i}>
-          {isImage ? (
-            <img
-              src={imageUrl}
-              alt={altText}
-              className="featured-logo"
-              onError={() => setImgError(true)}
-            />
-          ) : (
-             <div className="alt-logo-text">{}</div>
-          )}
+                  return (
+                    <div className="featured-item" key={i}>
+                      {isImage ? (
+                        <img
+                          src={imageUrl}
+                          alt={altText}
+                          className="featured-logo"
+                          onError={() => setImgError(true)}
+                        />
+                      ) : (
+                        <div className="alt-logo-text">{ }</div>
+                      )}
 
-          <div>
-            <p className="featured-title">
-              {s.scholarshipName ?? "Unnamed Scholarship"}
-            </p>
-            {s.deadline ? (
-              <p className="featured-deadline">
-                Deadline Date:{" "}
-                {new Date(s.deadline).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </p>
-            ) : (
-              <p className="featured-deadline">No Deadline</p>
-            )}
-          </div>
-        </div>
-      );
-    })
-  )}
-</aside>
-
+                      <div>
+                        <p className="featured-title">
+                          {s.scholarshipName ?? "Unnamed Scholarship"}
+                        </p>
+                        {s.deadline ? (
+                          <p className="featured-deadline">
+                            Deadline Date:{" "}
+                            {new Date(s.deadline).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </p>
+                        ) : (
+                          <p className="featured-deadline">No Deadline</p>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </aside>
+ </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
