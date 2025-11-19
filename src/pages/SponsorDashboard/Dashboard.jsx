@@ -80,9 +80,9 @@ export default function SponsorDashboard() {
       Approved Applications
     </Link>
 
-    <Link to="/sponsor-dashboard/report" className="sponsor-drawer-item">
+    {/* <Link to="/sponsor-dashboard/report" className="sponsor-drawer-item">
       Reports
-    </Link>
+    </Link> */}
 
     <Link to={RP.ViewSponsorProfile} className="sponsor-drawer-item">
       Profile
@@ -116,9 +116,9 @@ export default function SponsorDashboard() {
             Approved
             Applications
           </Link>         
-          <Link to="/sponsor-dashboard/report" className="nav-link">
+          {/* <Link to="/sponsor-dashboard/report" className="nav-link">
             Reports
-          </Link>
+          </Link> */}
           <Link to={RP.ViewSponsorProfile} className="nav-link">
             Profile
           </Link>

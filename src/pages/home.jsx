@@ -1,5 +1,6 @@
 import React,{useEffect}from 'react';
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 import Header from '../app/components/header/header';
 import "../pages/styles.css";
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -39,7 +40,16 @@ const Home=() =>{
       }
     }
   }, [navigate]);*/
+const location = useLocation();
 
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const section = document.getElementById(location.state.scrollTo);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
   // ✅ Helper function for redirection
   const redirectToDashboard = (roleId) => {
     debugger
@@ -124,10 +134,10 @@ const Home=() =>{
   const expiresAt = localStorage.getItem("expiresAt");
   const roleId = localStorage.getItem("roleId");
 // 🔹 Special case: student → direct dashboard access
-  if (expectedRole === "1") {
+  /*if (expectedRole === "1") {
     navigate(RP.studentdashboard);
     return;
-  }
+  }*/
   // 🔹 Case 1: No valid token → go to login
   if (!token || token === "" || !expiresAt || !roleId || roleId === "0") {
     navigate(RP.login, { state: { userType } });

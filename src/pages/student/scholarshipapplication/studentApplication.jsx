@@ -23,6 +23,7 @@ const location = useLocation();
   const [selectedApplication, setSelectedApplication] = useState(null);
 
   useEffect(() => {
+    debugger;
     dispatch(fetchScholarshipApplicationList());
   }, [dispatch]);
 
@@ -83,13 +84,14 @@ useEffect(() => {
   };
 
   return (
-   <div className="applications-wrapper">
+   <div>
   <Header variant="application" />
-
-  <h1 className="applications-title pt-5">My Scholarship Applications</h1>
-  <p className="applications-subtitle">
-    Track your scholarship applications and <br /> filter by status.
-  </p>
+<div className="applications-header">
+    <h1 className="applications-title pt-5">My Scholarship Applications</h1>
+    <p className="applications-subtitle">
+      Track your scholarship applications and <br /> filter by status.
+    </p>
+  </div>
 
   {/* Actions */}
   <div className="applications-actions">
