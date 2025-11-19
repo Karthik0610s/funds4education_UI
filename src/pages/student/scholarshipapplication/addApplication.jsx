@@ -22,6 +22,8 @@ const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,3}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
 const text250Regex = /^[A-Za-z\s]{0,250}$/;
+const RequiredMark = () => <span className="validation-error-label">*</span>;
+
 
 /*const scholarshipOptions = [
   { id: 1, name: "National Merit Scholarship" },
@@ -294,23 +296,39 @@ const uploadFiles = async (applicationId) => {
 };
 
   const validateForm = () => {
-    const newErrors = {};
-    if (!formData.firstName || !nameRegex.test(formData.firstName))
-      newErrors.firstName = "First Name is required (letters only, max 150).";
-    if (formData.lastName && !nameRegex.test(formData.lastName))
-      newErrors.lastName = "Last Name must be letters only (max 150).";
-    if (!formData.email || !emailRegex.test(formData.email))
-      newErrors.email = "Valid email required (abc@xyz.com).";
-    if (formData.phoneNumber && !/^[0-9]{10}$/.test(formData.phoneNumber))
-      newErrors.phoneNumber = "Phone must be exactly 10 digits.";
-    if (formData.dateOfBirth && !(new Date(formData.dateOfBirth) <= new Date()))
-      newErrors.dateOfBirth = `DOB must be valid and in the past.`;
-    if (!formData.studyLevel) newErrors.studyLevel = "Study Level is required.";
-    if (!formData.scholarshipId) newErrors.scholarshipId = "Scholarship Name required.";
-    if (!formData.category) newErrors.category = "Category required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const newErrors = {};
+
+  // Mandatory fields:
+  if (!formData.firstName.trim())
+    newErrors.firstName = "First Name is required.";
+
+  if (!formData.email.trim())
+    newErrors.email = "Email is required.";
+  else if (!emailRegex.test(formData.email))
+    newErrors.email = "Enter a valid email.";
+
+  if (!formData.studyLevel)
+    newErrors.studyLevel = "Study Level is required.";
+
+  if (!formData.scholarshipId)
+    newErrors.scholarshipId = "Scholarship selection is required.";
+
+  if (!formData.category)
+    newErrors.category = "Category is required.";
+
+  if (!formData.applicationDate)
+    newErrors.applicationDate = "Application Date is required.";
+
+  // Optional fields with validation:
+  if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber))
+    newErrors.phoneNumber = "Phone must be 10 digits.";
+
+  if (formData.lastName && !nameRegex.test(formData.lastName))
+    newErrors.lastName = "Last Name must contain only letters.";
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
   /*const handleSubmit = (e, statusType) => {
     e.preventDefault();
@@ -455,7 +473,7 @@ const handleSubmit = async (e, statusType) => {
 
     <div className="row">
       <div className="form-group col-6">
-        <label>First Name <Required /></label>
+<label>First Name <RequiredMark /></label>
         <input
           type="text"
           name="firstName"
@@ -466,6 +484,8 @@ const handleSubmit = async (e, statusType) => {
         />
         {errors.firstName && <p className="error-text">{errors.firstName}</p>}
       </div>
+</div>
+    <div className="row">
 
       <div className="form-group col-6">
         <label>Last Name</label>
@@ -494,6 +514,8 @@ const handleSubmit = async (e, statusType) => {
         />
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
+      </div>
+    <div className="row">
 
       <div className="form-group col-6">
         <label>Phone</label>
@@ -543,18 +565,22 @@ const handleSubmit = async (e, statusType) => {
       <div className="form-group col-6">
         <label>Study Level <Required /></label>
         <select
-          name="studyLevel"
-          value={formData.studyLevel}
-          onChange={handleChange}
-        >
-          <option value="">Select Study Level</option>
-          <option value="UG">Undergraduate</option>
-          <option value="PG">Postgraduate</option>
-          <option value="PhD">Ph.D.</option>
-        </select>
-        {errors.studyLevel && <p className="error-text">{errors.studyLevel}</p>}
-      </div>
+  name="studyLevel"
+  value={formData.studyLevel}
+  onChange={handleChange}
+  className={errors.studyLevel ? "input-error" : ""}>
+  <option value="">Select Study Level</option>
+  <option value="UG">Undergraduate</option>
+  <option value="PG">Postgraduate</option>
+  <option value="PhD">Ph.D.</option>
+</select>
 
+{errors.studyLevel && (
+  <p className="error-text">{errors.studyLevel}</p>
+)}
+      </div>
+      </div>
+      <div className="row">
       <div className="form-group col-6">
         <label>College</label>
         <input
@@ -564,6 +590,7 @@ const handleSubmit = async (e, statusType) => {
           onChange={handleChange}
         />
       </div>
+    
     </div>
 
     <div className="row">
@@ -576,6 +603,9 @@ const handleSubmit = async (e, statusType) => {
           onChange={handleChange}
         />
       </div>
+    </div>
+          <div className="row">
+
 
       <div className="form-group col-6">
         <label>Year of Study</label>
@@ -599,24 +629,32 @@ const handleSubmit = async (e, statusType) => {
         />
       </div>
 
-      <div className="form-group col-6">
-        <label>Scholarship Name <Required /></label>
-        <select
-          name="scholarshipId"
-          value={formData.scholarshipId}
-          onChange={handleChange}
-        >
-          <option value="">Select Scholarship</option>
-          {scholarshipOptions.map((sch) => (
-            <option key={sch.id} value={sch.id}>{sch.name}</option>
-          ))}
-        </select>
+      <div className="row">
+  <div className="form-group col-6">
+    <label>Scholarship Name <Required /></label>
+
+    <select
+      name="scholarshipId"
+      value={formData.scholarshipId}
+      onChange={handleChange}
+      className={errors.scholarshipId ? "input-error" : ""}
+    >
+      <option value="">Select Scholarship</option>
+      {scholarshipOptions.map((sch) => (
+        <option key={sch.id} value={sch.id}>{sch.name}</option>
+      ))}
+    </select>
+
+    {errors.scholarshipId && (
+      <p className="error-text">{errors.scholarshipId}</p>
+    )}
+  </div>
+</div>
       </div>
-    </div>
 
     <div className="row">
        <div className="form-group col-6">
-                <label>Category <Required /></label>
+                <label>Category </label>
                 <select
                   name="category"
                   value={formData.category}
@@ -633,7 +671,7 @@ const handleSubmit = async (e, statusType) => {
               </div>
  
       <div className="form-group col-6">
-        <label>Application Date <Required /></label>
+        <label>Application Date</label>
         <input
           type="date"
           name="applicationDate"
@@ -762,10 +800,16 @@ const handleSubmit = async (e, statusType) => {
         <label>Extra-Curricular</label>
         <textarea name="extraCurricularActivities" value={formData.extraCurricularActivities} onChange={handleChange}></textarea>
       </div>
+    </div>
+          <div className="row">
+
       <div className="form-group col-12">
         <label>Awards / Achievements</label>
         <textarea name="awardsAchievements" value={formData.awardsAchievements} onChange={handleChange}></textarea>
       </div>
+    </div>
+          <div className="row">
+
       <div className="form-group col-12">
         <label>Notes / Comments</label>
         <textarea name="notesComments" value={formData.notesComments} onChange={handleChange}></textarea>

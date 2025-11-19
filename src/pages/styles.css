@@ -5948,3 +5948,25 @@ h2, h3, p {
 .password-toggle:hover {
   color: #000;
 }
+/*Add Application Styles*/
+
+/* For required field error text */
+.validation-error-text {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+/* For highlighting the input borders */
+.validation-error-input {
+  border: 1px solid #d9534f !important;
+}
+
+/* For required star symbol */
+.validation-error-label {
+  color: red;
+  margin-left: 2px;
+  font-weight: bold;
+}
+/*add Application form styles*/
+
