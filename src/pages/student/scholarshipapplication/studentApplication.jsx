@@ -21,10 +21,11 @@ const location = useLocation();
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
+    const studentId = localStorage.getItem("userId");
 
   useEffect(() => {
     debugger;
-    dispatch(fetchScholarshipApplicationList());
+    dispatch(fetchScholarshipApplicationList(studentId));
   }, [dispatch]);
 
   // Filtered applications based on status
