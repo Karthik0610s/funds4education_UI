@@ -1,5 +1,5 @@
 import { FiBell, FiUpload, FiDownload } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "../../pages/styles.css";
 import logo from "../../app/assests/Logo.png";
 import student1 from "../../app/assests/Img1.jpg";
@@ -9,11 +9,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { logout } from "../../app/redux/slices/authSlice";
+import { fetchApplicationsBySponsor } from "../../app/redux/slices/ScholarshipSlice";
+
 import { routePath as RP } from "../../app/components/router/routepath";
 
 export default function SponsorDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { data } = useSelector((state) => state.scholarship);
+  const [filter, setFilter] = useState("All");
+  const normalize = (s) => (s || "").toLowerCase();
+
+  const applications = data.applications || [];
+
 
   const name =
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
@@ -24,6 +32,38 @@ export default function SponsorDashboard() {
     dispatch(logout());
     navigate("/login");
   };
+  const approvedApplications = useMemo(() => {
+    return applications.filter(
+      (app) => (app.status || "").toLowerCase() === "approved"
+    );
+  }, [applications]);
+
+  const filteredApplications = useMemo(() => {
+    debugger;
+    if (filter === "All") return applications;
+    return applications.filter((app) => normalize(app.status) === normalize(filter));
+  }, [applications, filter]);
+  function extractNumber(str) {
+    if (!str) return 0;
+
+    // Match the largest number with commas or decimals
+    const match = str.replace(/,/g, '').match(/\d+(\.\d+)?/);
+
+    return match ? Number(match[0]) : 0;
+  }
+  const totalFund = approvedApplications
+    .map(s => extractNumber(s.amount))
+    .reduce((a, b) => a + b, 0);
+  const formattedFund = totalFund.toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR"
+  });
+  useEffect(() => {
+    debugger;
+    const sponsorId = localStorage.getItem("userId");
+    dispatch(fetchApplicationsBySponsor(sponsorId));
+  }, [dispatch]);
+
 
   // disable back button
   useEffect(() => {
@@ -45,57 +85,57 @@ export default function SponsorDashboard() {
 
   return (
     <div className="dashboard-container">
-{/* ⭐ MOBILE BAR */}
-<div className="sponsor-mobile-bar">
- <button className="sponsor-mobile-btn" onClick={() => setDrawerOpen(!drawerOpen)}>
-  ☰
-</button>
+      {/* ⭐ MOBILE BAR */}
+      <div className="sponsor-mobile-bar">
+        <button className="sponsor-mobile-btn" onClick={() => setDrawerOpen(!drawerOpen)}>
+          ☰
+        </button>
 
-  <span className="sponsor-mobile-username">{name}</span>
-</div>
+        <span className="sponsor-mobile-username">{name}</span>
+      </div>
 
-{/* ⭐ OVERLAY */}
-{drawerOpen && (
-  <div
-    className="sponsor-drawer-overlay"
-    onClick={() => setDrawerOpen(false)}
-  ></div>
-)}
+      {/* ⭐ OVERLAY */}
+      {drawerOpen && (
+        <div
+          className="sponsor-drawer-overlay"
+          onClick={() => setDrawerOpen(false)}
+        ></div>
+      )}
 
-{/* ⭐ DRAWER */}
-<aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
-  <nav className="sponsor-drawer-nav">
+      {/* ⭐ DRAWER */}
+      <aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
+        <nav className="sponsor-drawer-nav">
 
-    <button className="sponsor-drawer-item">Dashboard</button>
+          <button className="sponsor-drawer-item">Dashboard</button>
 
-    <Link to="/sponsor-dashboard/sponsorapplication" className="sponsor-drawer-item">
-      Applications
-    </Link>
+          <Link to="/sponsor-dashboard/sponsorapplication" className="sponsor-drawer-item">
+            Applications
+          </Link>
 
-    <Link to="/sponsor-dashboard/scholarshipPage" className="sponsor-drawer-item">
-      Sponsored Scholarship
-    </Link>
+          <Link to="/sponsor-dashboard/scholarshipPage" className="sponsor-drawer-item">
+            Sponsored Scholarship
+          </Link>
 
-    <Link to="/Sponsored-Scholarship" className="sponsor-drawer-item">
-      Approved Applications
-    </Link>
+          <Link to="/Sponsored-Scholarship" className="sponsor-drawer-item">
+            Approved Applications
+          </Link>
 
-    <Link to="/sponsor-dashboard/report" className="sponsor-drawer-item">
-      Reports
-    </Link>
+          <Link to="/sponsor-dashboard/report" className="sponsor-drawer-item">
+            Reports
+          </Link>
 
-    <Link to={RP.ViewSponsorProfile} className="sponsor-drawer-item">
-      Profile
-    </Link>
+          <Link to={RP.ViewSponsorProfile} className="sponsor-drawer-item">
+            Profile
+          </Link>
 
-    <button className="sponsor-drawer-item logout" onClick={handleLogout}>
-      Logout
-    </button>
+          <button className="sponsor-drawer-item logout" onClick={handleLogout}>
+            Logout
+          </button>
 
-  </nav>
-</aside>
+        </nav>
+      </aside>
 
- {/* Destop Sidebar */}
+      {/* Destop Sidebar */}
       <aside className="sidebar">
         <div className="profile">
           <div className="avatar">👤</div>
@@ -112,25 +152,25 @@ export default function SponsorDashboard() {
           <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">
             Sponsored Scholarship
           </Link>
-           <Link to="/Sponsored-Scholarship" className="nav-link">
+          <Link to="/Sponsored-Scholarship" className="nav-link">
             Approved
             Applications
-          </Link>         
+          </Link>
           <Link to="/sponsor-dashboard/report" className="nav-link">
             Reports
           </Link>
           <Link to={RP.ViewSponsorProfile} className="nav-link">
             Profile
           </Link>
-          </nav>
-          {/* ✅ Logout Button */}
-          <div style={{ marginTop: "auto", padding: "1rem" }}>
-            <button onClick={handleLogout} className="logout-button">
-              Logout
-            </button>
-          </div>
+        </nav>
+        {/* ✅ Logout Button */}
+        <div style={{ marginTop: "auto", padding: "1rem" }}>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
+        </div>
 
-        
+
 
       </aside>
 
@@ -144,18 +184,18 @@ export default function SponsorDashboard() {
           <div className="stats-grid">
             <div className="stat-card">
               <p>Sponsored Students</p>
-              <p className="stat-value">5</p>
+              <p className="stat-value">{approvedApplications.length}</p>
             </div>
 
             <div className="stat-card">
               <p>Total Funds</p>
-              <p className="stat-value">$50,000</p>
+              <p className="stat-value"> {formattedFund}</p>
             </div>
           </div>
 
           <h3 className="sub-title">Student Profiles</h3>
 
-          <div className="students-list">
+          {/* <div className="students-list">
             {[
               {
                 name: "Ananya S.",
@@ -192,15 +232,45 @@ export default function SponsorDashboard() {
                 <button className="msg-btn">Message</button>
               </div>
             ))}
+          </div> */}
+          <div className="students-list">
+            {approvedApplications.map((s, i) => (
+              <div key={i} className="student-card">
+                <div className="student-info">
+                  <img src={student1} alt={s.firstName} className="student-avatar" />
+
+                  <div>
+                    <h4>{s.firstName} {s.lastName}</h4>
+
+                    {/* Scholarship Name */}
+                    <p>{s.scholarshipName}</p>
+
+                    {/* Scholarship Amount */}
+                    <p className="muted">Amount: ₹{s.amount}</p>
+
+                    {/* Application Date */}
+                    <p className="muted">
+                      Applied On: {new Date(s.applicationDate).toLocaleDateString()}
+                    </p>
+
+                    {/* Status */}
+                    <p className="muted">Status: {s.status}</p>
+
+                  </div>
+                </div>
+
+                <button className="msg-btn">Message</button>
+              </div>
+            ))}
           </div>
 
           <div className="applications">
             <div className="app-header">
               <h3 className="sub-title">Applications</h3>
-              <button className="download-btn">Download Reports</button>
+              {/* <button className="download-btn">Download Reports</button> */}
             </div>
 
-            <div className="app-card">
+            {/* <div className="app-card">
               <div className="app-card-header">
                 <p><strong>Vijay T.</strong> – Arts</p>
                 <span className="status">In Review</span>
@@ -216,7 +286,63 @@ export default function SponsorDashboard() {
               <div className="app-row">
                 <span>Customize Branding</span>
               </div>
+            </div> */}
+            <div className="app-card-container">
+              {applications.map((s, i) => {
+
+                // Determine progress width based on status
+                const progressMap = {
+                  APPROVED: 100,
+                  REJECTED: 0,
+                  SUBMITTED: 50,
+                  "IN REVIEW": 70,
+                  DRAFT: 30
+                };
+
+                const progress = progressMap[s.status?.toUpperCase()] ?? 0;
+
+                return (
+                  <div key={i} className="app-card">
+
+                    <div className="app-card-header">
+                      <p>
+                        <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
+                      </p>
+                      <span className="status"><strong>{s.status.toUpperCase()}</strong></span>
+                    </div>
+
+                    <div className="app-row">
+                      <span>Scholarship Amount</span>
+                      <span><strong>₹{s.amount}</strong></span>
+                    </div>
+
+                    <div className="app-row">
+                      <span>Application Date</span>
+                      <span >{new Date(s.applicationDate).toLocaleDateString()}</span>
+                    </div>
+
+                    <div className="app-row">
+                      <span>Funds Disbursed</span>
+
+                      <div className="progress-bar">
+                        <div
+                          className="progress"
+                          style={{ width: `${progress}%` }}
+                        ></div>
+                      </div>
+
+                    </div>
+
+                    {/* <div className="app-row">
+                      <span>Customize Branding</span>
+                    </div> */}
+
+                  </div>
+                );
+              })}
             </div>
+
+
           </div>
 
         </main>
