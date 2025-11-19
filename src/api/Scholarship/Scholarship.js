@@ -51,23 +51,25 @@ export const fetchScholarshipByStatusReq = async (filters = {}) => {
       return { error: true, data: [], message: "", errorMsg: "Invalid StatusType" };
     }
 
-    // ✅ Build params object with correct backend names
     const params = {};
-    params.StatusType = statusType; // 🔹 Note: capital S to match backend
+    params.StatusType = statusType;
 
-if (filters.classId?.length) params.Class_ID = filters.classId.join(',');
+    const studentId = localStorage.getItem("id");
+    if (studentId) params.StudentId = studentId;
+    const role = localStorage.getItem("userType");
+    if (role) params.Role = role;
 
-if (filters.countryId?.length) params.Country_ID = filters.countryId.join(',');
-if (filters.courseId?.length) params.Course_ID = filters.courseId.join(',');
-if (filters.stateId?.length) params.State_ID = filters.stateId.join(',');
-if (filters.religionId?.length) params.Religion_ID = filters.religionId.join(',');
-if (filters.genderId?.length) params.Gender_ID = filters.genderId.join(',');
-
+   
+    if (filters.classId != null) params.Class_ID = filters.classId;
+    if (filters.countryId != null) params.Country_ID = filters.countryId;
+    if (filters.courseId != null) params.Course_ID = filters.courseId;
+    if (filters.stateId != null) params.State_ID = filters.stateId;
+    if (filters.religionId != null) params.Religion_ID = filters.religionId;
+    if (filters.genderId != null) params.Gender_ID = filters.genderId;
 
     const url = `${ApiKey.Scholarship}/status`;
     const res = await publicAxios.get(url, { params });
 
-    // Handle API data shape
     const _data = Array.isArray(res.data)
       ? res.data
       : Array.isArray(res.data?.data)
@@ -85,6 +87,7 @@ if (filters.genderId?.length) params.Gender_ID = filters.genderId.join(',');
     return { error: true, data: [], message: "", errorMsg };
   }
 };
+
 
 //
 // ✅ 3️⃣ Fetch single scholarship by ID
