@@ -92,6 +92,7 @@ const navigation= useNavigate();
     status: "",
       createdBy: "",
   modifiedBy: "",
+  studentId:Number(localStorage.getItem("userId"))
   };
   const [formData, setFormData] = useState(initialFormData);
    
