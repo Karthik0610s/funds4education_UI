@@ -259,7 +259,8 @@ export default function SponsorDashboard() {
 
   <div className="info-row">
     <span className="label">Amount</span>
-    <span className="value">₹{s.amount}</span>
+   {/* <span className="value">₹{s.amount}</span>*/}
+   <span className="value">₹{s.amount}</span>
   </div>
 
   <div className="info-row">
