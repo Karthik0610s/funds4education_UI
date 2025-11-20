@@ -90,8 +90,14 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
     awardsAchievements: "",
     notesComments: "",
     status: "",
+<<<<<<< HEAD
     createdBy: "",
     modifiedBy: "",
+=======
+      createdBy: "",
+  modifiedBy: "",
+  studentId:Number(localStorage.getItem("userId"))
+>>>>>>> 8e2c64e5f20c7923ed2bde17cb8a3d4844002427
   };
   const [formData, setFormData] = useState(initialFormData);
 

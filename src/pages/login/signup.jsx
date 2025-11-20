@@ -309,24 +309,24 @@ const payload = {
               <div className="form-group">
                 <label>Gender *</label>
                 <div className="gender-group">
-                  <label>
+                  <label>   Male
+                  </label>
                     <input
                       type="radio"
                       name="gender"
                       checked={basicDetails.gender === "Male"}
                       onChange={() => setBasicDetails({ ...basicDetails, gender: "Male" })}
                     />
-                    Male
+                 
+                  <label>  Female
                   </label>
-                  <label>
                     <input
                       type="radio"
                       name="gender"
                       checked={basicDetails.gender === "Female"}
                       onChange={() => setBasicDetails({ ...basicDetails, gender: "Female" })}
                     />
-                    Female
-                  </label>
+                  
                 </div>
                 {errors.gender && <p className="error-text">{errors.gender}</p>}
               </div>
@@ -370,7 +370,7 @@ const payload = {
 
 <input
   type="text"
-  placeholder="College / University"
+  placeholder="College / University  "
   value={education.college}
   onChange={(e) => setEducation({ ...education, college: e.target.value })}
 />
@@ -429,7 +429,7 @@ const payload = {
               <div className="education-grid">
                <input
                     type="text"
-                    placeholder="Course"
+                    placeholder="Course / Class "
                     value={education.degree}
                     maxLength={150}
                     onChange={(e) => {
@@ -442,7 +442,7 @@ const payload = {
 
                   <input
                     type="text"
-                    placeholder="College / University"
+                    placeholder="College / University / School"
                     value={education.college}
                     maxLength={250}
                     onChange={(e) => {
