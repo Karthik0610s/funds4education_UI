@@ -5234,6 +5234,7 @@ padding: 8px;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   flex-wrap: wrap;
   gap: 1rem; /* responsive on small screens */
 }
