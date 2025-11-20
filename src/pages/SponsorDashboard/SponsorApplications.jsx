@@ -201,9 +201,15 @@ const handleLogout = () => {
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "40px" }}>
-              <h3>No scholarships added</h3>
-              <p>Add scholarship to get applications</p>
-            </div>)}
+    {filter === "All" ? (
+      <>
+        <h3>No scholarships added</h3>
+        <p>Add scholarship to get applications</p>
+      </>
+    ) : (
+      <h3>No {filter} applications</h3>
+    )}
+  </div>)}
         </div>
       </div>
 
