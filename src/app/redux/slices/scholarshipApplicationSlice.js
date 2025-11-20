@@ -74,10 +74,6 @@ export const updateScholarshipApplication = async (data, dispatch) => {
     // Fetch updated list of scholarshipApplications after updating
     await dispatch(fetchScholarshipApplicationList());
 
-   Swal.fire({
-      text: "ScholarshipApplication updated successfully!",
-      icon: "success",
-    });
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
     Swal.fire({
@@ -98,10 +94,7 @@ export const deleteScholarshipApplication = async (data, dispatch) => {
     // Fetch updated list of scholarshipApplications after deleting
     await dispatch(fetchScholarshipApplicationList());
 
-    Swal.fire({
-      text: "ScholarshipApplication deleted successfully!",
-      icon: "success",
-    });
+   
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
     Swal.fire({
@@ -113,11 +106,11 @@ export const deleteScholarshipApplication = async (data, dispatch) => {
 };
 
 // Action to fetch the scholarshipApplication list
-export const fetchScholarshipApplicationList = (studentId) => async (dispatch) => {
+export const fetchScholarshipApplicationList = () => async (dispatch) => {
   try {
     debugger;
     dispatch(setLoading()); // Set loading before making the API request
-    const res = await fetchScholarshipApplicationListReq(studentId); // Fetch scholarshipApplication list from API
+    const res = await fetchScholarshipApplicationListReq(); // Fetch scholarshipApplication list from API
     dispatch(addData(res.data)); // Dispatch the data to Redux state
   } catch (error) {
     dispatch(setError()); // Handle error if API fails

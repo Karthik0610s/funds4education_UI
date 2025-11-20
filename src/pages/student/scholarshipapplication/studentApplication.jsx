@@ -26,7 +26,7 @@ const location = useLocation();
   useEffect(() => {
     debugger;
     dispatch(fetchScholarshipApplicationListbyStudent(studentId));
-  }, [dispatch]);
+  }, [dispatch, studentId]);
 
   // Filtered applications based on status
   const filteredApps =
