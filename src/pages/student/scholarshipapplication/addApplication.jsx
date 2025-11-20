@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import {
   addNewScholarshipApplication,
@@ -8,7 +8,7 @@ import {
 import "../../../pages/styles.css";
 import Swal from "sweetalert2";
 import { useNavigate, useNavigation } from "react-router-dom";
-import {fetchScholarshipApplicationByIdReq, uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarshipapplication"
+import { fetchScholarshipApplicationByIdReq, uploadFormFilesReq } from "../../../api/scholarshipapplication/scholarshipapplication"
 import { publicAxios } from "../../../api/config";
 import { ApiKey } from "../../../api/endpoint";
 import { routePath as RP } from "../../../app/components/router/routepath";
@@ -31,14 +31,14 @@ const RequiredMark = () => <span className="validation-error-label">*</span>;
   { id: 3, name: "STEM Excellence Fellowship" },
   { id: 4, name: "Research Innovation Award" },
 ];*/
- 
 
- 
+
+
 
 const AddApplicationModal = ({ show, handleClose, application }) => {
-const [scholarshipOptions, setScholarshipOptions] = useState([]);
+  const [scholarshipOptions, setScholarshipOptions] = useState([]);
   const [filteredScholarships, setFilteredScholarships] = useState([]);
-   useEffect(() => {
+  useEffect(() => {
     const fetchScholarships = async () => {
       try {
         const url = `${ApiKey.Scholarship}/status`;
@@ -50,7 +50,7 @@ const [scholarshipOptions, setScholarshipOptions] = useState([]);
           const options = res.data.map((s) => ({
             id: s.id,
             name: s.name,
-             type: s.scholarshipType,
+            type: s.scholarshipType,
           }));
           setScholarshipOptions(options);
         }
@@ -61,16 +61,16 @@ const [scholarshipOptions, setScholarshipOptions] = useState([]);
 
     fetchScholarships();
   }, []);
-   // 🔍 Whenever category changes, filter scholarships
- 
-const fileInputRef = useRef(null);
-const navigation= useNavigate();
-   const dispatch = useDispatch();
+  // 🔍 Whenever category changes, filter scholarships
+
+  const fileInputRef = useRef(null);
+  const navigation = useNavigate();
+  const dispatch = useDispatch();
   const today = new Date().toISOString().split("T")[0];
   const minDOB = new Date(new Date().setFullYear(new Date().getFullYear() - 79))
     .toISOString()
     .split("T")[0];
-   const initialFormData = {
+  const initialFormData = {
     firstName: "",
     lastName: "",
     email: "",
@@ -90,23 +90,23 @@ const navigation= useNavigate();
     awardsAchievements: "",
     notesComments: "",
     status: "",
-      createdBy: "",
-  modifiedBy: "",
+    createdBy: "",
+    modifiedBy: "",
   };
   const [formData, setFormData] = useState(initialFormData);
-   
+
   const [errors, setErrors] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
-//const [filesList, setFilesList] = useState([]);
-// --- State ---
-const [filesList, setFilesList] = useState(formData?.files || []);
-const [fileSelected, setFileSelected] = useState(false);
-const [newFileSelected, setNewFileSelected] = useState(false);
- 
+  //const [filesList, setFilesList] = useState([]);
+  // --- State ---
+  const [filesList, setFilesList] = useState(formData?.files || []);
+  const [fileSelected, setFileSelected] = useState(false);
+  const [newFileSelected, setNewFileSelected] = useState(false);
 
- 
 
-  
+
+
+
 
   // Populate form if editing
   useEffect(() => {
@@ -117,19 +117,64 @@ const [newFileSelected, setNewFileSelected] = useState(false);
         dateOfBirth: application.dateOfBirth ? application.dateOfBirth.split("T")[0] : "",
         applicationDate: application.applicationDate ? application.applicationDate.split("T")[0] : today,
         scholarshipId: application.scholarshipId ? parseInt(application.scholarshipId) : "",
-        modifiedBy:localStorage.getItem("name")
+        modifiedBy: localStorage.getItem("name")
       });
     } else {
-     setFormData({
-      ...initialFormData,
-      createdBy: localStorage.getItem("name"),  // ✅ set created by current user
-      
-    });
+      setFormData({
+        ...initialFormData,
+        createdBy: localStorage.getItem("name"),  // ✅ set created by current user
+
+      });
     }
     setErrors({});
   }, [application, show]);
 
- /* const handleChange = (e) => {
+  /* const handleChange = (e) => {
+     const { name, value, files } = e.target;
+     let regex = null;
+ 
+     switch (name) {
+       case "firstName":
+       case "lastName":
+         regex = nameRegex;
+         break;
+       case "phoneNumber":
+         regex = phoneRegex;
+         break;
+       case "courseOrMajor":
+         regex = courseRegex;
+         break;
+       case "schoolName":
+         regex = collegeRegex;
+         break;
+       case "yearOfStudy":
+         regex = yearRegex;
+         break;
+       case "gpaOrMarks":
+         regex = gpaRegex;
+         break;
+       case "scholarshipId":
+         regex = scholarshipRegex;
+         break;
+       case "extraCurricularActivities":
+       case "awardsAchievements":
+       case "notesComments":
+         regex = text250Regex;
+         break;
+       default:
+         regex = null;
+     }
+ 
+     if (files) {
+       setFormData({ ...formData, [name]: files[0] });
+     } else {
+       if (!regex || regex.test(value)) {
+         setFormData({ ...formData, [name]: name === "scholarshipId" ? parseInt(value) : value });
+       }
+     }
+     setErrors({ ...errors, [name]: "" });
+   };*/
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
     let regex = null;
 
@@ -166,62 +211,17 @@ const [newFileSelected, setNewFileSelected] = useState(false);
     }
 
     if (files) {
-      setFormData({ ...formData, [name]: files[0] });
+      const fileArray = Array.from(files);
+      setSelectedFiles(fileArray);
+      setFilesList(fileArray.map((f) => f.name));
     } else {
-      if (!regex || regex.test(value)) {
-        setFormData({ ...formData, [name]: name === "scholarshipId" ? parseInt(value) : value });
-      }
-    }
-    setErrors({ ...errors, [name]: "" });
-  };*/
-  const handleChange = (e) => {
-  const { name, value, files } = e.target;
-  let regex = null;
-
-  switch (name) {
-    case "firstName":
-    case "lastName":
-      regex = nameRegex;
-      break;
-    case "phoneNumber":
-      regex = phoneRegex;
-      break;
-    case "courseOrMajor":
-      regex = courseRegex;
-      break;
-    case "schoolName":
-      regex = collegeRegex;
-      break;
-    case "yearOfStudy":
-      regex = yearRegex;
-      break;
-    case "gpaOrMarks":
-      regex = gpaRegex;
-      break;
-    case "scholarshipId":
-      regex = scholarshipRegex;
-      break;
-    case "extraCurricularActivities":
-    case "awardsAchievements":
-    case "notesComments":
-      regex = text250Regex;
-      break;
-    default:
-      regex = null;
-  }
-
-  if (files) {
-    const fileArray = Array.from(files);
-    setSelectedFiles(fileArray);
-    setFilesList(fileArray.map((f) => f.name));
-  } else {
-   /* if (!regex || regex.test(value)) {
-      setFormData({
-        ...formData,
-        [name]: name === "scholarshipId" ? parseInt(value) : value,
-      });
-    }*/
-let updatedFormData = { ...formData };
+      /* if (!regex || regex.test(value)) {
+         setFormData({
+           ...formData,
+           [name]: name === "scholarshipId" ? parseInt(value) : value,
+         });
+       }*/
+      let updatedFormData = { ...formData };
 
       if (!regex || regex.test(value)) {
         updatedFormData[name] =
@@ -241,94 +241,94 @@ let updatedFormData = { ...formData };
       }
 
       setFormData(updatedFormData);
-  }
-  setErrors({ ...errors, [name]: "" });
-};
+    }
+    setErrors({ ...errors, [name]: "" });
+  };
 
 
-// --- Clear function ---
-const handleClear = () => {
-  // Clear newly selected files
-  setSelectedFiles([]);
-  setFilesList([]);
-  setFileSelected(false);
-  setNewFileSelected(false);
+  // --- Clear function ---
+  const handleClear = () => {
+    // Clear newly selected files
+    setSelectedFiles([]);
+    setFilesList([]);
+    setFileSelected(false);
+    setNewFileSelected(false);
 
-  // Clear the file input element
-  if (fileInputRef.current) {
-    fileInputRef.current.value = null;
-  }
+    // Clear the file input element
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
 
-  // Reset documents field in formData
-  setFormData({ ...formData, documents: null });
-};
+    // Reset documents field in formData
+    setFormData({ ...formData, documents: null });
+  };
 
-// --- File change handler ---
-const handleFileChange = (e) => {
-  const files = Array.from(e.target.files);
-  if (!files || files.length === 0) return;
+  // --- File change handler ---
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
 
-  // No file type restriction
-  setSelectedFiles(files);
-  setFilesList(files.map(f => f.name));
-  setFileSelected(true);
-  setNewFileSelected(true);
-  setFormData({ ...formData, documents: files });
-};
-// Upload files function returns uploaded file names
-const uploadFiles = async (applicationId) => {
-  if (selectedFiles.length < 1) return [];
+    // No file type restriction
+    setSelectedFiles(files);
+    setFilesList(files.map(f => f.name));
+    setFileSelected(true);
+    setNewFileSelected(true);
+    setFormData({ ...formData, documents: files });
+  };
+  // Upload files function returns uploaded file names
+  const uploadFiles = async (applicationId) => {
+    if (selectedFiles.length < 1) return [];
 
-  const formDataPayload = new FormData();
-  selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
-  formDataPayload.append("TypeofUser", "SchAppForm");
-  formDataPayload.append("id", applicationId);
+    const formDataPayload = new FormData();
+    selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
+    formDataPayload.append("TypeofUser", "SchAppForm");
+    formDataPayload.append("id", applicationId);
 
-  try {
-    await uploadFormFilesReq(formDataPayload);
+    try {
+      await uploadFormFilesReq(formDataPayload);
 
-    // Return names of uploaded files for merging
-    return selectedFiles.map(f => f.name);
-  } catch (ex) {
-    console.error("File upload failed:", ex);
-    return [];
-  }
-};
+      // Return names of uploaded files for merging
+      return selectedFiles.map(f => f.name);
+    } catch (ex) {
+      console.error("File upload failed:", ex);
+      return [];
+    }
+  };
 
   const validateForm = () => {
-  const newErrors = {};
+    const newErrors = {};
 
-  // Mandatory fields:
-  if (!formData.firstName.trim())
-    newErrors.firstName = "First Name is required.";
+    // Mandatory fields:
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First Name is required.";
 
-  if (!formData.email.trim())
-    newErrors.email = "Email is required.";
-  else if (!emailRegex.test(formData.email))
-    newErrors.email = "Enter a valid email.";
+    if (!formData.email.trim())
+      newErrors.email = "Email is required.";
+    else if (!emailRegex.test(formData.email))
+      newErrors.email = "Enter a valid email.";
 
-  if (!formData.studyLevel)
-    newErrors.studyLevel = "Study Level is required.";
+    if (!formData.studyLevel)
+      newErrors.studyLevel = "Study Level is required.";
 
-  if (!formData.scholarshipId)
-    newErrors.scholarshipId = "Scholarship selection is required.";
+    if (!formData.scholarshipId)
+      newErrors.scholarshipId = "Scholarship selection is required.";
 
-  if (!formData.category)
-    newErrors.category = "Category is required.";
+    if (!formData.category)
+      newErrors.category = "Category is required.";
 
-  if (!formData.applicationDate)
-    newErrors.applicationDate = "Application Date is required.";
+    if (!formData.applicationDate)
+      newErrors.applicationDate = "Application Date is required.";
 
-  // Optional fields with validation:
-  if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber))
-    newErrors.phoneNumber = "Phone must be 10 digits.";
+    // Optional fields with validation:
+    if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber))
+      newErrors.phoneNumber = "Phone must be 10 digits.";
 
-  if (formData.lastName && !nameRegex.test(formData.lastName))
-    newErrors.lastName = "Last Name must contain only letters.";
+    if (formData.lastName && !nameRegex.test(formData.lastName))
+      newErrors.lastName = "Last Name must contain only letters.";
 
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   /*const handleSubmit = (e, statusType) => {
     e.preventDefault();
@@ -344,82 +344,82 @@ const uploadFiles = async (applicationId) => {
 
     handleCloseAndReset();
   };*/
-const handleSubmit = async (e, statusType) => {
-  e.preventDefault();
-  if (!validateForm()) return;
+  const handleSubmit = async (e, statusType) => {
+    e.preventDefault();
+    if (!validateForm()) return;
 
-  const finalData = {
-    ...formData,
-    status: statusType,
-    dateOfBirth: formData.dateOfBirth || null,
-    yearOfStudy: formData.yearOfStudy || null,
-    phoneNumber: formData.phoneNumber || "",
-    schoolName: formData.schoolName || "",
-    courseOrMajor: formData.courseOrMajor || "",
-    documents: null,
+    const finalData = {
+      ...formData,
+      status: statusType,
+      dateOfBirth: formData.dateOfBirth || null,
+      yearOfStudy: formData.yearOfStudy || null,
+      phoneNumber: formData.phoneNumber || "",
+      schoolName: formData.schoolName || "",
+      courseOrMajor: formData.courseOrMajor || "",
+      documents: null,
+    };
+
+    let applicationId = null;
+
+    try {
+      // Create or update application
+      if (application) {
+        applicationId = application.id;
+        await updateScholarshipApplication(finalData, dispatch);
+      } else {
+        const res = await addNewScholarshipApplication(finalData, dispatch);
+        applicationId = res?.id;
+      }
+
+      // Upload files if any
+      if (applicationId && selectedFiles.length > 0) {
+        await uploadFiles(applicationId);
+      }
+
+      // Fetch updated application by ID to get the latest files
+      if (applicationId) {
+        debugger;
+        const updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
+        setFormData((prev) => ({
+          ...prev,
+          ...updatedApp.data,
+          dateOfBirth: updatedApp.data.dateOfBirth
+            ? updatedApp.data.dateOfBirth.split("T")[0]
+            : "",
+          applicationDate: updatedApp.data.applicationDate
+            ? updatedApp.data.applicationDate.split("T")[0]
+            : today,
+        }));
+      }
+
+      // Reset selected files
+      setSelectedFiles([]);
+      //setFilesList([]);
+
+      // Fetch latest list for Redux
+      // await dispatch(fetchScholarshipApplicationList());
+
+      // Show success Swal
+      const result = await Swal.fire({
+        text: application ? "Application updated successfully!" : "Application added successfully!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
+      // Navigate after OK
+      if (result.isConfirmed) {
+        navigation("/application"); // useNavigate hook
+      }
+
+      handleCloseAndReset();
+    } catch (err) {
+      console.error("Submit failed:", err);
+      Swal.fire({
+        text: "Error! Try Again!",
+        icon: "error",
+      });
+    }
   };
-
-  let applicationId = null;
-
-  try {
-    // Create or update application
-    if (application) {
-      applicationId = application.id;
-      await updateScholarshipApplication(finalData, dispatch);
-    } else {
-      const res = await addNewScholarshipApplication(finalData, dispatch);
-      applicationId = res?.id;
-    }
-
-    // Upload files if any
-    if (applicationId && selectedFiles.length > 0) {
-      await uploadFiles(applicationId);
-    }
-
-    // Fetch updated application by ID to get the latest files
-    if (applicationId) {
-      debugger;
-      const updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
-      setFormData((prev) => ({
-        ...prev,
-        ...updatedApp.data,
-        dateOfBirth: updatedApp.data.dateOfBirth
-          ? updatedApp.data.dateOfBirth.split("T")[0]
-          : "",
-        applicationDate: updatedApp.data.applicationDate
-          ? updatedApp.data.applicationDate.split("T")[0]
-          : today,
-      }));
-    }
-
-    // Reset selected files
-    setSelectedFiles([]);
-    //setFilesList([]);
-
-    // Fetch latest list for Redux
-   // await dispatch(fetchScholarshipApplicationList());
-
-    // Show success Swal
-    const result = await Swal.fire({
-      text: application ? "Application updated successfully!" : "Application added successfully!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-
-    // Navigate after OK
-    if (result.isConfirmed) {
-      navigation("/application"); // useNavigate hook
-    }
-
-    handleCloseAndReset();
-  } catch (err) {
-    console.error("Submit failed:", err);
-    Swal.fire({
-      text: "Error! Try Again!",
-      icon: "error",
-    });
-  }
-};
 
 
   const handleCloseAndReset = () => {
@@ -429,29 +429,29 @@ const handleSubmit = async (e, statusType) => {
   };
 
   const downloadFileFun = async (id) => {
-  try {
-    //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
-//const res= await 
- const res = await publicAxios.get(
-      `${ApiKey.downloadscholarshipFiles}/${id}`, 
-      { responseType: "blob" }   // <-- important for file download
-    );
-    
+    try {
+      //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
+      //const res= await 
+      const res = await publicAxios.get(
+        `${ApiKey.downloadscholarshipFiles}/${id}`,
+        { responseType: "blob" }   // <-- important for file download
+      );
 
-    const url = window.URL.createObjectURL(
-      new Blob([res.data], { type: "application/zip" })
-    );
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "documents.zip"); // you can rename as needed
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
-  } catch (err) {
-    console.error("File download failed:", err);
-  }
-};
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/zip" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "documents.zip"); // you can rename as needed
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.error("File download failed:", err);
+    }
+  };
 
   if (!show) return null; // Do not render if modal hidden
 
@@ -467,193 +467,194 @@ const handleSubmit = async (e, statusType) => {
         </div>
 
         {/* Body */}
-       <div className="modal-body">
-  <form>
-    <h4>Personal Information</h4>
+        <div className="modal-body">
+          <form>
+            <h4>Personal Information</h4>
 
-    <div className="row">
-      <div className="form-group col-6">
-<label>First Name <RequiredMark /></label>
-        <input
-          type="text"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          className={errors.firstName ? "input-error" : ""}
-          placeholder="First Name"
-        />
-        {errors.firstName && <p className="error-text">{errors.firstName}</p>}
-      </div>
-</div>
-    <div className="row">
+            <div className="row">
+              <div className="form-group col-6">
+                <label>First Name <RequiredMark /></label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className={errors.firstName ? "input-error" : ""}
+                  placeholder="First Name"
+                />
+                {errors.firstName && <p className="error-text">{errors.firstName}</p>}
+              </div>
+            </div>
+            <div className="row">
 
-      <div className="form-group col-6">
-        <label>Last Name</label>
-        <input
-          type="text"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          className={errors.lastName ? "input-error" : ""}
-          placeholder="Last Name"
-        />
-        {errors.lastName && <p className="error-text">{errors.lastName}</p>}
-      </div>
-    </div>
+              <div className="form-group col-6">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className={errors.lastName ? "input-error" : ""}
+                  placeholder="Last Name"
+                />
+                {errors.lastName && <p className="error-text">{errors.lastName}</p>}
+              </div>
+            </div>
 
-    <div className="row">
-      <div className="form-group col-6">
-        <label>Email <Required /></label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={errors.email ? "input-error" : ""}
-          placeholder="Email"
-        />
-        {errors.email && <p className="error-text">{errors.email}</p>}
-      </div>
-      </div>
-    <div className="row">
+            <div className="row">
+              <div className="form-group col-6">
+                <label>Email <Required /></label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={errors.email ? "input-error" : ""}
+                  placeholder="Email"
+                />
+                {errors.email && <p className="error-text">{errors.email}</p>}
+              </div>
+            </div>
+            <div className="row">
 
-      <div className="form-group col-6">
-        <label>Phone</label>
-        <input
-          type="text"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          className={errors.phoneNumber ? "input-error" : ""}
-          placeholder="Phone"
-        />
-        {errors.phoneNumber && <p className="error-text">{errors.phoneNumber}</p>}
-      </div>
-    </div>
+              <div className="form-group col-6">
+                <label>Phone</label>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className={errors.phoneNumber ? "input-error" : ""}
+                  placeholder="Phone"
+                />
+                {errors.phoneNumber && <p className="error-text">{errors.phoneNumber}</p>}
+              </div>
+            </div>
 
-    <div className="row">
-      <div className="form-group col-6">
-        <label>Date of Birth</label>
-        <input
-          type="date"
-          name="dateOfBirth"
-          value={formData.dateOfBirth}
-          min={minDOB}
-          max={today}
-          onChange={handleChange}
-        />
-      </div>
+            <div className="row">
+              <div className="form-group col-6">
+                <label>Date of Birth</label>
+                <input
+                  type="date"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  min={minDOB}
+                  max={today}
+                  onChange={handleChange}
+                />
+              </div>
 
-      <div className="form-group col-6">
-        <label>Gender</label>
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-        >
-          <option value="">Select Gender</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-    </div>
+              <div className="form-group col-6">
+                <label>Gender</label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
 
-    <h4 className="mt-3">Academic Information</h4>
+            <h4 className="mt-3">Academic Information</h4>
 
-    <div className="row">
-      <div className="form-group col-6">
-        <label>Study Level <Required /></label>
-        <select
-  name="studyLevel"
-  value={formData.studyLevel}
-  onChange={handleChange}
-  className={errors.studyLevel ? "input-error" : ""}>
-  <option value="">Select Study Level</option>
-  <option value="UG">Undergraduate</option>
-  <option value="PG">Postgraduate</option>
-  <option value="PhD">Ph.D.</option>
-</select>
+            <div className="row">
+              <div className="form-group col-6">
+                <label>Study Level <Required /></label>
+                <select
+                  name="studyLevel"
+                  value={formData.studyLevel}
+                  onChange={handleChange}
+                  className={errors.studyLevel ? "input-error" : ""}>
+                  <option value="">Select Study Level</option>
+                  <option value="UG">Undergraduate</option>
+                  <option value="PG">Postgraduate</option>
+                  <option value="PhD">Ph.D.</option>
+                </select>
 
-{errors.studyLevel && (
-  <p className="error-text">{errors.studyLevel}</p>
-)}
-      </div>
-      </div>
-      <div className="row">
-      <div className="form-group col-6">
-        <label>College</label>
-        <input
-          type="text"
-          name="schoolName"
-          value={formData.schoolName}
-          onChange={handleChange}
-        />
-      </div>
-    
-    </div>
+                {errors.studyLevel && (
+                  <p className="error-text">{errors.studyLevel}</p>
+                )}
+              </div>
+            </div>
+            <div className="row">
+              <div className="form-group col-6">
+                <label>College</label>
+                <input
+                  type="text"
+                  name="schoolName"
+                  value={formData.schoolName}
+                  onChange={handleChange}
+                />
+              </div>
 
-    <div className="row">
-      <div className="form-group col-6">
-        <label>Course / Major</label>
-        <input
-          type="text"
-          name="courseOrMajor"
-          value={formData.courseOrMajor}
-          onChange={handleChange}
-        />
-      </div>
-    </div>
-          <div className="row">
+            </div>
+
+            <div className="row">
+              <div className="form-group col-6">
+                <label>Course / Major</label>
+                <input
+                  type="text"
+                  name="courseOrMajor"
+                  value={formData.courseOrMajor}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="row">
 
 
-      <div className="form-group col-6">
-        <label>Year of Study</label>
-        <input
-          type="text"
-          name="yearOfStudy"
-          value={formData.yearOfStudy}
-          onChange={handleChange}
-        />
-      </div>
-    </div>
+              <div className="form-group col-6">
+                <label>Year of Study</label>
+                <input
+                  type="text"
+                  name="yearOfStudy"
+                  value={formData.yearOfStudy}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
 
-    <div className="row">
-      <div className="form-group col-6">
-        <label>Marks / GPA</label>
-        <input
-          type="text"
-          name="gpaOrMarks"
-          value={formData.gpaOrMarks}
-          onChange={handleChange}
-        />
-      </div>
+            <div className="row">
+              <div className="form-group col-6">
+                <label>Marks / GPA</label>
+                <input
+                  type="text"
+                  name="gpaOrMarks"
+                  value={formData.gpaOrMarks}
+                  onChange={handleChange}
+                />
+              </div>
+              </div>
 
-      <div className="row">
-  <div className="form-group col-6">
-    <label>Scholarship Name <Required /></label>
+              <div className="row">
+                <div className="form-group col-6">
+                  <label>Scholarship Name <Required /></label>
 
-    <select
-      name="scholarshipId"
-      value={formData.scholarshipId}
-      onChange={handleChange}
-      className={errors.scholarshipId ? "input-error" : ""}
-    >
-      <option value="">Select Scholarship</option>
-      {scholarshipOptions.map((sch) => (
-        <option key={sch.id} value={sch.id}>{sch.name}</option>
-      ))}
-    </select>
+                  <select
+                    name="scholarshipId"
+                    value={formData.scholarshipId}
+                    onChange={handleChange}
+                    className={errors.scholarshipId ? "input-error" : ""}
+                  >
+                    <option value="">Select Scholarship</option>
+                    {scholarshipOptions.map((sch) => (
+                      <option key={sch.id} value={sch.id}>{sch.name}</option>
+                    ))}
+                  </select>
 
-    {errors.scholarshipId && (
-      <p className="error-text">{errors.scholarshipId}</p>
-    )}
-  </div>
-</div>
-      </div>
+                  {errors.scholarshipId && (
+                    <p className="error-text">{errors.scholarshipId}</p>
+                  )}
+                </div>
+              
+            </div>
 
-    <div className="row">
-       <div className="form-group col-6">
+            <div className="row">
+              <div className="form-group col-6">
                 <label>Category </label>
                 <select
                   name="category"
@@ -669,22 +670,22 @@ const handleSubmit = async (e, statusType) => {
                   )}
                 </select>
               </div>
- 
-      <div className="form-group col-6">
-        <label>Application Date</label>
-        <input
-          type="date"
-          name="applicationDate"
-          value={formData.applicationDate}
-          min={today}
-          max={today}
-          onChange={handleChange}
-        />
-      </div>
-    </div>
 
-    <div className="row">
-  {/*<div className="form-group col-12">
+              <div className="form-group col-6">
+                <label>Application Date</label>
+                <input
+                  type="date"
+                  name="applicationDate"
+                  value={formData.applicationDate}
+                  min={today}
+                  max={today}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              {/*<div className="form-group col-12">
     <label>Upload Documents</label>
     <input
       type="file"
@@ -738,85 +739,85 @@ const handleSubmit = async (e, statusType) => {
 )}*/}
 
 
- <div className="form-group col-12">
-  <label>Upload Documents</label>
-  <input
-    type="file"
-    name="documents"
-    onChange={handleFileChange}
-    multiple
-    ref={fileInputRef}
-  />
+              <div className="form-group col-12">
+                <label>Upload Documents</label>
+                <input
+                  type="file"
+                  name="documents"
+                  onChange={handleFileChange}
+                  multiple
+                  ref={fileInputRef}
+                />
 
-  {fileSelected && filesList.length > 0 && (
-  <button
-    type="button"
-    className="btn btn-sm btn-danger mt-2"
-    onClick={handleClear}
-  >
-    Clear
-  </button>
-)}
+                {fileSelected && filesList.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger mt-2"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                )}
 
-  {/* Display all files: backend + newly selected */}
-  {(formData?.files?.length > 0 || filesList.length > 0) && (
-    <div className="d-flex flex-column mt-2 rounded">
-      {/* Existing backend files */}
-      {formData?.files?.map((fileName, index) => (
-        <div
-          key={`backend-${index}`}
-          className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
-        >
-          <span>{fileName || "No File Name"}</span>
+                {/* Display all files: backend + newly selected */}
+                {(formData?.files?.length > 0 || filesList.length > 0) && (
+                  <div className="d-flex flex-column mt-2 rounded">
+                    {/* Existing backend files */}
+                    {formData?.files?.map((fileName, index) => (
+                      <div
+                        key={`backend-${index}`}
+                        className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+                      >
+                        <span>{fileName || "No File Name"}</span>
+                      </div>
+                    ))}
+
+
+
+                    {/* Download button for backend files */}
+                    {formData?.files?.length > 0 && (
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary mt-2"
+                        onClick={() => downloadFileFun(formData.id)}
+                      >
+                        Download
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+
+
+
+
+            </div>
+
+
+            <h4 className="mt-3">Additional Information</h4>
+            <div className="row">
+              <div className="form-group col-12">
+                <label>Extra-Curricular</label>
+                <textarea name="extraCurricularActivities" value={formData.extraCurricularActivities} onChange={handleChange}></textarea>
+              </div>
+            </div>
+            <div className="row">
+
+              <div className="form-group col-12">
+                <label>Awards / Achievements</label>
+                <textarea name="awardsAchievements" value={formData.awardsAchievements} onChange={handleChange}></textarea>
+              </div>
+            </div>
+            <div className="row">
+
+              <div className="form-group col-12">
+                <label>Notes / Comments</label>
+                <textarea name="notesComments" value={formData.notesComments} onChange={handleChange}></textarea>
+              </div>
+            </div>
+          </form>
         </div>
-      ))}
-
-     
-
-      {/* Download button for backend files */}
-      {formData?.files?.length > 0 && (
-        <button
-          type="button"
-          className="btn btn-sm btn-primary mt-2"
-          onClick={() => downloadFileFun(formData.id)}
-        >
-          Download
-        </button>
-      )}
-    </div>
-  )}
-</div>
-
-
-
-
-
-</div>
-
-
-    <h4 className="mt-3">Additional Information</h4>
-    <div className="row">
-      <div className="form-group col-12">
-        <label>Extra-Curricular</label>
-        <textarea name="extraCurricularActivities" value={formData.extraCurricularActivities} onChange={handleChange}></textarea>
-      </div>
-    </div>
-          <div className="row">
-
-      <div className="form-group col-12">
-        <label>Awards / Achievements</label>
-        <textarea name="awardsAchievements" value={formData.awardsAchievements} onChange={handleChange}></textarea>
-      </div>
-    </div>
-          <div className="row">
-
-      <div className="form-group col-12">
-        <label>Notes / Comments</label>
-        <textarea name="notesComments" value={formData.notesComments} onChange={handleChange}></textarea>
-      </div>
-    </div>
-  </form>
-</div>
 
 
         {/* Footer Actions */}
