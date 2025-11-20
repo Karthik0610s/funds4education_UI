@@ -103,13 +103,14 @@ const dispatch = useDispatch();
             <button className="icon-btn">
               <FiBell size={20} />
             </button>
-            <button className="action-btn">
+            
+         {/*   <button className="action-btn">
               <FiUpload size={16} /> Upload
             </button>
             <button className="action-btn">
               <FiDownload size={16} /> Download
-            </button>
-          </div>
+            </button>*/}
+          </div> 
         );
 
       default:

@@ -65,16 +65,11 @@ const name = localStorage.getItem("name") || "Student";
                   <p>Application Date: {new Date(app.applicationDate).toLocaleDateString()}</p>
                   <span className="status approved">Approved</span>
                 </div>
-
-                <div className="application-actions">
-                  <button
-                    className="btn btn-fund"
-                    onClick={() => alert(`Fund student: ${app.firstName}`)}
-                  >
-                    Fund Student
-                  </button>
-                </div>
+          
+                
+                
               </div>
+            
             ))}
           </div>
         )}
