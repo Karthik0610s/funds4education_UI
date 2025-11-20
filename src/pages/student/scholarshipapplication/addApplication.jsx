@@ -186,8 +186,8 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
         regex = nameRegex;
         break;
       case "phoneNumber":
-        regex = phoneRegex;
-        break;
+  regex = phoneRegex;
+  break;
       case "courseOrMajor":
         regex = courseRegex;
         break;
@@ -211,7 +211,13 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
       default:
         regex = null;
     }
-
+ if (name === "phoneNumber") {
+    let cleaned = value.replace(/\D/g, "");
+    cleaned = cleaned.slice(0, 10);
+    setFormData({ ...formData, phoneNumber: cleaned });
+    setErrors({ ...errors, phoneNumber: "" });
+    return;
+  }
     if (files) {
       const fileArray = Array.from(files);
       setSelectedFiles(fileArray);
@@ -322,8 +328,9 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
       newErrors.applicationDate = "Application Date is required.";
 
     // Optional fields with validation:
-    if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber))
-      newErrors.phoneNumber = "Phone must be 10 digits.";
+    if (formData.phoneNumber && formData.phoneNumber.length !== 10)
+  newErrors.phoneNumber = "Phone must be exactly 10 digits.";
+
 
     if (formData.lastName && !nameRegex.test(formData.lastName))
       newErrors.lastName = "Last Name must contain only letters.";
@@ -556,7 +563,7 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <option value="Other">Others</option>
                 </select>
               </div>
             </div>
@@ -622,7 +629,7 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
 
             <div className="row">
               <div className="form-group col-6">
-                <label>Marks / GPA</label>
+                <label>Marks</label>
                 <input
                   type="text"
                   name="gpaOrMarks"
