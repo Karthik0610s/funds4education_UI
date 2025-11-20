@@ -55,14 +55,7 @@ const StudentDashboard = () => {
     state: [],
     course: [],
   });
-const [dropdownOpen, setDropdownOpen] = useState({
-  class: false,
-  country: false,
-  gender: false,
-  religion: false,
-  state: false,
-  course: false,
-});
+
 
   const [dropdownData, setDropdownData] = useState({
     countries: [],
@@ -342,7 +335,7 @@ useEffect(() => {
                 <button
                   className="dropdown-toggle"
                  onClick={() =>
-                    setDropdownOpen((prev) => ({ ...prev, [key]: !prev[key] }))
+                    setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
                   }
                 >
                   <span>{label}</span>
