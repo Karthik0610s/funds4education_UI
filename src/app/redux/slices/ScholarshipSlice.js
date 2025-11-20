@@ -167,11 +167,12 @@ export const fetchScholarshipList =
         }
       } catch (error) {
         dispatch(setError());
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error?.message || "Something went wrong while fetching scholarships.",
-        });
+        console.log(error);
+        // Swal.fire({
+        //   icon: "error",
+        //   title: "Error",
+        //   text: error?.message || "Something went wrong while fetching scholarships.",
+        // });
       }
     };
 
@@ -188,23 +189,25 @@ export const fetchFeaturedScholarships = () => async (dispatch) => {
       dispatch(addFeatured(res.data));
     } else {
       dispatch(setError());
-      Swal.fire({
-        icon: "info",
-        title: "No Featured Scholarships",
-        text: res.errorMsg || "No featured scholarships found.",
-        timer: 1800,
-      });
+      console.log(res.errorMsg);
+      // Swal.fire({
+      //   icon: "info",
+      //   title: "No Featured Scholarships",
+      //   text: res.errorMsg || "No featured scholarships found.",
+      //   timer: 1800,
+      // });
     }
   } catch (error) {
     dispatch(setError());
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text:
-        error?.errorMsg ||
-        error?.message ||
-        "Something went wrong while fetching featured scholarships.",
-    });
+    console.log(error);
+    // Swal.fire({
+    //   icon: "error",
+    //   title: "Error",
+    //   text:
+    //     error?.errorMsg ||
+    //     error?.message ||
+    //     "Something went wrong while fetching featured scholarships.",
+    // });
   }
 };
 

@@ -55,6 +55,14 @@ const StudentDashboard = () => {
     state: [],
     course: [],
   });
+const [dropdownOpen, setDropdownOpen] = useState({
+  class: false,
+  country: false,
+  gender: false,
+  religion: false,
+  state: false,
+  course: false,
+});
 
   const [dropdownData, setDropdownData] = useState({
     countries: [],
@@ -79,9 +87,14 @@ const StudentDashboard = () => {
   }, [dispatch]);
 
   // ✅ Fetch scholarships whenever filters or tab change
-  useEffect(() => {
-    const fetchData = async () => {
-      const activeFilters = {
+  // 🔹 Load featured only once
+useEffect(() => {
+  dispatch(fetchFeaturedScholarships());
+}, [dispatch]);
+
+// 🔹 Scholarships reload when filters change
+useEffect(() => {
+   const activeFilters = {
         statusType: "both",
         classId: filters.class.length ? filters.class : null,
         countryId: filters.country.length ? filters.country : null,
@@ -91,22 +104,46 @@ const StudentDashboard = () => {
         courseId: filters.course.length ? filters.course : null,
 
       };
+  dispatch(fetchScholarshipList(activeFilters));
+}, [
+  dispatch,
+  activeTab,
+  filters.class,
+  filters.country,
+  filters.gender,
+  filters.religion,
+  filters.state,
+  filters.course,
+]);
 
-      await dispatch(fetchScholarshipList(activeFilters));
-      await dispatch(fetchFeaturedScholarships());
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const activeFilters = {
+  //       statusType: "both",
+  //       classId: filters.class.length ? filters.class : null,
+  //       countryId: filters.country.length ? filters.country : null,
+  //       genderId: filters.gender.length ? filters.gender : null,
+  //       religionId: filters.religion.length ? filters.religion : null,
+  //       stateId: filters.state.length ? filters.state : null,
+  //       courseId: filters.course.length ? filters.course : null,
 
-    fetchData();
-  }, [
-    dispatch,
-    activeTab,
-    filters.class,
-    filters.country,
-    filters.gender,
-    filters.religion,
-    filters.state,
-    filters.course,
-  ]);
+  //     };
+
+  //     await dispatch(fetchScholarshipList(activeFilters));
+  //     await dispatch(fetchFeaturedScholarships());
+  //   };
+
+  //   fetchData();
+  // }, [
+  //   dispatch,
+  //   activeTab,
+  //   filters.class,
+  //   filters.country,
+  //   filters.gender,
+  //   filters.religion,
+  //   filters.state,
+  //   filters.course,
+  // ]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -179,14 +216,7 @@ const StudentDashboard = () => {
   );
 
   const clearAllFilters = () => {
-    /*setFilters({
-      class: "All",
-      country: "All",
-      gender: "All",
-      religion: "All",
-      state: "All",
-      course: "All",
-    });*/
+ 
     setFilters({
       class: [],
       country: [],
@@ -311,8 +341,8 @@ const StudentDashboard = () => {
               <div key={key} className="filter-dropdown">
                 <button
                   className="dropdown-toggle"
-                  onClick={() =>
-                    setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
+                 onClick={() =>
+                    setDropdownOpen((prev) => ({ ...prev, [key]: !prev[key] }))
                   }
                 >
                   <span>{label}</span>
@@ -420,15 +450,13 @@ const StudentDashboard = () => {
           {/* Scholarships Grid */}
           <div className="content-layout">
             <div className="scholarship-grid">
-              {loading ? (
-                <p>Loading scholarships...</p>
-              ) : currentScholarships.length === 0 ? (
-                <p>
-                  {activeTab === "live"
-                    ? "No live scholarships currently available."
-                    : "No upcoming scholarships yet."}
-                </p>
-              ) : (
+              
+              {loading && 
+                <p>Loading scholarships...</p>}
+
+              
+                {!loading && currentScholarships.length > 0 && (
+                 
                 currentScholarships.map((s, i) => {
                   const endDate = s.endDate ? new Date(s.endDate) : null;
                   const daysLeftText = getDaysLeftText(s.endDate);
@@ -545,8 +573,13 @@ const StudentDashboard = () => {
                       </div>
                     </div>
                   );
-                })
-              )}
+                }
+              )
+                
+
+              )}  {!loading && currentScholarships.length === 0 && (
+                  <p>No scholarships found.</p>
+                )}
             </div>
 
             <div className="ads-container">

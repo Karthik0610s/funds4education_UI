@@ -46,7 +46,7 @@ const ScholarshipViewPage = () => {
   <div className="scholarshipview-page">
     {/* 🔙 Back Button */}
     <button className="scholarship-back-button" onClick={() => navigate(-1)}>
-      Back
+      ← Back
     </button>
 
     {/* WRAPPER so everything aligns properly */}

@@ -55,10 +55,11 @@ export const addNewScholarshipApplication = async (data, dispatch) => {
     return res.data;
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
-    Swal.fire({
-      text: "Error! Try Again!",
-      icon: "error",
-    });
+    // Swal.fire({
+    //   text: "Error! Try Again!",
+    //   icon: "error",
+    // });
+    console.log(error);
     throw error; // Throw the error to be handled elsewhere
   }
 };
@@ -73,16 +74,17 @@ export const updateScholarshipApplication = async (data, dispatch) => {
     // Fetch updated list of scholarshipApplications after updating
     await dispatch(fetchScholarshipApplicationList());
 
-   /* Swal.fire({
+   Swal.fire({
       text: "ScholarshipApplication updated successfully!",
       icon: "success",
-    });*/
+    });
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
     Swal.fire({
       text: "Error! Try Again!",
       icon: "error",
     });
+    console.log(error);
     throw error; // Handle or throw the error to be handled elsewhere
   }
 };

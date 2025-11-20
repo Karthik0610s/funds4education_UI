@@ -3451,7 +3451,7 @@ input:not([type="radio"]) {
 
   .deadline-info {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
   }
 
   .scholarship-detail-container {
@@ -3481,7 +3481,7 @@ input:not([type="radio"]) {
   color: #fff;
   border: none;
   border-radius: 8px;
-  padding: 8px 16px;
+  padding: 9px 18px;
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 20px;
@@ -5459,7 +5459,7 @@ h2, h3, p {
   width: 100%; /* 🆕 full width */
   text-align: cener; /* 🆕 center align for balance with title */
   border-left: none; /* 🆕 no offset border */
-  padding-left: 1%;
+  padding-left: 0.35%;
 }
 .highlight-word {
   color: #F08650;
@@ -5842,7 +5842,7 @@ h2, h3, p {
   font-size: 1rem;
   font-weight: 600;
   color: #007bff;
-  padding-right:2%;
+  padding-right:0.25%;
 }
 
 .deadline-label {
