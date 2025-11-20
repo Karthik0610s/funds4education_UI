@@ -256,13 +256,14 @@ export default function SponsorDashboard() {
     <strong>{s.firstName} {s.lastName}</strong>
     <span className="sch-name"> - {s.scholarshipName}</span>
   </p>
-
+<div className="app-row">
   <div className="info-row">
     <span className="label">Amount</span>
    {/* <span className="value">₹{s.amount}</span>*/}
    <span className="value">₹{s.amount}</span>
   </div>
-
+  
+</div>
   <div className="info-row">
     <span className="label">Applied On</span>
     <span className="value">
@@ -272,7 +273,7 @@ export default function SponsorDashboard() {
 
   {/* STATUS + BUTTON ROW */}
   <div className="status-action-row">
-    <span className="status-badge">{s.status}</span>
+    <span className="status-badge">{s.status.toUpperCase()}</span>
     <button className="msg-btn">Message</button>
   </div>
 
@@ -312,11 +313,12 @@ export default function SponsorDashboard() {
 
                 // Determine progress width based on status
                 const progressMap = {
-                  APPROVED: 100,
+                  APPROVED: 80,
+                  FUNDED: 100,
                   REJECTED: 0,
-                  SUBMITTED: 50,
-                  "IN REVIEW": 70,
-                  DRAFT: 30
+                  SUBMITTED: 40,
+                  "IN REVIEW": 60,
+                  DRAFT: 20
                 };
 
                 const progress = progressMap[s.status?.toUpperCase()] ?? 0;

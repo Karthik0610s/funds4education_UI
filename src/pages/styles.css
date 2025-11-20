@@ -1051,14 +1051,11 @@ text-align: center;
 }
 .msg-btn {
   /* margin-top: 10px; */
-  width: 100%;
-  padding: 8px 12px;
   border-radius: 6px;
   border: none;
   background: #7C3AED;
   color: white;
   font-weight: bold;
-      width: 50%;
 }
 .student-details .msg-btn {
   /* margin-top: 12px; */
@@ -1073,7 +1070,7 @@ text-align: center;
 }
 @media (max-width: 768px) {
   .msg-btn {
-    width: 100%;
+    /* width: 100%; */
     display: block;
   }
 }
