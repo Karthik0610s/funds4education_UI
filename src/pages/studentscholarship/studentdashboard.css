@@ -583,7 +583,7 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 
 .ad-box button {
   width: 100%;
-  background: #0066ff;
+  background: #008000;
   color: white;
   font-size: 13px;
   padding: 8px;
@@ -593,5 +593,7 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 }
 
 .ad-box button:hover {
-  background: #004dcc;
+  background: #e68900;
 }
+/* Container for icon + text */
+

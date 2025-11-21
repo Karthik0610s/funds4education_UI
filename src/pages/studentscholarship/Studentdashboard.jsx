@@ -18,6 +18,8 @@ import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
@@ -81,33 +83,33 @@ const StudentDashboard = () => {
 
   // ✅ Fetch scholarships whenever filters or tab change
   // 🔹 Load featured only once
-useEffect(() => {
-  dispatch(fetchFeaturedScholarships());
-}, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchFeaturedScholarships());
+  }, [dispatch]);
 
-// 🔹 Scholarships reload when filters change
-useEffect(() => {
-   const activeFilters = {
-        statusType: "both",
-        classId: filters.class.length ? filters.class : null,
-        countryId: filters.country.length ? filters.country : null,
-        genderId: filters.gender.length ? filters.gender : null,
-        religionId: filters.religion.length ? filters.religion : null,
-        stateId: filters.state.length ? filters.state : null,
-        courseId: filters.course.length ? filters.course : null,
+  // 🔹 Scholarships reload when filters change
+  useEffect(() => {
+    const activeFilters = {
+      statusType: "both",
+      classId: filters.class.length ? filters.class : null,
+      countryId: filters.country.length ? filters.country : null,
+      genderId: filters.gender.length ? filters.gender : null,
+      religionId: filters.religion.length ? filters.religion : null,
+      stateId: filters.state.length ? filters.state : null,
+      courseId: filters.course.length ? filters.course : null,
 
-      };
-  dispatch(fetchScholarshipList(activeFilters));
-}, [
-  dispatch,
-  activeTab,
-  filters.class,
-  filters.country,
-  filters.gender,
-  filters.religion,
-  filters.state,
-  filters.course,
-]);
+    };
+    dispatch(fetchScholarshipList(activeFilters));
+  }, [
+    dispatch,
+    activeTab,
+    filters.class,
+    filters.country,
+    filters.gender,
+    filters.religion,
+    filters.state,
+    filters.course,
+  ]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -209,7 +211,7 @@ useEffect(() => {
   );
 
   const clearAllFilters = () => {
- 
+
     setFilters({
       class: [],
       country: [],
@@ -221,39 +223,39 @@ useEffect(() => {
 
   };
   const ads = [
-  {
-    title: "🎓 Online MBA Degree",
-    text: "UGC Approved | EMI Available",
-    button: "Apply Now",
-  },
-  {
-    title: "💻 Full Stack Development Course",
-    text: "Job Guarantee Program",
-    button: "Enroll Now",
-  },
-  {
-    title: "📚 IELTS Online Coaching",
-    text: "Live Online Classes",
-    button: "Start Learning",
-  },
+    {
+      title: "🎓 Online MBA Degree",
+      text: "UGC Approved | EMI Available",
+      button: "Apply Now",
+    },
+    {
+      title: "💻 Full Stack Development Course",
+      text: "Job Guarantee Program",
+      button: "Enroll Now",
+    },
+    {
+      title: "📚 IELTS Online Coaching",
+      text: "Live Online Classes",
+      button: "Start Learning",
+    },
 
-  // ⭐ Extra ads added below
-  {
-    title: "🧠 Data Science Certification",
-    text: "Learn AI, ML & Python | Online",
-    button: "Join Today",
-  },
-  {
-    title: "🌍 Study Abroad Consultancy",
-    text: "Free Guidance & Visa Support",
-    button: "Book Free Call",
-  },
-  {
-    title: "🧑‍💼 Digital Marketing Course",
-    text: "Internship & Placement Support",
-    button: "Register Now",
-  },
-];
+    // ⭐ Extra ads added below
+    {
+      title: "🧠 Data Science Certification",
+      text: "Learn AI, ML & Python | Online",
+      button: "Join Today",
+    },
+    {
+      title: "🌍 Study Abroad Consultancy",
+      text: "Free Guidance & Visa Support",
+      button: "Book Free Call",
+    },
+    {
+      title: "🧑‍💼 Digital Marketing Course",
+      text: "Internship & Placement Support",
+      button: "Register Now",
+    },
+  ];
 
   const [currentAd, setCurrentAd] = useState(0);
 
@@ -334,7 +336,7 @@ useEffect(() => {
               <div key={key} className="filter-dropdown">
                 <button
                   className="dropdown-toggle"
-                 onClick={() =>
+                  onClick={() =>
                     setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
                   }
                 >
@@ -443,13 +445,13 @@ useEffect(() => {
           {/* Scholarships Grid */}
           <div className="content-layout">
             <div className="scholarship-grid">
-              
-              {loading && 
+
+              {loading &&
                 <p>Loading scholarships...</p>}
 
-              
-                {!loading && currentScholarships.length > 0 && (
-                 
+
+              {!loading && currentScholarships.length > 0 && (
+
                 currentScholarships.map((s, i) => {
                   const endDate = s.endDate ? new Date(s.endDate) : null;
                   const daysLeftText = getDaysLeftText(s.endDate);
@@ -567,12 +569,12 @@ useEffect(() => {
                     </div>
                   );
                 }
-              )
-                
+                )
+
 
               )}  {!loading && currentScholarships.length === 0 && (
-                  <p>No scholarships found.</p>
-                )}
+                <p>No scholarships found.</p>
+              )}
             </div>
 
             <div className="ads-container">
@@ -581,75 +583,75 @@ useEffect(() => {
                 <p>{ads[currentAd].text}</p>
                 <button>{ads[currentAd].button}</button>
               </div>
-           
-            {/* Featured Sidebar */}
-            <aside className="featured-sidebar">
-              <div className="featured-header">Featured Scholarships</div>
 
-              {featuredScholarships.length === 0 ? (
-                <p style={{ padding: "12px" }}>No featured scholarships found.</p>
-              ) : (
-                featuredScholarships.map((s, i) => {
-                  // const baseUrl = "https://localhost:44315";
+              {/* Featured Sidebar */}
+              <aside className="featured-sidebar">
+                <div className="featured-header">Featured Scholarships</div>
 
-                  // ✅ Clean logo name (remove trailing | and spaces)
-                  const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
+                {featuredScholarships.length === 0 ? (
+                  <p style={{ padding: "12px" }}>No featured scholarships found.</p>
+                ) : (
+                  featuredScholarships.map((s, i) => {
+                    // const baseUrl = "https://localhost:44315";
 
-                  // ✅ Encode spaces and special chars in file name
-                  const encodedLogoName = encodeURIComponent(cleanLogoName);
+                    // ✅ Clean logo name (remove trailing | and spaces)
+                    const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
 
-                  // ✅ Build proper image URL (handles Scholarship, SchAppForm, etc.)
-                  const imageUrl =
-                    s.logoPath && cleanLogoName
-                      ? `${baseUrl}/${s.logoPath
-                        .replace(/^.*Scholarship[\\/]/, "Scholarship/")
-                        .replace(/\\/g, "/")}/${encodedLogoName}`
-                      : "/images/before.png";
+                    // ✅ Encode spaces and special chars in file name
+                    const encodedLogoName = encodeURIComponent(cleanLogoName);
 
-                  // ✅ Create alt text without extension
-                  const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
+                    // ✅ Build proper image URL (handles Scholarship, SchAppForm, etc.)
+                    const imageUrl =
+                      s.logoPath && cleanLogoName
+                        ? `${baseUrl}/${s.logoPath
+                          .replace(/^.*Scholarship[\\/]/, "Scholarship/")
+                          .replace(/\\/g, "/")}/${encodedLogoName}`
+                        : "/images/before.png";
 
-                  // ✅ Detect if file is an image
-                  const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
+                    // ✅ Create alt text without extension
+                    const altText = cleanLogoName.replace(/\.[^/.]+$/, "") || "Scholarship Logo";
 
-                  console.log("image", imageUrl);
+                    // ✅ Detect if file is an image
+                    const isImage = /\.(png|jpg|jpeg|gif)$/i.test(cleanLogoName);
 
-                  return (
-                    <div className="featured-item" key={i}>
-                      {isImage ? (
-                        <img
-                          src={imageUrl}
-                          alt={altText}
-                          className="featured-logo"
-                          onError={() => setImgError(true)}
-                        />
-                      ) : (
-                        <div className="alt-logo-text">{ }</div>
-                      )}
+                    console.log("image", imageUrl);
 
-                      <div>
-                        <p className="featured-title">
-                          {s.scholarshipName ?? "Unnamed Scholarship"}
-                        </p>
-                        {s.deadline ? (
-                          <p className="featured-deadline">
-                            Deadline Date:{" "}
-                            {new Date(s.deadline).toLocaleDateString("en-GB", {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            })}
-                          </p>
+                    return (
+                      <div className="featured-item" key={i}>
+                        {isImage ? (
+                          <img
+                            src={imageUrl}
+                            alt={altText}
+                            className="featured-logo"
+                            onError={() => setImgError(true)}
+                          />
                         ) : (
-                          <p className="featured-deadline">No Deadline</p>
+                          <div className="alt-logo-text">{ }</div>
                         )}
+
+                        <div>
+                          <p className="featured-title">
+                            {s.scholarshipName ?? "Unnamed Scholarship"}
+                          </p>
+                          {s.deadline ? (
+                            <p className="featured-deadline">
+                              Deadline Date:{" "}
+                              {new Date(s.deadline).toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              })}
+                            </p>
+                          ) : (
+                            <p className="featured-deadline">No Deadline</p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
-              )}
-            </aside>
- </div>
+                    );
+                  })
+                )}
+              </aside>
+            </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
@@ -678,6 +680,36 @@ useEffect(() => {
           </div>
         </main>
       </div>
+      {/* <div
+        className="chat-float-container"
+        onClick={() => setShowChat(true)}
+      >
+        <div className="chat-float-btn">💬</div>
+        <span className="chat-float-text">Chat Us</span>
+      </div> */}
+
+      {/* ⭐ Chat Popup */}
+      {/* {showChat && (
+        <div className="chat-popup">
+          <div className="chat-header">
+            <span>Support Chat</span>
+            <button className="close-chat" onClick={() => setShowChat(false)}>✕</button>
+          </div>
+
+          <div className="chat-body">
+            <p><strong>Agent:</strong> Hi! How can I help you?</p>
+          </div>
+
+          <div className="chat-input-area">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              className="chat-input"
+            />
+            <button className="send-btn">Send</button>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 };
