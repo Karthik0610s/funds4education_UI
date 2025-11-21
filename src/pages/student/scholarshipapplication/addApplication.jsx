@@ -16,12 +16,12 @@ import { routePath as RP } from "../../../app/components/router/routepath";
 const nameRegex = /^[A-Za-z\s]{0,150}$/;
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu)$/;
 const phoneRegex = /^[0-9]{0,10}$/;
-const courseRegex = /^[A-Za-z\s]{0,150}$/;
+const courseRegex = /^[A-Za-z\s/]{0,150}$/;
 const collegeRegex = /^[A-Za-z\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,3}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
-const text250Regex = /^[A-Za-z\s]{0,250}$/;
+const text250Regex = /^[A-Za-z,\s]{0,250}$/;
 const RequiredMark = () => <span className="validation-error-label">*</span>;
 
 
@@ -230,6 +230,11 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
          });
        }*/
       let updatedFormData = { ...formData };
+        if (name === "yearOfStudy") {
+      let cleaned = value.replace(/\D/g, "").slice(0, 4);
+      setFormData({ ...formData, yearOfStudy: cleaned });
+      return;
+    }
 
       if (!regex || regex.test(value)) {
         updatedFormData[name] =
@@ -335,6 +340,17 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
     if (formData.lastName && !nameRegex.test(formData.lastName))
       newErrors.lastName = "Last Name must contain only letters.";
 
+     if (formData.yearOfStudy) {
+      const enteredYear = parseInt(formData.yearOfStudy);
+      const currentYear = new Date().getFullYear();
+
+      if (isNaN(enteredYear)) {
+        newErrors.yearOfStudy = "Enter a valid year.";
+      } else if (enteredYear > currentYear) {
+        newErrors.yearOfStudy =
+          `Year cannot be greater than ${currentYear}.`;
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -618,12 +634,15 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
 
               <div className="form-group col-6">
                 <label>Year of Study</label>
-                <input
+               <input
                   type="text"
                   name="yearOfStudy"
                   value={formData.yearOfStudy}
                   onChange={handleChange}
                 />
+                {errors.yearOfStudy && (
+                  <p className="error-text">{errors.yearOfStudy}</p>
+                )}
               </div>
             </div>
 
@@ -828,7 +847,7 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
           </form>
         </div>
 
-
+ 
         {/* Footer Actions */}
         <div className="modal-actions">
           <button className="sign-action-btn1 danger" onClick={handleCloseAndReset} >Cancel</button>
