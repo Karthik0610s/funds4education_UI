@@ -10,7 +10,7 @@ import AddApplicationModal from "./addApplication"; // <-- your modal component
 import { useLocation } from "react-router-dom";
 const ApplicationsPage = () => {
   const dispatch = useDispatch();
-const location = useLocation();
+  const location = useLocation();
   // Redux state
   const { data: applications = [], loading = false } =
     useSelector((state) => state.scholarshipApplicationList || {});
@@ -21,7 +21,7 @@ const location = useLocation();
   // Modal state
   const [showModal, setShowModal] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
-    const studentId = localStorage.getItem("userId");
+  const studentId = localStorage.getItem("userId");
 
   useEffect(() => {
     debugger;
@@ -33,25 +33,25 @@ const location = useLocation();
     filter === "All"
       ? applications
       : applications.filter(
-          (app) => app.status.toLowerCase() === filter.toLowerCase()
-        );
+        (app) => app.status.toLowerCase() === filter.toLowerCase()
+      );
 
   // Filter further by search query
   const displayedApps = filteredApps.filter((app) =>
     app.scholarshipName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-useEffect(() => {
-  // ✅ Open Add Modal automatically when user came from Apply Now
-  if (location.state?.openAddModal) {
-    setSelectedApplication(null);
-    setShowModal(true);
-  }
-}, [location.state]);
+  useEffect(() => {
+    // ✅ Open Add Modal automatically when user came from Apply Now
+    if (location.state?.openAddModal) {
+      setSelectedApplication(null);
+      setShowModal(true);
+    }
+  }, [location.state]);
   // Open modal in Add mode
   const handleAddApplication = () => {
     setSelectedApplication(null);
     setShowModal(true);
-    
+
   };
 
   // Open modal in Edit mode
@@ -70,9 +70,9 @@ useEffect(() => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await deleteScholarshipApplication(appId, dispatch);
+        await deleteScholarshipApplication(appId, studentId, dispatch);
         Swal.fire("Deleted!", "Application has been deleted.", "success");
-        dispatch(fetchScholarshipApplicationListbyStudent());
+        // dispatch(fetchScholarshipApplicationListbyStudent());
       }
     });
   };
@@ -113,41 +113,41 @@ const ITEMS_PER_PAGE = 5;
   );
 
   return (
-   <div>
-  <Header variant="application" />
-<div className="applications-header">
-    <h1 className="applications-title pt-5">My Scholarship Applications</h1>
-    <p className="applications-subtitle">
-      Track your scholarship applications and <br /> filter by status.
-    </p>
-  </div>
+    <div>
+      <Header variant="application" />
+      <div className="applications-header">
+        <h1 className="applications-title pt-5">My Scholarship Applications</h1>
+        <p className="applications-subtitle">
+          Track your scholarship applications and <br /> filter by status.
+        </p>
+      </div>
 
-  {/* Actions */}
-  <div className="applications-actions">
-    <input
-      type="text"
-      placeholder="Search by name..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-    />
+      {/* Actions */}
+      <div className="applications-actions">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
 
-    <select
-      value={filter}
-      onChange={(e) => setFilter(e.target.value)}
-      className="applications-filter"
-    >
-      <option value="All">All</option>
-      <option value="Submitted">Submitted</option>
-      <option value="In Review">In Review</option>
-      <option value="Rejected">Rejected</option>
-      <option value="Approved">Approved</option>
-      <option value="Draft">Draft</option>
-    </select>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="applications-filter"
+        >
+          <option value="All">All</option>
+          <option value="Submitted">Submitted</option>
+          <option value="In Review">In Review</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Approved">Approved</option>
+          <option value="Draft">Draft</option>
+        </select>
 
-    <button className="applications-btn-new" onClick={handleAddApplication}>
-      + New Application
-    </button>
-  </div>
+        <button className="applications-btn-new" onClick={handleAddApplication}>
+          + New Application
+        </button>
+      </div>
 
   {/* Applications List */}
  <section className="applications-cards">
@@ -316,13 +316,13 @@ const ITEMS_PER_PAGE = 5;
 
 
 
-  <AddApplicationModal
-    show={showModal}
-    handleClose={() => setShowModal(false)}
-    onSubmit={handleModalSubmit}
-    application={selectedApplication}
-  />
-</div>
+      <AddApplicationModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        onSubmit={handleModalSubmit}
+        application={selectedApplication}
+      />
+    </div>
 
   );
 };
