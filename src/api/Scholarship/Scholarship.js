@@ -55,6 +55,10 @@ export const fetchScholarshipByStatusReq = async (filters = {}) => {
     // ✅ Build params object with correct backend names
     const params = {};
     params.StatusType = statusType; // 🔹 Note: capital S to match backend
+      const studentId = localStorage.getItem("id");
+    if (studentId) params.StudentId = studentId;
+    const role = localStorage.getItem("userType");
+    if (role) params.Role = role
 
 if (filters.classId?.length) params.Class_ID = filters.classId.join(',');
 
@@ -63,6 +67,7 @@ if (filters.courseId?.length) params.Course_ID = filters.courseId.join(',');
 if (filters.stateId?.length) params.State_ID = filters.stateId.join(',');
 if (filters.religionId?.length) params.Religion_ID = filters.religionId.join(',');
 if (filters.genderId?.length) params.Gender_ID = filters.genderId.join(',');
+
 
 
     const url = `${ApiKey.Scholarship}/status`;
