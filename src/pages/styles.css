@@ -1308,12 +1308,7 @@ text-align: center;
   
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}
+
 
 .action-btn {
   display: flex;
@@ -4229,7 +4224,7 @@ padding: 8px;
 }
 
 .status.status.submitted {
-  background: #cdb97a;
+  background: #dfce98;
   color: #bb7f32;
 }
 
@@ -4242,6 +4237,230 @@ padding: 8px;
   background: #fee2e2;
   color: #991b1b;
 }
+.applications-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #fff;
+}
+
+.applications-table th,
+.applications-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.applications-table th {
+  background: #f3f3f3;
+  font-weight: 600;
+}
+
+.actions-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;   /* space between icons */
+}
+
+.status.draft {
+  display: flex;
+  align-items: center;
+}
+
+.icons-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.icons-btn.edit {
+  color: #ff9800; /* orange */
+}
+
+.icons-btn.delete {
+  color:rgb(221 92 92);
+}
+
+.status-icon {
+  font-size: 14px; 
+}
+
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  opacity: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #111827 transparent transparent transparent;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip:hover::after,
+.tooltip:hover::before {
+  opacity: 1;
+}
+
+
+/* Mobile View Card Layout */
+/* -------------------------
+   MOBILE VIEW (max-width 768px)
+---------------------------*/
+@media (max-width: 768px) {
+  .applications-table {
+    border: 0;
+  }
+
+  .applications-table thead {
+    display: none; /* hide table headers */
+  }
+
+  .applications-table tr {
+    display: block;
+    margin-bottom: 18px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  }
+
+  /* All TDs stacked vertically except Status / Actions */
+  .applications-table td {
+    display: block;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+  }
+
+  /* S.No bold on top */
+  .applications-table td[data-label="S.No"]:before {
+    content: attr(data-label);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Other labels */
+  .applications-table td:not([data-label="S.No"]):not([data-label="Status / Actions"]):before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #374151;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Status / Actions stay in one row */
+  .applications-table td[data-label="Status / Actions"] {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 0;
+  }
+
+  .status-icon {
+    margin-left: 0;
+  }
+
+  /* Remove borders for clean mobile cards */
+  .applications-table td,
+  .applications-table tr {
+    border: none !important;
+  }
+    .applications-table td[data-label="Status / Actions"] {
+    display: block; /* Stack label and value */
+    padding: 8px 0;
+    border-bottom: 0;
+  }
+
+  /* Label on top */
+  .applications-table td[data-label="Status / Actions"]:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #374151;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Container for icons/buttons */
+  .applications-table td[data-label="Status / Actions"] .actions-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .status-icon {
+    margin-left: 0;
+  }
+}
+.pagination {
+  display: flex;
+  justify-content: flex-end; /* align to right */
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  font-family: Arial, sans-serif;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  background-color:#082A28;
+  color: #fcfcfc;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #fe7c00;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: #374151;
+  min-width: 40px;
+  text-align: center;
+}
+
+
+
 /* 🔧 Mobile responsiveness */
 @media (max-width: 768px) {
   .page {
@@ -4514,7 +4733,7 @@ padding: 8px;
 
 /* Status styles */
 .status {
-  font-weight: bold;
+  font-weight: 500px;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 13px;
@@ -4628,7 +4847,7 @@ padding: 8px;
 }
 
 .applications-btn-new:hover {
-  background-color: #1d4ed8;
+  background-color: #fe7c00;
 }
 
 .applications-filter {

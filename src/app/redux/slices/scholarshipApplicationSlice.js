@@ -86,13 +86,13 @@ export const updateScholarshipApplication = async (data, dispatch) => {
 };
 
 // Action to delete a scholarshipApplication
-export const deleteScholarshipApplication = async (data, dispatch) => {
+export const deleteScholarshipApplication = async (data,studentId, dispatch) => {
   try {
     dispatch(setLoading()); // Set loading before making the API request
     await deleteScholarshipApplicationReq(data); // Call API to delete a scholarshipApplication
 
     // Fetch updated list of scholarshipApplications after deleting
-    await dispatch(fetchScholarshipApplicationList());
+    await dispatch(fetchScholarshipApplicationListbyStudent(studentId));
 
    
   } catch (error) {
