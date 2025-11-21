@@ -1019,7 +1019,75 @@ text-align: center;
     background: rgba(0,0,0,0.45);
     z-index: 8500;
   }
+ 
+/* MOBILE VIEW SPECIAL STYLING */
+/*@media (max-width: 600px) {
 
+  .app-info-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    text-align: left !important;
+  }
+
+  .label-bold {
+    font-weight: bold;
+    color: #111;
+    font-size: 14px;
+  }
+
+  .value-normal {
+    font-weight: normal;
+    color: #444;
+    margin-top: 2px;
+    font-size: 14px;
+  }
+
+  .progress-bar {
+    margin-top: 6px;
+    height: 6px;
+    border-radius: 5px;
+  }
+
+  .progress {
+    height: 6px;
+    border-radius: 5px;
+  }
+}
+.app-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px; 
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.app-info-row .progress-bar {
+  flex: 1;          
+  max-width: 250px;  
+  margin-left: 20px; 
+}*/
+.app-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+@media (max-width: 600px) {
+  .app-row {
+    display: block !important;
+  }
+
+  .app-row span:first-child {
+    display: block;
+    font-weight: 500;
+  }
+
+  .app-row span:last-child {
+    display: block;
+    margin-top: 5px;
+  }
+}
   /* ------------------------------------
      DRAWER NAV ITEMS
   ------------------------------------ */
@@ -4150,17 +4218,22 @@ padding: 8px;
   font-weight: 500;
 }
 
-.status.pending {
+.status.draft {
   background: #fef3c7;
   color: #92400e;
 }
 
-.status.approved {
+.status.funded {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.status.funded {
+.status.status.submitted {
+  background: #cdb97a;
+  color: #bb7f32;
+}
+
+.status.approved {
   background: #dcfce7;
   color: #166534;
 }

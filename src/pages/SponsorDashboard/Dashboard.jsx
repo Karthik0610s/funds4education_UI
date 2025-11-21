@@ -308,9 +308,9 @@ export default function SponsorDashboard() {
                 <span>Customize Branding</span>
               </div>
             </div> */}
-            <div className="app-card-container">
+<div className="app-card-container">
               {applications.map((s, i) => {
-
+ 
                 // Determine progress width based on status
                 const progressMap = {
                   APPROVED: 80,
@@ -320,12 +320,12 @@ export default function SponsorDashboard() {
                   "IN REVIEW": 60,
                   DRAFT: 20
                 };
-
+ 
                 const progress = progressMap[s.status?.toUpperCase()] ?? 0;
-
+ 
                 return (
                   <div key={i} className="app-card">
-
+ 
                     <div className="app-card-header">
                       <p>
                         <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
@@ -334,37 +334,39 @@ export default function SponsorDashboard() {
   <strong>{s.status.toUpperCase()}</strong>
 </span>
                     </div>
-
+ 
                     <div className="app-row">
                       <span>Scholarship Amount</span>
                       <span><strong>₹{s.amount}</strong></span>
                     </div>
-
+ 
                     <div className="app-row">
                       <span>Application Date</span>
                       <span >{new Date(s.applicationDate).toLocaleDateString()}</span>
                     </div>
-
+ 
                     <div className="app-row">
                       <span>Funds Disbursed</span>
-
+ 
                       <div className="progress-bar">
                         <div
                           className="progress"
                           style={{ width: `${progress}%` }}
                         ></div>
                       </div>
-
+ 
                     </div>
-
+ 
                     {/* <div className="app-row">
                       <span>Customize Branding</span>
                     </div> */}
-
+ 
                   </div>
                 );
               })}
             </div>
+
+
 
 
           </div>
