@@ -680,16 +680,16 @@ const StudentDashboard = () => {
           </div>
         </main>
       </div>
-      <div
+      {/* <div
         className="chat-float-container"
         onClick={() => setShowChat(true)}
       >
         <div className="chat-float-btn">💬</div>
         <span className="chat-float-text">Chat Us</span>
-      </div>
+      </div> */}
 
       {/* ⭐ Chat Popup */}
-      {showChat && (
+      {/* {showChat && (
         <div className="chat-popup">
           <div className="chat-header">
             <span>Support Chat</span>
@@ -709,7 +709,7 @@ const StudentDashboard = () => {
             <button className="send-btn">Send</button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
