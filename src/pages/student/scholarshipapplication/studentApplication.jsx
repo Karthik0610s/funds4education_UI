@@ -188,122 +188,119 @@ const ApplicationsPage = () => {
                       })}
                     </td>
 
-                    {/* STATUS + ACTIONS */}
-                    <td
-                      data-label="Status / Actions"
+            {/* STATUS + ACTIONS */}
+          <td data-label="Status / Actions">
+  <div className="actions-container">
+    {/* STATUS ICON */}
+    <span
+      className="status-icon"
+      style={{
+        color:
+          app.status.toLowerCase() === "approved"
+            ? "#006400"
+            : app.status.toLowerCase() === "submitted"
+            ? "#1e40af"
+            : app.status.toLowerCase() === "draft"
+            ? "#d6c581ff"
+            : app.status.toLowerCase() === "rejected"
+            ? "red"
+            : "black",
+        fontSize: "16px",
+        cursor: "pointer",
+        position: "relative",
+        padding: "5px"
+      }}
+      onMouseEnter={(e) => {
+        const tip = document.createElement("div");
+        tip.innerText = app.status.charAt(0).toUpperCase() + app.status.slice(1);
+        tip.style.position = "absolute";
+        tip.style.bottom = "120%";
+        tip.style.left = "50%";
+        tip.style.transform = "translateX(-50%)";
+        tip.style.background = "#111827";
+        tip.style.color = "#fff";
+        tip.style.padding = "6px 10px";
+        tip.style.fontSize = "16px";
+        tip.style.borderRadius = "6px";
+        tip.style.whiteSpace = "nowrap";
+        tip.style.zIndex = 2000;
+        tip.style.pointerEvents = "none";
+        tip.className = "custom-tooltip";
+        e.currentTarget.appendChild(tip);
+      }}
+      onMouseLeave={(e) => {
+        const tip = e.currentTarget.querySelector(".custom-tooltip");
+        if (tip) tip.remove();
+      }}
+    >
+      <i
+        className={
+          app.status.toLowerCase() === "approved"
+            ? "fa-solid fa-circle-check"
+            : app.status.toLowerCase() === "submitted"
+            ? "fa-regular fa-paper-plane"
+            : app.status.toLowerCase() === "draft"
+            ? "fa-regular fa-file-lines"
+            : "fa-solid fa-circle-xmark"
+        }
+      ></i>
+    </span>
 
-                      style={{
+    {/* EDIT & DELETE BUTTONS only for Draft */}
+    {app.status.toLowerCase() === "draft" && (
+      <>
+        <button
+          className="icons-btn edit"
+          onClick={() => handleEdit(app)}
+          style={{
+            color: "orange",
+            fontSize: "16px",
+            cursor: "pointer",
+            background: "transparent",
+            border: "none",
+          }}
+        >
+          <i className="fa-regular fa-pen-to-square"></i>
+        </button>
 
-                        alignItems: "center",
-                        gap: "14px",
-                      }}
-                    >
-                      <div className="actions-container">
-                        {/* STATUS ICON */}
-                        <span
-                          className="status-icon"
-                          style={{
-                            color:
-                              app.status.toLowerCase() === "approved"
-                                ? "#006400"
-                                : app.status.toLowerCase() === "submitted"
-                                  ? "#1e40af"
-                                  : app.status.toLowerCase() === "draft"
-                                    ? "#d6c581ff"
-                                    : app.status.toLowerCase() === "rejected"
-                                      ? "red"
-                                      : "black",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            position: "relative",
-                          }}
-                          onMouseEnter={(e) => {
-                            const tip = document.createElement("div");
-                            tip.innerText = app.status.charAt(0).toUpperCase() + app.status.slice(1);
-                            tip.style.position = "absolute";
-                            tip.style.bottom = "120%";
-                            tip.style.left = "50%";
-                            tip.style.transform = "translateX(-50%)";
-                            tip.style.background = "#111827";
-                            tip.style.color = "#fff";
-                            tip.style.padding = "6px 10px";
-                            tip.style.fontSize = "16px";
-                            tip.style.borderRadius = "6px";
-                            tip.style.whiteSpace = "nowrap";
-                            tip.style.zIndex = 2000;
-                            tip.style.pointerEvents = "none";
-                            tip.className = "custom-tooltip";
-                            e.currentTarget.appendChild(tip);
-                          }}
-                          onMouseLeave={(e) => {
-                            const tip = e.currentTarget.querySelector(".custom-tooltip");
-                            if (tip) tip.remove();
-                          }}
-                        >
-                          <i
-                            className={
-                              app.status.toLowerCase() === "approved"
-                                ? "fa-solid fa-circle-check"
-                                : app.status.toLowerCase() === "submitted"
-                                  ? "fa-regular fa-paper-plane"
-                                  : app.status.toLowerCase() === "draft"
-                                    ? "fa-regular fa-file-lines"
-                                    : "fa-solid fa-circle-xmark"
-                            }
-                          ></i>
-                        </span>
+        <button
+          className="icons-btn delete"
+          onClick={() => handleDelete(app.id)}
+          style={{
+            color: "red",
+            fontSize: "16px",
+            cursor: "pointer",
+            background: "transparent",
+            border: "none",
+          }}
+        >
+          <i className="fa-solid fa-trash"></i>
+        </button>
+      </>
+    )}
+  </div>
+</td>
 
-                        {/* --- EDIT BUTTON --- */}
-                        <button
-                          className="icons-btn edit"
-                          onClick={() => handleEdit(app)}
-                          style={{
-                            color: "orange",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                          }}
-                        >
-                          <i className="fa-regular fa-pen-to-square"></i>
-                        </button>
-
-                        {/* --- DELETE BUTTON --- */}
-                        <button
-                          className="icons-btn delete"
-                          onClick={() => handleDelete(app.id)}
-                          style={{
-                            color: "red",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            background: "transparent",
-                            border: "none",
-                          }}
-                        >
-                          <i className="fa-solid fa-trash"></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <div className="pagination">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-              >
-                Prev
-              </button>
-              <span>{currentPage} / {totalPages}</span>
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-              >
-                Next
-              </button>
-            </div>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+   
+          <div className="pagination">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+            >
+              Prev
+            </button>
+            <span>{currentPage} / {totalPages}</span>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+            >
+              Next
+            </button>
+          </div>
           </>
         ) : (
           <p className="applications-no-results">
