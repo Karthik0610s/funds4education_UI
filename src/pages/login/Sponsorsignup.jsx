@@ -24,7 +24,9 @@ export default function SponsorSignUpPage() {
 
     // --- Validation regex ---
     const nameRegex = /^[A-Za-z\s]{1,150}$/;
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|org|net|edu|co\.in)$/;
+    const emailRegex =
+  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(com|org|net|edu|co\.in)$/;
+
     const phoneRegex = /^[0-9]{10}$/;
     const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
     const passwordRegex =
@@ -210,9 +212,10 @@ export default function SponsorSignUpPage() {
       const value = e.target.value;
 
       // allow only letters, numbers, @ and . WHILE typing
-      if (/^[A-Za-z0-9@.]*$/.test(value)) {
-        setBasicDetails({ ...basicDetails, email: value });
-      }
+      if (/^[A-Za-z0-9@._%-]*$/.test(value)) {
+    setBasicDetails({ ...basicDetails, email: value });
+}
+
 
 }}
 
