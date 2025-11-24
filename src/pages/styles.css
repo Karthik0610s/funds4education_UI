@@ -4824,6 +4824,18 @@ padding: 8px;
     margin-bottom: auto;
 
 }
+.applications-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;       /* space between back button and text */
+  margin-bottom: 20px;
+}
+
+.applications-title-wrapper {
+  flex: 1;            /* allows centering */
+  text-align: center; /* centers title + subtitle */
+}
 
 /* Actions */
 .applications-actions {
