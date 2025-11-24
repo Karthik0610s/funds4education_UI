@@ -16,7 +16,7 @@ import { routePath as RP } from "../../../app/components/router/routepath";
 const nameRegex = /^[A-Za-z\s]{0,150}$/;
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu)$/;
 const phoneRegex = /^[0-9]{0,10}$/;
-const courseRegex = /^[A-Za-z\s/]{0,150}$/;
+const courseRegex = /^[A-Za-z\s-./]{0,150}$/;
 const collegeRegex = /^[A-Za-z\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,3}(\.\d{1,2})?$/;
@@ -66,10 +66,20 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
   const fileInputRef = useRef(null);
   const navigation = useNavigate();
   const dispatch = useDispatch();
+  // Max allowed DOB = yesterday
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+const maxDOB = yesterday.toISOString().split("T")[0];
+
+// Min allowed DOB = today - 79 years
+const minDOB = new Date();
+minDOB.setFullYear(minDOB.getFullYear() - 79);
+const minAllowedDOB = minDOB.toISOString().split("T")[0];
+
   const today = new Date().toISOString().split("T")[0];
-  const minDOB = new Date(new Date().setFullYear(new Date().getFullYear() - 79))
-    .toISOString()
-    .split("T")[0];
+  //const minDOB = new Date(new Date().setFullYear(new Date().getFullYear() - 79))
+   // .toISOString()
+    //.split("T")[0];
   const initialFormData = {
     firstName: "",
     lastName: "",
@@ -229,12 +239,50 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
            [name]: name === "scholarshipId" ? parseInt(value) : value,
          });
        }*/
-      let updatedFormData = { ...formData };
+     // Year of Study: Only allow past or current year, block future
+if (name === "yearOfStudy") {
+  let cleaned = value.replace(/\D/g, "").slice(0, 4); // only digits, max 4 chars
+
+  if (cleaned === "") {
+    setFormData({ ...formData, yearOfStudy: "" });
+    return;
+  }
+
+  const enteredYear = Number(cleaned);
+  const currentYear = new Date().getFullYear();
+
+  // ❌ Block typing future year
+  if (enteredYear > currentYear) {
+    return; // DO NOT UPDATE STATE
+  }
+
+  setFormData({ ...formData, yearOfStudy: cleaned });
+  return;
+}
+ let updatedFormData = { ...formData };
         if (name === "yearOfStudy") {
       let cleaned = value.replace(/\D/g, "").slice(0, 4);
       setFormData({ ...formData, yearOfStudy: cleaned });
       return;
     }
+    
+    // Marks: allow only 0–100
+if (name === "gpaOrMarks") {
+  let cleaned = value.replace(/\D/g, ""); // keep only digits
+
+  // Block numbers greater than 100
+  if (cleaned !== "" && Number(cleaned) > 100) {
+    return; // do NOT update the state
+  }
+
+  // Limit to max 3 digits
+  cleaned = cleaned.slice(0, 3);
+  
+
+  setFormData({ ...formData, gpaOrMarks: cleaned });
+  return;
+}
+
 
       if (!regex || regex.test(value)) {
         updatedFormData[name] =
@@ -563,8 +611,8 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
                   type="date"
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
-                  min={minDOB}
-                  max={today}
+                  min={minAllowedDOB}
+                  max={maxDOB}
                   onChange={handleChange}
                 />
               </div>
