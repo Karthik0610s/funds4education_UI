@@ -429,8 +429,8 @@ if (formData.maxFamilyIncome && formData.maxFamilyIncome.length > 350) {
             newErrors.eligibility = "Eligibility cannot exceed 250 characters.";
             console.log("❌ eligibility too long:", formData.eligibility.length);
         }
-        if (formData.eligibilityCriteria && formData.eligibilityCriteria.length > 500) {
-            newErrors.eligibilityCriteria = "Eligibility Criteria cannot exceed 500 characters.";
+        if (formData.eligibilityCriteria && formData.eligibilityCriteria.length > 1000) {
+            newErrors.eligibilityCriteria = "Eligibility Criteria cannot exceed 1000 characters.";
             console.log("❌ eligibilityCriteria too long:", formData.eligibilityCriteria.length);
         }
         if (formData.renewalCriteria && formData.renewalCriteria.length > 300) {
