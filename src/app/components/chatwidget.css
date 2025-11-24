@@ -1,7 +1,7 @@
 .chat-float-container {
   position: fixed;
   right: 25px;
-  bottom: 25px;
+  bottom: 70px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -11,8 +11,8 @@
 
 /* Round Chat Icon */
 .chat-float-btn {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   background: #fe8200;
   color: white;
   border-radius: 50%;
