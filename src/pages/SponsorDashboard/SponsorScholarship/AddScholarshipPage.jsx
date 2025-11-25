@@ -594,7 +594,7 @@ const payload = {
                                 >
                                     <option value="">Select Type</option>
                                     <option value="Merit Based">Merit-Based</option>
-                                    <option value="Neet Based">Neet-Based</option>
+                                    <option value="Need Based">Need-Based</option>
                                     <option value="Research Grant">Research Grant</option>
                                     <option value="Government">Government</option>
                                 </select>
