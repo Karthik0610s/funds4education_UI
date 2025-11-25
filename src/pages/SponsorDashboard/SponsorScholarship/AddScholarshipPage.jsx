@@ -71,8 +71,7 @@ const AddScholarshipModal = ({ show, handleClose, scholarship }) => {
     const text50 = /^[A-Za-z0-9\s]{0,50}$/; // letters, numbers, spaces only, max 50
     const text350 = /^[A-Za-z0-9\s]{0,350}$/;
     const text250 = /^[A-Za-z0-9\s]{0,250}$/;
-    const text300 = /^[A-Za-z0-9-,.%\s]{0,300}$/;
-    //  const text500 = /^[A-Za-z0-9\s.,-]{0,1000}$/; // allows . , - only
+const text300 = /^[A-Za-z0-9-,.%()\s–]{0,300}$/;
     const text500 = /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~\s]{0,1000}$/;
     //const decimalRegex = /^\d{0,2}(\.\d{0,2})?$/; // CGPA/Percentage with decimals
     const number5Regex = /^\d{0,5}$/;
@@ -594,7 +593,7 @@ const payload = {
                                 >
                                     <option value="">Select Type</option>
                                     <option value="Merit Based">Merit-Based</option>
-                                    <option value="Neet Based">Neet-Based</option>
+                                    <option value="Need Based">Need-Based</option>
                                     <option value="Research Grant">Research Grant</option>
                                     <option value="Government">Government</option>
                                 </select>
