@@ -114,10 +114,11 @@ export const fetchScholarshipApplicationList = () => async (dispatch) => {
     dispatch(addData(res.data)); // Dispatch the data to Redux state
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
-    Swal.fire({
-      text: "Failed to load scholarshipApplications",
-      icon: "error",
-    });
+   // Swal.fire({
+      //text: "Failed to load scholarshipApplications",
+      //icon: "error",
+   // });
+    console.log(error);
   }
 };
 export const fetchScholarshipApplicationListbyStudent = (studentId) => async (dispatch) => {
@@ -128,9 +129,10 @@ export const fetchScholarshipApplicationListbyStudent = (studentId) => async (di
     dispatch(addData(res.data)); // Dispatch the data to Redux state
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
-    Swal.fire({
-      text: "Failed to load scholarshipApplications",
-      icon: "error",
-    });
+   // Swal.fire({
+    //  text: "Failed to load scholarshipApplications",
+     // icon: "error",
+   // });
+    console.log(error);
   }
 };

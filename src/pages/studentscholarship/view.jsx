@@ -73,11 +73,13 @@ const ScholarshipViewPage = () => {
             <span className="deadline-label">Deadline Date:</span>
             <span className="deadline-date">
               📅{" "}
-              {new Date(scholarship.endDate).toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              }).replace(/ /g, "-")}
+              {scholarship.endDate
+              ? new Date(scholarship.endDate).toLocaleDateString("en-IN", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric",
+                })
+              : "Always Open"}
             </span>
           </div>
         </div>
