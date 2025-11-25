@@ -71,7 +71,7 @@ const AddScholarshipModal = ({ show, handleClose, scholarship }) => {
     const text50 = /^[A-Za-z0-9\s]{0,50}$/; // letters, numbers, spaces only, max 50
     const text350 = /^[A-Za-z0-9\s]{0,350}$/;
     const text250 = /^[A-Za-z0-9\s]{0,250}$/;
-    const text300 = /^[A-Za-z0-9\s]{0,300}$/;
+    const text300 = /^[A-Za-z0-9-,.%\s]{0,300}$/;
     //  const text500 = /^[A-Za-z0-9\s.,-]{0,1000}$/; // allows . , - only
     const text500 = /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~\s]{0,1000}$/;
     //const decimalRegex = /^\d{0,2}(\.\d{0,2})?$/; // CGPA/Percentage with decimals
@@ -307,11 +307,6 @@ const handleReactSelect = (key, selected, allOptions, setFilters) => {
             case "scholarshipName":
                 regex = scholarshipNameRegex; // letters/numbers/spaces only, max 350
                 break;
-            case "description":
-
-
-                regex = text500; // allows ., - , and space
-                break;
             case "applicableCourses":
             case "applicableDepartments":
                 regex = text250;
@@ -365,17 +360,7 @@ const handleReactSelect = (key, selected, allOptions, setFilters) => {
             newErrors.scholarshipType = "Scholarship Type is required.";
             console.log("❌ scholarshipType missing");
         }
-        if (!formData.startDate) {
-            newErrors.startDate = "Start Date is required.";
-            console.log("❌ startDate missing");
-        }
-        if (!formData.endDate) {
-            newErrors.endDate = "End Date is required.";
-            console.log("❌ endDate missing");
-        } else if (formData.startDate && formData.endDate < formData.startDate) {
-            newErrors.endDate = "End Date must be after Start Date.";
-            console.log("❌ endDate < startDate");
-        }
+        
 
         // Scholarship amount validation
         /* if (formData.benefits && !amountRegex.test(formData.benefits)) {
@@ -421,7 +406,7 @@ if (formData.maxFamilyIncome && formData.maxFamilyIncome.length > 350) {
         }
 
         // Optional text length validations
-        if (formData.description && formData.description.length > 500) {
+        if (formData.description && formData.description.length > 1000) {
             newErrors.description = "Description cannot exceed 500 characters.";
             console.log("❌ description too long:", formData.description.length);
         }
@@ -457,6 +442,8 @@ const payload = {
     scholarshipAmount: formData.benefits || null,
     documents: formData.documents || null,
     uploadedFiles: null,
+    startDate: formData.startDate || null,
+    endDate: formData.endDate || null,
 
  // ⛔ DON'T parseInt these anymore
   religion_ID: filters.religion || "",
@@ -1024,18 +1011,18 @@ const payload = {
 
                         <div className="row">
                             <div className="form-group col-6">
-                                <label>Start Date<Required /></label>
+                                <label>Start Date</label>
                                 <input
                                     type="date"
                                     name="startDate"
                                     value={formData.startDate}
                                     onChange={handleChange}
                                 />
-                                {errors.startDate && <p className="error-text">{errors.startDate}</p>}
+                               
                             </div>
 
                             <div className="form-group col-6">
-                                <label>End Date<Required /></label>
+                                <label>End Date</label>
                                 <input
                                     type="date"
                                     name="endDate"
@@ -1043,7 +1030,7 @@ const payload = {
                                     min={formData.startDate || ""}
                                     onChange={handleChange}
                                 />
-                                {errors.endDate && <p className="error-text">{errors.endDate}</p>}
+                                
                             </div>
                         </div>
 
