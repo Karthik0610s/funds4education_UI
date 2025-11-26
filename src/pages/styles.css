@@ -6591,3 +6591,7 @@ h2, h3, p {
 .close-btn:hover {
   color: #d9534f; /* optional: hover red */
 }
+.deadline-badge.open {
+  background-color: #2ecc71;  /* green */
+  color: white;
+}
