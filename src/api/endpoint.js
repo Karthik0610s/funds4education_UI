@@ -25,5 +25,6 @@ export const ApiKey = {
    Religion:"/Filter/religions",
    Class:"/Class",
    Course:"/Course",
-   CourseByClass:"/Course"
+   CourseByClass:"/Course",
+   InsertChat:"/Chat/send"
 };
