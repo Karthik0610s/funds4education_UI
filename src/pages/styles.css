@@ -1152,8 +1152,7 @@ text-align: center;
 .left-container {
   width: 260px;              /* Sidebar width */
   background: #f9fafb;       /* Light grey */
-  padding: 20px;
-  border-right: 1px solid #e5e7eb;
+  border-right: px solid #e5e7eb;
   position: sticky;
   top: 0;
   height: 100vh;             /* Full height */
@@ -1161,7 +1160,7 @@ text-align: center;
 
 .right-container {
   flex: 1;                   /* Take remaining width */
-  padding: 20px;
+ 
   overflow-y: auto;
   background: #ffffff;
 }
@@ -4689,21 +4688,32 @@ padding: 8px;
   
 }
 
-/* Table Layout for Web Size */
+/* Compact Table Layout */
 .scholarship-table {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  font-size: 13px;          /* smaller text */
+  gap: 10px;
 }
 
-.table-header, .table-row {
+/* 7 Columns Now */
+.table-header, 
+.table-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr 1.5fr;
+  grid-template-columns: 
+      60px     /* S.No */
+      2fr      /* Title */
+      1fr      /* Amount */
+      1fr      /* Limit */
+      1fr      /* Status */
+      1fr      /* Deadline */
+      1.2fr;   /* Actions */
+
   align-items: center;
   background: white;
-  padding: 16px 20px;
-  border-radius: 10px;
-  box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+  padding: 10px 16px;       /* smaller height */
+  border-radius: 8px;
+  box-shadow: 0px 1px 4px rgba(0,0,0,0.07);
 }
 
 .table-header {
@@ -4711,48 +4721,37 @@ padding: 8px;
   background: #f3f4f6;
 }
 
+/* Hover effect */
 .table-row {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .table-row:hover {
   transform: translateY(-2px);
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
 }
 
 .title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-weight: 500;
-}
-
-.icon {
-  color: #2563eb;
-  margin-right: 6px;
 }
 
 /* Status styles */
 .status {
-  font-weight: 500px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .status.active {
-  /*background: #dcfce7;*/
   color: #166534;
 }
-.status.submitted {
-  background: #dcfce7;
-  color: #28cd67;
-}
-
 .status.closed {
   background: #fee2e2;
   color: #991b1b;
 }
-
 .status.upcoming {
   background: #dbeafe;
   color: #1e40af;
@@ -4761,36 +4760,48 @@ padding: 8px;
 /* Buttons */
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
 }
 
-.btn-view, .btn-edit,.btn-danger {
-  padding: 6px 12px;
+.icon-btn {
+  width: 30px;
+  height: 30px;
   border-radius: 6px;
   border: none;
+  background: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 13px;
+  transition: 0.2s ease;
 }
 
-.btn-view {
-  background: #2563eb;
-  color: white;
-}
-.btn-view:hover {
-  background: #1d4ed8;
+.icon-btn i {
+  font-size: 14px;
+  color: #374151;
 }
 
-.btn-edit {
-  background: #9333ea;
-  color: white;
+/* Hover */
+.icon-btn:hover {
+  background: #d1d5db;
 }
-.btn-edit:hover {
-  background: #7e22ce;
+
+/* Edit */
+.icon-btn.edit i {
+  color: #7e22ce;
 }
-.btn-danger {
-  background: #dc3229;
-  color: white;
+
+/* Delete */
+.icon-btn.delete i {
+  color: #dc2626;
 }
+
+.icon-btn.delete:hover {
+  background: #fee2e2;
+}
+
+
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -4979,6 +4990,7 @@ padding: 8px;
 }
 /* 📱 Responsive layout for mobile view */
 @media (max-width: 920px) {
+
   .scholarship-table {
     display: block;
   }
@@ -4994,19 +5006,12 @@ padding: 8px;
     margin-bottom: 1rem;
     padding: 1rem;
     background: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   }
 
-  /* hide all icons in mobile view */
-  .table-row .icon {
-    display: none !important;
-  }
-
-  /* make each span appear as a block with label above value */
   .table-row span {
     display: block;
     padding: 6px 0;
-    font-size: 14px;
     word-break: break-word;
   }
 
@@ -5018,84 +5023,50 @@ padding: 8px;
     margin-bottom: 4px;
   }
 
-  /* bold title label and value */
+  /* Title bold */
   .table-row .title {
     font-weight: 700;
     color: #000;
   }
 
-  .table-row .title::before {
-    font-weight: 800;
-  }
-  /*.actions {
-    display: flex !important;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-top: 8px;
-    gap: 8px !important; 
-  }
-
-  .actions button {
-    flex: 1 1 calc(33.33% - 8px); 
-    font-size: 13px;
-   
-    border-radius: 6px;
-    box-sizing: border-box;
-  }*/
+  /* ---- ACTIONS LABEL ---- */
   .actions {
-    display: flex;
-    flex-direction: column; /* label on top, buttons below */
-    margin-top: 8px;
+    margin-top: 10px;
   }
 
-  /* "Actions" label on top */
   .actions::before {
-    content: attr(data-label);
+    content: "Actions";
+    display: block;
     font-weight: 700;
     color: #222;
     margin-bottom: 6px;
-    display: block;
   }
 
-  /* Buttons in a single line with spacing */
-  .actions button {
-    flex: 1;
-    font-size: 13px;
-    padding: 8px;
-    border-radius: 6px;
-  }
 
-  .actions > button + button {
-    margin-left: 6px; /* small horizontal gap between buttons */
-  }
-
-  /* Wrap the buttons into a flex row */
-  .actions {
-    display: flex;
-    flex-direction: column;
-  }
-
+ 
   .actions-buttons {
     display: flex;
-    justify-content: space-between;
-    gap: 6px;
+    flex-direction: row;      /* FORCE HORIZONTAL */
+    align-items: center;
+    gap: 12px;                /* space between icons */
   }
- 
-  /* hide actions column completely in mobile */
-  
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e5e7eb;
+    border-radius: 8px;
+    border: none;
+  }
+
+  .icon-btn i {
+    font-size: 18px;
+  }
 }
 
-.actions-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px; /* space between buttons */
-}
-
-.actions-buttons button {
-  font-size: 14px;
-  padding: 6px 12px;
-  border-radius: 6px;
-}
 @media (max-width: 915px){
 .scholarship-page {
     font-family: 'Inter', sans-serif;
