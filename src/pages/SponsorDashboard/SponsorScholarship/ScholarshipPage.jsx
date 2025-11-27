@@ -168,64 +168,85 @@ const ScholarshipPage = () => {
               </div>
 
               {/* TABLE */}
-              <div className="scholarship-table">
-                <div className="table-header">
-                  <span>Title</span>
-                  <span>Amount</span>
-                  <span>Scholarship Limit</span>
-                  <span>Status</span>
-                  <span>Deadline</span>
-                  <span>Actions</span>
-                </div>
+<div className="scholarship-table">
+  <div className="table-header">
+    <span>S.No</span>
+    <span>Title</span>
+    <span>Amount</span>
+    <span>Scholarship Limit</span>
+    <span>Status</span>
+    <span>Deadline</span>
+    <span>Actions</span>
+  </div>
 
-                {loading ? (
-                  <p className="loading-text">Loading scholarships...</p>
-                ) : paginatedScholarships.length > 0 ? (
-                  paginatedScholarships.map((scholarship) => (
-                    <div key={scholarship.id} className="table-row">
-                      <span className="title">{scholarship.scholarshipName}</span>
-                      <span>{scholarship.benefits ?? "0"}</span>
-                      <span>{scholarship.scholarshipLimit ?? "-"}</span>
+  {loading ? (
+    <p className="loading-text">Loading scholarships...</p>
+  ) : paginatedScholarships.length > 0 ? (
+    paginatedScholarships.map((scholarship, index) => (
+      <div key={scholarship.id} className="table-row">
 
-                      <span>
-                        <span
-                          className={`status ${scholarship.status?.toLowerCase()}`}
-                        >
-                          {scholarship.status}
-                        </span>
-                      </span>
+        {/* S.No */}
+        <span>
+          {(index + 1) + (currentPage - 1) * ITEMS_PER_PAGE}
+        </span>
 
-                      <span>
-                        {scholarship.endDate
-                          ? scholarship.endDate.split("T")[0]
-                          : "-"}
-                      </span>
+        {/* Title */}
+        <span className="title">
+  {scholarship.scholarshipName?.slice(0, 20) +
+    (scholarship.scholarshipName?.length > 20 ? "..." : "")
+  }
+</span>
 
-                      <span className="actions">
-                        <div className="actions-buttons">
-                          <button className="btn-view">View</button>
-                          <button
-                            className="btn-edit"
-                            onClick={() => handleEdit(scholarship)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="btn-danger"
-                            onClick={() => handleDelete(scholarship.id)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p className="applications-no-results">
-                    No scholarships found for <strong>{filter}</strong>.
-                  </p>
-                )}
-              </div>
+        {/* Amount */}
+        <span>
+  {scholarship.benefits?.slice(0, 20) + 
+    (scholarship.benefits?.length > 20 ? "..." : "")
+  }
+</span>
+
+
+        {/* Scholarship Limit */}
+        <span>{scholarship.scholarshipLimit ?? "-"}</span>
+
+        {/* Status */}
+        <span>
+          <span className={`status ${scholarship.status?.toLowerCase()}`}>
+            {scholarship.status}
+          </span>
+        </span>
+
+        {/* Deadline */}
+        <span>
+          {scholarship.endDate ? scholarship.endDate.split("T")[0] : "-"}
+        </span>
+
+        <span className="actions-buttons">
+          <div className="actions">
+
+  <button className="icon-btn" onClick={() => console.log("view")}>
+    <i className="fa fa-eye"></i>
+  </button>
+
+  <button className="icon-btn edit" onClick={() => handleEdit(scholarship)}>
+    <i className="fa fa-pencil"></i>
+  </button>
+
+  <button className="icon-btn delete" onClick={() => handleDelete(scholarship.id)}>
+    <i className="fa fa-trash"></i>
+  </button>
+  </div>
+
+</span>
+
+
+      </div>
+    ))
+  ) : (
+    <p className="applications-no-results">
+      No scholarships found for <strong>{filter}</strong>.
+    </p>
+  )}
+</div>
 
               {/* PAGINATION */}
               {displayedScholarships.length > 0 && (

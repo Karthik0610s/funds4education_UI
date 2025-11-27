@@ -179,7 +179,10 @@ const ApplicationsPage = () => {
                   <tr key={app.id}>
 
                     {/* S.No */}
-                    <td data-label="S.No">{index + 1}</td>
+                    <td data-label="S.No">
+                    {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+                    </td>
+
 
                     {/* Name */}
                     <td data-label="Name">{app.scholarshipName}</td>
