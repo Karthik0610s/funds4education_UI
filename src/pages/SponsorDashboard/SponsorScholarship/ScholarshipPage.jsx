@@ -191,18 +191,75 @@ const ScholarshipPage = () => {
         </span>
 
         {/* Title */}
-        <span className="title">
-  {scholarship.scholarshipName?.slice(0, 20) +
-    (scholarship.scholarshipName?.length > 20 ? "..." : "")
+       <span
+  className="title"
+  style={{ position: "relative", cursor: "pointer" }}
+  onMouseEnter={(e) => {
+    const tip = document.createElement("div");
+    tip.innerText = scholarship.scholarshipName;
+    tip.style.position = "absolute";
+    tip.style.bottom = "120%";
+    tip.style.left = "50%";
+    tip.style.transform = "translateX(-50%)";
+    tip.style.background = "#111827";
+    tip.style.color = "#fff";
+    tip.style.padding = "6px 10px";
+    tip.style.fontSize = "11px";
+    tip.style.borderRadius = "6px";
+    tip.style.width = "220px";       // ✅ wider tooltip
+  tip.style.maxWidth = "260px";    // optional safe limit
+  tip.style.whiteSpace = "normal";
+  tip.style.wordBreak = "break-word";
+    tip.style.zIndex = 2000;
+    tip.style.pointerEvents = "none";
+    tip.className = "custom-tooltip";
+    e.currentTarget.appendChild(tip);
+  }}
+  onMouseLeave={(e) => {
+    const tip = e.currentTarget.querySelector(".custom-tooltip");
+    if (tip) tip.remove();
+  }}
+>
+  {scholarship.scholarshipName?.slice(0, 25) +
+    (scholarship.scholarshipName?.length > 25 ? "..." : "")
   }
 </span>
 
+
         {/* Amount */}
-        <span>
-  {scholarship.benefits?.slice(0, 20) + 
+      <span
+  style={{ position: "relative", cursor: "pointer" }}
+  onMouseEnter={(e) => {
+    const tip = document.createElement("div");
+    tip.innerText = scholarship.benefits;
+    tip.style.position = "absolute";
+    tip.style.bottom = "120%";
+    tip.style.left = "50%";
+    tip.style.transform = "translateX(-50%)";
+    tip.style.background = "#111827";
+    tip.style.color = "#fff";
+    tip.style.padding = "6px 10px";
+    tip.style.fontSize = "11px";
+    tip.style.borderRadius = "6px";
+   tip.style.width = "220px";       // ✅ wider tooltip
+  tip.style.maxWidth = "260px";    // optional safe limit
+  tip.style.whiteSpace = "normal";
+  tip.style.wordBreak = "break-word";
+    tip.style.zIndex = 2000;
+    tip.style.pointerEvents = "none";
+    tip.className = "custom-tooltip";
+    e.currentTarget.appendChild(tip);
+  }}
+  onMouseLeave={(e) => {
+    const tip = e.currentTarget.querySelector(".custom-tooltip");
+    if (tip) tip.remove();
+  }}
+>
+  {scholarship.benefits?.slice(0, 20) +
     (scholarship.benefits?.length > 20 ? "..." : "")
   }
 </span>
+
 
 
         {/* Scholarship Limit */}

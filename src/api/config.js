@@ -20,13 +20,49 @@ export const publicAxios = axios.create({
   baseURL: _baseURL,
 });
 
-publicAxios.interceptors.request.use(async (config) => {
+/*publicAxios.interceptors.request.use(async (config) => {
   const access_token = localStorage.getItem("token");
   if (access_token != null && config.headers.Authorization === undefined) {
     config.headers.Authorization = `bearer ${access_token}`;
   }
   return config;
+});*/
+publicAxios.interceptors.request.use(async (config) => {
+  const access_token = localStorage.getItem("token");
+  const expiresAt = localStorage.getItem("expiresAt"); // Stored in ISO format
+
+  if (access_token && expiresAt) {
+    const expiryTime = new Date(expiresAt).getTime();
+    const currentTime = new Date().getTime();
+
+    // Token expired → remove token and redirect
+    if (currentTime >= expiryTime) {
+      console.log("Token expired, redirecting to login...");
+
+         // CLEAR ALL AUTH LOCAL STORAGE
+      localStorage.removeItem("token");
+      localStorage.removeItem("expiresAt");
+      localStorage.removeItem("user");
+      localStorage.removeItem("roleId");
+      localStorage.removeItem("roleName");
+      localStorage.removeItem("username");
+      localStorage.removeItem("name");
+      localStorage.removeItem("id");
+      localStorage.removeItem("userId");
+
+      window.location.href = "/login";
+      return Promise.reject("Token expired");
+    }
+
+    // Token valid → attach it
+    if (config.headers.Authorization === undefined) {
+      config.headers.Authorization = `Bearer ${access_token}`;
+    }
+  }
+
+  return config;
 });
+
 
 authAxios.interceptors.request.use(async (config) => {
   config.headers = {

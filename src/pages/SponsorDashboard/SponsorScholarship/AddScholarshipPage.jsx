@@ -983,7 +983,7 @@ const payload = {
                                 />
                             </div>
 
-                            <div className=" col-4 renewable-field">
+                            <div className="col-4 renewable-field">
                                 <label>Renewable</label>
                                 <input
                                     type="checkbox"

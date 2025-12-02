@@ -205,6 +205,22 @@ const ScholarshipViewPage = () => {
               : "Not specified"}
           </p>
         </div>
+ <div className="scholarship-eligibility-header">
+          <h3>Criteria</h3>
+        </div>
+        <div className="scholarship-detail-container">
+  <p className="scholarship-view-text">
+    <strong>Renewable:</strong>{" "}
+    {scholarship.isRenewable ? "Yes" : "No"}
+  </p>
+
+  {scholarship.isRenewable && (
+    <p className="scholarship-view-text">
+      <strong>Renewal Criteria:</strong>{" "}
+      {scholarship.renewalCriteria || "Not specified"}
+    </p>
+  )}
+</div>
       </div>
     </div>
   </div>

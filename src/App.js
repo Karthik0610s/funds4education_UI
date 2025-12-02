@@ -12,7 +12,7 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <div className="App">
-         <ChatWidget />
+         {/* <ChatWidget /> */}
           <AppRoute />
         </div>
       </PersistGate>

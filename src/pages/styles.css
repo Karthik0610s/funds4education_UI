@@ -2857,6 +2857,7 @@ input:not([type="radio"]) {
   font-weight: 500;
   color: #1d4f56;
   margin-bottom: 0.25rem;
+  text-align: left;
 }
 
 .form-group input {
@@ -3937,7 +3938,7 @@ padding: 8px;
 .container {
   /*max-width: 1000px;
   margin: 0 auto;*/
-   margin-top:10px
+   margin-top:25px
 }
 
 /* Page title */
@@ -4103,15 +4104,31 @@ padding: 8px;
 
 
 
+/* Specific styling for renewable checkbox container */
+.renewable-field {
+    display: flex;
+    align-items: center;   /* vertically center checkbox with label */
+    gap: 10px;    
+     font-size: 0.9rem;
+    font-weight: 600;
+    color: #1d4f56;       /* space between checkbox and label */
+}
 
+/* Checkbox input sizing */
+.renewable-field input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
 
 
 /* Parent spacing */
 .mb-4 {
-  background: #fff;
-  border-radius: 12px;
+ /* background: #fff;
+ 
   padding: 18px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);*/
+   border-radius: 12px;
 }
 
 /* Labels */

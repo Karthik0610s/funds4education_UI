@@ -21,7 +21,9 @@ const collegeRegex = /^[A-Za-z\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,3}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
-const text250Regex = /^[A-Za-z,\s]{0,250}$/;
+//const text250Regex = /^[A-Za-z0-9.,\/\-\s]{0,250}$/;
+const text250Regex = /^[\s\S]{0,250}$/;
+
 const RequiredMark = () => <span className="validation-error-label">*</span>;
 
 

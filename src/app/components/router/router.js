@@ -35,7 +35,8 @@ import ResetPassword from "../../../pages/Resetpassword/Resetpassword.jsx";
 import ScholarshipViewPage from "../../../pages/studentscholarship/view.jsx";
 import LoginSuccess from "../../../pages/login/loginsuccess.jsx";
 import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredScholarship.jsx";
-// 🔹 Map routes to header variants
+// ⭐ ADD THIS IMPORT
+import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 const routeToVariant = {
   [RP.home]: "public",
   [RP.studentdashboard]: "student-profile",
@@ -64,15 +65,38 @@ const routeToVariant = {
 
 // 🔹 Layout wrapper
 function Layout({ children }) {
+  debugger;
   const location = useLocation();
-  const variant = routeToVariant[location.pathname] || "public"; // fallback
+
+  // get token + expiry from localStorage
+  const token = localStorage.getItem("token");
+  const expiry = localStorage.getItem("expiresAt");
+
+  // Condition: hide chat if NO token or NO expiry or homepage
+  const hideChat =
+  location.pathname === "/" ||
+  location.pathname === "/login" ||
+  location.pathname==="/signup"||
+   location.pathname==="/sponsor/signup"||
+    location.pathname==="/institution/signup"||
+  !token ||
+  !expiry;
+
+
+  const variant = routeToVariant[location.pathname] || "public";
+
   return (
     <>
       <Header variant={variant} />
+
+      {/* ⭐ Hide ChatWidget based on your conditions */}
+      {!hideChat && <ChatWidget />}
+
       <main>{children}</main>
     </>
   );
 }
+
 
 function App() {
   return (
