@@ -79,6 +79,8 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
           <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
           {/* <Link to="/sponsor-dashboard/report" className="nav-link">Reports</Link> */}
           <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
+          { <Link to={RP.resetPassword}>Reset Password</Link> }
+
         </nav>
 
         <div style={{ marginTop: "auto", padding: "1rem" }}>

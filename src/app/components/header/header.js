@@ -68,7 +68,6 @@ const dispatch = useDispatch();
             </Link>
 
 
-              {/* <Link to={RP.resetPassword}>Reset Password</Link> */}
             </div>
           </div>
         );
