@@ -38,7 +38,7 @@ export default function SignUpPage() {
 
   // --- Validation regex ---
   const nameRegex = /^[A-Za-z]{0,150}$/;
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu)$/;
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^[0-9]{0,10}$/;
@@ -78,8 +78,8 @@ export default function SignUpPage() {
     }
 
     if (step === 2) {
-      if (!verification.username || !usernameRegex.test(verification.username))
-        stepErrors.username = "Username required (alphabets only, max 150).";
+      if (!verification.username || !isValidEmail(verification.username))
+  stepErrors.username = "Enter a valid email.";
       if (!verification.password || !passwordRegex.test(verification.password))
         stepErrors.password =
           "Password must be min 6 chars, include letters, numbers & special char.";
@@ -502,23 +502,24 @@ const payload = {
             <h3>Verification</h3>
             <div className="row">
               <div className="form-group">
-                <label>Username *</label>
-                <input
+               <label>Username *</label>
+<input
   type="text"
-  placeholder="Username"
+  placeholder="Enter your email"
   value={verification.username}
   onChange={(e) => {
     const value = e.target.value;
 
-    // allow only valid characters while typing
-    if (/^[A-Za-z0-9_]*$/.test(value)) {
+    // allow valid email characters while typing
+    if (/^[A-Za-z0-9@._%+-]*$/.test(value)) {
       setVerification({ ...verification, username: value });
     }
   }}
   className={errors.username ? "input-error" : ""}
 />
 
-                {errors.username && <p className="error-text">{errors.username}</p>}
+{errors.username && <p className="error-text">{errors.username}</p>}
+
               </div>
               <div className="form-group">
   <label>Password *</label>

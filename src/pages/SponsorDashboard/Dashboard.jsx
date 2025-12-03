@@ -82,7 +82,29 @@ export default function SponsorDashboard() {
     window.addEventListener("popstate", handleBack);
     return () => window.removeEventListener("popstate", handleBack);
   }, []);
+const formatAmount = (val) => {
+  debugger;
+  if (!val) return "₹0";
 
+  let amount = String(val).trim();
+
+  // already contains any currency → return as is
+ if (/(₹|rs\.?\b|inr\b|usd\b|\$|€|£)/i.test(amount)) {
+    return amount;
+  }
+
+  // extract the number part only (before any text)
+  const match = amount.match(/[\d,]+\/?-?/);
+  if (match) {
+    const numPart = match[0]; // like "20,000/-"
+    const rest = amount.slice(numPart.length); // remaining text
+
+    return `₹${numPart}${rest}`;
+  }
+
+  // fallback for unknown format
+  return `₹${amount}`;
+};
   return (
     <div className="dashboard-container">
       <SponsorLayout name={name} handleLogout={handleLogout}></SponsorLayout>
@@ -322,7 +344,7 @@ export default function SponsorDashboard() {
                 };
  
                 const progress = progressMap[s.status?.toUpperCase()] ?? 0;
- 
+
                 return (
                   <div key={i} className="app-card">
  
@@ -337,7 +359,21 @@ export default function SponsorDashboard() {
  
                     <div className="app-row">
                       <span>Scholarship Amount</span>
-                      <span><strong>₹{s.amount}</strong></span>
+                   { /*  <span><strong>₹{s.amount}</strong></span>
+                  <span>
+    <strong>
+      ₹{
+        typeof s.amount === "string"
+          ? s.amount.replace(/₹|Rs\.?/gi, "").trim() // remove ₹, Rs, Rs.
+          : s.amount
+      }
+    </strong>
+  </span>*/}
+ <span>
+  <strong>{formatAmount(s.amount)}</strong>
+
+</span>
+
                     </div>
  
                     <div className="app-row">

@@ -82,12 +82,29 @@ debugger;
   window.addEventListener("message", handleMessage);
 };*/
 
+const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+
+const isValidEmail = (email) => {
+  if (!emailRegex.test(email)) return false;
+
+  const domainPart = email.split("@")[1];
+  const tldMatches = domainPart.match(/\.[a-z]+/gi);
+  if (!tldMatches) return false;
+
+  const tldSet = new Set(tldMatches);
+  return tldSet.size === tldMatches.length;
+};
  const handleSubmit = async (e) => {
   e.preventDefault();
   let newErrors = { identifier: "", password: "", userType: "" };
 
   if (!userType) newErrors.userType = "Please select a user type";
-  if (!identifier.trim()) newErrors.identifier = "Username or Email is required";
+ // if (!identifier.trim()) newErrors.identifier = "Username or Email is required";
+ if (!identifier.trim()) {
+  newErrors.identifier = "Email is required";
+} else if (!isValidEmail(identifier)) {
+  newErrors.identifier = "Enter a valid email";
+}
   if (!password.trim()) newErrors.password = "Password is required";
 
   setErrors(newErrors);

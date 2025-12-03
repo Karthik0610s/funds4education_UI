@@ -34,7 +34,8 @@ const [step, setStep] = useState(0);
   const nameRegex = /^[A-Za-z\s]{1,150}$/;
   //const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|edu|org|in|au)$/;
   //const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com\.au|au|edu|org|in)$/;
-const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com(\.(au|edu|in|org))?|edu|org|in)$/;
+//const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com(\.(au|edu|in|org))?|edu|org|in)$/;
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
 
 
 
@@ -143,8 +144,8 @@ const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com(\.(au|edu|in|org))?|e
     }
 
     if (step === 2) {
-      if (!verification.username || !usernameRegex.test(verification.username))
-        stepErrors.username = "Username required (alphabets only).";
+       if (!verification.username || !emailRegex.test(verification.username))
+  stepErrors.username = "Enter a valid email.";
       if (!verification.password || !passwordRegex.test(verification.password))
         stepErrors.password =
           "Password min 6 chars, must include letters, numbers & 1 special char.";

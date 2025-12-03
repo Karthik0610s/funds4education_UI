@@ -24,8 +24,8 @@ export default function SponsorSignUpPage() {
 
     // --- Validation regex ---
     const nameRegex = /^[A-Za-z\s]{1,150}$/;
-    const emailRegex =
-  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(com|org|net|edu|co\.in)$/;
+  //  const emailRegex =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(com|org|net|edu|co\.in)$/;
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
 
     const phoneRegex = /^[0-9]{10}$/;
     const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
@@ -60,8 +60,8 @@ export default function SponsorSignUpPage() {
         }
 
         if (step === 1) {
-            if (!verification.username || !usernameRegex.test(verification.username))
-                stepErrors.username = "Username required (alphabets only, max 150).";
+            if (!verification.username || !emailRegex.test(verification.username))
+  stepErrors.username = "Enter a valid email.";
             if (!verification.password || !passwordRegex.test(verification.password))
                 stepErrors.password =
                     "Password min 6 chars, must include letters, numbers & 1 special char.";

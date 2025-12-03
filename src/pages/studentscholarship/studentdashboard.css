@@ -59,8 +59,13 @@ body, .scholarship-card, .sidebar, .main-content {
   /*overflow-x: hidden;*/
   background-color: #f9fafb;
   scrollbar-width: thin;
+  margin-top: 10px;
 }
-
+@media (max-width: 768px) {
+  .main-content {
+    margin-top: 0;
+  }
+}
 .main-content::-webkit-scrollbar {
   width: 6px;
 }

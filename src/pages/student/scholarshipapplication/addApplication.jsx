@@ -52,6 +52,7 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
           const options = res.data.map((s) => ({
             id: s.id,
             name: s.name,
+            scholarshipCode:s.scholarshipCode,
             type: s.scholarshipType,
           }));
           setScholarshipOptions(options);
@@ -720,7 +721,7 @@ if (name === "gpaOrMarks") {
                   >
                     <option value="">Select Scholarship</option>
                     {scholarshipOptions.map((sch) => (
-                      <option key={sch.id} value={sch.id}>{sch.name}</option>
+                      <option key={sch.id} value={sch.id}>{`${sch.scholarshipCode} - ${sch.name}`}</option>
                     ))}
                   </select>
 

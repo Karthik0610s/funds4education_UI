@@ -320,7 +320,7 @@ const getDaysLeftText = (endDate) => {
         <FaFilter />
         <span style={{ marginLeft: "6px" }}>Filters</span>
       </div>
-      <div className="dashboard-container">
+      <div className="dashboard-container-SC">
         {/* Sidebar Filters */}
         <aside className={`sidebar ${showFilter ? "mobile-open" : ""}`}>
 
