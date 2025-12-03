@@ -29,5 +29,5 @@ export const ApiKey = {
    InsertChat:"/Chat/send",
    GetSessionId:"/Chat/start-session",
    EmailExistCheck:"/userDto/by-email",
-   ResetPassword:"Auth/reset-password"
+   ResetPassword:"Auth/change-password"
 };
