@@ -63,7 +63,9 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const validateForm = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
-    const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
+   // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
+     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
     if (!formData.firstName.trim()) {
@@ -91,7 +93,11 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-    if (!formData.userName.trim()) errs.userName = "Username is required.";
+if (!formData.userName.trim()) {
+    errs.userName = "Username is required.";
+  } else if (!emailRegex.test(formData.userName)) {
+    errs.userName = "Enter a valid Gmail address (e.g., user@gmail.com).";
+  }
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";

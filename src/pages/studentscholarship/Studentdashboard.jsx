@@ -201,7 +201,7 @@ const getDaysLeftText = (endDate) => {
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const scholarshipsPerPage = 6;
+  const scholarshipsPerPage = 8;
 
   useEffect(() => {
     setCurrentPage(1);

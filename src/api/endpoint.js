@@ -27,5 +27,7 @@ export const ApiKey = {
    Course:"/Course",
    CourseByClass:"/Course",
    InsertChat:"/Chat/send",
-   GetSessionId:"/Chat/start-session"
+   GetSessionId:"/Chat/start-session",
+   EmailExistCheck:"/userDto/by-email",
+   ResetPassword:"Auth/reset-password"
 };

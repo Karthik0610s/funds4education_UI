@@ -278,7 +278,7 @@ export default function SponsorSignUpPage() {
     const value = e.target.value;
 
     // allow only letters, numbers, underscore
-    if (/^[A-Za-z0-9_]*$/.test(value)) {
+   if (/^[A-Za-z0-9@._%+-]*$/.test(value)){
       setVerification({ ...verification, username: value });
     }
   }}

@@ -6590,3 +6590,135 @@ h2, h3, p {
   background-color: #2ecc71;  /* green */
   color: white;
 }
+.forgot-password {
+  text-align: right;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.forgot-password a {
+  color: #20523c;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+}
+.forgot-container {
+  width: 100%;
+  max-width: 380px;
+  margin: 60px auto;
+  padding: 25px 30px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+}
+
+.forgot-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Input Fields */
+.forgot-container label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Input field */
+.forgot-container input {
+  width: 80%;        /* full width */
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+/* Select field – DIFFERENT WIDTH */
+.forgot-container select {
+  width: 85%;         /* change to whatever you like e.g. 50%, 60%, etc */
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+
+.forgot-container input:focus,
+.forgot-container select:focus {
+  border-color: #4c8bf5;
+}
+
+/* Error Message */
+.error-text {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.forgot-container button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #ff9800;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+  margin-top: 5px;
+}
+
+
+
+/* Step animation */
+.step-section {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 10px 40px 10px 12px; /* space for eye icon */
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.toggle-eye:hover {
+  color: #000;
+}

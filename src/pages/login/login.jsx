@@ -201,6 +201,28 @@ const isValidEmail = (email) => {
           </button>
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
+        <div className="forgot-password">
+  <Link
+    to="#"
+    onClick={(e) => {
+      e.preventDefault();
+
+      if (!userType) {
+        setErrors((prev) => ({
+          ...prev,
+          userType: "Please select a user type",
+        }));
+        return;
+      }
+
+      // Navigate to forgot password page with role
+      navigate("/forgot-password", { state: { userType } });
+    }}
+  >
+    Forgot Password?
+  </Link>
+</div>
+
 
         <button type="submit" disabled={loading} className="login-btn">
           {loading ? "Logging in..." : "LOGIN"}

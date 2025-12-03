@@ -103,12 +103,16 @@ const [step, setStep] = useState(0);
   const handleVerificationChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "username") {
-      setVerification((prev) => ({
-        ...prev,
-        [name]: value.replace(/[^A-Za-z\s]/g, "").slice(0, 150),
-      }));
-    } else if (name === "password") {
+   if (name === "username") {
+    const cleaned = value
+      .replace(/[^A-Za-z0-9@._%+-]/g, "") // allow these chars only
+      .slice(0, 150);                     // limit to 150 chars
+
+    setVerification((prev) => ({
+      ...prev,
+      username: cleaned,
+    }));
+  }  else if (name === "password") {
       setVerification((prev) => ({ ...prev, [name]: value })); // password validation on next/save
     }
   };
@@ -450,7 +454,7 @@ const [step, setStep] = useState(0);
           <div>
             <h3 className="section-title">Verification</h3>
             <div className="row">
-              <div className="form-group">
+              {/*<div className="form-group">
                 <label>Username *</label>
                 <input
                   type="text"
@@ -462,7 +466,18 @@ const [step, setStep] = useState(0);
                   maxLength={150}
                 />
                 {errors.username && <p className="error-text">{errors.username}</p>}
-              </div>
+              </div>*/}
+               <div className="form-group">
+        <label>Username *</label>
+        <input
+  type="text"
+  placeholder="Username"
+  value={verification.username}
+ onChange={(e) => { const value = e.target.value; // allow only letters, numbers, underscore 
+ if (/^[A-Za-z0-9@._%+-]*$/.test(value)){ setVerification({ ...verification, username: value }); } }} className={errors.username ? "input-error" : ""} />
+
+        {errors.username && <p className="error-text">{errors.username}</p>}
+      </div>
               <div className="form-group">
                 <label>Password *</label>
                 <input
