@@ -5670,6 +5670,23 @@ padding: 8px;
 .auth-link:hover {
   text-decoration: underline;
 }
+/* RESET PASSWORD PAGE - EYE ICON */
+.reset-eye-btn {
+  position: absolute;
+  top: 70%;               /* Centered vertically relative to input */
+  right: 12px;            /* Distance from right edge of input */
+  transform: translateY(-50%); /* Perfect vertical alignment */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #1D4F56;         /* Icon color */
+  font-size: 20px;        /* Icon size */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* --------------------Scholarship details page --------------------------*/
 
 /* 🌈 Page Background for Scholarship View */

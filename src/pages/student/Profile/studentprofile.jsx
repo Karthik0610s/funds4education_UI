@@ -314,13 +314,28 @@ if (!formData.userName.trim()) {
               }
             />
             <input
-              type="text"
-              placeholder="Year"
-              value={education.year}
-              onChange={(e) =>
-                setEducation({ ...education, year: e.target.value })
-              }
-            />
+  type="text"
+  placeholder="Year"
+  value={education.year}
+  maxLength={4}
+  onChange={(e) => {
+    let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
+    const currentYear = new Date().getFullYear();
+
+    if (cleaned === "") {
+      setEducation({ ...education, year: "" });
+      return;
+    }
+
+    const enteredYear = Number(cleaned);
+
+    // ❌ Block entering a future year
+    if (enteredYear > currentYear) return;
+
+    setEducation({ ...education, year: cleaned });
+  }}
+/>
+
             <button
               type="button"
               className="sign-action-btn"
