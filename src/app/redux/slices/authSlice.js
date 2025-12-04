@@ -30,6 +30,12 @@ export const loginUser = createAsyncThunk(
       // ✅ Store IDs separately — do not overwrite
       localStorage.setItem("id", data.id);         // ✅ Student record ID (used for GET /student/:id)
       localStorage.setItem("userId", data.userId); // ✅ User account ID (for login/auth)
+localStorage.setItem("firstName", data.firstName );
+localStorage.setItem("lastName", data.lastName);
+localStorage.setItem("email", data.email);
+localStorage.setItem("phoneNumber", data.phone);
+localStorage.setItem("dateOfBirth", data.dateofBirth);
+localStorage.setItem("gender", data.gender);     
 
       // ✅ Return response data
       return { ...data, userType };
