@@ -20,9 +20,10 @@
   /* gives spacing on both sides */
   display: flex;
   align-items: center;
-  justify-content: space-between; /* logo left, nav+auth spread */
+  justify-content: space-between;
+  /* logo left, nav+auth spread */
   box-sizing: border-box;
- 
+
   position: relative;
   z-index: 10;
 }
@@ -48,13 +49,17 @@
   color: #032331;
   letter-spacing: 0.5px;
 }
+
 .header-actions a {
   color: black;
   text-decoration: none;
 }
+
 .header-actions a:hover {
-  color: #ff8a00; /* or remove this line if you don't want underline on hover */
+  color: #ff8a00;
+  /* or remove this line if you don't want underline on hover */
 }
+
 .brand:hover {
   color: #ff8a00;
 }
@@ -171,7 +176,7 @@
 @media (max-width: 768px) {
   .header-container {
     flex-wrap: wrap;
-    
+
     /*justify-content: center;*/
   }
 
@@ -185,6 +190,7 @@
     gap: 20px;
   }
 }
+
 /* ==============================
    RESPONSIVE MENU
 ============================== */
@@ -240,6 +246,7 @@
     gap: 12px;
   }
 }
+
 @media (max-width: 920px) {
   .header-container {
     padding: 10px 20px;
@@ -257,10 +264,11 @@
     display: block;
   }
 }
+
 .signup-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -272,7 +280,7 @@
   padding: 28px;
   width: 340px;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   position: relative;
   text-align: center;
 }
@@ -317,4 +325,53 @@
   top: 10px;
   cursor: pointer;
   font-size: 20px;
+}
+
+/* ==============================
+   DROPDOWN MENU
+============================== */
+.header-actions {
+  position: relative;
+  /* Make dropdown relative to header actions */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  /* Adjust depending on header height */
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  color: #1a3742;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  color: #ff8a00;
+}
+
+/* Optional: small arrow pointing to icon circle */
+.dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  /* above the dropdown */
+  right: 16px;
+  /* align with the icon */
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
 }
