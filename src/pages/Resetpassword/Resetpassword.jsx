@@ -17,13 +17,10 @@ export default function ResetPassword() {
     newPassword: "",
   });
 
-  const [errors, setErrors] = useState({
-    currentPassword: "",
-    newPassword: "",
-  });
-
+  const [error, setError] = useState(""); // single error state
   const [success, setSuccess] = useState("");
 
+  // Password validation regex
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -33,23 +30,22 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setErrors({});
+    setError("");
     setSuccess("");
 
-    const currentPassword = formData.currentPassword;
-    const newPassword = formData.newPassword;
+    const { currentPassword, newPassword } = formData;
 
-
-    console.log({
-      username: localStorage.getItem("username"),
-      roleId: localStorage.getItem("roleId"),
-      currentPassword,
-      newPassword
-    });
-
+    // Check if both fields are filled
     if (!currentPassword || !newPassword) {
-      setErrors({ newPassword: "Please enter both passwords." });
+      setError("Please enter both current and new password.");
+      return;
+    }
+
+    // Validate new password
+    if (!passwordRegex.test(newPassword)) {
+      setError(
+        "New password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+      );
       return;
     }
 
@@ -61,20 +57,20 @@ export default function ResetPassword() {
         newPassword,
       });
 
-      setSuccess("Password reset successfully!");
-      setTimeout(() => navigate("/login"), 1500);
+      if (res.data.success) {
+        setSuccess(res.data.message);
+        setTimeout(() => navigate("/login"), 1500);
+      } else {
+        setError(res.data.message);
+      }
     } catch (err) {
-      setErrors({
-        newPassword: err.response?.data?.message || "Something went wrong.",
-      });
+      setError(err.response?.data?.message || "Something went wrong.");
     }
   };
-
 
   return (
     <div className="login-page">
       <div className="login-card">
-        {/* Left Form */}
         <form
           onSubmit={handleSubmit}
           style={{
@@ -97,9 +93,7 @@ export default function ResetPassword() {
 
           {/* Current Password */}
           <div style={{ marginBottom: "1rem", position: "relative" }}>
-            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>
-              Current Password
-            </label>
+            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>Current Password</label>
             <input
               type={showCurrentPassword ? "text" : "password"}
               name="currentPassword"
@@ -121,9 +115,6 @@ export default function ResetPassword() {
             >
               {showCurrentPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </button>
-            {errors.currentPassword && (
-              <p style={{ color: "red", fontSize: "12px" }}>{errors.currentPassword}</p>
-            )}
           </div>
 
           {/* New Password */}
@@ -150,9 +141,6 @@ export default function ResetPassword() {
             >
               {showNewPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </button>
-            {errors.newPassword && (
-              <p style={{ color: "red", fontSize: "12px" }}>{errors.newPassword}</p>
-            )}
           </div>
 
           <button
@@ -171,6 +159,10 @@ export default function ResetPassword() {
             Reset Password
           </button>
 
+          {/* Show all errors below button */}
+          {error && (
+            <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{error}</p>
+          )}
           {success && (
             <p style={{ color: "green", fontSize: "13px", marginTop: "8px" }}>{success}</p>
           )}
