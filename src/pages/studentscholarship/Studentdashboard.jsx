@@ -38,7 +38,7 @@ const StudentDashboard = () => {
     Number(localStorage.getItem("userId"));
   const name =
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
-    
+
 
   const [activeTab, setActiveTab] = useState("live");
   const [searchQuery, setSearchQuery] = useState("");
@@ -154,20 +154,20 @@ const StudentDashboard = () => {
   };
 
   const today = useMemo(() => new Date(), []);
-const getDaysLeftText = (endDate) => {
-  if (!endDate) return "Always Open";   // ⭐ FIX: null means always open
+  const getDaysLeftText = (endDate) => {
+    if (!endDate) return "Always Open";   // ⭐ FIX: null means always open
 
-  const end = new Date(endDate);
-  if (isNaN(end.getTime())) return "Always Open"; // ⭐ invalid date → always open
+    const end = new Date(endDate);
+    if (isNaN(end.getTime())) return "Always Open"; // ⭐ invalid date → always open
 
-  const diffDays = Math.ceil((end - today) / 86400000);
+    const diffDays = Math.ceil((end - today) / 86400000);
 
-  if (diffDays <= 0) return null;
-  if (diffDays === 1) return "Last day to go";
-  if (diffDays <= 15) return `${diffDays} days to go`;
+    if (diffDays <= 0) return null;
+    if (diffDays === 1) return "Last day to go";
+    if (diffDays <= 15) return `${diffDays} days to go`;
 
-  return null;
-};
+    return null;
+  };
 
 
   const liveScholarships = useMemo(() => live || [], [live]);
@@ -293,7 +293,6 @@ const getDaysLeftText = (endDate) => {
           <Link to="/application">Applications</Link>
           {/* <Link to="/scholarship-match">Matches</Link>
     <Link to={RP.studentmessages}>Messages</Link> */}
-          <Link to={RP.ViewStudentProfile}>Profile</Link>
           {/* <Link to={RP.studentwallet}>Wallet</Link> */}
         </div>
       )}
@@ -310,7 +309,7 @@ const getDaysLeftText = (endDate) => {
             <Link to="/application">Applications</Link>
             {/* <Link to="/scholarship-match">Matches</Link>
             <Link to={RP.studentmessages}>Messages</Link> */}
-            <Link to={RP.ViewStudentProfile}>Profile</Link>
+            
             {/* <Link to={RP.studentwallet}>Wallet</Link> */}
           </nav>
         </div>
@@ -503,20 +502,20 @@ const getDaysLeftText = (endDate) => {
                         <div className="featured-tag">Featured</div>
                       )}
                       {activeTab === "live" && (
-  <>
-    {s.endDate === null ? (
-      <div className="deadline-badge open">
-        Always Open
-      </div>
-    ) : (
-      daysLeftText && (
-        <div className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"}`}>
-          {daysLeftText}
-        </div>
-      )
-    )}
-  </>
-)}
+                        <>
+                          {s.endDate === null ? (
+                            <div className="deadline-badge open">
+                              Always Open
+                            </div>
+                          ) : (
+                            daysLeftText && (
+                              <div className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"}`}>
+                                {daysLeftText}
+                              </div>
+                            )
+                          )}
+                        </>
+                      )}
 
 
                       <div className="card-header-flex">

@@ -9,21 +9,18 @@ import { ApiKey } from "../../api/endpoint";
 export default function ResetPassword() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const [formData, setFormData] = useState({
+    currentPassword: "",
     newPassword: "",
-    confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState({
-    newPassword: "",
-    confirmPassword: "",
-  });
-
+  const [error, setError] = useState(""); // single error state
   const [success, setSuccess] = useState("");
 
+  // Password validation regex
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
@@ -33,55 +30,47 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setErrors({ newPassword: "", confirmPassword: "" });
+    setError("");
     setSuccess("");
 
-    const { newPassword, confirmPassword } = formData;
-    let newErrors = {};
+    const { currentPassword, newPassword } = formData;
 
-    if (!newPassword.trim()) {
-      newErrors.newPassword = "New password is required.";
-    } else if (!passwordRegex.test(newPassword)) {
-      newErrors.newPassword =
-        "Must be 8+ chars, include uppercase, lowercase, number & special symbol.";
+    // Check if both fields are filled
+    if (!currentPassword || !newPassword) {
+      setError("Please enter both current and new password.");
+      return;
     }
 
-    if (!confirmPassword.trim()) {
-      newErrors.confirmPassword = "Please confirm your password.";
-    } else if (newPassword !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    // Validate new password
+    if (!passwordRegex.test(newPassword)) {
+      setError(
+        "New password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+      );
       return;
     }
 
     try {
       const res = await publicAxios.post(ApiKey.ResetPassword, {
         username: localStorage.getItem("username"),
-        currentPassword: localStorage.getItem("currentPassword"),
-        newPassword: newPassword,
-        roleId: localStorage.getItem("roleId")
+        roleId: localStorage.getItem("roleId"),
+        currentPassword,
+        newPassword,
       });
 
-      setSuccess("Password reset successfully!");
-      setTimeout(() => navigate("/login"), 1500);
-
+      if (res.data.success) {
+        setSuccess(res.data.message);
+        setTimeout(() => navigate("/login"), 1500);
+      } else {
+        setError(res.data.message);
+      }
     } catch (err) {
-      setErrors({
-        newPassword: err.response?.data?.message || "Something went wrong.",
-      });
+      setError(err.response?.data?.message || "Something went wrong.");
     }
   };
-
 
   return (
     <div className="login-page">
       <div className="login-card">
-
-        {/* Left Form */}
         <form
           onSubmit={handleSubmit}
           style={{
@@ -102,14 +91,37 @@ export default function ResetPassword() {
             </a>
           </p>
 
+          {/* Current Password */}
+          <div style={{ marginBottom: "1rem", position: "relative" }}>
+            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>Current Password</label>
+            <input
+              type={showCurrentPassword ? "text" : "password"}
+              name="currentPassword"
+              placeholder="Enter current password"
+              value={formData.currentPassword}
+              onChange={handleChange}
+              style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.5rem",
+                height: "36px",
+              }}
+            />
+            <button
+              type="button"
+              className="reset-eye-btn"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+            >
+              {showCurrentPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+            </button>
+          </div>
+
           {/* New Password */}
           <div style={{ marginBottom: "1rem", position: "relative" }}>
-            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>
-              New Password
-            </label>
-
+            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>New Password</label>
             <input
-              type={showPassword ? "text" : "password"}
+              type={showNewPassword ? "text" : "password"}
               name="newPassword"
               placeholder="Enter new password"
               value={formData.newPassword}
@@ -122,54 +134,13 @@ export default function ResetPassword() {
                 height: "36px",
               }}
             />
-
-            {/* Eye Icon */}
             <button
               type="button"
               className="reset-eye-btn"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowNewPassword(!showNewPassword)}
             >
-              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              {showNewPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </button>
-
-            {errors.newPassword && (
-              <p style={{ color: "red", fontSize: "12px" }}>{errors.newPassword}</p>
-            )}
-          </div>
-
-          {/* Confirm Password */}
-          <div style={{ marginBottom: "1rem", position: "relative" }}>
-            <label style={{ fontSize: "0.875rem", color: "#1D4F56" }}>
-              Confirm Password
-            </label>
-
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Confirm new password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              style={{
-                width: "100%",
-                padding: "0.5rem 1rem",
-                border: "1px solid #d1d5db",
-                borderRadius: "0.5rem",
-                height: "36px",
-              }}
-            />
-
-            {/* Eye Icon */}
-            <button
-              type="button"
-              className="reset-eye-btn"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-            </button>
-
-            {errors.confirmPassword && (
-              <p style={{ color: "red", fontSize: "12px" }}>{errors.confirmPassword}</p>
-            )}
           </div>
 
           <button
@@ -188,10 +159,12 @@ export default function ResetPassword() {
             Reset Password
           </button>
 
+          {/* Show all errors below button */}
+          {error && (
+            <p style={{ color: "red", fontSize: "13px", marginTop: "8px" }}>{error}</p>
+          )}
           {success && (
-            <p style={{ color: "green", fontSize: "13px", marginTop: "8px" }}>
-              {success}
-            </p>
+            <p style={{ color: "green", fontSize: "13px", marginTop: "8px" }}>{success}</p>
           )}
         </form>
 

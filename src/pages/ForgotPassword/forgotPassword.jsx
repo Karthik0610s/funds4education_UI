@@ -3,6 +3,8 @@ import { ApiKey } from "../../api/endpoint";
 import { publicAxios } from "../../api/config";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import resetImg from "../../app/assests/login.jpg";
+import "../../pages/styles.css";
 export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ export default function ForgotPassword() {
 const [showNewPass, setShowNewPass] = useState(false);
 const [showConfirmPass, setShowConfirmPass] = useState(false);
   const handleContinue = async () => {
+    debugger;
     setError("");
 
     if (!username || !role) {
@@ -68,66 +71,272 @@ const [showConfirmPass, setShowConfirmPass] = useState(false);
   };
 
  return (
-  <div className="forgot-container">
-    <h2 className="forgot-title">Forgot Password</h2>
+  <div className="login-page">
+    <div className="login-card">
 
-    
+      {/* LEFT SIDE – Form */}
+      <div
+        style={{
+          padding: "2rem",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+         
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            color: "#1D4F56",
+            marginBottom: "0.5rem",
+          }}
+        >
+          Forgot Password
+        </h2>
 
-    {step === 1 && (
-      <div className="step-section">
-        <label>Username *</label>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <p
+          style={{
+            fontSize: "0.875rem",
+            color: "#1D4F56",
+            marginBottom: "1.5rem",
+          }}
+        >
+          Remembered your password?{" "}
+          <a
+            href="/login"
+            style={{ color: "#1D4F56", textDecoration: "underline" }}
+          >
+            Back to Login
+          </a>
+        </p>
 
-        <label>Role *</label>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="">Select</option>
-          <option value="sponsor">Sponsor</option>
-          <option value="student">Student</option>
-          <option value="institution">Institution</option>
-        </select>
+        {/* ---------------------- STEP 1 ---------------------- */}
+        {step === 1 && (
+          <>
+            {/* Username */}
+            <div style={{ marginBottom: "1rem", position: "relative" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "#1D4F56",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Username/Email *
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your Email"
+                style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                fontSize: "14px",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.5rem",
+                outline: "none",
+                height: "36px",
+                boxSizing: "border-box",
+              }}
+              />
+            </div>
 
-        <button onClick={handleContinue}>Continue</button>
+            {/* Role */}
+            <div style={{ marginBottom: "1.2rem", position: "relative"}}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "#1D4F56",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Role *
+              </label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                 style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                fontSize: "14px",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.5rem",
+                outline: "none",
+                height: "36px",
+                boxSizing: "border-box",
+              }}
+              >
+                <option value="">Select</option>
+                <option value="sponsor">Sponsor</option>
+                <option value="student">Student</option>
+                <option value="institution">Institution</option>
+              </select>
+            </div>
+
+            <button
+              onClick={handleContinue}
+              style={{
+                width: "100%",
+                backgroundColor: "#1D4F56",
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.5rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "none",
+                marginBottom: "1rem",
+              }}
+            >
+              Continue
+            </button>
+          </>
+        )}
+
+        {/* ---------------------- STEP 2 ---------------------- */}
+        {step === 2 && (
+          <>
+            {/* NEW PASSWORD */}
+            <div style={{ marginBottom: "1rem", position: "relative" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "#1D4F56",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                New Password *
+              </label>
+
+              <input
+                type={showNewPass ? "text" : "password"}
+                value={newPassword}
+                placeholder="Enter new password"
+                onChange={(e) => setNewPassword(e.target.value)}
+                 style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                fontSize: "14px",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.5rem",
+                outline: "none",
+                height: "36px",
+                boxSizing: "border-box",
+              }}
+              />
+
+              <button
+                type="button"
+                className="reset-eye-btn"
+                onClick={() => setShowNewPass(!showNewPass)}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(1px)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {showNewPass ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            </div>
+
+            {/* CONFIRM PASSWORD */}
+            <div style={{ marginBottom: "1rem", position: "relative" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "#1D4F56",
+                  marginBottom: "0.25rem",
+                }}
+              >
+                Re-enter Password *
+              </label>
+
+              <input
+                type={showConfirmPass ? "text" : "password"}
+                value={confirmPassword}
+                placeholder="Re-enter new password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                 style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                fontSize: "14px",
+                border: "1px solid #d1d5db",
+                borderRadius: "0.5rem",
+                outline: "none",
+                height: "36px",
+                boxSizing: "border-box",
+              }}
+              />
+
+              <button
+                type="button"
+                className="reset-eye-btn"
+                onClick={() => setShowConfirmPass(!showConfirmPass)}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(1px)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {showConfirmPass ? <FaEye /> : <FaEyeSlash />}
+              </button>
+            </div>
+
+            <button
+              onClick={handleUpdatePassword}
+              style={{
+                width: "100%",
+                backgroundColor: "#1D4F56",
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.5rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "none",
+                marginBottom: "1rem",
+              }}
+            >
+              Update Password
+            </button>
+          </>
+        )}
+
+        {error && (
+          <p style={{ color: "red", fontSize: "13px", marginTop: "10px" }}>
+            {error}
+          </p>
+        )}
       </div>
-    )}
 
-    {step === 2 && (
-      <div className="step-section">
-
-  <label>New Password *</label>
-  <div className="password-wrapper">
-    <input
-      type={showNewPass ? "text" : "password"}
-      value={newPassword}
-      onChange={(e) => setNewPassword(e.target.value)}
-    />
-    <span className="toggle-eye" onClick={() => setShowNewPass(!showNewPass)}>
-      {showNewPass ? <FaEye /> : <FaEyeSlash />}
-    </span>
-  </div>
-
-  <label>Re-enter Password *</label>
-  <div className="password-wrapper">
-    <input
-      type={showConfirmPass ? "text" : "password"}
-      value={confirmPassword}
-      onChange={(e) => setConfirmPassword(e.target.value)}
-    />
-    <span className="toggle-eye" onClick={() => setShowConfirmPass(!showConfirmPass)}>
-      {showConfirmPass ? <FaEye /> : <FaEyeSlash />}
-    </span>
-    
-  </div>
-
-  <button onClick={handleUpdatePassword}>Update Password</button>
-</div>
-
-    )}
-    {error && <p className="error-text">{error}</p>}
+      {/* RIGHT SIDE IMAGE */}
+      <div
+        style={{
+          backgroundImage: `url(${resetImg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+         
+        }}
+      ></div>
+    </div>
   </div>
 );
+
 
 }
