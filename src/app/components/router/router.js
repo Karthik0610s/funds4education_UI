@@ -50,18 +50,18 @@ const routeToVariant = {
   [RP.studentwallet]: "studentwallet",
   [RP.studentredemptioncalog]: "studentredemptioncalog",
   [RP.studentrewards]: "studentrewards",
-[RP.studentrewardsredemption]: "studentrewardsredemption",
+  [RP.studentrewardsredemption]: "studentrewardsredemption",
   [RP.sponsordashboardreport]: "sponsordashboardreport",
 
   [RP.monetizationads]: "monetizationads",
   [RP.sponsoraddashboard]: "sponsoraddashboard",
   [RP.applications]: "student-profile",
   [RP.addapplication]: "application",
-  [RP.sponsorapplication]:"sponsorapplication",
-  [RP.SponsorSignUpPage]:"sponsorsignup",
-  [RP.scholarshipPage]:"scholarshippage",
- [RP.scholarshipViewPage]: "scholarshipview",
-  [RP.loginSuccess]:"public"
+  [RP.sponsorapplication]: "sponsorapplication",
+  [RP.SponsorSignUpPage]: "sponsorsignup",
+  [RP.scholarshipPage]: "scholarshippage",
+  [RP.scholarshipViewPage]: "scholarshipview",
+  [RP.loginSuccess]: "public"
 };
 
 // 🔹 Layout wrapper
@@ -75,13 +75,13 @@ function Layout({ children }) {
 
   // Condition: hide chat if NO token or NO expiry or homepage
   const hideChat =
-  location.pathname === "/" ||
-  location.pathname === "/login" ||
-  location.pathname==="/signup"||
-   location.pathname==="/sponsor/signup"||
-    location.pathname==="/institution/signup"||
-  !token ||
-  !expiry;
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
+    location.pathname === "/signup" ||
+    location.pathname === "/sponsor/signup" ||
+    location.pathname === "/institution/signup" ||
+    !token ||
+    !expiry;
 
 
   const variant = routeToVariant[location.pathname] || "public";
@@ -116,28 +116,28 @@ function App() {
           <Route path={RP.studentredemptioncalog} element={<StudentRedemptionCatalog />} />
           <Route path={RP.studentrewards} element={<StudentRewards />} />
           <Route path={RP.sponsordashboardreport} element={<SponsorDashboardReport />} />
-<Route path={RP.studentrewardsredemption} element={<StudentRewardsRedemption />} />
-<Route path={RP.studentprofile} element={<StudentProfile />} />
-<Route path={RP.ViewStudentProfile} element={<ViewStudentProfile />} />
-<Route path={RP.ViewSponsorProfile} element={<ViewSponsorProfile />} />
-<Route path={RP.sponsorprofile} element={<SponsorProfileForm />} />
-<Route path={RP.studentmessages} element={<MessagesPage />} />
+          <Route path={RP.studentrewardsredemption} element={<StudentRewardsRedemption />} />
+          <Route path={RP.studentprofile} element={<StudentProfile />} />
+          <Route path={RP.ViewStudentProfile} element={<ViewStudentProfile />} />
+          <Route path={RP.ViewSponsorProfile} element={<ViewSponsorProfile />} />
+          <Route path={RP.sponsorprofile} element={<SponsorProfileForm />} />
+          <Route path={RP.studentmessages} element={<MessagesPage />} />
           <Route path={RP.monetizationads} element={<MonetizationAds />} />
           <Route path={RP.sponsoraddashboard} element={<SponsorAdDashboard />} />
-          <Route path={RP.sponsorapplication} element={<SponsorApplications/>} />
-          <Route path={RP.scholarshipPage} element={<ScholarshipPage/>} />
+          <Route path={RP.sponsorapplication} element={<SponsorApplications />} />
+          <Route path={RP.scholarshipPage} element={<ScholarshipPage />} />
           <Route path={RP.applications} element={<ApplicationsPage />} />
           <Route path={RP.addapplication} element={<AddApplicationPage />} />
-    <Route path={RP.settings} element={<SponsorSettings />} />
-    <Route path={RP.signupSponsor} element={<SponsorSignUpPage />} />
-      <Route path={RP.signupInstitution} element={<InstitutionSignUpPage />} />
-      <Route path={RP.addscholarshippage} element={<AddScholarshipPage/>}/>
-        <Route path={RP.resetPassword} element={<ResetPassword/>} />
-       <Route path={RP.scholarshipViewPage} element={< ScholarshipViewPage/>} />
-    <Route path={RP.loginSuccess} element={< LoginSuccess/>} />
-    <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship/>} />
-     <Route path={RP.ForgotPassword} element={<ForgotPassword/>} />
- </Routes>
+          <Route path={RP.settings} element={<SponsorSettings />} />
+          <Route path={RP.signupSponsor} element={<SponsorSignUpPage />} />
+          <Route path={RP.signupInstitution} element={<InstitutionSignUpPage />} />
+          <Route path={RP.addscholarshippage} element={<AddScholarshipPage />} />
+          <Route path={RP.resetPassword} element={<ResetPassword />} />
+          <Route path={RP.scholarshipViewPage} element={< ScholarshipViewPage />} />
+          <Route path={RP.loginSuccess} element={< LoginSuccess />} />
+          <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship />} />
+          <Route path={RP.ForgotPassword} element={<ForgotPassword />} />
+        </Routes>
       </Layout>
     </Router>
   );
