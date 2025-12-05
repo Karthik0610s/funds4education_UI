@@ -5673,7 +5673,7 @@ padding: 8px;
 /* RESET PASSWORD PAGE - EYE ICON */
 .reset-eye-btn {
   position: absolute;
-  top: 70%;               /* Centered vertically relative to input */
+  top: 65%;               /* Centered vertically relative to input */
   right: 12px;            /* Distance from right edge of input */
   transform: translateY(-50%); /* Perfect vertical alignment */
   background: transparent;

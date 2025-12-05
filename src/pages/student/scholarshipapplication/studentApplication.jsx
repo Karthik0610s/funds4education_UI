@@ -51,19 +51,28 @@ const ApplicationsPage = () => {
     }
   }, [location.state]);
   // Open modal in Add mode
-  const handleAddApplication = () => {
-    setSelectedApplication(null);
-    setShowModal(true);
+  const [modalMode, setModalMode] = useState("add");
 
-  };
+  const handleAddApplication = () => {
+  setSelectedApplication(null);
+  setModalMode("add");
+  setShowModal(true);
+};
+
   const handleBack = () => {
     navigate(-1); // 👈 goes back to the previous page
   };
   // Open modal in Edit mode
   const handleEdit = (app) => {
-    setSelectedApplication(app);
-    setShowModal(true);
-  };
+  setSelectedApplication(app);
+  setModalMode("edit");
+  setShowModal(true);
+};
+const handleView = (app) => {
+  setSelectedApplication(app);
+  setModalMode("view");
+  setShowModal(true);
+};
 
   // Delete application
   const handleDelete = (appId) => {
@@ -89,24 +98,30 @@ const ApplicationsPage = () => {
     dispatch(fetchScholarshipApplicationListbyStudent());
   };
   const statusIcon = {
-    draft: "fa-regular fa-file-lines",
+   // draft: "fa-regular fa-file-lines",
     approved: "fa-solid fa-circle-check",
     submitted: "fa-regular fa-paper-plane",
     rejected: "fa-solid fa-circle-xmark",
+    funded: "fa-solid fa-sack-dollar",   
+
   };
 
   const statusLabel = {
-    draft: "Draft",
+   // draft: "Draft",
     approved: "Approved",
     submitted: "Submitted",
     rejected: "Rejected",
+    funded: "Funded",   
+
   };
 
   const statusColor = {
-    draft: "#d6c581ff",
+   // draft: "#d6c581ff",
     approved: "#006400",
     submitted: "#1e40af",
     rejected: "red",
+    funded: "#b45309", // gold-brown
+
   };
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 5;
@@ -205,59 +220,84 @@ const ApplicationsPage = () => {
                     <td data-label="Status / Actions">
                       <div className="actions-container">
                         {/* STATUS ICON */}
-                        <span
-                          className="status-icon"
-                          style={{
-                            color:
-                              app.status.toLowerCase() === "approved"
-                                ? "#006400"
-                                : app.status.toLowerCase() === "submitted"
-                                  ? "#1e40af"
-                                  : app.status.toLowerCase() === "draft"
-                                    ? "#d6c581ff"
-                                    : app.status.toLowerCase() === "rejected"
-                                      ? "red"
-                                      : "black",
-                            fontSize: "16px",
-                            cursor: "pointer",
-                            position: "relative",
-                            padding: "5px"
-                          }}
-                          onMouseEnter={(e) => {
-                            const tip = document.createElement("div");
-                            tip.innerText = app.status.charAt(0).toUpperCase() + app.status.slice(1);
-                            tip.style.position = "absolute";
-                            tip.style.bottom = "120%";
-                            tip.style.left = "50%";
-                            tip.style.transform = "translateX(-50%)";
-                            tip.style.background = "#111827";
-                            tip.style.color = "#fff";
-                            tip.style.padding = "6px 10px";
-                            tip.style.fontSize = "16px";
-                            tip.style.borderRadius = "6px";
-                            tip.style.whiteSpace = "nowrap";
-                            tip.style.zIndex = 2000;
-                            tip.style.pointerEvents = "none";
-                            tip.className = "custom-tooltip";
-                            e.currentTarget.appendChild(tip);
-                          }}
-                          onMouseLeave={(e) => {
-                            const tip = e.currentTarget.querySelector(".custom-tooltip");
-                            if (tip) tip.remove();
-                          }}
-                        >
-                          <i
-                            className={
-                              app.status.toLowerCase() === "approved"
-                                ? "fa-solid fa-circle-check"
-                                : app.status.toLowerCase() === "submitted"
-                                  ? "fa-regular fa-paper-plane"
-                                  : app.status.toLowerCase() === "draft"
-                                    ? "fa-regular fa-file-lines"
-                                    : "fa-solid fa-circle-xmark"
-                            }
-                          ></i>
-                        </span>
+                       {/* STATUS ICON */}
+                       <button
+  className="icons-btn view"
+  onClick={() => handleView(app)}
+  style={{
+    color: "#1e40af",
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+  }}
+>
+  <i className="fa-regular fa-eye"></i>
+</button>
+<span
+  className="status-icon"
+  style={{
+    color:
+      app.status.toLowerCase() === "approved"
+        ? "#006400"
+        : app.status.toLowerCase() === "submitted"
+        ? "#1e40af"
+      //  : app.status.toLowerCase() === "draft"
+       // ? "#d6c581ff"
+        : app.status.toLowerCase() === "rejected"
+        ? "red"
+        : app.status.toLowerCase() === "funded"
+        ? "#b45309" // ⭐ FUNDED COLOR
+        : "",
+    fontSize: "16px",
+    cursor: "pointer",
+    position: "relative",
+    padding: "5px",
+  }}
+
+  onMouseEnter={(e) => {
+    
+    const tip = document.createElement("div");
+    tip.innerText =
+      app.status.charAt(0).toUpperCase() + app.status.slice(1);
+    tip.style.position = "absolute";
+    tip.style.bottom = "120%";
+    tip.style.left = "50%";
+    tip.style.transform = "translateX(-50%)";
+    tip.style.background = "#111827";
+    tip.style.color = "#fff";
+    tip.style.padding = "6px 10px";
+    tip.style.fontSize = "16px";
+    tip.style.borderRadius = "6px";
+    tip.style.whiteSpace = "nowrap";
+    tip.style.zIndex = 2000;
+    tip.style.pointerEvents = "none";
+    tip.className = "custom-tooltip";
+    e.currentTarget.appendChild(tip);
+  }}
+  onMouseLeave={(e) => {
+    const tip = e.currentTarget.querySelector(".custom-tooltip");
+    if (tip) tip.remove();
+  }}
+>
+  <i
+    className={
+      app.status.toLowerCase() === "approved"
+        ? "fa-solid fa-circle-check"
+        : app.status.toLowerCase() === "submitted"
+        ? "fa-regular fa-paper-plane"
+       // : app.status.toLowerCase() === "draft"
+        //? "fa-regular fa-file-lines"
+        : app.status.toLowerCase() === "rejected"
+        ? "fa-solid fa-circle-xmark"
+        : app.status.toLowerCase() === "funded"
+        ? "fa-solid fa-sack-dollar" // ⭐ FUNDED ICON
+        : ""
+        
+    }
+  ></i>
+</span>
+
+
 
                         {/* EDIT & DELETE BUTTONS only for Draft */}
                         {app.status.toLowerCase() === "draft" && (
@@ -275,7 +315,7 @@ const ApplicationsPage = () => {
                             >
                               <i className="fa-regular fa-pen-to-square"></i>
                             </button>
-
+                        
                             <button
                               className="icons-btn delete"
                               onClick={() => handleDelete(app.id)}
@@ -289,6 +329,7 @@ const ApplicationsPage = () => {
                             >
                               <i className="fa-solid fa-trash"></i>
                             </button>
+                             
                           </>
                         )}
                       </div>
@@ -327,11 +368,13 @@ const ApplicationsPage = () => {
 
 
       <AddApplicationModal
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        onSubmit={handleModalSubmit}
-        application={selectedApplication}
-      />
+  show={showModal}
+  handleClose={() => setShowModal(false)}
+  onSubmit={handleModalSubmit}
+  application={selectedApplication}
+  mode={modalMode}   // ← ADD THIS
+/>
+
     </div>
 
   );
