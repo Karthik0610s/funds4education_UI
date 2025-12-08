@@ -15,12 +15,18 @@ import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
+import { act } from "@testing-library/react";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [eligibilityTab, setEligibilityTab] = useState("all"); // default
   //const [activeTab, setActiveTab] = useState("live"); // default
+//const userId = localStorage.getItem("userId");
+//const roleId = localStorage.getItem("roleId");
+//const roleName = localStorage.getItem("roleName");
+
+// Condition: user is logged in
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,8 +46,8 @@ const StudentDashboard = () => {
     Number(localStorage.getItem("userId"));
   const name =
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
-
-
+const roleName = localStorage.getItem("roleName");
+const canSeeEligibility = userId && roleId && roleName;
   const [activeTab, setActiveTab] = useState("live");
   const [searchQuery, setSearchQuery] = useState("");
   /*const [filters, setFilters] = useState({
@@ -93,7 +99,8 @@ const StudentDashboard = () => {
   // 🔹 Scholarships reload when filters change
   useEffect(() => {
     const activeFilters = {
-      statusType: "both",
+      statusType: activeTab,
+      filterType:eligibilityTab,
       classId: filters.class.length ? filters.class : null,
       countryId: filters.country.length ? filters.country : null,
       genderId: filters.gender.length ? filters.gender : null,
@@ -106,6 +113,7 @@ const StudentDashboard = () => {
   }, [
     dispatch,
     activeTab,
+     eligibilityTab, 
     filters.class,
     filters.country,
     filters.gender,
@@ -453,12 +461,13 @@ const StudentDashboard = () => {
 
               {/* CARD 1 — Eligibility + All */}
               <div className="tab-card-container">
-                <button
-                  className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
-                  onClick={() => setEligibilityTab("eligibility")}
-                >
-                  Eligibility
-                </button>
+               <button
+  className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
+  onClick={() => canSeeEligibility && setEligibilityTab("eligibility")}
+  disabled={!canSeeEligibility}
+>
+  Eligibility
+</button>
 
                 <button
                   className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
