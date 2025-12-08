@@ -45,8 +45,8 @@ const routeToVariant = {
   [RP.scholarshipdiscovery]: "discovery",
   [RP.scholarshipmatch]: "student",
   [RP.sponsordashboard]: "dashboard",
-  [RP.login]: "login",
-  [RP.signup]: "signup",
+  [RP.login]: "public",
+  [RP.signup]: "public",
   [RP.studentwalletredemption]: "studentwalletredemption",
   [RP.studentwallet]: "studentwallet",
   [RP.studentredemptioncalog]: "studentredemptioncalog",
@@ -62,8 +62,7 @@ const routeToVariant = {
   [RP.SponsorSignUpPage]: "sponsorsignup",
   [RP.scholarshipPage]: "scholarshippage",
   [RP.scholarshipViewPage]: "scholarshipview",
-  [RP.loginSuccess]: "public",
-  [RP.viewApplication]: "viewapplication",
+  [RP.loginSuccess]: "public"
 };
 
 // 🔹 Layout wrapper

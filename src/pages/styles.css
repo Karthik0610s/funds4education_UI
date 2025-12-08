@@ -1702,15 +1702,19 @@ main::-webkit-scrollbar-thumb:hover {
   left: 0;
   right: 0;
   height: 60px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0 20px;
+ /* background: #fff;
+  border-bottom: 1px solid #e5e7eb;*/
+  padding: 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
 }
-
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0; /* remove padding on mobile */
+  }
+}
 .content-area {
   display: flex;
   height: calc(100vh - 60px);
@@ -6141,13 +6145,11 @@ p {
 /* MAIN studnet scholarshipdasboard*/
 /* HEADER MOBILE */
 @media (max-width: 768px) {
-  .search-box {
-    width: 100%;
-    /* Full width in mobile */
-    padding: 4px 10px;
-    /* Slightly smaller padding */
-    border-radius: 16px;
-  }
+    .search-box {
+      width: 90% !important;   
+        padding: 4px 10px; 
+        border-radius: 16px;
+    }
 
   .search-box input {
     font-size: 14px;
@@ -6160,6 +6162,7 @@ p {
     /* Smaller icon */
   }
 }
+/*.mobile-header {
 
 .mobile-header {
   display: none;
@@ -6172,7 +6175,7 @@ p {
   justify-content: space-between;
   margin-top: 10%;
 }
-
+*/
 .menu-icon {
   font-size: 26px;
   cursor: pointer;
