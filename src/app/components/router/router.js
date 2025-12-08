@@ -62,7 +62,8 @@ const routeToVariant = {
   [RP.SponsorSignUpPage]: "sponsorsignup",
   [RP.scholarshipPage]: "scholarshippage",
   [RP.scholarshipViewPage]: "scholarshipview",
-  [RP.loginSuccess]: "public"
+  [RP.loginSuccess]: "public",
+  [RP.viewApplication]: "viewapplication",
 };
 
 // 🔹 Layout wrapper
