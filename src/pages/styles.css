@@ -7168,50 +7168,89 @@ p {
   color: #000;
 }
 
-/* view application page styles */
-/* Container & Header */
-.view-app-header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin: 20px 0;
+/* 🌐 Main Container */
+.view-application-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #1c3c64;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  padding-top: 60px;
+  background-color: #f9fcff;
 }
 
-.view-app-header button.view-app-btn-back {
-  background-color: #1e40af;
+/* 🔙 Back Button INSIDE HEADER (Right Side) */
+/* 🔙 Back Button (Styled Like Scholarship Button) */
+.view-application-back-btn {
+  background: #fe8200;
   color: #fff;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
   cursor: pointer;
-  font-weight: 500;
   transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  right: 3%;              /* keep right */
+  top: 15%;
+  transform: translateY(-50%);
 }
 
-.view-app-header button.view-app-btn-back:hover {
-  background-color: #1c3a9b;
+.view-application-back-btn:hover {
+  background: #e67300;
+}
+
+
+/* 📌 Page Header */
+.view-app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+    justify-content: center;  
+  padding: 0 3%;
+  margin-bottom: 20px;
+    margin-top: 50px;
+
+}
+
+.view-app-header-title {
+  text-align: center;
 }
 
 .view-app-header h1 {
-  font-size: 28px;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #0066ff, #00b7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin: 0;
-  font-weight: 600;
+  text-transform: capitalize;
+  
 }
 
 .view-app-header p {
   font-size: 16px;
+  color: #0f1f33;
   margin: 4px 0 0 0;
-  color: #555;
 }
 
-/* Card Styles */
+/* 🏷️ Card Container */
 .view-app-cards {
   display: flex;
   flex-direction: column;
   gap: 20px;
   margin-bottom: 40px;
+  padding: 0 3%;
 }
 
+/* 🗂 Individual Card */
 .view-app-card {
   padding: 20px;
   border: 1px solid #ccc;
@@ -7225,7 +7264,7 @@ p {
   margin-bottom: 10px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
-  color: #1e40af;
+  color: #205C5C;
 }
 
 .view-app-card p {
@@ -7238,7 +7277,7 @@ p {
   color: #111827;
 }
 
-/* Uploaded Documents */
+/* 📎 Uploaded Documents */
 .view-app-card ul {
   list-style-type: none;
   padding-left: 0;
@@ -7260,30 +7299,14 @@ p {
   text-decoration: underline;
 }
 
-/* Responsive */
+/* 📱 Responsive */
 @media screen and (max-width: 768px) {
-  .view-app-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
   .view-app-header h1 {
-    font-size: 24px;
+    font-size: 2rem;
   }
-
-  .view-app-header p {
-    font-size: 14px;
-  }
-
   .view-app-card {
     padding: 16px;
   }
-
-  .view-app-card h3 {
-    font-size: 18px;
-  }
-
-  .view-app-card p {
-    font-size: 14px;
-  }
 }
+
+
