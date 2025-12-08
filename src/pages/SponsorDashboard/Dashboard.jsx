@@ -123,6 +123,21 @@ export default function SponsorDashboard() {
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
 
+  const handleViewApplication = (id) => {
+  navigate(`/student/scholarship-application/${id}/view`);
+};
+
+
+
+const [currentPage, setCurrentPage] = useState(1);
+const pageSize = 5; // number of applications per page
+
+const filteredApps = applications.filter(s =>
+  ["approved", "submitted"].includes((s.status || "").toLowerCase())
+);
+
+const totalPages = Math.ceil(filteredApps.length / pageSize);
+
 
   // disable back button
   useEffect(() => {
@@ -392,83 +407,107 @@ const formatAmount = (val) => {
               </div>
             </div> */}
 <div className="app-card-container">
-  {applications.map((s, i) => {
-    const progressMap = {
-      APPROVED: 80,
-      FUNDED: 100,
-      REJECTED: 0,
-      SUBMITTED: 40,
-      "IN REVIEW": 60,
-      PENDING: 40,
-      DRAFT: 20
-    };
 
-    const progress = progressMap[s.status?.toUpperCase()] ?? 0;
-    const statusNorm = (s.status || "").toLowerCase();
+  {applications
+    .filter(s => ["approved", "submitted"].includes((s.status || "").toLowerCase()))
+      //.sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
+     .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+     
+  .map((s, i) => {
+      const progressMap = {
+        APPROVED: 80,
+        FUNDED: 100,
+        REJECTED: 0,
+        SUBMITTED: 40,
+        "IN REVIEW": 60,
+        PENDING: 40,
+        DRAFT: 20
+      };
 
-    return (
-      <div key={i} className="app-card">
-        <div className="app-card-header">
-          <p>
-            <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
-          </p>
+      const progress = progressMap[s.status?.toUpperCase()] ?? 0;
+      const statusNorm = (s.status || "").toLowerCase();
 
-          <span className={`status ${statusNorm}`}>
-            <strong>{s.status.toUpperCase()}</strong>
-          </span>
-        </div>
+      return (
+        <div key={i} className="app-card"
+        onClick={() => handleViewApplication(s.applicationId)} style={{ cursor: "pointer" }}>
+          <div className="app-card-header">
+            <p>
+              <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
+            </p>
+            <span className={`status ${statusNorm}`}>
+              <strong>{s.status.toUpperCase()}</strong>
+            </span>
+          </div>
 
-        <div className="app-row">
-          <span>Scholarship Amount</span>
-          <strong>{formatAmount(s.amount)}</strong>
-        </div>
+          <div className="app-row">
+            <span>Scholarship Amount</span>
+            <strong>{formatAmount(s.amount)}</strong>
+          </div>
 
-        <div className="app-row">
-          <span>Application Date</span>
-          <span>{new Date(s.applicationDate).toLocaleDateString()}</span>
-        </div>
+          <div className="app-row">
+            <span>Application Date</span>
+            <span>{new Date(s.applicationDate).toLocaleDateString()}</span>
+          </div>
 
-        <div className="app-row">
-          <span>Funds Disbursed</span>
-          <div className="progress-bar">
-            <div
-              className="progress"
-              style={{ width: `${progress}%` }}
-            ></div>
+          <div className="app-row">
+            <span>Funds Disbursed</span>
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${progress}%` }}></div>
+            </div>
+          </div>
+
+          <div className="application-actions">
+            {statusNorm === "submitted" && (
+              <>
+                <button
+                  className="btn btn-approve"
+                  onClick={() => handleUpdateStatus(s.applicationId, "Approved")}
+                >
+                  Approve
+                </button>
+
+                <button
+                  className="btn btn-reject"
+                  onClick={() => handleUpdateStatus(s.applicationId, "Rejected")}
+                >
+                  Reject
+                </button>
+              </>
+            )}
+
+            {statusNorm === "approved" && (
+              <button
+                className="btn btn-fund"
+                onClick={() => handleUpdateStatus(s.applicationId, "Funded")}
+              >
+                Fund Student
+              </button>
+            )}
           </div>
         </div>
+      );
+    })}
+</div>
 
-        <div className="application-actions">
-          {["pending", "submitted", "in review", "under review"].includes(statusNorm) && (
-            <>
-              <button
-                className="btn btn-approve"
-                onClick={() => handleUpdateStatus(s.applicationId, "Approved")}
-              >
-                Approve
-              </button>
 
-              <button
-                className="btn btn-reject"
-                onClick={() => handleUpdateStatus(s.applicationId, "Rejected")}
-              >
-                Reject
-              </button>
-            </>
-          )}
+<div className="pagination">
+  <button
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage(prev => prev - 1)}
+  >
+    Prev
+  </button>
 
-          {statusNorm === "approved" && (
-            <button
-              className="btn btn-fund"
-              onClick={() => handleUpdateStatus(s.applicationId, "Funded")}
-            >
-              Fund Student
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  })}
+  <span>
+    Page {currentPage} / {totalPages}
+  </span>
+
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(prev => prev + 1)}
+  >
+    Next
+  </button>
 </div>
 
 
