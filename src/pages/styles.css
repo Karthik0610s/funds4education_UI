@@ -1702,15 +1702,19 @@ main::-webkit-scrollbar-thumb:hover {
   left: 0;
   right: 0;
   height: 60px;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0 20px;
+ /* background: #fff;
+  border-bottom: 1px solid #e5e7eb;*/
+  padding: 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
 }
-
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0; /* remove padding on mobile */
+  }
+}
 .content-area {
   display: flex;
   height: calc(100vh - 60px);
@@ -6141,13 +6145,11 @@ p {
 /* MAIN studnet scholarshipdasboard*/
 /* HEADER MOBILE */
 @media (max-width: 768px) {
-  .search-box {
-    width: 100%;
-    /* Full width in mobile */
-    padding: 4px 10px;
-    /* Slightly smaller padding */
-    border-radius: 16px;
-  }
+    .search-box {
+      width: 90% !important;   
+        padding: 4px 10px; 
+        border-radius: 16px;
+    }
 
   .search-box input {
     font-size: 14px;
@@ -6160,6 +6162,7 @@ p {
     /* Smaller icon */
   }
 }
+/*.mobile-header {
 
 .mobile-header {
   display: none;
@@ -6172,7 +6175,7 @@ p {
   justify-content: space-between;
   margin-top: 10%;
 }
-
+*/
 .menu-icon {
   font-size: 26px;
   cursor: pointer;
@@ -7163,4 +7166,124 @@ p {
 
 .toggle-eye:hover {
   color: #000;
+}
+
+/* view application page styles */
+/* Container & Header */
+.view-app-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.view-app-header button.view-app-btn-back {
+  background-color: #1e40af;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.view-app-header button.view-app-btn-back:hover {
+  background-color: #1c3a9b;
+}
+
+.view-app-header h1 {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.view-app-header p {
+  font-size: 16px;
+  margin: 4px 0 0 0;
+  color: #555;
+}
+
+/* Card Styles */
+.view-app-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.view-app-card {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.view-app-card h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+  color: #1e40af;
+}
+
+.view-app-card p {
+  font-size: 16px;
+  margin: 6px 0;
+  color: #333;
+}
+
+.view-app-card strong {
+  color: #111827;
+}
+
+/* Uploaded Documents */
+.view-app-card ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 6px 0;
+}
+
+.view-app-card ul li {
+  margin-bottom: 6px;
+}
+
+.view-app-card ul li a {
+  color: #1e40af;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.view-app-card ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .view-app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .view-app-header h1 {
+    font-size: 24px;
+  }
+
+  .view-app-header p {
+    font-size: 14px;
+  }
+
+  .view-app-card {
+    padding: 16px;
+  }
+
+  .view-app-card h3 {
+    font-size: 18px;
+  }
+
+  .view-app-card p {
+    font-size: 14px;
+  }
 }

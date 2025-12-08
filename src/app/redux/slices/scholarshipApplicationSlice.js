@@ -6,6 +6,7 @@ import {
   fetchScholarshipApplicationListReq,
   fetchScholarshipApplicationListbyStudentReq,
   updateScholarshipApplicationReq,
+  fetchScholarshipApplicationByIdReq,
 } from "../../../api/scholarshipapplication/scholarshipapplication";
 
 const scholarshipApplicationSlice = createSlice({
@@ -29,10 +30,15 @@ const scholarshipApplicationSlice = createSlice({
       state.error = true;
       state.loading = false;
     },
+     setSelectedApplication: (state, { payload }) => {
+      state.loading = false;
+      state.error = false;
+      state.selectedApplication = payload;
   },
+},
 });
 
-export const { setLoading, addData, setError } = scholarshipApplicationSlice.actions;
+export const { setLoading, addData, setError, setSelectedApplication } = scholarshipApplicationSlice.actions;
 
 // ✅ export only the reducer
 export default scholarshipApplicationSlice.reducer;
@@ -63,7 +69,16 @@ export const addNewScholarshipApplication = async (data, dispatch) => {
     throw error; // Throw the error to be handled elsewhere
   }
 };
-
+export const fetchScholarshipApplicationById = (id) => async (dispatch) => {
+  try {
+    dispatch(setLoading());
+    const res = await fetchScholarshipApplicationByIdReq(id); // call API with ID
+    dispatch(setSelectedApplication(res.data));
+  } catch (error) {
+    dispatch(setError());
+    console.log(error);
+  }
+};
 // Action to update a scholarshipApplication
 export const updateScholarshipApplication = async (data, dispatch) => {
   try {

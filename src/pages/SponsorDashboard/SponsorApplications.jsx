@@ -11,17 +11,20 @@ export default function SponsorApplications() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.scholarship);
   const applications = data.applications || [];
-const name = localStorage.getItem("name") || "Student";
- const navigate = useNavigate();
+  const name = localStorage.getItem("name") || "Student";
+  const navigate = useNavigate();
 
-// logout
-const handleLogout = () => {
+  // logout
+  const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
   const [filter, setFilter] = useState("All");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+  const handleViewApplication = (appId) => {
+    navigate(`/student/scholarship-application/${appId}/view`);
+  };
 
   useEffect(() => {
     debugger;
@@ -114,145 +117,153 @@ const handleLogout = () => {
   if (error) return <p className="error">Error loading applications.</p>;
 
   return (
-    
-    <div className="page-split">
-    
-     <div className="left-container">
-    <SponsorLayout name={name} handleLogout={handleLogout} />
-  </div>
 
-  
-      <div className="right-container">
-     <div className="mobile-sponsor">
+    <div className="page-split">
+
+      <div className="left-container">
         <SponsorLayout name={name} handleLogout={handleLogout} />
       </div>
-    <div className="container">
-        <h2 className="page-title">Student Applications</h2>
 
-        {/* Filter */}
-        <div className="filter">
-          <label>Filter by status:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option>All</option>
-            <option>Pending</option>
-            <option>Approved</option>
-            <option>Funded</option>
-            <option>Rejected</option>
-          </select>
+
+      <div className="right-container">
+        <div className="mobile-sponsor">
+          <SponsorLayout name={name} handleLogout={handleLogout} />
         </div>
+        <div className="container">
+          <h2 className="page-title">Student Applications</h2>
 
-        {/* Applications List */}
-        <div className="application-list">
-          {filteredApplications.length > 0 ? (
-            filteredApplications.map((app) => (
-              <div key={app.applicationId} className="application-card">
-                <div className="application-info">
-                  <h3 className="student-name">
-                    {app.firstName} {app.lastName}
-                  </h3>
-                  <p>{app.scholarshipName || "Course not specified"}</p>
-                  <p>School: {app.schoolName}</p>
-                  <span className={`status ${normalize(app.status)}`}>
-                    {displayStatus(app.status)}
-                  </span>
-                </div>
+          {/* Filter */}
+          <div className="filter">
+            <label>Filter by status:</label>
+            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option>All</option>
+              <option>Pending</option>
+              <option>Approved</option>
+              <option>Funded</option>
+              <option>Rejected</option>
+            </select>
+          </div>
 
-                <div className="application-actions">
-                  {["pending", "submitted", "under review"].includes(normalize(app.status)) && (
-                    <>
-                      <button
-                        className="btn btn-approve"
-                        onClick={() => handleUpdateStatus(app.applicationId, "Approved")}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="btn btn-reject"
-                        onClick={() => handleUpdateStatus(app.applicationId, "Rejected")}
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-
-                  {normalize(app.status) === "approved" && (
-                    <button
-                      className="btn btn-fund"
-                      onClick={() => handleUpdateStatus(app.applicationId, "Funded")}
-                    >
-                      Fund Student
-                    </button>
-                  )}
-
-                  <button
-                    className="btn btn-message"
-                    onClick={() =>
-                      setSelectedStudent({
-                        ...app,
-                        messages: app.messages || [],
-                      })
-                    }
-                  >
-                    Messages ({(app.messages || []).length})
-                  </button>
-                </div>
-
-              </div>
-            ))
-          ) : (
-            <div style={{ textAlign: "center", padding: "40px" }}>
-    {filter === "All" ? (
-      <>
-        <h3>No scholarships added</h3>
-        <p>Add scholarship to get applications</p>
-      </>
-    ) : (
-      <h3>No {filter} applications</h3>
-    )}
-  </div>)}
-        </div>
-      </div>
-
-      {/* 💬 Modal for Messages */}
-      {selectedStudent && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Messages with {selectedStudent.firstName}</h2>
-            <div className="messages-box">
-              {selectedStudent.messages.length === 0 ? (
-                <p className="empty">No messages yet.</p>
-              ) : (
-                selectedStudent.messages.map((m, i) => (
-                  <div key={i} className={`message-item ${m.sender.toLowerCase()}`}>
-                    <strong>{m.sender}:</strong> {m.text}
-                    <div className="message-time">{m.time}</div>
+          {/* Applications List */}
+          <div className="application-list">
+            {filteredApplications.length > 0 ? (
+              filteredApplications.map((app) => (
+                <div key={app.applicationId} className="application-card">
+                  <div className="application-info">
+                    <h3 className="student-name">
+                      {app.firstName} {app.lastName}
+                    </h3>
+                    <p>{app.scholarshipName || "Course not specified"}</p>
+                    <p>School: {app.schoolName}</p>
+                    <span className={`status ${normalize(app.status)}`}>
+                      {displayStatus(app.status)}
+                    </span>
                   </div>
-                ))
-              )}
-            </div>
+                  <div className="application-actions">
+                    {/* VIEW BUTTON */}
+                    <button
+                      className="btn btn-view"
+                      onClick={() => handleViewApplication(app.applicationId)}
+                    >
+                      View
+                    </button>
 
-            {/* Send Message Box */}
-            <div className="send-box">
-              <textarea
-                rows="3"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Type your message..."
-              />
-              <button className="btn btn-approve" onClick={sendMessage}>
-                Send
-              </button>
-            </div>
+                    {["pending", "submitted", "under review"].includes(normalize(app.status)) && (
+                      <>
+                        <button
+                          className="btn btn-approve"
+                          onClick={() => handleUpdateStatus(app.applicationId, "Approved")}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="btn btn-reject"
+                          onClick={() => handleUpdateStatus(app.applicationId, "Rejected")}
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
 
-            <div className="modal-actions">
-              <button className="btn btn-reject" onClick={() => setSelectedStudent(null)}>
-                Close
-              </button>
-            </div>
+                    {normalize(app.status) === "approved" && (
+                      <button
+                        className="btn btn-fund"
+                        onClick={() => handleUpdateStatus(app.applicationId, "Funded")}
+                      >
+                        Fund Student
+                      </button>
+                    )}
+
+                    <button
+                      className="btn btn-message"
+                      onClick={() =>
+                        setSelectedStudent({
+                          ...app,
+                          messages: app.messages || [],
+                        })
+                      }
+                    >
+                      Messages ({(app.messages || []).length})
+                    </button>
+                  </div>
+
+
+                </div>
+              ))
+            ) : (
+              <div style={{ textAlign: "center", padding: "40px" }}>
+                {filter === "All" ? (
+                  <>
+                    <h3>No scholarships added</h3>
+                    <p>Add scholarship to get applications</p>
+                  </>
+                ) : (
+                  <h3>No {filter} applications</h3>
+                )}
+              </div>)}
           </div>
         </div>
-      )}
+
+        {/* 💬 Modal for Messages */}
+        {selectedStudent && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>Messages with {selectedStudent.firstName}</h2>
+              <div className="messages-box">
+                {selectedStudent.messages.length === 0 ? (
+                  <p className="empty">No messages yet.</p>
+                ) : (
+                  selectedStudent.messages.map((m, i) => (
+                    <div key={i} className={`message-item ${m.sender.toLowerCase()}`}>
+                      <strong>{m.sender}:</strong> {m.text}
+                      <div className="message-time">{m.time}</div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Send Message Box */}
+              <div className="send-box">
+                <textarea
+                  rows="3"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Type your message..."
+                />
+                <button className="btn btn-approve" onClick={sendMessage}>
+                  Send
+                </button>
+              </div>
+
+              <div className="modal-actions">
+                <button className="btn btn-reject" onClick={() => setSelectedStudent(null)}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-</div>
   );
 }

@@ -36,6 +36,7 @@ import ScholarshipViewPage from "../../../pages/studentscholarship/view.jsx";
 import LoginSuccess from "../../../pages/login/loginsuccess.jsx";
 import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredScholarship.jsx";
 import ForgotPassword from "../../../pages/ForgotPassword/forgotPassword.jsx";
+import ViewApplication from "../../../pages/student/scholarshipapplication/viewApplication.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 const routeToVariant = {
@@ -44,8 +45,8 @@ const routeToVariant = {
   [RP.scholarshipdiscovery]: "discovery",
   [RP.scholarshipmatch]: "student",
   [RP.sponsordashboard]: "dashboard",
-  [RP.login]: "login",
-  [RP.signup]: "signup",
+  [RP.login]: "public",
+  [RP.signup]: "public",
   [RP.studentwalletredemption]: "studentwalletredemption",
   [RP.studentwallet]: "studentwallet",
   [RP.studentredemptioncalog]: "studentredemptioncalog",
@@ -61,7 +62,8 @@ const routeToVariant = {
   [RP.SponsorSignUpPage]: "sponsorsignup",
   [RP.scholarshipPage]: "scholarshippage",
   [RP.scholarshipViewPage]: "scholarshipview",
-  [RP.loginSuccess]: "public"
+  [RP.loginSuccess]: "public",
+  [RP.viewApplication]: "viewapplication",
 };
 
 // 🔹 Layout wrapper
@@ -137,6 +139,7 @@ function App() {
           <Route path={RP.loginSuccess} element={< LoginSuccess />} />
           <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship />} />
           <Route path={RP.ForgotPassword} element={<ForgotPassword />} />
+          <Route path={RP.viewApplication} element={<ViewApplication />} />
         </Routes>
       </Layout>
     </Router>

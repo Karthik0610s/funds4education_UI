@@ -211,22 +211,29 @@
     display: block;
   }
 
+ 
   .nav-menu {
     position: absolute;
     top: 70px;
-    left: 0;
-    width: 100%;
+    right: 16px;       /* align to right */
+    left: auto;        /* unset left */
+    width: 240px;      /* fixed width for box */
     background: #ffffff;
     box-shadow: 0 4px 8px rgba(57, 109, 112, 0.1);
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;  /* left-align text */
     gap: 16px;
-    padding: 20px 0;
+    padding: 16px 20px;
+    border-radius: 8px;       /* optional: rounded box */
     transition: all 0.3s ease;
     transform: translateY(-120%);
     opacity: 0;
     pointer-events: none;
+    text-align: left;          /* left-align text */
   }
+
+  
+
 
   .nav-menu.open {
     transform: translateY(0);
@@ -245,6 +252,34 @@
     flex-direction: column;
     gap: 12px;
   }
+    .header-right {
+        display: flex;
+        flex-direction: column; /* stack items */
+        align-items: flex-start; /* align left */
+        justify-content: flex-start;
+        gap: 16px;
+        padding-left: 0; /* remove container padding */
+    }
+
+    .header-right ul {
+        list-style: none; /* remove bullets */
+        padding: 0;
+        margin: 0;
+        width: 100%; /* make full width if needed */
+    }
+
+    .header-right li {
+        padding: 0;  /* remove default li padding */
+        margin: 0;
+        width: 100%; /* optional */
+    }
+
+    .header-right a {
+        padding: 0;  /* remove extra padding from links */
+        margin: 0;
+        display: block; /* make full width clickable */
+        width: 150%;
+    }
 }
 
 @media (max-width: 920px) {
@@ -375,3 +410,239 @@
   border-style: solid;
   border-color: transparent transparent #ffffff transparent;
 }
+/* Hide mobile on desktop */
+.mobile-header {
+  display: none;
+}
+
+.desktop-header {
+  display: flex;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .mobile-header { display: flex; }
+  .desktop-header { display: none; }
+
+  .left-section-mobile {
+    display: flex;
+    align-items: center;
+  }
+
+  .right-mobile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mobile-welcome {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .mobile-login {
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .logout-icon {
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    padding: 10px;
+  }
+}
+.mobile-header {
+  display: flex;
+  align-items: center;      /* vertically center items */
+  justify-content: space-between; /* space between left and right sections */
+  padding: 0 16px;          /* optional: horizontal padding */
+  height: 60px;             /* adjust as needed */
+  background-color: #fff;   /* optional: background */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* optional shadow */
+}
+
+.left-section-mobile {
+  display: flex;
+  align-items: center;
+}
+
+.right-mobile {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between elements in right section */
+}
+
+.logo {
+  height: 40px; /* adjust logo size */
+  cursor: pointer;
+}
+
+.logout-icon, .menu-icon {
+  cursor: pointer;
+}
+/* Mobile Header Container */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px; /* slightly smaller padding for mobile */
+  height: 50-60px; /* suitable mobile height */
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+/* Left side (Logo) */
+.left-section-mobile {
+  display: flex;
+  align-items: center;
+}
+
+/* Logo */
+.logo {
+  height: 35-40px; /* mobile-friendly size */
+  cursor: pointer;
+}
+
+/* Right side (User info, logout, menu) */
+.right-mobile {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* smaller gap for mobile */
+}
+
+/* Text like "Hi, User" or Login */
+.mobile-welcome, .mobile-login {
+  font-size: 14px; /* adjust for small screens */
+  white-space: nowrap; /* prevent wrapping */
+}
+
+/* Icons */
+.logout-icon, .menu-icon {
+  cursor: pointer;
+}
+
+/* Optional: make menu icon slightly bigger on mobile */
+
+/* Default: show menu icon */
+.menu-icon {
+  display: flex; /* visible by default (mobile) */
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Hide menu icon on desktop */
+@media screen and (min-width: 769px) {
+  .menu-icon {
+    display: none;
+  }
+}
+/* MOBILE MENU */
+.mobile-menu {
+  position: absolute;
+  top: 85px;
+  right: 0;
+  width: 220px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  border-radius: 8px;
+}
+
+/* Override nav-menu behavior on mobile */
+@media screen and (max-width: 768px) {
+  .nav-menu {
+    position: absolute !important;
+    top: 60px !important;
+    right: 0 !important;
+    width: 220px !important;
+    background: #fff !important;
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 10px 0 !important;
+  }
+}
+
+.mobile-menu-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-menu-items .dropdown-item {
+  padding: 12px 18px;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  color: #222;
+}
+
+.mobile-menu-items .dropdown-item:hover {
+  background: #f7f7f7;
+}
+/* MOBILE */
+@media (max-width: 768px) {
+  .menu-icon-mobile {
+    display: flex !important;
+    cursor: pointer;
+  }
+  .menu-icon-desktop {
+    display: none !important;
+  }
+}
+
+/* DESKTOP */
+/* Show desktop menu icon only between 769px and 960px */
+@media (min-width: 769px) and (max-width: 960px) {
+  .menu-icon-desktop {
+    display: flex !important;
+    cursor: pointer;
+  }
+
+  .menu-icon-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide desktop menu icon above 960px */
+@media (min-width: 961px) {
+  .menu-icon-desktop {
+    display: none !important;
+  }
+}
+
+.mobile-menu-items {
+  display: flex;
+  flex-direction: column;
+  align-items: left;   /* ← center horizontally */
+  justify-content: center; /* optional: center vertically */
+  text-align: left;
+  gap:5px  
+}
+
+.mobile-menu-items .dropdown-item {
+  width: 100%;              /* allow full width */
+  text-align: center;       /* center text */
+  padding: 12px 2px;     
+   /* equal padding */
+}
+
+/* Hide mobile header on desktop */
+@media screen and (min-width: 769px) {
+  .mobile-header {
+    display: none !important;
+  }
+}
+/* Show mobile header only on mobile */
+@media screen and (max-width: 768px) {
+  .mobile-header {
+    display: flex !important;
+  }
+}
+
+
