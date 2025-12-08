@@ -37,7 +37,7 @@ const RequiredMark = () => <span className="validation-error-label">*</span>;
 
 
 
-const AddApplicationModal = ({ show, handleClose, application }) => {
+const AddApplicationModal = ({ show, handleClose, application , mode }) => {
   const [scholarshipOptions, setScholarshipOptions] = useState([]);
   const [filteredScholarships, setFilteredScholarships] = useState([]);
   useEffect(() => {
@@ -73,7 +73,7 @@ const AddApplicationModal = ({ show, handleClose, application }) => {
 const yesterday = new Date();
 yesterday.setDate(yesterday.getDate() - 1);
 const maxDOB = yesterday.toISOString().split("T")[0];
-
+const isViewMode = mode === "view";
 // Min allowed DOB = today - 79 years
 const minDOB = new Date();
 minDOB.setFullYear(minDOB.getFullYear() - 79);
@@ -121,28 +121,63 @@ const minAllowedDOB = minDOB.toISOString().split("T")[0];
 
 
 
+const convertDOB = (dateStr) => {
+  if (!dateStr) return { inputFormat: "", displayFormat: "" };
+
+  const [datePart] = dateStr.split(" "); // remove time
+  const [mm, dd, yyyy] = datePart.split("/");
+
+  return {
+    inputFormat: `${yyyy}-${mm}-${dd}`,     // backend format
+    displayFormat: `${dd}/${mm}/${yyyy}`,   // UI display
+  };
+};
+const rawDOB = localStorage.getItem("dateOfBirth");
+const { inputFormat, displayFormat } = convertDOB(rawDOB);
 
 
   // Populate form if editing
-  useEffect(() => {
-    if (application) {
-      setFormData({
-        ...initialFormData,
-        ...application,
-        dateOfBirth: application.dateOfBirth ? application.dateOfBirth.split("T")[0] : "",
-        applicationDate: application.applicationDate ? application.applicationDate.split("T")[0] : today,
-        scholarshipId: application.scholarshipId ? parseInt(application.scholarshipId) : "",
-        modifiedBy: localStorage.getItem("name")
-      });
-    } else {
-      setFormData({
-        ...initialFormData,
-        createdBy: localStorage.getItem("name"),  // ✅ set created by current user
+useEffect(() => {
+  const localData = {
+    firstName: localStorage.getItem("firstName") || "",
+    lastName: localStorage.getItem("lastName") || "",
+    email: localStorage.getItem("email") || "",
+    phoneNumber: localStorage.getItem("phoneNumber") || "",
+    gender: localStorage.getItem("gender") || "",
+    dateOfBirth: inputFormat,       // <- internal use
+    dateOfBirthDisplay: displayFormat, // <- UI display value
+  };
 
-      });
-    }
-    setErrors({});
-  }, [application, show]);
+  if (application) {
+    // Edit mode → still autofill from localStorage
+    setFormData({
+      ...initialFormData,
+      ...application,
+      ...localData,
+      dateOfBirth:
+        localData.dateOfBirth ||
+        (application.dateOfBirth?.split("T")[0] || ""),
+      applicationDate: application.applicationDate
+        ? application.applicationDate.split("T")[0]
+        : today,
+      scholarshipId: application.scholarshipId
+        ? parseInt(application.scholarshipId)
+        : "",
+      modifiedBy: localStorage.getItem("name"),
+    });
+  } else {
+    // New application
+    setFormData({
+      ...initialFormData,
+      ...localData,
+      createdBy: localStorage.getItem("name"),
+      studentId: Number(localStorage.getItem("userId")),
+    });
+  }
+
+  setErrors({});
+}, [application, show]);
+
 
   /* const handleChange = (e) => {
      const { name, value, files } = e.target;
@@ -538,7 +573,14 @@ if (name === "gpaOrMarks") {
       <div className="modal">
         {/* Header */}
         <div className="modal-header">
-          <h3>{application ? "Edit Application" : "New Application"}</h3>
+         <h3>
+  {mode === "view"
+    ? "View Application"
+    : application
+    ? "Edit Application"
+    : "New Application"}
+</h3>
+
           <button className="close-btn" onClick={handleCloseAndReset}>×</button>
         </div>
 
@@ -557,6 +599,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleChange}
                   className={errors.firstName ? "input-error" : ""}
                   placeholder="First Name"
+                  disabled
                 />
                 {errors.firstName && <p className="error-text">{errors.firstName}</p>}
               </div>
@@ -572,6 +615,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleChange}
                   className={errors.lastName ? "input-error" : ""}
                   placeholder="Last Name"
+                  disabled
                 />
                 {errors.lastName && <p className="error-text">{errors.lastName}</p>}
               </div>
@@ -587,6 +631,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleChange}
                   className={errors.email ? "input-error" : ""}
                   placeholder="Email"
+                  disabled
                 />
                 {errors.email && <p className="error-text">{errors.email}</p>}
               </div>
@@ -602,6 +647,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleChange}
                   className={errors.phoneNumber ? "input-error" : ""}
                   placeholder="Phone"
+                  disabled
                 />
                 {errors.phoneNumber && <p className="error-text">{errors.phoneNumber}</p>}
               </div>
@@ -617,6 +663,7 @@ if (name === "gpaOrMarks") {
                   min={minAllowedDOB}
                   max={maxDOB}
                   onChange={handleChange}
+                  disabled
                 />
               </div>
 
@@ -626,6 +673,7 @@ if (name === "gpaOrMarks") {
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
+                  disabled
                 >
                   <option value="">Select Gender</option>
                   <option value="Male">Male</option>
@@ -641,6 +689,7 @@ if (name === "gpaOrMarks") {
               <div className="form-group col-6">
                 <label>Study Level <Required /></label>
                 <select
+                 disabled={isViewMode}
                   name="studyLevel"
                   value={formData.studyLevel}
                   onChange={handleChange}
@@ -664,6 +713,7 @@ if (name === "gpaOrMarks") {
                   name="schoolName"
                   value={formData.schoolName}
                   onChange={handleChange}
+                  disabled={isViewMode}
                 />
               </div>
 
@@ -677,6 +727,7 @@ if (name === "gpaOrMarks") {
                   name="courseOrMajor"
                   value={formData.courseOrMajor}
                   onChange={handleChange}
+                  disabled={isViewMode}
                 />
               </div>
             </div>
@@ -690,6 +741,7 @@ if (name === "gpaOrMarks") {
                   name="yearOfStudy"
                   value={formData.yearOfStudy}
                   onChange={handleChange}
+                  disabled={isViewMode}
                 />
                 {errors.yearOfStudy && (
                   <p className="error-text">{errors.yearOfStudy}</p>
@@ -705,6 +757,7 @@ if (name === "gpaOrMarks") {
                   name="gpaOrMarks"
                   value={formData.gpaOrMarks}
                   onChange={handleChange}
+                  disabled={isViewMode}
                 />
               </div>
               </div>
@@ -718,6 +771,7 @@ if (name === "gpaOrMarks") {
                     value={formData.scholarshipId}
                     onChange={handleChange}
                     className={errors.scholarshipId ? "input-error" : ""}
+                    disabled={isViewMode}
                   >
                     <option value="">Select Scholarship</option>
                     {scholarshipOptions.map((sch) => (
@@ -740,6 +794,7 @@ if (name === "gpaOrMarks") {
                   value={formData.category}
                   onChange={handleChange}
                   disabled // category is auto-filled, not user-editable
+
                 >
                   <option value="">Select Category</option>
                   {formData.category && (
@@ -759,6 +814,7 @@ if (name === "gpaOrMarks") {
                   min={today}
                   max={today}
                   onChange={handleChange}
+                  disabled={isViewMode}
                 />
               </div>
             </div>
@@ -826,6 +882,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleFileChange}
                   multiple
                   ref={fileInputRef}
+                  disabled={isViewMode}
                 />
 
                 {fileSelected && filesList.length > 0 && (
@@ -878,21 +935,26 @@ if (name === "gpaOrMarks") {
             <div className="row">
               <div className="form-group col-12">
                 <label>Extra-Curricular</label>
-                <textarea name="extraCurricularActivities" value={formData.extraCurricularActivities} onChange={handleChange}></textarea>
+                <textarea name="extraCurricularActivities" value={formData.extraCurricularActivities} onChange={handleChange}
+                disabled={isViewMode}></textarea>
               </div>
             </div>
             <div className="row">
 
               <div className="form-group col-12">
                 <label>Awards / Achievements</label>
-                <textarea name="awardsAchievements" value={formData.awardsAchievements} onChange={handleChange}></textarea>
+                <textarea name="awardsAchievements" 
+                disabled={isViewMode}
+                value={formData.awardsAchievements} onChange={handleChange}></textarea>
               </div>
             </div>
             <div className="row">
 
               <div className="form-group col-12">
                 <label>Notes / Comments</label>
-                <textarea name="notesComments" value={formData.notesComments} onChange={handleChange}></textarea>
+                <textarea name="notesComments"
+                disabled={isViewMode}
+                 value={formData.notesComments} onChange={handleChange}></textarea>
               </div>
             </div>
           </form>
@@ -901,12 +963,23 @@ if (name === "gpaOrMarks") {
  
         {/* Footer Actions */}
         <div className="modal-actions">
-          <button className="sign-action-btn1 danger" onClick={handleCloseAndReset} >Cancel</button>
-          <button className="sign-action-btn1" onClick={(e) => handleSubmit(e, "Draft")}>Save Draft</button>
-          <button className="sign-action-btn1" onClick={(e) => handleSubmit(e, "Submitted")}>
-            {application ? "Update" : "Submit"}
-          </button>
-        </div>
+  <button className="sign-action-btn1 danger" onClick={handleCloseAndReset}>
+    {isViewMode ? "Close" : "Cancel"}
+  </button>
+
+  {!isViewMode && (
+    <>
+      <button className="sign-action-btn1" onClick={(e) => handleSubmit(e, "Draft")}>
+        Save Draft
+      </button>
+
+      <button className="sign-action-btn1" onClick={(e) => handleSubmit(e, "Submitted")}>
+        {application ? "Update" : "Submit"}
+      </button>
+    </>
+  )}
+</div>
+
       </div>
     </div>
   );
