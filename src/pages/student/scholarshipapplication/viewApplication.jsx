@@ -6,7 +6,8 @@ import { fetchScholarshipApplicationById } from "../../../app/redux/slices/schol
 import SponsorLayout from "../../SponsorDashboard/SponsorLayout";
 import { logout } from "../../../app/redux/slices/authSlice";
 import "../../../pages/styles.css";
-
+import { publicAxios } from "../../../api/config";
+import { ApiKey } from "../../../api/endpoint";
 const ViewApplication = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -36,6 +37,28 @@ const ViewApplication = () => {
   };
 
   const name = localStorage.getItem("name") || "Student";
+  const downloadFiles = async () => {
+  try {
+    const res = await publicAxios.get(
+      `${ApiKey.downloadscholarshipFiles}/${data.id}`,
+      { responseType: "blob" }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([res.data], { type: "application/zip" })
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "documents.zip");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("File download failed:", err);
+  }
+};
+
 
   const getAge = (dob) => {
     if (!dob) return "N/A";
@@ -68,13 +91,14 @@ const ViewApplication = () => {
             <h1>Scholarship Application Preview</h1>
             <p>View all details of the scholarship application.</p>
           </div>
-
+     {/*
           <button
             className="view-application-back-btn"
             onClick={handleBack}
           >
             Back
           </button>
+     */}
         </div>
 
         {/* Card Section */}
@@ -106,23 +130,23 @@ const ViewApplication = () => {
             <p><strong>Notes / Comments:</strong> {data.notesComments || "N/A"}</p>
 
             <h3>Uploaded Documents</h3>
-            {data.files?.length > 0 ? (
-              <ul>
-                {data.files.map((file, i) => (
-                  <li key={i}>
-                    <a
-                      href={`${data.filePath}/${file}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {file}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>No files uploaded</p>
-            )}
+
+{data.files?.length > 0 ? (
+  <div>
+    <ul>
+      {data.files.map((file, index) => (
+        <li key={index}>{file}</li>
+      ))}
+    </ul>
+
+    <button className="btn btn-primary mt-2" onClick={downloadFiles}>
+      Download All Documents
+    </button>
+  </div>
+) : (
+  <p>No files uploaded</p>
+)}
+
           </div>
         </section>
       </div>

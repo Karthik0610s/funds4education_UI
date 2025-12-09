@@ -429,6 +429,7 @@ const formatAmount = (val) => {
 
       return (
         <div key={i} className="app-card"
+        
         onClick={() => handleViewApplication(s.applicationId)} style={{ cursor: "pointer" }}>
           <div className="app-card-header">
             <p>
@@ -460,28 +461,37 @@ const formatAmount = (val) => {
             {statusNorm === "submitted" && (
               <>
                 <button
-                  className="btn btn-approve"
-                  onClick={() => handleUpdateStatus(s.applicationId, "Approved")}
-                >
-                  Approve
-                </button>
+  className="btn btn-approve"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Approved");
+  }}
+>
+  Approve
+</button>
 
-                <button
-                  className="btn btn-reject"
-                  onClick={() => handleUpdateStatus(s.applicationId, "Rejected")}
-                >
-                  Reject
-                </button>
+<button
+  className="btn btn-reject"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Rejected");
+  }}
+>
+  Reject
+</button>
               </>
             )}
 
             {statusNorm === "approved" && (
               <button
-                className="btn btn-fund"
-                onClick={() => handleUpdateStatus(s.applicationId, "Funded")}
-              >
-                Fund Student
-              </button>
+  className="btn btn-fund"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Funded");
+  }}
+>
+  Fund Student
+</button>
             )}
           </div>
         </div>

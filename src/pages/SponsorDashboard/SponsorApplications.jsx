@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApplicationsBySponsor, updateApplicationStatus } from "../../app/redux/slices/ScholarshipSlice"; // adjust path if needed
+import { fetchApplicationsBySponsor, updateApplicationStatus } from "../../app/redux/slices/ScholarshipSlice";
 import "../styles.css";
 import Swal from "sweetalert2";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { logout } from "../../app/redux/slices/authSlice";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function SponsorApplications() {
   const dispatch = useDispatch();
@@ -14,23 +14,32 @@ export default function SponsorApplications() {
   const name = localStorage.getItem("name") || "Student";
   const navigate = useNavigate();
 
-  // logout
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
+
   const [filter, setFilter] = useState("All");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5; // items per page
+
   const handleViewApplication = (appId) => {
     navigate(`/student/scholarship-application/${appId}/view`);
   };
 
   useEffect(() => {
-    debugger;
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
+
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
 
   const normalize = (s) => (s || "").toLowerCase();
 
@@ -42,10 +51,10 @@ export default function SponsorApplications() {
       newStatus === "Approved"
         ? "approve"
         : newStatus === "Rejected"
-          ? "reject"
-          : newStatus === "Funded"
-            ? "fund"
-            : "update";
+        ? "reject"
+        : newStatus === "Funded"
+        ? "fund"
+        : "update";
 
     Swal.fire({
       title: `Are you sure you want to ${actionText} this application?`,
@@ -53,14 +62,14 @@ export default function SponsorApplications() {
         newStatus === "Approved"
           ? "Once approved, this student will be eligible for funding."
           : newStatus === "Rejected"
-            ? "Once rejected, this student cannot reapply for this scholarship."
-            : "Confirm your action.",
+          ? "Once rejected, this student cannot reapply for this scholarship."
+          : "Confirm your action.",
       icon:
         newStatus === "Approved"
           ? "success"
           : newStatus === "Rejected"
-            ? "warning"
-            : "info",
+          ? "warning"
+          : "info",
       showCancelButton: true,
       confirmButtonText: `Yes, ${actionText}`,
       cancelButtonText: "Cancel",
@@ -68,12 +77,11 @@ export default function SponsorApplications() {
         newStatus === "Approved"
           ? "#4CAF50"
           : newStatus === "Rejected"
-            ? "#e74c3c"
-            : "#3498db",
+          ? "#e74c3c"
+          : "#3498db",
       cancelButtonColor: "#999",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        // ✅ Dispatch API call
         await dispatch(updateApplicationStatus(id, newStatus, modifiedBy));
 
         setTimeout(() => {
@@ -91,8 +99,6 @@ export default function SponsorApplications() {
     });
   };
 
-
-  // 💬 Handle local messaging UI (not stored in backend)
   const sendMessage = () => {
     if (!newMessage.trim() || !selectedStudent) return;
     setSelectedStudent({
@@ -105,11 +111,19 @@ export default function SponsorApplications() {
     setNewMessage("");
   };
 
-  // 🧠 Filter logic
+  // Filter application list
   const filteredApplications = useMemo(() => {
     if (filter === "All") return applications;
     return applications.filter((app) => normalize(app.status) === normalize(filter));
   }, [applications, filter]);
+
+  // Pagination
+  const paginatedApplications = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredApplications.slice(start, start + pageSize);
+  }, [filteredApplications, currentPage]);
+
+  const totalPages = Math.ceil(filteredApplications.length / pageSize);
 
   const displayStatus = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -117,13 +131,10 @@ export default function SponsorApplications() {
   if (error) return <p className="error">Error loading applications.</p>;
 
   return (
-
     <div className="page-split">
-
       <div className="left-container">
         <SponsorLayout name={name} handleLogout={handleLogout} />
       </div>
-
 
       <div className="right-container">
         <div className="mobile-sponsor">
@@ -146,9 +157,14 @@ export default function SponsorApplications() {
 
           {/* Applications List */}
           <div className="application-list">
-            {filteredApplications.length > 0 ? (
-              filteredApplications.map((app) => (
-                <div key={app.applicationId} className="application-card">
+            {paginatedApplications.length > 0 ? (
+              paginatedApplications.map((app) => (
+                <div
+                  key={app.applicationId}
+                  className="application-card"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleViewApplication(app.applicationId)}
+                >
                   <div className="application-info">
                     <h3 className="student-name">
                       {app.firstName} {app.lastName}
@@ -159,26 +175,25 @@ export default function SponsorApplications() {
                       {displayStatus(app.status)}
                     </span>
                   </div>
-                  <div className="application-actions">
-                    {/* VIEW BUTTON */}
-                    <button
-                      className="btn btn-view"
-                      onClick={() => handleViewApplication(app.applicationId)}
-                    >
-                      View
-                    </button>
 
+                  <div className="application-actions">
                     {["pending", "submitted", "under review"].includes(normalize(app.status)) && (
                       <>
                         <button
                           className="btn btn-approve"
-                          onClick={() => handleUpdateStatus(app.applicationId, "Approved")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpdateStatus(app.applicationId, "Approved");
+                          }}
                         >
                           Approve
                         </button>
                         <button
                           className="btn btn-reject"
-                          onClick={() => handleUpdateStatus(app.applicationId, "Rejected")}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpdateStatus(app.applicationId, "Rejected");
+                          }}
                         >
                           Reject
                         </button>
@@ -188,7 +203,10 @@ export default function SponsorApplications() {
                     {normalize(app.status) === "approved" && (
                       <button
                         className="btn btn-fund"
-                        onClick={() => handleUpdateStatus(app.applicationId, "Funded")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUpdateStatus(app.applicationId, "Funded");
+                        }}
                       >
                         Fund Student
                       </button>
@@ -196,18 +214,17 @@ export default function SponsorApplications() {
 
                     <button
                       className="btn btn-message"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setSelectedStudent({
                           ...app,
                           messages: app.messages || [],
-                        })
-                      }
+                        });
+                      }}
                     >
                       Messages ({(app.messages || []).length})
                     </button>
                   </div>
-
-
                 </div>
               ))
             ) : (
@@ -220,15 +237,42 @@ export default function SponsorApplications() {
                 ) : (
                   <h3>No {filter} applications</h3>
                 )}
-              </div>)}
+              </div>
+            )}
           </div>
+
+          {/* Pagination */}
+          {filteredApplications.length > 0 && (
+            <div className="pagination">
+ <button
+      className="btn"
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((prev) => prev - 1)}
+    >
+      Prev
+    </button>
+
+    <span className="page-indicator">
+      {currentPage} / {totalPages}
+    </span>
+
+    <button
+      className="btn"
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((prev) => prev + 1)}
+    >
+      Next
+    </button>
+  </div>
+)}
         </div>
 
-        {/* 💬 Modal for Messages */}
+        {/* Messages Modal */}
         {selectedStudent && (
           <div className="modal-overlay">
             <div className="modal">
               <h2>Messages with {selectedStudent.firstName}</h2>
+
               <div className="messages-box">
                 {selectedStudent.messages.length === 0 ? (
                   <p className="empty">No messages yet.</p>
@@ -242,7 +286,6 @@ export default function SponsorApplications() {
                 )}
               </div>
 
-              {/* Send Message Box */}
               <div className="send-box">
                 <textarea
                   rows="3"

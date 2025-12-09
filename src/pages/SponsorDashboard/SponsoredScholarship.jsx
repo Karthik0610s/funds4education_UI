@@ -5,6 +5,7 @@ import "../styles.css";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { logout } from "../../app/redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import { Pointer } from "lucide-react";
 export default function SponsoredScholarship() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.scholarship);
@@ -20,6 +21,12 @@ const name = localStorage.getItem("name") || "Student";
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId, "Approved")); 
   }, [dispatch]);
+
+  const handleViewApplication = (appId) => {
+    navigate(`/student/scholarship-application/${appId}/view`);
+  };
+
+  
 
   const approvedApplications = useMemo(() => {
     return applications.filter(
@@ -55,13 +62,16 @@ const name = localStorage.getItem("name") || "Student";
         ) : (
           <div className="application-list">
             {approvedApplications.map((app) => (
-              <div key={app.applicationId} className="application-card">
+              <div key={app.applicationId} className="application-card"
+              style={{cursor: "Pointer" }} 
+             onClick={() => handleViewApplication(app.applicationId)}
+              >
                 <div className="application-info">
                   <h3 className="student-name">
                     {app.firstName} {app.lastName}
                   </h3>
                   <p>Course: {app.courseOrMajor || "No Course Info"}</p>
-                  <p>School: {app.schoolName || "N/A"}</p>
+                  <p>School/College: {app.schoolName || "N/A"}</p>
                   <p>Application Date: {new Date(app.applicationDate).toLocaleDateString()}</p>
                   <span className="status approved">Approved</span>
                 </div>
