@@ -33,7 +33,8 @@ addscholarshippage:"/sponsor-dashboard/addscholarshipPage",
  scholarshipViewPage: "/scholarship/:id",
  loginSuccess:"/login-success",
  SponsoredScholarship: "/Sponsored-Scholarship",
- ForgotPassword:"/forgot-password"
+ ForgotPassword:"/forgot-password",
+ viewApplication:"/student/scholarship-application/:id/view",
 };
 
 

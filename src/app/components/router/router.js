@@ -36,6 +36,7 @@ import ScholarshipViewPage from "../../../pages/studentscholarship/view.jsx";
 import LoginSuccess from "../../../pages/login/loginsuccess.jsx";
 import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredScholarship.jsx";
 import ForgotPassword from "../../../pages/ForgotPassword/forgotPassword.jsx";
+import ViewApplication from "../../../pages/student/scholarshipapplication/viewApplication.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 const routeToVariant = {
@@ -138,6 +139,7 @@ function App() {
           <Route path={RP.loginSuccess} element={< LoginSuccess />} />
           <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship />} />
           <Route path={RP.ForgotPassword} element={<ForgotPassword />} />
+          <Route path={RP.viewApplication} element={<ViewApplication />} />
         </Routes>
       </Layout>
     </Router>

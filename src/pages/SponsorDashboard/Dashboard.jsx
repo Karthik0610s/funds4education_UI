@@ -9,7 +9,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { logout } from "../../app/redux/slices/authSlice";
-import { fetchApplicationsBySponsor } from "../../app/redux/slices/ScholarshipSlice";
+import { 
+  fetchApplicationsBySponsor,
+  updateApplicationStatus
+} from "../../app/redux/slices/ScholarshipSlice";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { routePath as RP } from "../../app/components/router/routepath";
 import Header from "../../app/components/header/header";
@@ -27,6 +30,62 @@ export default function SponsorDashboard() {
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleUpdateStatus = (id, newStatus) => {
+  const modifiedBy = localStorage.getItem("name") || "SponsorUser";
+  const sponsorId = localStorage.getItem("userId");
+
+  const actionText =
+    newStatus === "Approved"
+      ? "approve"
+      : newStatus === "Rejected"
+      ? "reject"
+      : newStatus === "Funded"
+      ? "fund"
+      : "update";
+
+  Swal.fire({
+    title: `Are you sure you want to ${actionText} this application?`,
+    text:
+      newStatus === "Approved"
+        ? "Once approved, this student will be eligible for funding."
+        : newStatus === "Rejected"
+        ? "Once rejected, this student cannot reapply for this scholarship."
+        : "Confirm your action.",
+    icon:
+      newStatus === "Approved"
+        ? "success"
+        : newStatus === "Rejected"
+        ? "warning"
+        : "info",
+    showCancelButton: true,
+    confirmButtonText: `Yes, ${actionText}`,
+    cancelButtonText: "Cancel",
+    confirmButtonColor:
+      newStatus === "Approved"
+        ? "#4CAF50"
+        : newStatus === "Rejected"
+        ? "#e74c3c"
+        : "#3498db",
+    cancelButtonColor: "#999",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      await dispatch(updateApplicationStatus(id, newStatus, modifiedBy));
+
+      setTimeout(() => {
+        dispatch(fetchApplicationsBySponsor(sponsorId));
+      }, 800);
+
+      Swal.fire({
+        icon: "success",
+        title: "Updated!",
+        text: `Application has been ${newStatus.toLowerCase()} successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
+  });
+};
+
 
   const handleLogout = () => {
     dispatch(logout());
@@ -63,6 +122,21 @@ export default function SponsorDashboard() {
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
+
+  const handleViewApplication = (id) => {
+  navigate(`/student/scholarship-application/${id}/view`);
+};
+
+
+
+const [currentPage, setCurrentPage] = useState(1);
+const pageSize = 5; // number of applications per page
+
+const filteredApps = applications.filter(s =>
+  ["approved", "submitted"].includes((s.status || "").toLowerCase())
+);
+
+const totalPages = Math.ceil(filteredApps.length / pageSize);
 
 
   // disable back button
@@ -227,7 +301,6 @@ const formatAmount = (val) => {
             </div>
           </div>
 
-          <h3 className="sub-title">Student Profiles</h3>
 
           {/* <div className="students-list">
             {[
@@ -267,46 +340,49 @@ const formatAmount = (val) => {
               </div>
             ))}
           </div> */}
-          <div className="students-list">
+         {/* 
+<h3 className="sub-title">Student Profiles</h3>
+
+<div className="students-list">
   {approvedApplications.map((s, i) => (
     <div key={i} className="student-card">
       <div className="student-info">
 
         <img src={student1} alt={s.firstName} className="student-avatar" />
 
-      <div className="student-details">
+        <div className="student-details">
+          <p className="student-name">
+            <strong>{s.firstName} {s.lastName}</strong>
+            <span className="sch-name"> - {s.scholarshipName}</span>
+          </p>
 
-  <p className="student-name">
-    <strong>{s.firstName} {s.lastName}</strong>
-    <span className="sch-name"> - {s.scholarshipName}</span>
-  </p>
-<div className="app-row">
-  <div className="info-row">
-    <span className="label">Amount</span>
-   {/* <span className="value">₹{s.amount}</span>*/}
-   <span className="value">₹{s.amount}</span>
-  </div>
-  
-</div>
-  <div className="info-row">
-    <span className="label">Applied On</span>
-    <span className="value">
-      {new Date(s.applicationDate).toLocaleDateString()}
-    </span>
-  </div>
+          <div className="app-row">
+            <div className="info-row">
+              <span className="label">Amount</span>
+              <span className="value">₹{s.amount}</span>
+            </div>
+          </div>
 
-  {/* STATUS + BUTTON ROW */}
-  <div className="status-action-row">
-    <span className="status-badge">{s.status.toUpperCase()}</span>
-    <button className="msg-btn">Message</button>
-  </div>
+          <div className="info-row">
+            <span className="label">Applied On</span>
+            <span className="value">
+              {new Date(s.applicationDate).toLocaleDateString()}
+            </span>
+          </div>
 
-</div>
+          <div className="status-action-row">
+            <span className="status-badge">{s.status.toUpperCase()}</span>
+            <button className="msg-btn">Message</button>
+          </div>
+        </div>
 
       </div>
     </div>
   ))}
 </div>
+*/}
+
+
 
 
           <div className="applications">
@@ -333,76 +409,119 @@ const formatAmount = (val) => {
               </div>
             </div> */}
 <div className="app-card-container">
-              {applications.map((s, i) => {
- 
-                // Determine progress width based on status
-                const progressMap = {
-                  APPROVED: 80,
-                  FUNDED: 100,
-                  REJECTED: 0,
-                  SUBMITTED: 40,
-                  "IN REVIEW": 60,
-                  DRAFT: 20
-                };
- 
-                const progress = progressMap[s.status?.toUpperCase()] ?? 0;
 
-                return (
-                  <div key={i} className="app-card">
- 
-                    <div className="app-card-header">
-                      <p>
-                        <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
-                      </p>
-<span className={`status ${s.status.toLowerCase()}`}>
-  <strong>{s.status.toUpperCase()}</strong>
-</span>
-                    </div>
- 
-                    <div className="app-row">
-                      <span>Scholarship Amount</span>
-                   { /*  <span><strong>₹{s.amount}</strong></span>
-                  <span>
-    <strong>
-      ₹{
-        typeof s.amount === "string"
-          ? s.amount.replace(/₹|Rs\.?/gi, "").trim() // remove ₹, Rs, Rs.
-          : s.amount
-      }
-    </strong>
-  </span>*/}
- <span>
-  <strong>{formatAmount(s.amount)}</strong>
+  {applications
+    .filter(s => ["approved", "submitted"].includes((s.status || "").toLowerCase()))
+      //.sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
+     .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+     
+  .map((s, i) => {
+      const progressMap = {
+        APPROVED: 80,
+        FUNDED: 100,
+        REJECTED: 0,
+        SUBMITTED: 40,
+        "IN REVIEW": 60,
+        PENDING: 40,
+        DRAFT: 20
+      };
 
-</span>
+      const progress = progressMap[s.status?.toUpperCase()] ?? 0;
+      const statusNorm = (s.status || "").toLowerCase();
 
-                    </div>
- 
-                    <div className="app-row">
-                      <span>Application Date</span>
-                      <span >{new Date(s.applicationDate).toLocaleDateString()}</span>
-                    </div>
- 
-                    <div className="app-row">
-                      <span>Funds Disbursed</span>
- 
-                      <div className="progress-bar">
-                        <div
-                          className="progress"
-                          style={{ width: `${progress}%` }}
-                        ></div>
-                      </div>
- 
-                    </div>
- 
-                    {/* <div className="app-row">
-                      <span>Customize Branding</span>
-                    </div> */}
- 
-                  </div>
-                );
-              })}
+      return (
+        <div key={i} className="app-card"
+        
+        onClick={() => handleViewApplication(s.applicationId)} style={{ cursor: "pointer" }}>
+          <div className="app-card-header">
+            <p>
+              <strong>{s.firstName} {s.lastName}</strong> – {s.scholarshipName}
+            </p>
+            <span className={`status ${statusNorm}`}>
+              <strong>{s.status.toUpperCase()}</strong>
+            </span>
+          </div>
+
+          <div className="app-row">
+            <span>Scholarship Amount</span>
+            <strong>{formatAmount(s.amount)}</strong>
+          </div>
+
+          <div className="app-row">
+            <span>Application Date</span>
+            <span>{new Date(s.applicationDate).toLocaleDateString()}</span>
+          </div>
+
+          <div className="app-row">
+            <span>Funds Disbursed</span>
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${progress}%` }}></div>
             </div>
+          </div>
+
+          <div className="application-actions">
+            {statusNorm === "submitted" && (
+              <>
+                <button
+  className="btn btn-approve"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Approved");
+  }}
+>
+  Approve
+</button>
+
+<button
+  className="btn btn-reject"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Rejected");
+  }}
+>
+  Reject
+</button>
+              </>
+            )}
+
+            {statusNorm === "approved" && (
+              <button
+  className="btn btn-fund"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleUpdateStatus(s.applicationId, "Funded");
+  }}
+>
+  Fund Student
+</button>
+            )}
+          </div>
+        </div>
+      );
+    })}
+</div>
+
+
+<div className="pagination">
+  <button
+    disabled={currentPage === 1}
+    onClick={() => setCurrentPage(prev => prev - 1)}
+  >
+    Prev
+  </button>
+
+  <span>
+    Page {currentPage} / {totalPages}
+  </span>
+
+  <button
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(prev => prev + 1)}
+  >
+    Next
+  </button>
+</div>
+
 
 
 
