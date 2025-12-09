@@ -47,14 +47,15 @@ export const fetchScholarshipListReq = async (UserId, role) => {
 export const fetchScholarshipByStatusReq = async (filters = {}) => {
   try {
     debugger;
-    const { statusType } = filters;
+       const { statusType, filterType } = filters;
     if (!statusType) {
       return { error: true, data: [], message: "", errorMsg: "Invalid StatusType" };
     }
 
     // ✅ Build params object with correct backend names
     const params = {};
-    params.StatusType = statusType; // 🔹 Note: capital S to match backend
+    params.StatusType = statusType;
+    params.filterType=filterType;// 🔹 Note: capital S to match backend
       const studentId = localStorage.getItem("id");
     if (studentId) params.StudentId = studentId;
     const role = localStorage.getItem("userType");
@@ -258,11 +259,12 @@ export const fetchApplicationsBySponsorReq = async (sponsorId, status = "") => {
 
 //
 // ✅ 5️⃣ Update Application Status (Approve / Reject)
-//
+
 export const updateApplicationStatusReq = async (
   applicationId,
   status,
-  modifiedBy
+  modifiedBy,
+  fundAmount
 ) => {
   try {
     if (!applicationId || !status) {
@@ -275,8 +277,7 @@ export const updateApplicationStatusReq = async (
     }
 
     // ✅ Backend endpoint for updating application status
-    const url = `${ApiKey.ApplicationStatus}/Update?applicationId=${applicationId}&status=${status}&modifiedBy=${modifiedBy || "Sponsor"}`;
-
+   const url = `${ApiKey.ApplicationStatus}/Update?applicationId=${applicationId}&status=${status}&modifiedBy=${modifiedBy}&fundAmount=${fundAmount ?? 0}`;
     const res = await publicAxios.put(url);
 
     const _data = res.data?.data || res.data || {};

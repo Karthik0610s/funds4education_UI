@@ -15,10 +15,18 @@ import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
+import { act } from "@testing-library/react";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [eligibilityTab, setEligibilityTab] = useState("all"); // default
+  //const [activeTab, setActiveTab] = useState("live"); // default
+//const userId = localStorage.getItem("userId");
+//const roleId = localStorage.getItem("roleId");
+//const roleName = localStorage.getItem("roleName");
+
+// Condition: user is logged in
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,8 +46,8 @@ const StudentDashboard = () => {
     Number(localStorage.getItem("userId"));
   const name =
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
-
-
+const roleName = localStorage.getItem("roleName");
+const canSeeEligibility = userId && roleId && roleName;
   const [activeTab, setActiveTab] = useState("live");
   const [searchQuery, setSearchQuery] = useState("");
   /*const [filters, setFilters] = useState({
@@ -92,6 +100,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const activeFilters = {
       statusType: "both",
+      filterType:eligibilityTab,
       classId: filters.class.length ? filters.class : null,
       countryId: filters.country.length ? filters.country : null,
       genderId: filters.gender.length ? filters.gender : null,
@@ -104,6 +113,7 @@ const StudentDashboard = () => {
   }, [
     dispatch,
     activeTab,
+     eligibilityTab, 
     filters.class,
     filters.country,
     filters.gender,
@@ -236,7 +246,7 @@ const StudentDashboard = () => {
       button: "Apply Now",
     },
     {
-      title: "💻 Full Stack Development Course",
+      title: "💻 Full Stack Development",
       text: "Job Guarantee Program",
       button: "Enroll Now",
     },
@@ -263,6 +273,48 @@ const StudentDashboard = () => {
       button: "Register Now",
     },
   ];
+const ads1 = [
+  {
+    title: "💻 Full-Stack Developer Course",
+    text: "MERN/Java/Python Tracks Available",
+    button: "Enroll Now",
+  },
+  {
+    title: "📖 Government Exam Coaching",
+    text: "SSC | Bank | UPSC | State Exams",
+    button: "Start Preparation",
+  },
+  {
+    title: "🧾 Resume & Portfolio Builder",
+    text: "Create ATS-Friendly Resume in Minutes",
+    button: "Build Resume",
+  },
+  {
+    title: "📸 Graphic Design Masterclass",
+    text: "Photoshop, Illustrator & UI/UX",
+    button: "Join Workshop",
+  },
+  {
+    title: "🏦 Personal Loan Assistance",
+    text: "Instant Approval | High Eligibility",
+    button: "Check Eligibility",
+  },
+  {
+    title: "🧳 International Travel Deals",
+    text: "Cheap Flights, Hotels & Packages",
+    button: "Explore Deals",
+  },
+  {
+    title: "👩‍⚕️ Health & Fitness Coaching",
+    text: "Diet Plans, Weight Loss Programs",
+    button: "Get Plan",
+  },
+  {
+    title: "🎧 Spoken English Classes",
+    text: "Improve Communication + Fluency",
+    button: "Join Now",
+  },
+];
 
   const [currentAd, setCurrentAd] = useState(0);
 
@@ -276,13 +328,13 @@ const StudentDashboard = () => {
   return (
     <div>
       <Header variant="student-profile" />
-      <div className="mobile-header">
+      {/*<div className="mobile-header">
         <div className="mobile-menu-btn" onClick={() => setShowMobileMenu(true)}>
           ☰
         </div>
 
         <h2 className="mobile-user-name">{name ?? "Student"}</h2>
-      </div>
+      </div>*/}
 
       {/* ⭐ MOBILE MENU DRAWER */}
       {showMobileMenu && (
@@ -297,7 +349,7 @@ const StudentDashboard = () => {
         </div>
       )}
 
-      {userId && roleId ? (
+      {/* {userId && roleId ? (
         <div className="student-navbar">
           <div className="user-info">
             <h2>{name ?? "Student"}</h2>
@@ -307,13 +359,13 @@ const StudentDashboard = () => {
               Dashboard
             </Link>
             <Link to="/application">Applications</Link>
-            {/* <Link to="/scholarship-match">Matches</Link>
-            <Link to={RP.studentmessages}>Messages</Link> */}
-            
-            {/* <Link to={RP.studentwallet}>Wallet</Link> */}
-          </nav>
+            /* <Link to="/scholarship-match">Matches</Link>
+            <Link to={RP.studentmessages}>Messages</Link> */
+
+            /* <Link to={RP.studentwallet}>Wallet</Link> */
+         /* </nav>
         </div>
-      ) : null}
+      ) : null}*/}
       {/* ⭐ MOBILE FILTER ICON */}
       <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
         <FaFilter />
@@ -408,45 +460,99 @@ const StudentDashboard = () => {
             Clear All Filters
           </button>
 
-          {userId ? (
+          {/*{userId ? (
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
-          ) : null}
+          ) : null}*/}
 
         </aside>
 
         {/* Main Content */}
         <main className="main-content">
-          <span style={{ fontSize: "34px" }}> Scholarships for Indian Students</span>
+<div className="content-layout">
+          {/* LEFT SIDE */}
+          <div className="left-content" >
 
-          {/* Search Box */}
-          <div className="search-box mb-3">
-            <FaSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search by name, eligibility or award..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+            {/* Title */}
+            <span
+              style={{
+                fontSize: "34px",
+                display: "block",
+                margin: "12px auto",
+              }}
+            >
+              Scholarships for Indian Students
+            </span>
 
-          <div className="tab-container">
-            <div className="tab-group">
-              <button
-                className={`tab ${activeTab === "live" ? "active" : ""}`}
-                onClick={() => setActiveTab("live")}
-              >
-                Live Scholarships ({liveScholarships.length})
-              </button>
-              <button
-                className={`tab ${activeTab === "upcoming" ? "active" : ""}`}
-                onClick={() => setActiveTab("upcoming")}
-              >
-                Upcoming Scholarships ({upcomingScholarships.length})
-              </button>
+            {/* Search Box */}
+            <div className="tab-card-container search-card">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search by name, eligibility or award..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-          </div>
+
+
+
+            {/* Parent Tabs */}
+            <div className="tabs-wrapper">
+
+              {/* CARD 1 — Eligibility + All */}
+              <div className="tab-card-container">
+               <button
+  className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
+  onClick={() => canSeeEligibility && setEligibilityTab("eligibility")}
+  disabled={!canSeeEligibility}
+>
+  Eligibility
+</button>
+
+                <button
+                  className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
+                  onClick={() => setEligibilityTab("all")}
+                >
+                  All
+                </button>
+              </div>
+
+              {/* CARD 2 — Live + Upcoming */}
+              <div className="tab-card-container">
+                <button
+                  className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
+                  onClick={() => setActiveTab("live")}
+                >
+                  Live ({liveScholarships.length})
+                </button>
+
+                <button
+                  className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
+                  onClick={() => setActiveTab("upcoming")}
+                >
+                  Upcoming ({upcomingScholarships.length})
+                </button>
+              </div>
+
+
+
+
+
+
+            </div>
+ </div>
+            {/* RIGHT SIDE ADS */}
+            <div className="right-content">
+              <div className="ad-box">
+                <h4>{ads1[currentAd].title}</h4>
+                <p>{ads1[currentAd].text}</p>
+                <button>{ads1[currentAd].button}</button>
+              </div>
+            </div>
+
+         </div>
 
           {/* Scholarships Grid */}
           <div className="content-layout">
@@ -467,6 +573,10 @@ const StudentDashboard = () => {
                   const isFeatured = featuredIds.includes(
                     s.id || s.scholarshipId
                   );
+                  // Extract folder name from Windows path
+                  const folderName = s.logoPath
+                    ? s.logoPath.split(/[/\\]/).pop()
+                    : "";
                   // ✅ Clean logo name (remove trailing | and spaces)
                   const cleanLogoName = s.logoName?.split("|")[0]?.trim() || "";
 
@@ -474,11 +584,16 @@ const StudentDashboard = () => {
                   const encodedLogoName = encodeURIComponent(cleanLogoName);
 
                   // ✅ Build proper image URL
+                  /* const imageUrl =
+                     folderName && cleanLogoName
+                       ? `${baseUrl}/${s.logoPath
+                         .replace(/^.*Scholarship[\\/]/, "Scholarship/")
+                         .replace(/\\/g, "/")}/${encodedLogoName}`
+                       : "/images/before.png";
+ */
                   const imageUrl =
-                    s.logoPath && cleanLogoName
-                      ? `${baseUrl}/${s.logoPath
-                        .replace(/^.*Scholarship[\\/]/, "Scholarship/")
-                        .replace(/\\/g, "/")}/${encodedLogoName}`
+                    folderName && cleanLogoName
+                      ? `${baseUrl}/Scholarship/${folderName}/${cleanLogoName}`
                       : "/images/before.png";
 
                   // ✅ Create alt text without extension
@@ -501,7 +616,11 @@ const StudentDashboard = () => {
                       {!activeTab.includes("upcoming") && isFeatured && (
                         <div className="featured-tag">Featured</div>
                       )}
-                      {activeTab === "live" && (
+                     
+
+
+                      <div className="card-header-flex">
+                         {activeTab === "live" && (
                         <>
                           {s.endDate === null ? (
                             <div className="deadline-badge open">
@@ -516,9 +635,6 @@ const StudentDashboard = () => {
                           )}
                         </>
                       )}
-
-
-                      <div className="card-header-flex">
                         <div className="logo-wrapper">
                           {/*<img
                             src={s.logopath}
@@ -592,7 +708,7 @@ const StudentDashboard = () => {
             </div>
 
             <div className="ads-container">
-              <div className="ad-box">
+              <div className="ad-box" style={{marginBottom:"8px"}}>
                 <h4>{ads[currentAd].title}</h4>
                 <p>{ads[currentAd].text}</p>
                 <button>{ads[currentAd].button}</button>
