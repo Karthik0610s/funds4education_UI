@@ -1,7 +1,6 @@
 import { FiBell, FiUpload, FiDownload } from "react-icons/fi";
 import { useEffect, useState, useMemo } from "react";
 import "../../pages/styles.css";
-import logo from "../../app/assests/Logo.png";
 import student1 from "../../app/assests/Img1.jpg";
 import student2 from "../../app/assests/img2.jpg";
 import student3 from "../../app/assests/img3.jpg";
