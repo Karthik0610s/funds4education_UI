@@ -8,8 +8,9 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
 
   return (
     <>
+     
       {/* ⭐ MOBILE TOP BAR */}
-      <div className="sponsor-mobile-bar">
+     {/* <div className="sponsor-mobile-bar">
         <button
           className="sponsor-mobile-btn"
           onClick={() => setDrawerOpen(!drawerOpen)}
@@ -24,13 +25,13 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
         <div className="sponsor-mobile-right"></div>
       </div>
 
-      {/* ⭐ OVERLAY */}
+     
       {drawerOpen && (
         <div
           className="sponsor-drawer-overlay"
           onClick={() => setDrawerOpen(false)}
         ></div>
-      )}
+      )}*/}
 
       {/* ⭐ DRAWER */}
       <aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
@@ -78,14 +79,14 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
           <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Sponsored Scholarship</Link>
           <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
           {/* <Link to="/sponsor-dashboard/report" className="nav-link">Reports</Link> */}
-          <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
-          { <Link to={RP.resetPassword}>Reset Password</Link> }
+         {/* <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
+          { <Link to={RP.resetPassword}>Reset Password</Link> }*/}
 
         </nav>
 
-        <div style={{ marginTop: "auto", padding: "1rem" }}>
+        {/*<div style={{ marginTop: "auto", padding: "1rem" }}>
           <button onClick={handleLogout} className="logout-button">Logout</button>
-        </div>
+        </div>*/}
       </aside>
 
       {/* ⭐ PAGE CONTENT */}

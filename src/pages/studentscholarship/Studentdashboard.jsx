@@ -99,7 +99,7 @@ const canSeeEligibility = userId && roleId && roleName;
   // 🔹 Scholarships reload when filters change
   useEffect(() => {
     const activeFilters = {
-      statusType: activeTab,
+      statusType: "both",
       filterType:eligibilityTab,
       classId: filters.class.length ? filters.class : null,
       countryId: filters.country.length ? filters.country : null,
@@ -273,6 +273,48 @@ const canSeeEligibility = userId && roleId && roleName;
       button: "Register Now",
     },
   ];
+const ads1 = [
+  {
+    title: "💻 Full-Stack Developer Course",
+    text: "MERN/Java/Python Tracks Available",
+    button: "Enroll Now",
+  },
+  {
+    title: "📖 Government Exam Coaching",
+    text: "SSC | Bank | UPSC | State Exams",
+    button: "Start Preparation",
+  },
+  {
+    title: "🧾 Resume & Portfolio Builder",
+    text: "Create ATS-Friendly Resume in Minutes",
+    button: "Build Resume",
+  },
+  {
+    title: "📸 Graphic Design Masterclass",
+    text: "Photoshop, Illustrator & UI/UX",
+    button: "Join Workshop",
+  },
+  {
+    title: "🏦 Personal Loan Assistance",
+    text: "Instant Approval | High Eligibility",
+    button: "Check Eligibility",
+  },
+  {
+    title: "🧳 International Travel Deals",
+    text: "Cheap Flights, Hotels & Packages",
+    button: "Explore Deals",
+  },
+  {
+    title: "👩‍⚕️ Health & Fitness Coaching",
+    text: "Diet Plans, Weight Loss Programs",
+    button: "Get Plan",
+  },
+  {
+    title: "🎧 Spoken English Classes",
+    text: "Improve Communication + Fluency",
+    button: "Join Now",
+  },
+];
 
   const [currentAd, setCurrentAd] = useState(0);
 
@@ -428,9 +470,9 @@ const canSeeEligibility = userId && roleId && roleName;
 
         {/* Main Content */}
         <main className="main-content">
-<div className="content-wrapper">
+<div className="content-layout">
           {/* LEFT SIDE */}
-          <div className="left-content">
+          <div className="left-content" >
 
             {/* Title */}
             <span
@@ -504,9 +546,9 @@ const canSeeEligibility = userId && roleId && roleName;
             {/* RIGHT SIDE ADS */}
             <div className="right-content">
               <div className="ad-box">
-                <h4>{ads[currentAd].title}</h4>
-                <p>{ads[currentAd].text}</p>
-                <button>{ads[currentAd].button}</button>
+                <h4>{ads1[currentAd].title}</h4>
+                <p>{ads1[currentAd].text}</p>
+                <button>{ads1[currentAd].button}</button>
               </div>
             </div>
 
@@ -666,7 +708,7 @@ const canSeeEligibility = userId && roleId && roleName;
             </div>
 
             <div className="ads-container">
-              <div className="ad-box">
+              <div className="ad-box" style={{marginBottom:"8px"}}>
                 <h4>{ads[currentAd].title}</h4>
                 <p>{ads[currentAd].text}</p>
                 <button>{ads[currentAd].button}</button>

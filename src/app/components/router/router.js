@@ -44,7 +44,7 @@ const routeToVariant = {
   [RP.studentdashboard]: "student-profile",
   [RP.scholarshipdiscovery]: "discovery",
   [RP.scholarshipmatch]: "student",
-  [RP.sponsordashboard]: "dashboard",
+  [RP.sponsordashboard]: "sponsor-profile",
   [RP.login]: "public",
   [RP.signup]: "public",
   [RP.studentwalletredemption]: "studentwalletredemption",
@@ -56,14 +56,14 @@ const routeToVariant = {
 
   [RP.monetizationads]: "monetizationads",
   [RP.sponsoraddashboard]: "sponsoraddashboard",
-  [RP.applications]: "student-profile",
-  [RP.addapplication]: "application",
-  [RP.sponsorapplication]: "sponsorapplication",
-  [RP.SponsorSignUpPage]: "sponsorsignup",
-  [RP.scholarshipPage]: "scholarshippage",
-  [RP.scholarshipViewPage]: "scholarshipview",
-  [RP.loginSuccess]: "public",
-  [RP.viewApplication]: "viewapplication",
+  [RP.applications]: "public",
+  [RP.addapplication]: "public",
+  [RP.sponsorapplication]:"sponsorapplication",
+  [RP.SponsorSignUpPage]:"sponsorsignup",
+  [RP.scholarshipPage]:"scholarshippage",
+ [RP.scholarshipViewPage]: "public",
+  [RP.loginSuccess]:"public",
+  [RP.SponsoredScholarship]:"sponsor-profile"
 };
 
 // 🔹 Layout wrapper

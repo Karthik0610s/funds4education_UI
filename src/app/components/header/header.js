@@ -129,6 +129,71 @@ const Header = ({ variant = "public" }) => {
             </div>
           </div>
         );
+        case "sponsor-profile":
+        return (
+          <div className="header-actions student-profile-header" ref={dropdownRef}>
+            {/* RIGHT SIDE */}
+            <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              {isLoggedIn ? (
+                <span style={{ fontWeight: 600 }}>
+                  Welcome, {userName || "User"}
+                </span>
+              ) : (
+                <span
+                  style={{ cursor: "pointer", fontWeight: 600 }}
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </span>
+              )}
+
+              {/* Bell Icon */}
+              <FiBell size={22} className="cursor-pointer" />
+
+              {/* Dropdown Icon */}
+              <div className="icon-circle" onClick={toggleDropdown}>?</div>
+
+              {/* Dropdown Menu */}
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      navigate("/view-sponsor-profile");
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    Profile
+                  </div>
+
+                  <div
+                    className="dropdown-item"
+                    onClick={() => {
+                      navigate("/reset-password");
+                      setDropdownOpen(false);
+                    }}
+                  >
+                    Reset Password
+                  </div>
+                </div>
+              )}
+
+              {/* Logout */}
+              {isLoggedIn && (
+                <FiLogOut
+                  size={22}
+                  className="logout-icon"
+                  onClick={() => {
+                    localStorage.clear();
+                    dispatch(logout());
+                    navigate("/");
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              )}
+            </div>
+          </div>
+        );
          case "student":
         return (
           <div className="nav-links">
@@ -214,6 +279,49 @@ const Header = ({ variant = "public" }) => {
 
               <div className="mobile-item" onClick={() => { navigate("/applications"); setMenuOpen(false); }}>
                 Applications
+              </div>
+
+              {/*<div
+                className="mobile-item logout-item"
+                onClick={() => {
+                  localStorage.clear();
+                  dispatch(logout());
+                  navigate("/");
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </div>*/}
+            </>
+          ) 
+           : (
+        renderMobileLinks("public")  // ⬅ HERE IS THE FIX
+      )}
+        </>
+      );
+
+
+       case "sponsor-profile":
+      return (
+        <>
+          {isLoggedIn ? (
+            <>
+              <div className="mobile-item" onClick={() => { navigate("/view-sponsor-profile"); setMenuOpen(false); }}>
+                Profile
+              </div>
+
+              <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
+                Reset Password
+              </div>
+
+              <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/sponsorapplication"); setMenuOpen(false); }}>
+                Applications
+              </div>
+              <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/scholarshipPage"); setMenuOpen(false); }}>
+                Sponsor Scholarship
+              </div>
+              <div className="mobile-item" onClick={() => { navigate("/Sponsored-Scholarship"); setMenuOpen(false); }}>
+                Approved Scholarship
               </div>
 
               {/*<div
