@@ -141,7 +141,7 @@ const handleView = (app) => {
 
   return (
     <div>
-      <Header variant="public" />
+      <Header variant="student-profile" />
      <div className="applications-header">
   <button className="btn-primary" onClick={handleBack}>Back</button>
 

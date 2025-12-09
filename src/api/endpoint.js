@@ -10,7 +10,8 @@ export const ApiKey = {
    downloadsponsorscholarshipFiles: "/Scholarship/downloadFiles",
    ScholarshipApplicationsBySponsor: "/Scholarship/bySponsor",
    ApplicationStatus: "/Scholarship",
-
+   SendMail:"/email",
+   
 
    signup: "/student",
    SponsorLogin: "/auth/sponsor",

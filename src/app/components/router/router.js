@@ -56,8 +56,8 @@ const routeToVariant = {
 
   [RP.monetizationads]: "monetizationads",
   [RP.sponsoraddashboard]: "sponsoraddashboard",
-  [RP.applications]: "public",
-  [RP.addapplication]: "public",
+  [RP.applications]: "student-profile",
+  [RP.addapplication]: "student-profile",
   [RP.sponsorapplication]:"sponsorapplication",
   [RP.SponsorSignUpPage]:"sponsorsignup",
   [RP.scholarshipPage]:"scholarshippage",

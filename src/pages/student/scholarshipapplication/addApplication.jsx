@@ -8,7 +8,7 @@ import {
 import "../../../pages/styles.css";
 import Swal from "sweetalert2";
 import { useNavigate, useNavigation } from "react-router-dom";
-import { fetchScholarshipApplicationByIdReq, uploadFormFilesReq } from "../../../api/scholarshipapplication/scholarshipapplication"
+import { fetchScholarshipApplicationByIdReq, uploadFormFilesReq,sendScholarshipEmailReq } from "../../../api/scholarshipapplication/scholarshipapplication"
 import { publicAxios } from "../../../api/config";
 import { ApiKey } from "../../../api/endpoint";
 import { routePath as RP } from "../../../app/components/router/routepath";
@@ -486,7 +486,9 @@ if (name === "gpaOrMarks") {
       if (applicationId && selectedFiles.length > 0) {
         await uploadFiles(applicationId);
       }
-
+      debugger;
+// NOW call email send API after upload is done
+await sendScholarshipEmailReq(applicationId);
       // Fetch updated application by ID to get the latest files
       if (applicationId) {
         debugger;
@@ -695,6 +697,7 @@ if (name === "gpaOrMarks") {
                   onChange={handleChange}
                   className={errors.studyLevel ? "input-error" : ""}>
                   <option value="">Select Study Level</option>
+                   <option value="School">School</option>
                   <option value="UG">Undergraduate</option>
                   <option value="PG">Postgraduate</option>
                   <option value="PhD">Ph.D.</option>
