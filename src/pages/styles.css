@@ -4704,6 +4704,29 @@ textarea {
     margin-left: 0;
   }
 }
+.actions-container {
+  display: flex;
+  align-items: center;     /* vertically aligns all icons */
+  gap: 12px;               /* spacing between icons */
+  justify-content: flex-start;
+  position: relative;
+}
+.actions-container .icons-btn,
+.actions-container .status-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.actions-container button,
+.actions-container .status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;              /* remove extra height */
+  width: 24px;             /* same size for all */
+  height: 24px;
+}
+
 
 .pagination {
   display: flex;

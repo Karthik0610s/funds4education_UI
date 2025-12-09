@@ -12,7 +12,7 @@ import { logout } from "../../app/redux/slices/authSlice";
 import { fetchApplicationsBySponsor } from "../../app/redux/slices/ScholarshipSlice";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { routePath as RP } from "../../app/components/router/routepath";
-
+import Header from "../../app/components/header/header";
 export default function SponsorDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function SponsorDashboard() {
   }, [applications]);
 
   const filteredApplications = useMemo(() => {
-    debugger;
+    
     if (filter === "All") return applications;
     return applications.filter((app) => normalize(app.status) === normalize(filter));
   }, [applications, filter]);
@@ -59,7 +59,7 @@ export default function SponsorDashboard() {
     currency: "INR"
   });
   useEffect(() => {
-    debugger;
+    
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
@@ -83,7 +83,7 @@ export default function SponsorDashboard() {
     return () => window.removeEventListener("popstate", handleBack);
   }, []);
 const formatAmount = (val) => {
-  debugger;
+  
   if (!val) return "₹0";
 
   let amount = String(val).trim();
@@ -106,6 +106,8 @@ const formatAmount = (val) => {
   return `₹${amount}`;
 };
   return (
+    <>
+     <Header variant="sponsor-profile" />
     <div className="dashboard-container">
       <SponsorLayout name={name} handleLogout={handleLogout}></SponsorLayout>
       {/* ⭐ MOBILE BAR */}
@@ -411,5 +413,6 @@ const formatAmount = (val) => {
 
       </div>
     </div>
+    </>
   );
 }

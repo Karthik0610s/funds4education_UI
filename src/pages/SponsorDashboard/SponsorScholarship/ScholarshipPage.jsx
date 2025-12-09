@@ -108,7 +108,7 @@ const ScholarshipPage = () => {
 
   return (
     <>
-      <Header variant="scholarship" />
+      <Header variant="sponsor-profile" />
 
       <div className="page-split">
 

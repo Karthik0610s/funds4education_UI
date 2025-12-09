@@ -40,9 +40,16 @@ const ApplicationsPage = () => {
       );
 
   // Filter further by search query
-  const displayedApps = filteredApps.filter((app) =>
-    app.scholarshipName?.toLowerCase().includes(searchQuery.toLowerCase())
+  const displayedApps = filteredApps.filter((app) => {
+  const query = searchQuery.toLowerCase();
+
+  return (
+    app.scholarshipName?.toLowerCase().includes(query) ||
+    app.firstName?.toLowerCase().includes(query) ||
+    app.lastName?.toLowerCase().includes(query)
   );
+});
+
   useEffect(() => {
     // ✅ Open Add Modal automatically when user came from Apply Now
     if (location.state?.openAddModal) {
@@ -233,6 +240,7 @@ const handleView = (app) => {
 >
   <i className="fa-regular fa-eye"></i>
 </button>
+{app.status.toLowerCase() !== "draft" && (
 <span
   className="status-icon"
   style={{
@@ -285,8 +293,8 @@ const handleView = (app) => {
         ? "fa-solid fa-circle-check"
         : app.status.toLowerCase() === "submitted"
         ? "fa-regular fa-paper-plane"
-       // : app.status.toLowerCase() === "draft"
-        //? "fa-regular fa-file-lines"
+       : app.status.toLowerCase() === "draft"
+        ? "fa-regular fa-file-lines"
         : app.status.toLowerCase() === "rejected"
         ? "fa-solid fa-circle-xmark"
         : app.status.toLowerCase() === "funded"
@@ -297,7 +305,7 @@ const handleView = (app) => {
   ></i>
 </span>
 
-
+  )}
 
                         {/* EDIT & DELETE BUTTONS only for Draft */}
                         {app.status.toLowerCase() === "draft" && (

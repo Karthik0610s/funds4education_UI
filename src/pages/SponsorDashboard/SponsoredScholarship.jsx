@@ -5,6 +5,7 @@ import "../styles.css";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { logout } from "../../app/redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import Header from "../../app/components/header/header";
 export default function SponsoredScholarship() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.scholarship);
@@ -31,6 +32,9 @@ const name = localStorage.getItem("name") || "Student";
   if (error) return <p className="error">Error loading applications.</p>;
 
   return (
+      <>
+      <Header variant="sponsor-profile" />
+
     <div className="page-split">
     
      <div className="left-container">
@@ -76,5 +80,6 @@ const name = localStorage.getItem("name") || "Student";
       </div>
       </div>
     </div>
+    </>
   );
 }

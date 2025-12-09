@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import SponsorLayout from "../../pages/SponsorDashboard/SponsorLayout";
 import { logout } from "../../app/redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
-
+import Header from "../../app/components/header/header";
 export default function SponsorApplications() {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.scholarship);
@@ -24,7 +24,7 @@ const handleLogout = () => {
   const [newMessage, setNewMessage] = useState("");
 
   useEffect(() => {
-    debugger;
+
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId));
   }, [dispatch]);
@@ -114,7 +114,8 @@ const handleLogout = () => {
   if (error) return <p className="error">Error loading applications.</p>;
 
   return (
-    
+      <>
+      <Header variant="sponsor-profile" />
     <div className="page-split">
     
      <div className="left-container">
@@ -254,5 +255,6 @@ const handleLogout = () => {
       )}
     </div>
 </div>
+</>
   );
 }
