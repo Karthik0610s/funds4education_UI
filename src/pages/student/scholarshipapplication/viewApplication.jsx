@@ -91,14 +91,14 @@ const ViewApplication = () => {
             <h1>Scholarship Application Preview</h1>
             <p>View all details of the scholarship application.</p>
           </div>
-     {/*
+     {
           <button
             className="view-application-back-btn"
             onClick={handleBack}
           >
-            Back
+            ←  Back
           </button>
-     */}
+     }
         </div>
 
         {/* Card Section */}
@@ -140,7 +140,7 @@ const ViewApplication = () => {
     </ul>
 
     <button className="btn btn-primary mt-2" onClick={downloadFiles}>
-      Download All Documents
+      Download Documents
     </button>
   </div>
 ) : (
