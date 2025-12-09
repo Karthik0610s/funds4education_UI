@@ -69,7 +69,7 @@ export default function SponsorDashboard() {
     cancelButtonColor: "#999",
   }).then(async (result) => {
     if (result.isConfirmed) {
-      await dispatch(updateApplicationStatus(id, newStatus, modifiedBy));
+      await dispatch(updateApplicationStatus(id, newStatus, modifiedBy ));
 
       setTimeout(() => {
         dispatch(fetchApplicationsBySponsor(sponsorId));
@@ -91,11 +91,12 @@ export default function SponsorDashboard() {
     dispatch(logout());
     navigate("/login");
   };
-  const approvedApplications = useMemo(() => {
-    return applications.filter(
-      (app) => (app.status || "").toLowerCase() === "approved"
-    );
-  }, [applications]);
+ const fundedApplications = useMemo(() => {
+  return applications.filter(
+    (app) => (app.status || "").toLowerCase() === "funded"
+  );
+}, [applications]);
+
 
   const filteredApplications = useMemo(() => {
     debugger;
@@ -110,13 +111,16 @@ export default function SponsorDashboard() {
 
     return match ? Number(match[0]) : 0;
   }
-  const totalFund = approvedApplications
-    .map(s => extractNumber(s.amount))
-    .reduce((a, b) => a + b, 0);
-  const formattedFund = totalFund.toLocaleString("en-IN", {
-    style: "currency",
-    currency: "INR"
-  });
+  const totalFund = fundedApplications.reduce(
+  (sum, app) => sum + (Number(app.fundAmount) || 0),
+  0
+);
+
+const formattedFund = totalFund.toLocaleString("en-IN", {
+  style: "currency",
+  currency: "INR"
+});
+
   useEffect(() => {
     debugger;
     const sponsorId = localStorage.getItem("userId");
@@ -137,6 +141,56 @@ const filteredApps = applications.filter(s =>
 );
 
 const totalPages = Math.ceil(filteredApps.length / pageSize);
+const handleFundPopup = (application) => {
+  const { applicationId, firstName, lastName, scholarshipName, amount } = application;
+
+  Swal.fire({
+    title: "Fund Student",
+    html: `
+      <div style="text-align:left;">
+        <p><strong>Student:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Scholarship:</strong> ${scholarshipName}</p>
+        <p><strong>Scholarship Amount:</strong> ${formatAmount(amount)}</p>
+        <br/>
+        <label><strong>Enter Fund Amount:</strong></label>
+        <input type="number" id="fundAmount" class="swal2-input" placeholder="Enter amount" min="1" />
+      </div>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: "Submit Funding",
+    cancelButtonText: "Cancel",
+    preConfirm: () => {
+      const fundAmount = document.getElementById("fundAmount").value;
+
+      if (!fundAmount || Number(fundAmount) <= 0) {
+        Swal.showValidationMessage("Please enter a valid fund amount.");
+        return false;
+      }
+
+      return { fundAmount };
+    }
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const sponsorName = localStorage.getItem("name") || "SponsorUser";
+
+      await dispatch(
+        updateApplicationStatus(applicationId, "Funded", sponsorName, result.value.fundAmount)
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Student Funded!",
+        text: `Fund Amount: ₹${result.value.fundAmount}`,
+        timer: 1500,
+        showConfirmButton: false
+      });
+
+      const sponsorId = localStorage.getItem("userId");
+      setTimeout(() => dispatch(fetchApplicationsBySponsor(sponsorId)), 500);
+    }
+  });
+};
 
 
   // disable back button
@@ -290,7 +344,7 @@ const formatAmount = (val) => {
           <div className="stats-grid">
             <div className="stat-card">
               <p>Sponsored Students</p>
-              <p className="stat-value">{approvedApplications.length}</p>
+              <p className="stat-value">{fundedApplications.length}</p>
             </div>
 
             <div className="stat-card">
@@ -410,7 +464,7 @@ const formatAmount = (val) => {
 
   {applications
     .filter(s => ["approved", "submitted"].includes((s.status || "").toLowerCase()))
-      //.sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
+      .sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
      .slice((currentPage - 1) * pageSize, currentPage * pageSize)
      
   .map((s, i) => {
@@ -456,6 +510,7 @@ const formatAmount = (val) => {
               <div className="progress" style={{ width: `${progress}%` }}></div>
             </div>
           </div>
+          
 
           <div className="application-actions">
             {statusNorm === "submitted" && (
@@ -483,15 +538,16 @@ const formatAmount = (val) => {
             )}
 
             {statusNorm === "approved" && (
-              <button
+             <button
   className="btn btn-fund"
   onClick={(e) => {
     e.stopPropagation();
-    handleUpdateStatus(s.applicationId, "Funded");
+    handleFundPopup(s);
   }}
 >
   Fund Student
 </button>
+
             )}
           </div>
         </div>

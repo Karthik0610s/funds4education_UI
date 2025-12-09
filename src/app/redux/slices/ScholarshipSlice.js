@@ -347,14 +347,15 @@ export const fetchDropdownData = () => async (dispatch) => {
 
 
 export const updateApplicationStatus =
-  (applicationId, status, modifiedBy) =>
+  (applicationId, status, modifiedBy , fundAmount) =>
     async (dispatch) => {
       try {
         dispatch(setLoading());
         const res = await updateApplicationStatusReq(
           applicationId,
           status,
-          modifiedBy
+          modifiedBy,
+          fundAmount
         );
 
         if (!res.error) {
@@ -363,6 +364,7 @@ export const updateApplicationStatus =
               applicationId,
               status,
               modifiedBy,
+              fundAmount,
             })
           );
           Swal.fire({

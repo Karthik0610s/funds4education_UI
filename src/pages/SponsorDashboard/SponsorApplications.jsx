@@ -112,10 +112,17 @@ export default function SponsorApplications() {
   };
 
   // Filter application list
-  const filteredApplications = useMemo(() => {
-    if (filter === "All") return applications;
-    return applications.filter((app) => normalize(app.status) === normalize(filter));
-  }, [applications, filter]);
+const filteredApplications = useMemo(() => {
+  const sortedApps = [...applications].sort(
+    (a, b) => new Date(b.applicationDate) - new Date(a.applicationDate)
+  );
+
+  if (filter === "All") return sortedApps;
+
+  return sortedApps.filter(
+    (app) => normalize(app.status) === normalize(filter)
+  );
+}, [applications, filter]);
 
   // Pagination
   const paginatedApplications = useMemo(() => {
@@ -148,7 +155,7 @@ export default function SponsorApplications() {
             <label>Filter by status:</label>
             <select value={filter} onChange={(e) => setFilter(e.target.value)}>
               <option>All</option>
-              <option>Pending</option>
+             {/* <option>Pending</option> */}
               <option>Approved</option>
               <option>Funded</option>
               <option>Rejected</option>
@@ -170,7 +177,8 @@ export default function SponsorApplications() {
                       {app.firstName} {app.lastName}
                     </h3>
                     <p>{app.scholarshipName || "Course not specified"}</p>
-                    <p>School: {app.schoolName}</p>
+                    <p>School/College: {app.schoolName}</p>
+                    <p>Funded Amount:{app.fundAmount}</p>
                     <span className={`status ${normalize(app.status)}`}>
                       {displayStatus(app.status)}
                     </span>
