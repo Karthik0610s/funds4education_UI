@@ -7221,7 +7221,7 @@ p {
   align-items: center;
   gap: 6px;
   position: relative;
-  right: 10%;              /* keep right */
+  right: 70%;              /* keep right */
   top: 15%;
   transform: translateY(-50%);
 }
