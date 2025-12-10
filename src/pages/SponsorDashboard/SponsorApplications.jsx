@@ -99,6 +99,52 @@ export default function SponsorApplications() {
       }
     });
   };
+  const handleFundPopup = (app) => {
+  Swal.fire({
+    title: "Fund Student",
+    html: `
+      <p><strong>Student:</strong> ${app.firstName} ${app.lastName}</p>
+      <p><strong>Scholarship:</strong> ${app.scholarshipName}</p>
+      <label><strong>Enter Fund Amount</strong></label>
+      <input id="fundAmount" type="number" class="swal2-input" min="1" />
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Fund",
+    preConfirm: () => {
+      const fundAmount = document.getElementById("fundAmount").value;
+      if (!fundAmount || fundAmount <= 0) {
+        Swal.showValidationMessage("Please enter a valid amount");
+        return false;
+      }
+      return fundAmount;
+    },
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const modifiedBy = localStorage.getItem("name") || "SponsorUser";
+      const sponsorId = localStorage.getItem("userId");
+
+      await dispatch(
+        updateApplicationStatus(
+          app.applicationId,
+          "Funded",
+          modifiedBy,
+          Number(result.value)
+        )
+      );
+
+      dispatch(fetchApplicationsBySponsor(sponsorId));
+
+      Swal.fire({
+        icon: "success",
+        title: "Student Funded",
+        text: `₹${result.value} funded successfully`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
+  });
+};
+
 
   const sendMessage = () => {
     if (!newMessage.trim() || !selectedStudent) return;
@@ -213,14 +259,15 @@ const filteredApplications = useMemo(() => {
 
                     {normalize(app.status) === "approved" && (
                       <button
-                        className="btn btn-fund"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleUpdateStatus(app.applicationId, "Funded");
-                        }}
-                      >
-                        Fund Student
-                      </button>
+  className="btn btn-fund"
+  onClick={(e) => {
+    e.stopPropagation();
+    handleFundPopup(app);
+  }}
+>
+  Fund Student
+</button>
+
                     )}
 
                     <button

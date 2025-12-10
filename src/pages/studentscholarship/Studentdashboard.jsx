@@ -276,7 +276,7 @@ const canSeeEligibility = userId && roleId && roleName;
 const ads1 = [
   {
     title: "💻 Full-Stack Developer Course",
-    text: "MERN/Java/Python Tracks Available",
+    text: "MERN/Java/Python Tracks",
     button: "Enroll Now",
   },
   {
@@ -286,7 +286,7 @@ const ads1 = [
   },
   {
     title: "🧾 Resume & Portfolio Builder",
-    text: "Create ATS-Friendly Resume in Minutes",
+    text: "Create ATS-Friendly Resume",
     button: "Build Resume",
   },
   {

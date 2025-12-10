@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiBell, FiMenu, FiX, FiLogOut } from "react-icons/fi";
-import logo from "../../assests/Logo.png";
+
+import { IoMdArrowDropdown } from "react-icons/io";
+import logo from "../../assests/logo2.png";
 import { routePath as RP } from "../router/routepath";
 import "./header.css";
 import { useDispatch } from "react-redux";
@@ -38,8 +40,10 @@ const Header = ({ variant = "public" }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const renderVariantLinks = () => {
-    switch (variant) {
+  const renderVariantLinks = (forcedVariant) => {
+  const activeVariant = forcedVariant || variant;
+
+  switch (activeVariant) {
       case "public":
         return (
           <div className="nav-wrapper">
@@ -65,75 +69,102 @@ const Header = ({ variant = "public" }) => {
         );
 
       case "student-profile":
-        return (
-          <div className="header-actions student-profile-header" ref={dropdownRef}>
-            {/* RIGHT SIDE */}
-            <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-              {isLoggedIn ? (
-                <span style={{ fontWeight: 600 }}>
-                  Welcome, {userName || "User"}
-                </span>
-              ) : (
-                <span
-                  style={{ cursor: "pointer", fontWeight: 600 }}
-                  onClick={() => navigate("/login")}
-                >
-                  Login
-                </span>
-              )}
-
-              {/* Bell Icon */}
-              <FiBell size={22} className="cursor-pointer" />
-
-              {/* Dropdown Icon */}
-              <div className="icon-circle" onClick={toggleDropdown}>?</div>
-
-              {/* Dropdown Menu */}
-              {dropdownOpen && (
-                <div className="dropdown-menu">
-                  <div
-                    className="dropdown-item"
-                    onClick={() => {
-                      navigate("/view-profile");
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Profile
-                  </div>
-
-                  <div
-                    className="dropdown-item"
-                    onClick={() => {
-                      navigate("/reset-password");
-                      setDropdownOpen(false);
-                    }}
-                  >
-                    Reset Password
-                  </div>
-                </div>
-              )}
-
-              {/* Logout */}
-              {isLoggedIn && (
-                <FiLogOut
-                  size={22}
-                  className="logout-icon"
-                  onClick={() => {
-                    localStorage.clear();
-                    dispatch(logout());
-                    navigate("/");
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
-            </div>
+  return (
+    <>
+    {!isLoggedIn && (
+        <div className="nav-wrapper">
+          <div className="nav-bar">
+            <Link to="/">Home</Link>
+            <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+            <Link to={RP.studentdashboard}>Scholarships</Link>
           </div>
-        );
+
+          <div className="header-right">
+            <Link to="/login">Login</Link>
+            <Link
+              to="#"
+              className="signup-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowSignupModal(true);
+              }}
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      )}
+    <div className="header-actions student-profile-header" ref={dropdownRef}>
+ {/* ---------- NOT LOGGED IN → SHOW PUBLIC HEADER (ABOVE RIGHT SECTION) ---------- */}
+      
+      
+      <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+
+        
+
+        {/* IF LOGGED IN → Show Profile Header */}
+        {isLoggedIn && (
+          <>
+            <span style={{ fontWeight: 600 }}>
+              Welcome, {userName || "User"}
+            </span>
+
+            {/* Bell Icon */}
+            <FiBell size={22} className="cursor-pointer" />
+
+            {/* Dropdown Icon */}
+            <div className="icon-circle" onClick={toggleDropdown}>?</div>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/view-profile");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Profile
+                </div>
+
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/reset-password");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Reset Password
+                </div>
+              </div>
+            )}
+
+            {/* Logout */}
+            <FiLogOut
+              size={22}
+              className="logout-icon"
+              onClick={() => {
+                localStorage.clear();
+                dispatch(logout());
+                navigate("/");
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          </>
+        )}
+
+      </div>
+    </div>
+    </>
+  );
+
         case "sponsor-profile":
         return (
           <div className="header-actions student-profile-header" ref={dropdownRef}>
             {/* RIGHT SIDE */}
             <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+              
               {isLoggedIn ? (
                 <span style={{ fontWeight: 600 }}>
                   Welcome, {userName || "User"}

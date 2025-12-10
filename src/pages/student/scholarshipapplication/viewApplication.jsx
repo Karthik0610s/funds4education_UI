@@ -83,7 +83,7 @@ const ViewApplication = () => {
 
       {/* Right Side */}
       <div className="right-container">
-        <Header variant="application" />
+        <Header variant="student-profile" />
 
         {/* Header with Back Button on Right */}
         <div className="view-app-header">
@@ -91,14 +91,14 @@ const ViewApplication = () => {
             <h1>Scholarship Application Preview</h1>
             <p>View all details of the scholarship application.</p>
           </div>
-     {
+     {/*
           <button
             className="view-application-back-btn"
             onClick={handleBack}
           >
             ←  Back
           </button>
-     }
+     */}
         </div>
 
         {/* Card Section */}
