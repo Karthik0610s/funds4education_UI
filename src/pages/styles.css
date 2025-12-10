@@ -1626,6 +1626,7 @@ main::-webkit-scrollbar-thumb:hover {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   background: #fff;
+  margin-bottom: 5px;
 }
 
 .app-card-header {

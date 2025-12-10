@@ -83,7 +83,7 @@ const ViewApplication = () => {
 
       {/* Right Side */}
       <div className="right-container">
-        <Header variant="application" />
+        <Header variant="student-profile" />
 
         {/* Header with Back Button on Right */}
         <div className="view-app-header">
