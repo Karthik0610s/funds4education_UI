@@ -10,15 +10,13 @@ import {
 } from "../../app/redux/slices/ScholarshipSlice";
 import Swal from "sweetalert2";
 import "../../pages/studentscholarship/studentdashboard.css";
-import logoUrl from "../../app/assests/kotak.png";
 import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
-import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
+import { FaSearch,  FaFilter } from "react-icons/fa";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showChat, setShowChat] = useState(false);
   const [eligibilityTab, setEligibilityTab] = useState("all"); // default
   //const [activeTab, setActiveTab] = useState("live"); // default
 //const userId = localStorage.getItem("userId");
