@@ -15,7 +15,6 @@ import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
-import { act } from "@testing-library/react";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
