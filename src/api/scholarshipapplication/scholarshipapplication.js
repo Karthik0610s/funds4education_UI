@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 
 export const fetchScholarshipApplicationListReq = async () => {
   try {
-    debugger;
+    
     const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}`);
 
     const _data = res.data;
@@ -19,7 +19,7 @@ export const fetchScholarshipApplicationListReq = async () => {
 export const fetchScholarshipApplicationListbyStudentReq
  = async (studentId) => {
   try {
-    debugger;
+    
     const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}/byStudent/${studentId}`);
 
     const _data = res.data;
@@ -34,7 +34,7 @@ export const fetchScholarshipApplicationListbyStudentReq
 };
 export const fetchScholarshipApplicationByIdReq = async (id) => {
     try {
-      debugger;
+      
       const res = await publicAxios.get(`${ApiKey.ScholarshipApplication}/${id}`);
   
       const _data = res.data;
@@ -49,7 +49,7 @@ export const fetchScholarshipApplicationByIdReq = async (id) => {
   };
 export const addNewScholarshipApplicationReq = async (data) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(`${ApiKey.ScholarshipApplication}`, data);
 
     const msg = res.data.message;
@@ -96,7 +96,7 @@ export const deleteScholarshipApplicationReq = async (actionId) => {
 };
 export const uploadFormFilesReq = async (formData) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(`${ApiKey.uploadScholarshipFiles}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -112,7 +112,7 @@ export const uploadFormFilesReq = async (formData) => {
 
 export const sendScholarshipEmailReq = async (applicationId) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(
       `${ApiKey.SendMail}/${applicationId}`
     );

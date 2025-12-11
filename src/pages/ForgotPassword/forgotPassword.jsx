@@ -16,7 +16,7 @@ export default function ForgotPassword() {
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const handleContinue = async () => {
-    debugger;
+    
     setError("");
 
     if (!username || !role) {
@@ -25,7 +25,7 @@ export default function ForgotPassword() {
     }
 
     try {
-      debugger;
+      
       const res = await publicAxios.get(`${ApiKey.EmailExistCheck}?email=${username}&role=${role}`);
       const data = res.data;
 

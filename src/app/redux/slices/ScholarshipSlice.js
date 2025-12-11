@@ -131,7 +131,7 @@ export const fetchScholarshipList =
   (filters = { statusType: "live" }) =>
     async (dispatch, getState) => {
       try {
-        debugger;
+        
         dispatch(setLoading());
 
         const currentData =
@@ -153,11 +153,11 @@ export const fetchScholarshipList =
 
         // 🟦 Case 2: Normal single-status call
         const res = await fetchScholarshipByStatusReq(filters);
-        debugger;
+        
         const list = !res.error && Array.isArray(res.data) ? res.data : [];
 
         if (filters.statusType === "live") {
-          debugger;
+          
           dispatch(addData({ live: list, upcoming: currentData.upcoming }));
         } else if (filters.statusType === "upcoming") {
           dispatch(addData({ live: currentData.live, upcoming: list }));
@@ -297,7 +297,7 @@ export const fetchApplicationsBySponsor =
 //
 export const fetchDropdownData = () => async (dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading());
     const res = await fetchDropdownDataReq();
 

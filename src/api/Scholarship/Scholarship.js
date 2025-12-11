@@ -46,7 +46,7 @@ export const fetchScholarshipListReq = async (UserId, role) => {
 //
 export const fetchScholarshipByStatusReq = async (filters = {}) => {
   try {
-    debugger;
+    
        const { statusType, filterType } = filters;
     if (!statusType) {
       return { error: true, data: [], message: "", errorMsg: "Invalid StatusType" };
@@ -161,7 +161,7 @@ export const fetchFeaturedScholarshipsReq = async () => {
 
 export const fetchDropdownDataReq = async () => {
   try {
-    debugger;
+    
     const [countryRes, stateRes, genderRes, religionRes,classRes,courseRes] = await Promise.all([
       publicAxios.get(ApiKey.Country),
       publicAxios.get(ApiKey.State),

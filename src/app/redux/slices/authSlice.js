@@ -35,12 +35,13 @@ localStorage.setItem("lastName", data.lastName);
 localStorage.setItem("email", data.email);
 localStorage.setItem("phoneNumber", data.phone);
 localStorage.setItem("dateOfBirth", data.dateofBirth);
-localStorage.setItem("gender", data.gender);     
-
+localStorage.setItem("gender", data.gender);  
+localStorage.setItem("filepath",data.filePath) ;  
+localStorage.setItem("filename",data.fileName) ; 
       // ✅ Return response data
       return { ...data, userType };
     } catch (error) {
-      debugger;
+      
       return rejectWithValue(error.response?.data?.message || error.errorMsg || "Login failed");
     }
   }

@@ -45,7 +45,7 @@ const handleOAuthLogin = (provider) => {
     alert("Please select or provide user type before login.");
     return;
   }
-debugger;
+
   const loginUrl = `https://localhost:44315/api/Auth/${provider}/${userType}/login`;
 
   // Open OAuth login popup

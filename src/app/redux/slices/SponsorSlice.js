@@ -39,7 +39,7 @@ export default sponsorSlice.reducer;
 // Action to add a new sponsor
 export const addNewSponsor = async (data, dispatch) => {
     try {
-        debugger;
+        
         dispatch(setLoading()); // Set loading before making the API request
         const res = await addNewSponsorReq(data); // Call API to add a sponsor
 
@@ -65,7 +65,7 @@ export const addNewSponsor = async (data, dispatch) => {
 // Action to update a sponsor
 export const updateSponsor = async (data, dispatch) => {
     try {
-        debugger;
+        
         dispatch(setLoading()); // Set loading before making the API request
         await updateSponsorReq(data); // Call API to update sponsor
 

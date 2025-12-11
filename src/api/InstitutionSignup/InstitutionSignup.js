@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 
 export const fetchInstitutionSignupListReq = async () => {
   try {
-    debugger;
+    
     const res = await publicAxios.get(`${ApiKey.InstitutionSignup}`);
 
     const _data = res.data;
@@ -18,7 +18,7 @@ export const fetchInstitutionSignupListReq = async () => {
 };
 export const fetchInstitutionSignupByIdReq = async (id) => {
     try {
-      debugger;
+      
       const res = await publicAxios.get(`${ApiKey.InstitutionSignup}/${id}`);
   
       const _data = res.data;
@@ -33,7 +33,7 @@ export const fetchInstitutionSignupByIdReq = async (id) => {
   };
 export const addNewInstitutionSignupReq = async (data) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(`${ApiKey.InstitutionSignup}`, data);
 
     const msg = res.data.message;

@@ -486,12 +486,12 @@ if (name === "gpaOrMarks") {
       if (applicationId && selectedFiles.length > 0) {
         await uploadFiles(applicationId);
       }
-      debugger;
+      
 // NOW call email send API after upload is done
 await sendScholarshipEmailReq(applicationId);
       // Fetch updated application by ID to get the latest files
       if (applicationId) {
-        debugger;
+        
         const updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
         setFormData((prev) => ({
           ...prev,

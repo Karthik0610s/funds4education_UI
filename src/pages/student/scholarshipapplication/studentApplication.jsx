@@ -27,7 +27,7 @@ const ApplicationsPage = () => {
   const studentId = localStorage.getItem("userId");
 
   useEffect(() => {
-    debugger;
+    
     dispatch(fetchScholarshipApplicationListbyStudent(studentId));
   }, [dispatch, studentId]);
 

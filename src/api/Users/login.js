@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 
 export const loginReq = async (credentials) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(`${ApiKey.Login}`, credentials);
     console.log("Login response:", res.data);
     const msg = res.data?.message || "Login successful";

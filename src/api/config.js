@@ -49,7 +49,14 @@ publicAxios.interceptors.request.use(async (config) => {
       localStorage.removeItem("name");
       localStorage.removeItem("id");
       localStorage.removeItem("userId");
-
+localStorage.setItem("firstName" );
+localStorage.setItem("lastName");
+localStorage.setItem("email");
+localStorage.setItem("phoneNumber");
+localStorage.setItem("dateOfBirth");
+localStorage.setItem("gender");  
+localStorage.setItem("filepath") ;  
+localStorage.setItem("filepath") ;
       window.location.href = "/login";
       return Promise.reject("Token expired");
     }

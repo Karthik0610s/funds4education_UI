@@ -18,7 +18,7 @@ const handleLogout = () => {
 const name = localStorage.getItem("name") || "Student";
  const navigate = useNavigate();
   useEffect(() => {
-    debugger;
+    
     const sponsorId = localStorage.getItem("userId");
     dispatch(fetchApplicationsBySponsor(sponsorId, "Approved")); 
   }, [dispatch]);

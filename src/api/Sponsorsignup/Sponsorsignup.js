@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 
 export const fetchSponsorListReq = async () => {
     try {
-        debugger;
+        
         const res = await publicAxios.get(`${ApiKey.Sponsor}`);
 
         const _data = res.data;
@@ -18,7 +18,7 @@ export const fetchSponsorListReq = async () => {
 };
 export const fetchSponsorByIdReq = async (id) => {
     try {
-        debugger;
+        
         console.log("Fetching sponsor ID:", id);
         console.log("URL:", `${ApiKey.Sponsor}/${id}`);
         const res = await publicAxios.get(`${ApiKey.Sponsor}/${id}`);
@@ -35,7 +35,7 @@ export const fetchSponsorByIdReq = async (id) => {
 };
 export const addNewSponsorReq = async (data) => {
     try {
-        debugger;
+        
         const res = await publicAxios.post(`${ApiKey.Sponsor}`, data);
 
         const msg = res.data.message;

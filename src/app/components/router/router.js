@@ -47,12 +47,18 @@ const routeToVariant = {
   [RP.sponsordashboard]: "sponsor-profile",
   [RP.login]: "public",
   [RP.signup]: "public",
+  [RP.ViewSponsorProfile]:"sponsor-profile",
+  [RP.sponsorprofile]:"sponsor-profile",
+  [RP.studentprofile]:"student-profile",
+  [RP.ViewStudentProfile]:"student-profile",
+  [RP.resetPassword]:"profile-role-based",
   [RP.studentwalletredemption]: "studentwalletredemption",
   [RP.studentwallet]: "studentwallet",
   [RP.studentredemptioncalog]: "studentredemptioncalog",
   [RP.studentrewards]: "studentrewards",
   [RP.studentrewardsredemption]: "studentrewardsredemption",
   [RP.sponsordashboardreport]: "sponsordashboardreport",
+ // [RP.resetPassword]
 
   [RP.monetizationads]: "monetizationads",
   [RP.sponsoraddashboard]: "sponsoraddashboard",
@@ -68,7 +74,7 @@ const routeToVariant = {
 
 // 🔹 Layout wrapper
 function Layout({ children }) {
-  debugger;
+  
   const location = useLocation();
 
   // get token + expiry from localStorage

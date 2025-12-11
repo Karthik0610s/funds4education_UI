@@ -21,7 +21,7 @@ const ChatWidget = () => {
 
   // 👉 OPEN CHAT → CHECK SESSION OR CREATE NEW
   const handleOpenChat = async () => {
-    debugger;
+    
     setShowChat(true);
 
     let storedSession = localStorage.getItem("chatSessionId");
@@ -53,7 +53,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
 
     const messageToSend = input;
     setInput("");
-debugger;
+
     try {
       
       const payload = {

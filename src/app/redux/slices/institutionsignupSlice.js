@@ -38,7 +38,7 @@ export default InstitutionSignupSlice.reducer;
 // Action to add a new InstitutionSignup
 export const addNewInstitutionSignup = async (data, dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
   const res=  await addNewInstitutionSignupReq(data); // Call API to add a InstitutionSignup
 
@@ -64,7 +64,7 @@ export const addNewInstitutionSignup = async (data, dispatch) => {
 // Action to update a InstitutionSignup
 export const updateInstitutionSignup = async (data, dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
     await updateInstitutionSignupReq(data); // Call API to update InstitutionSignup
 

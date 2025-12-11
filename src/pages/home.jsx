@@ -70,7 +70,7 @@ const location = useLocation();
 
   // ✅ Click Handlers
   /*const handleClickStudent = () => {
-    debugger;
+    
     const token = localStorage.getItem("token");
     const expiresAt = localStorage.getItem("expiresAt");
     const roleId = localStorage.getItem("roleId");
@@ -91,7 +91,7 @@ const location = useLocation();
   };
 
   const handleClickSponsor = () => {
-    debugger;
+    
     const token = localStorage.getItem("token");
     const expiresAt = localStorage.getItem("expiresAt");
     const roleId = localStorage.getItem("roleId");
@@ -111,7 +111,7 @@ const location = useLocation();
   };
 
   const handleClickInstitution = () => {
-    debugger;
+    
     const token = localStorage.getItem("token");
     const expiresAt = localStorage.getItem("expiresAt");
     const roleId = localStorage.getItem("roleId");
@@ -166,7 +166,7 @@ const location = useLocation();
 // ✅ Click Handlers
 const handleClickStudent = () => checkAndNavigate("1", "student");
 /*const handleClickStudent=()=>{
-  debugger;
+  
   navigate(RP.studentdashboard);
 }*/
 const handleClickSponsor = () => checkAndNavigate("2", "sponsor");

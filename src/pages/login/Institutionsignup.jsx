@@ -166,7 +166,7 @@ const [step, setStep] = useState(0);
   const prevStep = () => setStep(step - 1);
 
   const handleSave = async () => {
-    debugger;
+    
     if (!validateStep()) return;
 
     // Flatten data to match backend expected structure
@@ -217,7 +217,7 @@ const [step, setStep] = useState(0);
         });
       }
     } catch (error) {
-        debugger;
+        
       Swal.fire({
         title: "Error",
         text: error.message  ||error. errorMsg|| "API call failed!",

@@ -21,7 +21,7 @@ const scholarshipApplicationSlice = createSlice({
       state.loading = true;
     },
     addData: (state, { payload }) => {
-      debugger;
+      
       state.loading = false;
       state.error = false;
       state.data = payload;
@@ -46,7 +46,7 @@ export default scholarshipApplicationSlice.reducer;
 // Action to add a new scholarshipApplication
 export const addNewScholarshipApplication = async (data, dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
   const res=  await addNewScholarshipApplicationReq(data); // Call API to add a scholarshipApplication
 
@@ -82,7 +82,7 @@ export const fetchScholarshipApplicationById = (id) => async (dispatch) => {
 // Action to update a scholarshipApplication
 export const updateScholarshipApplication = async (data, dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
     await updateScholarshipApplicationReq(data); // Call API to update scholarshipApplication
 
@@ -123,7 +123,7 @@ export const deleteScholarshipApplication = async (data,studentId, dispatch) => 
 // Action to fetch the scholarshipApplication list
 export const fetchScholarshipApplicationList = () => async (dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
     const res = await fetchScholarshipApplicationListReq(); // Fetch scholarshipApplication list from API
     dispatch(addData(res.data)); // Dispatch the data to Redux state
@@ -138,7 +138,7 @@ export const fetchScholarshipApplicationList = () => async (dispatch) => {
 };
 export const fetchScholarshipApplicationListbyStudent = (studentId) => async (dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading()); // Set loading before making the API request
     const res = await fetchScholarshipApplicationListbyStudentReq(studentId); // Fetch scholarshipApplication list from API
     dispatch(addData(res.data)); // Dispatch the data to Redux state

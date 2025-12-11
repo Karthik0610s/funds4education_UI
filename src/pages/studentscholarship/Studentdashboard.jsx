@@ -211,7 +211,31 @@ const canSeeEligibility = userId && roleId && roleName;
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const scholarshipsPerPage = 8;
+const getResponsiveValue = (breakpoints) => {
+  const width = window.innerWidth;
+  for (let i = 0; i < breakpoints.length; i++) {
+    if (width >= breakpoints[i].minWidth) return breakpoints[i].value;
+  }
+  return breakpoints[breakpoints.length - 1].value;
+};
+  // --- Responsive helpers ---
+const getItemsPerPage = () =>
+  getResponsiveValue([
+    { minWidth: 1400, value: 12 },
+    { minWidth: 1024, value: 10 },
+    { minWidth: 768, value: 6 },
+    { minWidth: 0, value: 4 },
+  ]);
+  const [scholarshipsPerPage, setScholarshipsPerPage] = useState(getItemsPerPage());
+useEffect(() => {
+  const handleResize = () => {
+    setScholarshipsPerPage(getItemsPerPage());
+  
+  };
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+  //const scholarshipsPerPage = 8;
 
   useEffect(() => {
     setCurrentPage(1);

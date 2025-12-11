@@ -166,7 +166,7 @@ const [filters, setFilters] = useState({
     }, [courses, scholarship]);*/
     useEffect(() => {
     if (scholarship && scholarship.class_ID && courses.length > 0) {
-      debugger;
+      
         setFilters(prev => ({
             ...prev,
             course: scholarship.course_ID ?? null
@@ -341,7 +341,7 @@ const handleReactSelect = (key, selected, allOptions, setFilters) => {
     const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w- ./?%&=]*)?$/i;
 
     const validateForm = () => {
-        debugger;
+        
         const newErrors = {};
 
         console.log("🔍 Validating form data:", formData);
@@ -430,7 +430,7 @@ if (formData.maxFamilyIncome && formData.maxFamilyIncome.length > 350) {
 
 
     const handleSubmit = async (e) => {
-        debugger;
+        
         e.preventDefault();
         if (!validateForm()) return;
 
@@ -457,7 +457,7 @@ const payload = {
 };
 
         try {
-            debugger;
+            
             let res;
             let scholarshipId;
 

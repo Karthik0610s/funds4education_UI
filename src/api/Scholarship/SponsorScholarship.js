@@ -41,7 +41,7 @@ export const fetchScholarshipBySponsorReq = async (userId, role) => {
 //
 export const addScholarshipReq = async (data) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(ApiKey.SponsorScholarship, data);
     return { error: false, data: res.data, message: "Added successfully" };
   } catch (err) {

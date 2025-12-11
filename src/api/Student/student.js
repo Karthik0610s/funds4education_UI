@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 
 // ✅ Fetch a student profile by ID
 export const getStudentProfile = async (id) => {
-  debugger;
+  
   try {
     const response = await publicAxios.get(`${ApiKey.Student}/${id}`);
     return response.data;

@@ -8,7 +8,7 @@ import { routePath as RP } from "../router/routepath";
 import "./header.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
-
+import { publicAxios } from "../../../api/config";
 const Header = ({ variant = "public" }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,14 +23,17 @@ const Header = ({ variant = "public" }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const dropdownRef = useRef(null);
+const menuRef = useRef(null);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
   // Close dropdown if clicked outside
   useEffect(() => {
+    
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
@@ -39,6 +42,76 @@ const Header = ({ variant = "public" }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  
+// MOBILE MENU CLOSE
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  if (menuOpen) {
+    document.addEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [menuOpen]);
+
+// 1️⃣ Get values from localStorage
+const filePath = (localStorage.getItem("filepath") || "").replace(/\\/g, "/");
+const fileNameRaw = localStorage.getItem("filename") || "";
+
+console.log("📁 filePath =", filePath);
+console.log("📝 fileNameRaw =", fileNameRaw);
+
+// 2️⃣ Extract folder name (student-26)
+const folderName = filePath.split("/").pop();
+console.log("📂 folderName =", folderName);
+
+// 3️⃣ Base URL
+const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
+console.log("🌐 baseUrl =", baseUrl);
+
+// 4️⃣ STEP 1 - Clean file name (remove trailing | and spaces)
+const cleanFileName = fileNameRaw.split("|")[0]?.trim() || "";
+console.log("✨ cleanFileName =", cleanFileName);
+
+// 5️⃣ STEP 2 - Remove invisible special characters
+const finalFileName = cleanFileName.replace(/[^\x20-\x7E]/g, "");
+console.log("🧹 finalFileName =", finalFileName);
+
+// 6️⃣ STEP 3 - Detect if file is image
+const isImage = /\.(png|jpg|jpeg|gif)$/i.test(finalFileName);
+console.log("🖼️ isImage =", isImage);
+
+// 7️⃣ STEP 4 - Encode safe filename
+const encodedFileName = encodeURIComponent(finalFileName);
+console.log("🔐 encodedFileName =", encodedFileName);
+
+
+// Pick the correct folder
+//const parentFolder = roleName === "Sponsor" ? "sponsor" : "student";
+let parentFolder = "";
+
+if (filePath.includes("student")) parentFolder = "student";
+else if (filePath.includes("sponsor")) parentFolder = "sponsor";
+// 8️⃣ STEP 5 - Build final image URL
+const profileImageUrl =
+  folderName && finalFileName
+    ? `${baseUrl}/${parentFolder}/${folderName}/${encodedFileName}`
+    : "/images/default-user.png";
+
+console.log("🔗 profileImageUrl =", profileImageUrl);
+
+// 9️⃣ STEP 6 - alt text without extension
+const altText =
+  finalFileName.replace(/\.[^/.]+$/, "") || "User Photo";
+
+console.log("🔤 altText =", altText);
+
 
   const renderVariantLinks = (forcedVariant) => {
   const activeVariant = forcedVariant || variant;
@@ -46,6 +119,8 @@ const Header = ({ variant = "public" }) => {
   switch (activeVariant) {
       case "public":
         return (
+          <>
+           {!isLoggedIn && (
           <div className="nav-wrapper">
             <div className="nav-bar">
               <Link to="/">Home</Link>
@@ -66,6 +141,87 @@ const Header = ({ variant = "public" }) => {
               </Link>
             </div>
           </div>
+           )}
+           <div className="header-actions student-profile-header" ref={dropdownRef}>
+ {/* ---------- NOT LOGGED IN → SHOW PUBLIC HEADER (ABOVE RIGHT SECTION) ---------- */}
+      
+      
+      <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+
+        
+
+        {/* IF LOGGED IN → Show Profile Header */}
+        {isLoggedIn && (
+          <>
+            <span style={{ fontWeight: 600 }}>
+              Welcome, {userName || "User"}
+            </span>
+
+            {/* Bell Icon */}
+            <FiBell size={22} className="cursor-pointer" />
+
+            {/* Dropdown Icon */}
+            <div className="icon-circle" onClick={toggleDropdown}>
+
+              {isImage ? (
+      <img
+        src={profileImageUrl}
+        alt={altText}
+        className="circle-img"
+            onError={() => setImgError(true)}
+            style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+      />
+    ) : (
+      <div className="alt-logo-text">{altText}</div>
+    )}
+            </div>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/view-profile");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Profile
+                </div>
+
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/reset-password");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Reset Password
+                </div>
+              </div>
+            )}
+
+            {/* Logout */}
+            <FiLogOut
+              size={22}
+              className="logout-icon"
+              onClick={() => {
+                localStorage.clear();
+                dispatch(logout());
+                navigate("/");
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          </>
+        )}
+
+      </div>
+    </div>
+    </>
         );
 
       case "student-profile":
@@ -113,7 +269,23 @@ const Header = ({ variant = "public" }) => {
             <FiBell size={22} className="cursor-pointer" />
 
             {/* Dropdown Icon */}
-            <div className="icon-circle" onClick={toggleDropdown}>?</div>
+            <div className="icon-circle" onClick={toggleDropdown}>
+              {isImage ? (
+      <img
+        src={profileImageUrl}
+        alt={altText}
+        className="circle-img"
+            onError={() => setImgError(true)}
+            style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+      />
+    ) : (
+      <div className="alt-logo-text">{altText}</div>
+    )}
+            </div>
 
             {/* Dropdown Menu */}
             {dropdownOpen && (
@@ -182,7 +354,24 @@ const Header = ({ variant = "public" }) => {
               <FiBell size={22} className="cursor-pointer" />
 
               {/* Dropdown Icon */}
-              <div className="icon-circle" onClick={toggleDropdown}>?</div>
+              <div className="icon-circle" onClick={toggleDropdown}>
+
+              {isImage ? (
+      <img
+        src={profileImageUrl}
+        alt={altText}
+        className="circle-img"
+            onError={() => setImgError(true)}
+            style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+      />
+    ) : (
+      <div className="alt-logo-text">{altText}</div>
+    )}
+              </div>
 
               {/* Dropdown Menu */}
               {dropdownOpen && (
@@ -248,152 +437,94 @@ const Header = ({ variant = "public" }) => {
     }
   };
 
-  const renderMobileLinks = (forcedVariant) => {
+const renderMobileLinks = (forcedVariant) => {
   const activeVariant = forcedVariant || variant;
 
   switch (activeVariant) {
-
-
-    /* ------------------- PUBLIC (MOBILE) ------------------- */
+    /* ---------- PUBLIC ---------- */
     case "public":
       return (
         <>
-          <div className="mobile-item" onClick={() => navigate("/")}>Home</div>
-          <div
-            className="mobile-item"
-            onClick={() => {
-              navigate("/", { state: { scrollTo: "benefits-section" } });
-            }}
-          >
+          <div className="mobile-item" onClick={() => { navigate("/"); setMenuOpen(false); }}>
+            Home
+          </div>
+
+          <div className="mobile-item" 
+               onClick={() => { navigate("/", { state: { scrollTo: "benefits-section" }}); setMenuOpen(false); }}>
             About Us
           </div>
 
-          <div
-            className="mobile-item"
-            onClick={() => navigate(RP.studentdashboard)}
-          >
+          <div className="mobile-item" onClick={() => { navigate(RP.studentdashboard); setMenuOpen(false); }}>
             Scholarships
           </div>
 
-          {/*<div
-            className="mobile-item"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </div>*/}
-
-          <div
-            className="mobile-item"
-            onClick={() => {
-              setShowSignupModal(true);
-              setMenuOpen(false);
-            }}
-          >
+          <div className="mobile-item"
+               onClick={() => { setShowSignupModal(true); setMenuOpen(false); }}>
             Sign Up
           </div>
         </>
       );
 
-    /* ------------------- STUDENT PROFILE (MOBILE) ------------------- */
+    /* ---------- STUDENT PROFILE ---------- */
     case "student-profile":
-      return (
+      return isLoggedIn ? (
         <>
-          {isLoggedIn ? (
-            <>
-              <div className="mobile-item" onClick={() => { navigate("/view-profile"); setMenuOpen(false); }}>
-                Profile
-              </div>
-
-              <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
-                Reset Password
-              </div>
-
-              <div className="mobile-item" onClick={() => { navigate("/applications"); setMenuOpen(false); }}>
-                Applications
-              </div>
-
-              {/*<div
-                className="mobile-item logout-item"
-                onClick={() => {
-                  localStorage.clear();
-                  dispatch(logout());
-                  navigate("/");
-                  setMenuOpen(false);
-                }}
-              >
-                Logout
-              </div>*/}
-            </>
-          ) 
-           : (
-        renderMobileLinks("public")  // ⬅ HERE IS THE FIX
-      )}
-        </>
-      );
-
-
-       case "sponsor-profile":
-      return (
-        <>
-          {isLoggedIn ? (
-            <>
-              <div className="mobile-item" onClick={() => { navigate("/view-sponsor-profile"); setMenuOpen(false); }}>
-                Profile
-              </div>
-
-              <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
-                Reset Password
-              </div>
-
-              <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/sponsorapplication"); setMenuOpen(false); }}>
-                Applications
-              </div>
-              <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/scholarshipPage"); setMenuOpen(false); }}>
-                Sponsor Scholarship
-              </div>
-              <div className="mobile-item" onClick={() => { navigate("/Sponsored-Scholarship"); setMenuOpen(false); }}>
-                Approved Scholarship
-              </div>
-
-              {/*<div
-                className="mobile-item logout-item"
-                onClick={() => {
-                  localStorage.clear();
-                  dispatch(logout());
-                  navigate("/");
-                  setMenuOpen(false);
-                }}
-              >
-                Logout
-              </div>*/}
-            </>
-          ) 
-           : (
-        renderMobileLinks("public")  // ⬅ HERE IS THE FIX
-      )}
-        </>
-      );
-
-    /* ------------------- STUDENT NAVIGATION (MOBILE) ------------------- */
-    case "student":
-      return (
-        <>
-          <div className="mobile-item" onClick={() => navigate("/my-scholarships")}>
-            Dashboard
+          <div className="mobile-item" onClick={() => { navigate("/view-profile"); setMenuOpen(false); }}>
+            Profile
           </div>
-          <div className="mobile-item" onClick={() => navigate("/applications")}>
-            Saved
+
+          <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
+            Reset Password
           </div>
-          <div className="mobile-item" onClick={() => navigate("/profile")}>
-            Message
+
+          <div className="mobile-item" onClick={() => { navigate("/application"); setMenuOpen(false); }}>
+            Applications
           </div>
         </>
+      ) : (
+        renderMobileLinks("public")
       );
+
+    /* ---------- SPONSOR PROFILE ---------- */
+    case "sponsor-profile":
+      return isLoggedIn ? (
+        <>
+          <div className="mobile-item" onClick={() => { navigate("/view-sponsor-profile"); setMenuOpen(false); }}>
+            Profile
+          </div>
+
+          <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
+            Reset Password
+          </div>
+
+          <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/sponsorapplication"); setMenuOpen(false); }}>
+            Applications
+          </div>
+
+          <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/scholarshipPage"); setMenuOpen(false); }}>
+            Sponsor Scholarship
+          </div>
+
+          <div className="mobile-item" onClick={() => { navigate("/Sponsored-Scholarship"); setMenuOpen(false); }}>
+            Approved Scholarship
+          </div>
+        </>
+      ) : (
+        renderMobileLinks("public")
+      );
+
+      case "profile-role-based":
+  if (!isLoggedIn) return renderMobileLinks("public");
+
+  return roleName === "Student"
+    ? renderMobileLinks("student-profile")
+    : renderMobileLinks("sponsor-profile");
 
     default:
       return null;
   }
 };
+
 
   return (
     <>
@@ -490,7 +621,7 @@ const Header = ({ variant = "public" }) => {
     </nav>*/}
      {/* MOBILE MENU */}
   {menuOpen && (
-  <nav className="mobile-menu">
+  <nav className="mobile-menu"ref={menuRef}>
     <div className="mobile-menu-items">
       {renderMobileLinks()}
     </div>
