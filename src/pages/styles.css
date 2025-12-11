@@ -3072,7 +3072,7 @@ input:not([type="radio"]) {
 
 .toggle-password {
   position: absolute;
-  top: 50%;
+  top: 55%;
   right: 12px;
 
   background: none;
