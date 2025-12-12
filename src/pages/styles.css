@@ -460,6 +460,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   margin-bottom: 8px;
+  transform: translateX(60px);
 }
 
 .achievement-title {
@@ -467,6 +468,7 @@ body {
   font-weight: 800;
   line-height: 1.3;
   color: #1a237e;
+  margin-left: 110px;
 }
 
 .achievement-title span {
@@ -500,7 +502,8 @@ body {
   font-size: 1.1rem;
   line-height: 1.6;
   color: #555;
-  max-width: 550px;
+  max-width: none;
+  /* remove the 550px limit */
   /* text-align: justify;
   word-break: break-word;
   overflow-wrap: anywhere;*/
@@ -1703,7 +1706,7 @@ main::-webkit-scrollbar-thumb:hover {
   left: 0;
   right: 0;
   height: 60px;
- /* background: #fff;
+  /* background: #fff;
   border-bottom: 1px solid #e5e7eb;*/
   padding: 0 10px;
   display: flex;
@@ -1711,11 +1714,14 @@ main::-webkit-scrollbar-thumb:hover {
   align-items: center;
   z-index: 1000;
 }
+
 @media screen and (max-width: 768px) {
   .header {
-    padding: 0; /* remove padding on mobile */
+    padding: 0;
+    /* remove padding on mobile */
   }
 }
+
 .content-area {
   display: flex;
   height: calc(100vh - 60px);
@@ -3677,85 +3683,24 @@ input:not([type="radio"]) {
   }
 }
 
-/* ✅ MOBILE RESPONSIVE (below 420px) */
-@media (max-width: 450px) {
-  .applications-wrapper {
-    padding: 10px;
-  }
-
-  .applications-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .applications-actions input,
-  .applications-actions select,
-  .applications-btn-new {
-    width: 100%;
-  }
-
-  .applications-card {
-    padding: 0.8rem;
-  }
-
-  .application-actions {
-    /* flex-direction: column; /* stack buttons vertically */
-    align-items: flex-start;
-  }
-
-  .applications-btn-edit,
-  .applications-btn-delete {
-    width: 100%;
-  }
+/* ===========================
+   Page & Container Padding
+=========================== */
+.scholarshipview-page,
+.scholarship-detail-container {
+  padding: 20px; /* consistent padding for all containers */
 }
 
-/* ✅ Mobile Responsive (≤420px) */
 @media (max-width: 420px) {
-  .scholarshipview-page {
-    padding: 12px;
-  }
-
-  .scholarship-view-title {
-    font-size: 18px;
-  }
-
-  .scholarship-subtitle {
-    font-size: 16px;
-  }
-
-  .scholarship-view-text {
-    font-size: 14px;
-
-  }
-
-  .deadline-info {
-    flex-direction: column;
-    align-items: flex-end;
-  }
-
+  .scholarshipview-page,
   .scholarship-detail-container {
-    padding: 12px;
-  }
-
-  .scholarship-back-button {
-
-    justify-content: center;
-    font-size: 15px;
-  }
-
-  .scholarship-apply-btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-  }
-
-  ul.scholarship-view-text li {
-    font-size: 14px;
-    margin-bottom: 6px;
+    padding: 12px; /* smaller padding for mobile */
   }
 }
 
-/* 🎯 Back Button */
+/* ===========================
+   Back Button Styles
+=========================== */
 .scholarship-back-button {
   background: #fe8200;
   color: #fff;
@@ -3774,6 +3719,79 @@ input:not([type="radio"]) {
 .scholarship-back-button:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 420px) {
+  .scholarship-back-button {
+    justify-content: center;
+    font-size: 15px;
+  }
+}
+
+/* ===========================
+   Titles & Text
+=========================== */
+.scholarship-view-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.scholarship-subtitle {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.scholarship-view-text {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ===========================
+   Uniform List & Bullets
+=========================== */
+ul.scholarship-view-text,
+ul.scholarship-view-text li {
+  list-style-type: disc;       /* standard bullets */
+  list-style-position: inside; /* bullets aligned with text */
+  font-size: 16px;             /* consistent font size */
+  line-height: 1.5;            /* spacing between lines */
+  margin: 0;
+  padding-left: 20px;          /* indentation for bullets */
+}
+
+ul.scholarship-view-text li {
+  margin-bottom: 8px;          /* spacing between bullets */
+}
+
+/* ===========================
+   Mobile List Adjustments
+=========================== */
+@media (max-width: 420px) {
+  ul.scholarship-view-text,
+  ul.scholarship-view-text li {
+    font-size: 14px;
+    padding-left: 16px; /* smaller indent for mobile */
+    margin-bottom: 6px;
+  }
+}
+
+
+/* ===========================
+   General List Styles
+=========================== */
+ul.scholarship-view-text,
+ul.scholarship-view-text li {
+  list-style-type: disc;
+  list-style-position: inside;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: 30px;
+}
+
+ul.scholarship-view-text li {
+  margin-bottom: 8px; /* spacing between bullets on desktop */
+}
+
 
 /* Dashboard container */
 .dashboard {
@@ -4705,26 +4723,33 @@ textarea {
     margin-left: 0;
   }
 }
+
 .actions-container {
   display: flex;
-  align-items: center;     /* vertically aligns all icons */
-  gap: 12px;               /* spacing between icons */
+  align-items: center;
+  /* vertically aligns all icons */
+  gap: 12px;
+  /* spacing between icons */
   justify-content: flex-start;
   position: relative;
 }
+
 .actions-container .icons-btn,
 .actions-container .status-icon {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .actions-container button,
 .actions-container .status-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;              /* remove extra height */
-  width: 24px;             /* same size for all */
+  padding: 0;
+  /* remove extra height */
+  width: 24px;
+  /* same size for all */
   height: 24px;
 }
 
@@ -5042,6 +5067,7 @@ textarea {
 .table-header {
   font-weight: 600;
   background: #f3f4f6;
+
 }
 
 /* Hover effect */
@@ -5130,19 +5156,47 @@ textarea {
 
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
+  .scholarship-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 
-  .table-header,
   .table-row {
-    grid-template-columns: 1fr;
-    text-align: left;
-    gap: 6px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .table-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .table-row span {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+
+  .table-row span.title {
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .actions-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
   }
 }
 
-.actions {
-  justify-content: center;
-}
 
 /* Layout */
 .applications-dashboard {
@@ -6086,22 +6140,8 @@ body {
 
 }
 
-/* 🔙 Back Button */
-.scholarship-view-back-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 1rem;
-  margin: 2rem 0 1rem 0rem;
-  /* 🆕 aligned left edge */
-  transition: all 0.3s ease;
-}
 
-.scholarship-view-back-btn:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
+
 
 /* 🏷️ Page Content Wrapper - 🆕 full width */
 .page-content {
@@ -6169,11 +6209,11 @@ p {
 /* MAIN studnet scholarshipdasboard*/
 /* HEADER MOBILE */
 @media (max-width: 768px) {
-    .search-box {
-      width: 90% !important;   
-        padding: 4px 10px; 
-        border-radius: 16px;
-    }
+  .search-box {
+    width: 90% !important;
+    padding: 4px 10px;
+    border-radius: 16px;
+  }
 
   .search-box input {
     font-size: 14px;
@@ -6186,6 +6226,7 @@ p {
     /* Smaller icon */
   }
 }
+
 /*.mobile-header {
 
 .mobile-header {
@@ -6574,8 +6615,8 @@ p {
 /* 🗓️ Deadline Info */
 .deadline-info {
   display: flex;
-  align-items: center;
-  font-size: 1rem;
+  align-items: left;
+  font-size: small;
   font-weight: 600;
   color: #007bff;
   padding-right: 0.25%;
@@ -7222,7 +7263,8 @@ p {
   align-items: center;
   gap: 6px;
   position: relative;
-  right: 70%;              /* keep right */
+  right: 70%;
+  /* keep right */
   top: 15%;
   transform: translateY(-50%);
 }
@@ -7237,10 +7279,10 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-    justify-content: center;  
+  justify-content: center;
   padding: 0 3%;
   margin-bottom: 20px;
-    margin-top: 50px;
+  margin-top: 50px;
 
 }
 
@@ -7256,7 +7298,7 @@ p {
   -webkit-text-fill-color: transparent;
   margin: 0;
   text-transform: capitalize;
-  
+
 }
 
 .view-app-header p {
@@ -7328,9 +7370,220 @@ p {
   .view-app-header h1 {
     font-size: 2rem;
   }
+
   .view-app-card {
     padding: 16px;
   }
 }
 
+/* Container split between sidebar and main content */
+.va-page-split {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #1F2937;
+  /* your preferred text color */
+}
 
+/* Sidebar */
+.va-left-container {
+  width: 280px;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* Main content */
+.va-right-container {
+  flex: 1;
+  padding: 30px 40px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+/* Section heading spacing */
+.va-right-container h2 {
+  margin-bottom: 16px;
+  /* adjust as needed */
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1d4f56;
+}
+
+/* Header */
+.va-header {
+  margin-bottom: 0px;
+}
+
+.va-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-align: center;
+  color: #008FFF;
+}
+
+.va-header p {
+  font-size: 1rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Sections container */
+.va-section {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.va-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Section title */
+.va-section h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #1F2937;
+}
+
+/* Section content */
+.va-section-content p {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+}
+
+.va-section-content p strong {
+  min-width: 250px;
+  display: inline-block;
+  font-weight: 700;
+  color: #513E51;
+}
+
+.va-section-content p {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.va-section-content p strong {
+  width: 180px;
+  /* fixed width for labels */
+  font-weight: 700;
+  color: #513E51;
+  flex-shrink: 0;
+}
+
+.va-section-content p span {
+  flex: 1;
+  /* take remaining space */
+  min-width: 0;
+  /* allow wrapping */
+}
+
+/* Uploaded files list */
+.va-section-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.va-section-content ul li {
+  font-size: 1rem;
+  color: #513E51;
+  margin-bottom: 6px;
+}
+
+/* Download button */
+.va-btn-download {
+  background-color: #367E7F;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.va-btn-download:hover {
+  background-color: #e66400ff;
+}
+
+/* Mobile / Small screens */
+@media (max-width: 768px) {
+
+  /* Stack sidebar and main content vertically */
+  .va-page-split {
+    flex-direction: column;
+  }
+
+  /* Sidebar takes full width on mobile */
+  .va-left-container {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 20px;
+  }
+
+  /* Main content takes full width */
+  .va-right-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  /* Reduce header font size */
+  .va-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .va-header p {
+    font-size: 0.9rem;
+  }
+
+  /* Reduce section heading size */
+  .va-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+  }
+
+  /* Reduce strong label width so text wraps nicely */
+  .va-section-content p strong {
+    min-width: 120px;
+  }
+
+  /* Adjust section content font size and spacing */
+  .va-section-content p {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  /* Uploaded files list adjustments */
+  .va-section-content ul {
+    padding-left: 15px;
+  }
+
+  .va-section-content ul li {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  /* Download button smaller */
+  .va-btn-download {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+  }
+}
