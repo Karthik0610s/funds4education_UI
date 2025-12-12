@@ -18,6 +18,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { fetchDashboardCounts } from '../app/redux/slices/dashboardCountSlice';
+import { useSelector , useDispatch } from 'react-redux';
 const Home=() =>{
 
   const navigate = useNavigate();
@@ -165,10 +167,21 @@ const location = useLocation();
 
 // ✅ Click Handlers
 const handleClickStudent = () => checkAndNavigate("1", "student");
-/*const handleClickStudent=()=>{
+
+const handleClickDashboard=()=>{
   
   navigate(RP.studentdashboard);
-}*/
+}
+const dispatch = useDispatch();
+
+useEffect(() => {
+  dispatch(fetchDashboardCounts());
+}, []);
+
+const { sponsorCount, studentCount, activeScholarshipCount } = useSelector(
+  (state) => state.dashboardCounts
+);
+
 const handleClickSponsor = () => checkAndNavigate("2", "sponsor");
 const handleClickInstitution = () => checkAndNavigate("4", "institution");
  const testimonials = [
@@ -270,7 +283,7 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
         achieves for a bright future can get.
       </p>
     </section>
-      <button className="btn-primary">Find Your Path</button>
+      <button className="btn-primary" onClick={handleClickDashboard}>Find Your Path</button>
     </div>
   </div>
 </section>
@@ -347,15 +360,15 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
   </div>
       <div className="achievement-stats">
         <div>
-          <h2>1050+</h2>
+          <h2>{activeScholarshipCount}+</h2>
           <p>Scholarship</p>
         </div>
         <div>
-          <h2>3500+</h2>
+          <h2>{studentCount}+</h2>
           <p>Students</p>
         </div>
         <div>
-          <h2>500+</h2>
+          <h2>{sponsorCount}+</h2>
           <p>Partner Group</p>
         </div>
       </div>

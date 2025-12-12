@@ -252,7 +252,7 @@ body {
   .benefits-section {
     flex-direction: column;
     align-items: center;
-    padding: 60px 30px;
+    /*padding: 60px 30px;*/
   }
 
   .benefits-right {
@@ -2113,7 +2113,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 40px;
-  margin-bottom: 60px;
+  /*margin-bottom: 60px;*/
 }
 
 .hero-left img {
@@ -6751,7 +6751,7 @@ p {
   gap: 4rem;
   justify-content: space-between;
   align-items: center;
-  padding: 5rem 1.5rem;
+  /*padding: 5rem 1.5rem;*/
   background-color: #f6f6fb;
 }
 
@@ -6864,7 +6864,7 @@ p {
 /* Section Layout */
 .achievement-section {
   background: #f6f6fb;
-  padding: 4rem 1.5rem;
+  padding: 0rem 0rem;
   display: flex;
   flex-direction: column;
   align-items: center;
