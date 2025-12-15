@@ -97,9 +97,9 @@ const finalFileName = cleanFileName.replace(/[^\x20-\x7E]/g, "");
 console.log("🧹 finalFileName =", finalFileName);
 
 // 6️⃣ STEP 3 - Detect if file is image
-const isImage = finalFileName
-  ? /\.(png|jpg|jpeg|gif)$/i.test(finalFileName)
-  : true;   // ⬅️ IMPORTANT — if empty => use default image
+const isImage =
+  finalFileName && /\.(png|jpg|jpeg|gif)$/i.test(finalFileName);
+// ⬅️ IMPORTANT — if empty => use default image
 
 console.log("🖼️ isImage =", isImage);
 
@@ -112,8 +112,9 @@ console.log("👉 DefaultImage URL =", defaultImage);
 //const parentFolder = roleName === "Sponsor" ? "sponsor" : "student";
 let parentFolder = "";
 
-if (filePath.includes("student")) parentFolder = "student";
-else if (filePath.includes("sponsor")) parentFolder = "sponsor";
+if (roleName === "Student") parentFolder = "student";
+else if (roleName === "Sponsor") parentFolder = "sponsor";
+
 // 8️⃣ STEP 5 - Build final image URL
 const profileImageUrl =
   folderName && finalFileName
@@ -129,12 +130,16 @@ const altText = finalFileName
 
 console.log("🔤 altText =", altText);
 
-  const initialImg = finalFileName ? profileImageUrl : defaultImage;
+const initialImg = isImage ? profileImageUrl : defaultImage;
 const [imgError, setImgError] = useState(initialImg);
   console.log("imgError",imgError);
   const [isCompactHeader, setIsCompactHeader] = useState(
   window.innerWidth <= 912
 );
+
+useEffect(() => {
+  setImgError(isImage ? profileImageUrl : defaultImage);
+}, [roleName, profileImageUrl, isImage]);
 
 useEffect(() => {
   const handleResize = () => {
@@ -196,7 +201,7 @@ useEffect(() => {
 
              {isImage ? (
      <img
-     src={imgError}
+      src={imgError}
   alt={altText}
   className="circle-img"
   onError={() => setImgError(defaultImage)}
