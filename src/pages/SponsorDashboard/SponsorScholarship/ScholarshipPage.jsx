@@ -332,18 +332,9 @@ const ScholarshipPage = () => {
                 </button>
 
                 {/* EDIT */}
-                <button
-                  className="icons-btn edit"
-                  onClick={() => handleEdit(sch)}
-                  style={{
-                    color: "orange",
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <i className="fa-regular fa-pen-to-square"></i>
-                </button>
+              <button className="icon-btn edit" onClick={() => openModal(scholarship, "edit")}>
+  <i className="fa fa-pencil"></i>
+</button>
 
                 {/* DELETE */}
                 <button
