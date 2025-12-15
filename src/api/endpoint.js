@@ -32,5 +32,6 @@ export const ApiKey = {
    EmailExistCheck: "/userDto/by-email",
    ChangePassword: "Auth/change-password",
    ResetPassword: "Auth/reset-password",
+   DashboardCount: "DashboardCount"
 
 };

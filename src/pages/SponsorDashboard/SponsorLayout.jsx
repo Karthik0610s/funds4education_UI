@@ -1,16 +1,16 @@
 // components/layout/SponsorLayout.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { routePath as RP }  from "../../app/components/router/routepath";
+import { routePath as RP } from "../../app/components/router/routepath";
 
 const SponsorLayout = ({ children, name, handleLogout }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <>
-     
+
       {/* ⭐ MOBILE TOP BAR */}
-     {/* <div className="sponsor-mobile-bar">
+      {/* <div className="sponsor-mobile-bar">
         <button
           className="sponsor-mobile-btn"
           onClick={() => setDrawerOpen(!drawerOpen)}
@@ -37,7 +37,7 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
       <aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
         <nav className="sponsor-drawer-nav">
 
-           <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
+          <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
 
           <Link to="/sponsor-dashboard/sponsorapplication" className="sponsor-drawer-item">
             Applications
@@ -68,10 +68,7 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
 
       {/* ⭐ DESKTOP SIDEBAR */}
       <aside className="sidebar">
-        <div className="profile">
-          <div className="avatar">👤</div>
-          <p className="profile-name">{name}</p>
-        </div>
+
 
         <nav className="sidebar-nav">
           <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
@@ -79,7 +76,7 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
           <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Sponsored Scholarship</Link>
           <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
           {/* <Link to="/sponsor-dashboard/report" className="nav-link">Reports</Link> */}
-         {/* <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
+          {/* <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
           { <Link to={RP.resetPassword}>Reset Password</Link> }*/}
 
         </nav>

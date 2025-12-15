@@ -8,6 +8,7 @@ import { logout } from "../../../app/redux/slices/authSlice";
 import "../../../pages/styles.css";
 import { publicAxios } from "../../../api/config";
 import { ApiKey } from "../../../api/endpoint";
+
 const ViewApplication = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -29,36 +30,35 @@ const ViewApplication = () => {
     }
   }, [selectedApplication]);
 
-  const handleBack = () => navigate(-1);
-
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
 
   const name = localStorage.getItem("name") || "Student";
+
+  // Move data definition here to avoid undefined in downloadFiles
+  const data = applicationData;
+
   const downloadFiles = async () => {
-  try {
-    const res = await publicAxios.get(
-      `${ApiKey.downloadscholarshipFiles}/${data.id}`,
-      { responseType: "blob" }
-    );
-
-    const url = window.URL.createObjectURL(
-      new Blob([res.data], { type: "application/zip" })
-    );
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "documents.zip");
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } catch (err) {
-    console.error("File download failed:", err);
-  }
-};
-
+    try {
+      const res = await publicAxios.get(
+        `${ApiKey.downloadscholarshipFiles}/${data.id}`,
+        { responseType: "blob" }
+      );
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/zip" })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "documents.zip");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("File download failed:", err);
+    }
+  };
 
   const getAge = (dob) => {
     if (!dob) return "N/A";
@@ -72,12 +72,10 @@ const ViewApplication = () => {
   if (error) return <p>Error loading data!</p>;
   if (!applicationData) return <p>No data found</p>;
 
-  const data = applicationData;
-
   return (
-    <div className="page-split">
+    <div className="va-page-split">
       {/* Left Sidebar */}
-      <div className="left-container">
+      <div className="va-left-container">
         <SponsorLayout name={name} handleLogout={handleLogout} />
       </div>
 
@@ -85,72 +83,92 @@ const ViewApplication = () => {
       <div className="right-container">
         <Header variant="sponsor-profile" />
 
-        {/* Header with Back Button on Right */}
-        <div className="view-app-header">
-          <div className="view-app-header-title">
-            <h1>Scholarship Application Preview</h1>
-            <p>View all details of the scholarship application.</p>
-          </div>
-     {/*
-          <button
-            className="view-application-back-btn"
-            onClick={handleBack}
-          >
-            ←  Back
-          </button>
-     */}
+        <div className="va-header">
+          <h1>Scholarship Application Preview</h1>
+          <p>View all details of the scholarship application.</p>
         </div>
 
-        {/* Card Section */}
-        <section className="view-app-cards">
-          <div className="view-app-card">
+        {/* Back button example */}
+        {/* <button className="va-btn-back" onClick={() => navigate(-1)}>← Back</button> */}
 
-            <h3>Personal Details</h3>
-            <p><strong>Full Name:</strong> {data.firstName} {data.lastName}</p>
-            <p><strong>Email:</strong> {data.email}</p>
-            <p><strong>Phone:</strong> {data.phoneNumber}</p>
-            <p><strong>Gender:</strong> {data.gender}</p>
-            <p><strong>Age:</strong> {getAge(data.dateOfBirth)}</p>
+        {/* Personal Details Container */}
 
-            <h3>Scholarship Details</h3>
-            <p><strong>Scholarship Name:</strong> {data.scholarshipName}</p>
-            <p><strong>Category:</strong> {data.category}</p>
-            <p><strong>Application Date:</strong> {new Date(data.applicationDate).toLocaleDateString()}</p>
+        <h2>Personal Details</h2>
+        <div className="va-section-content">
+          <p><strong>Full Name:</strong> {data.firstName} {data.lastName}</p>
+          <p><strong>Email:</strong> {data.email}</p>
+          <p><strong>Phone:</strong> {data.phoneNumber}</p>
+          <p><strong>Gender:</strong> {data.gender}</p>
+          <p><strong>Age:</strong> {getAge(data.dateOfBirth)}</p>
+        </div>
 
-            <h3>Education Details</h3>
-            <p><strong>Study Level:</strong> {data.studyLevel}</p>
-            <p><strong>School Name:</strong> {data.schoolName || "N/A"}</p>
-            <p><strong>Course / Major:</strong> {data.courseOrMajor || "N/A"}</p>
-            <p><strong>Year of Study:</strong> {data.yearOfStudy || "N/A"}</p>
-            <p><strong>GPA / Marks:</strong> {data.gpaOrMarks || "N/A"}</p>
 
-            <h3>Additional Information</h3>
-            <p><strong>Extra Curricular Activities:</strong> {data.extraCurricularActivities || "N/A"}</p>
-            <p><strong>Awards & Achievements:</strong> {data.awardsAchievements || "N/A"}</p>
-            <p><strong>Notes / Comments:</strong> {data.notesComments || "N/A"}</p>
+        {/* Scholarship Details Container */}
 
-            <h3>Uploaded Documents</h3>
+        <h2>Scholarship Details</h2>
+        <div className="va-section-content">
+          <p>
+            <strong>Scholarship Name:</strong> <span>{data.scholarshipName}</span>
+          </p>
+          <p><strong>Category:</strong> {data.category}</p>
+          <p><strong>Application Date:</strong> {new Date(data.applicationDate).toLocaleDateString()}</p>
+        </div>
 
-{data.files?.length > 0 ? (
-  <div>
-    <ul>
-      {data.files.map((file, index) => (
-        <li key={index}>{file}</li>
-      ))}
-    </ul>
 
-    <button className="btn btn-primary mt-2" onClick={downloadFiles}>
-      Download Documents
-    </button>
-  </div>
-) : (
-  <p>No files uploaded</p>
-)}
+        {/* Education Details Container */}
 
-          </div>
-        </section>
+        <h2>Education Details</h2>
+        <div className="va-section-content">
+          <p><strong>Study Level:</strong> {data.studyLevel}</p>
+          <p>
+            <strong>School / College Name:</strong> <span>{data.schoolName || "N/A"}</span>
+          </p>
+          <p>
+            <strong>Class / Course / Major:</strong> <span>{data.courseOrMajor || "N/A"}</span>
+          </p>
+
+          <p><strong>Year of Study:</strong> {data.yearOfStudy || "N/A"}</p>
+          <p><strong>Marks / GPA:</strong> {data.gpaOrMarks || "N/A"}</p>
+
+        </div>
+
+        {/* Additional Information Container */}
+        <h2>Additional Information</h2>
+        <div className="va-section-content">
+          <p>
+            <strong>Extra Curricular Activities:</strong> <span>{data.extraCurricularActivities || "N/A"}</span>
+          </p>
+          <p>
+            <strong>Awards & Achievements:</strong> <span>{data.awardsAchievements || "N/A"}</span>
+          </p>
+          <p>
+            <strong>Notes / Comments:</strong> <span>{data.notesComments || "N/A"}</span>
+          </p>
+
+        </div>
+
+
+        {/* Uploaded Documents Container */}
+        <h2>Uploaded Documents</h2>
+        <div className="va-section-content">
+          {data.files?.length > 0 ? (
+            <>
+              <ul>
+                {data.files.map((file, index) => (
+                  <li key={index}>{file}</li>
+                ))}
+              </ul>
+              <button className="va-btn-download" onClick={downloadFiles}>
+                Download Documents
+              </button>
+            </>
+          ) : (
+            <p>No files uploaded</p>
+          )}
+        </div>
       </div>
     </div>
+
   );
 };
 

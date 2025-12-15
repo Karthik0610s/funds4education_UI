@@ -33,6 +33,7 @@ const ScholarshipPage = () => {
   // Modal
   const [showModal, setShowModal] = useState(false);
   const [selectedScholarship, setSelectedScholarship] = useState(null);
+  const [modalMode, setModalMode] = useState("view");
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,15 +73,11 @@ const ScholarshipPage = () => {
   );
 
   // Handlers
-  const handleAddScholarship = () => {
-    setSelectedScholarship(null);
-    setShowModal(true);
-  };
-
-  const handleEdit = (scholarship) => {
-    setSelectedScholarship(scholarship);
-    setShowModal(true);
-  };
+  const openModal = (scholarship, mode) => {
+  setSelectedScholarship(scholarship);
+  setModalMode(mode);
+  setShowModal(true);
+};
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -158,12 +155,11 @@ const ScholarshipPage = () => {
                     <option value="Closed">Closed</option>
                   </select>
 
-                  <button
-                    className="applications-btn-new"
-                    onClick={handleAddScholarship}
-                  >
-                    + New Scholarship
-                  </button>
+                 
+                  <button 
+                  className="applications-btn-new"
+                  onClick={() => openModal(null, "add")}> + Add New Scholarship</button>
+
                 </div>
               </div>
 
@@ -419,12 +415,12 @@ const ScholarshipPage = () => {
               )}*/}
 
               {/* MODAL */}
-              <AddScholarshipModal
-                show={showModal}
-                handleClose={() => setShowModal(false)}
-                onSubmit={handleModalSubmit}
-                scholarship={selectedScholarship}
-              />
+             <AddScholarshipModal
+   show={showModal}
+   handleClose={() => setShowModal(false)}
+   scholarship={selectedScholarship}
+   mode={modalMode}    // <-- Add this
+/>
             </div>
           </div>
         </div>
