@@ -320,7 +320,7 @@ const ScholarshipPage = () => {
                 {/* VIEW */}
                 <button
                   className="icons-btn view"
-                  onClick={() => console.log("view")}
+                  onClick={() => openModal(sch, "view")}
                   style={{
                     color: "#1e40af",
                     background: "transparent",
@@ -332,7 +332,7 @@ const ScholarshipPage = () => {
                 </button>
 
                 {/* EDIT */}
-              <button className="icon-btn edit" onClick={() => openModal(scholarship, "edit")}>
+              <button className="icon-btn edit" onClick={() => openModal(sch, "edit")}>
   <i className="fa fa-pencil"></i>
 </button>
 
