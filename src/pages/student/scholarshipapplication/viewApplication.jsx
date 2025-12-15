@@ -93,7 +93,7 @@ const ViewApplication = () => {
 
         {/* Personal Details Container */}
 
-        <h2>Personal Details</h2>
+        <h2 class="personal-header">Personal Details</h2>
         <div className="va-section-content">
           <p><strong>Full Name:</strong> {data.firstName} {data.lastName}</p>
           <p><strong>Email:</strong> {data.email}</p>
@@ -104,8 +104,8 @@ const ViewApplication = () => {
 
 
         {/* Scholarship Details Container */}
+        <h2 class="personal-header">Scholarship Details</h2>
 
-        <h2>Scholarship Details</h2>
         <div className="va-section-content">
           <p>
             <strong>Scholarship Name:</strong> <span>{data.scholarshipName}</span>
@@ -116,8 +116,8 @@ const ViewApplication = () => {
 
 
         {/* Education Details Container */}
+        <h2 class="personal-header">Education Details</h2>
 
-        <h2>Education Details</h2>
         <div className="va-section-content">
           <p><strong>Study Level:</strong> {data.studyLevel}</p>
           <p>
@@ -133,7 +133,8 @@ const ViewApplication = () => {
         </div>
 
         {/* Additional Information Container */}
-        <h2>Additional Information</h2>
+        <h2 class="personal-header">Additional Information</h2>
+
         <div className="va-section-content">
           <p>
             <strong>Extra Curricular Activities:</strong> <span>{data.extraCurricularActivities || "N/A"}</span>
@@ -149,7 +150,8 @@ const ViewApplication = () => {
 
 
         {/* Uploaded Documents Container */}
-        <h2>Uploaded Documents</h2>
+        <h2 class="personal-header">Uploaded Documents</h2>
+
         <div className="va-section-content">
           {data.files?.length > 0 ? (
             <>
