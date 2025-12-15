@@ -37,8 +37,11 @@ import LoginSuccess from "../../../pages/login/loginsuccess.jsx";
 import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredScholarship.jsx";
 import ForgotPassword from "../../../pages/ForgotPassword/forgotPassword.jsx";
 import ViewApplication from "../../../pages/student/scholarshipapplication/viewApplication.jsx";
+import TermsAndConditions from "../../../pages/termsandcondition.jsx";
+import ContactUs from "../../../pages/contact.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
+import PrivacyPolicy from "../../../pages/privacypolicy.jsx";
 const routeToVariant = {
   [RP.home]: "public",
   [RP.studentdashboard]: "student-profile",
@@ -146,6 +149,9 @@ function App() {
           <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship />} />
           <Route path={RP.ForgotPassword} element={<ForgotPassword />} />
           <Route path={RP.viewApplication} element={<ViewApplication />} />
+           <Route path="/terms" element={<TermsAndConditions />} />
+        <Route path="/contact" element={<ContactUs />} />
+         <Route path="/privacy" element={<PrivacyPolicy />} />
         </Routes>
       </Layout>
     </Router>
