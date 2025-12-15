@@ -3429,7 +3429,7 @@ input:not([type="radio"]) {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 920px) {
   .left-container {
     display: none;
   }
@@ -4490,7 +4490,7 @@ textarea {
 .applications-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  /*margin-top: 15px;*/
   background: #fff;
 }
 
@@ -4617,7 +4617,7 @@ textarea {
   /* S.No bold on top */
   .applications-table td[data-label="S.No"]:before {
     content: attr(data-label);
-    font-weight: 700;
+    /*font-weight: 500;*/
     display: block;
     margin-bottom: 4px;
   }
@@ -4625,8 +4625,8 @@ textarea {
   /* Other labels */
   .applications-table td:not([data-label="S.No"]):not([data-label="Status / Actions"]):before {
     content: attr(data-label);
-    font-weight: 600;
-    color: #374151;
+    /*font-weight: 500;
+    color: #222325;*/
     display: block;
     margin-bottom: 4px;
   }
@@ -4660,8 +4660,8 @@ textarea {
   /* Label on top */
   .applications-table td[data-label="Status / Actions"]:before {
     content: attr(data-label);
-    font-weight: 600;
-    color: #374151;
+   /* font-weight: 500;
+    color: #374151;*/
     display: block;
     margin-bottom: 6px;
   }
@@ -5225,7 +5225,7 @@ textarea {
 
 /* Cards */
 .applications-cards {
-  margin-top: 24px;
+ /* margin-top: 24px;*/
   display: grid;
   gap: 16px;
 }
@@ -6287,7 +6287,7 @@ p {
 }
 
 /* ⭐ Mobile Drawer Behavior */
-@media (max-width: 768px) {
+@media (max-width: 920px) {
 
   .mobile-filter-icon {
     display: flex;
@@ -6322,6 +6322,14 @@ p {
     margin-top: 70px
   }
 }
+
+@media (max-width: 768px) {
+  .applications-table td::before {
+    font-weight: 600; /* bold all data-label text */
+  color :#000;
+  }
+}
+
 
 /* Hide mobile elements on desktop */
 .mobile-header,
@@ -7380,6 +7388,39 @@ p {
 
   .view-app-card {
     padding: 16px;
+  }
+}
+
+/* DEFAULT DESKTOP (min-width: 801px) */
+.title-desktop {
+  display: inline;
+}
+.title-tablet,
+.title-mobile {
+  display: none;
+}
+
+/* TABLET (500px–800px) */
+@media (max-width: 800px) and (min-width: 500px) {
+  .title-desktop {
+    display: none;
+  }
+  .title-tablet {
+    display: inline;
+  }
+  .title-mobile {
+    display: none;
+  }
+}
+
+/* MOBILE (<500px) */
+@media (max-width: 500px) {
+  .title-desktop,
+  .title-tablet {
+    display: none;
+  }
+  .title-mobile {
+    display: inline;
   }
 }
 

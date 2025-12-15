@@ -47,10 +47,10 @@ export const addNewSponsor = async (data, dispatch) => {
         await dispatch(fetchSponsorList());
 
         // Optionally show success notification
-        Swal.fire({
+       /* Swal.fire({
           text: "Sponsor added successfully!",
           icon: "success",
-        });
+        });*/
         return res.data;
     } catch (error) {
         dispatch(setError()); // Handle error if API fails
@@ -67,7 +67,7 @@ export const updateSponsor = async (data, dispatch) => {
     try {
         
         dispatch(setLoading()); // Set loading before making the API request
-        await updateSponsorReq(data); // Call API to update sponsor
+     const res=   await updateSponsorReq(data); // Call API to update sponsor
 
         // Fetch updated list of sponsors after updating
         await dispatch(fetchSponsorList());
@@ -76,6 +76,7 @@ export const updateSponsor = async (data, dispatch) => {
            text: "Sponsor updated successfully!",
            icon: "success",
          });*/
+         return res.data;
     } catch (error) {
         dispatch(setError()); // Handle error if API fails
         Swal.fire({

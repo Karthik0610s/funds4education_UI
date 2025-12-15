@@ -80,8 +80,8 @@ const ViewApplication = () => {
       </div>
 
       {/* Right Side */}
-      <div className="va-right-container">
-        <Header variant="student-profile" />
+      <div className="right-container">
+        <Header variant="sponsor-profile" />
 
         <div className="va-header">
           <h1>Scholarship Application Preview</h1>

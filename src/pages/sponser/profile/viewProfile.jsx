@@ -30,6 +30,9 @@ export default function ViewProfile() {
             budget: sponsor.budget || "",
             studentCriteria: sponsor.studentCriteria || "",
             studyLevels: sponsor.studyLevels || "",
+            fileName:sponsor.fileName ||"",
+            files:sponsor.files ||[],
+            sponsorId:sponsor.sponsorId||0
           });
         })
         .catch((err) => console.error("❌ Error fetching sponsor:", err));
@@ -63,6 +66,10 @@ export default function ViewProfile() {
           <div className="profile-details">
             <div className="detail-row"><label>Email:</label><input type="text" value={profile.email} readOnly /></div>
             <div className="detail-row"><label>Phone:</label><input type="text" value={profile.phone} readOnly /></div>
+            <div className="detail-row">
+              <label>Upload Profile Photo:</label>
+              <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />
+            </div>
           </div>
 
           {/* Extra Info */}

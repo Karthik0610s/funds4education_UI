@@ -50,7 +50,7 @@ export const addNewInstitutionSignup = async (data, dispatch) => {
       text: "InstitutionSignup added successfully!",
       icon: "success",
     });*/
-    return res;
+    return res.data;
   } catch (error) {
     dispatch(setError()); // Handle error if API fails
     Swal.fire({

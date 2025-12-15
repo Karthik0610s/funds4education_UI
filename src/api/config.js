@@ -27,42 +27,49 @@ export const publicAxios = axios.create({
   }
   return config;
 });*/
-publicAxios.interceptors.request.use(async (config) => {
+// ✅ Auto-logout timer: runs on page load
+// ✅ Continuous token expiry check
+(function setupContinuousLogout() {
+  const checkExpiry = () => {
+    const expiresAt = localStorage.getItem("expiresAt");
+    const token = localStorage.getItem("token");
+
+    if (token && expiresAt) {
+      const expiryTime = new Date(expiresAt).getTime();
+      const currentTime = Date.now();
+
+      if (currentTime >= expiryTime) {
+        console.log("Token expired, logging out automatically...");
+        localStorage.clear();
+        window.location.href = "/login";
+      }
+    }
+  };
+
+  // Check immediately and then every second
+  checkExpiry();
+  setInterval(checkExpiry, 1000); // every 1 second
+})();
+
+// ✅ Public Axios interceptor: attach token and check expiry on each request
+publicAxios.interceptors.request.use((config) => {
   const access_token = localStorage.getItem("token");
-  const expiresAt = localStorage.getItem("expiresAt"); // Stored in ISO format
+  const expiresAt = localStorage.getItem("expiresAt"); // ISO string
 
   if (access_token && expiresAt) {
     const expiryTime = new Date(expiresAt).getTime();
-    const currentTime = new Date().getTime();
+    const currentTime = Date.now();
 
-    // Token expired → remove token and redirect
+    // Token expired → logout immediately
     if (currentTime >= expiryTime) {
-      console.log("Token expired, redirecting to login...");
-
-         // CLEAR ALL AUTH LOCAL STORAGE
-      localStorage.removeItem("token");
-      localStorage.removeItem("expiresAt");
-      localStorage.removeItem("user");
-      localStorage.removeItem("roleId");
-      localStorage.removeItem("roleName");
-      localStorage.removeItem("username");
-      localStorage.removeItem("name");
-      localStorage.removeItem("id");
-      localStorage.removeItem("userId");
-localStorage.setItem("firstName" );
-localStorage.setItem("lastName");
-localStorage.setItem("email");
-localStorage.setItem("phoneNumber");
-localStorage.setItem("dateOfBirth");
-localStorage.setItem("gender");  
-localStorage.setItem("filepath") ;  
-localStorage.setItem("filepath") ;
+      console.log("Token expired (request), redirecting to login...");
+      localStorage.clear();
       window.location.href = "/login";
       return Promise.reject("Token expired");
     }
 
-    // Token valid → attach it
-    if (config.headers.Authorization === undefined) {
+    // Token valid → attach
+    if (!config.headers.Authorization) {
       config.headers.Authorization = `Bearer ${access_token}`;
     }
   }

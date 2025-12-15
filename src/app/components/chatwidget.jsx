@@ -13,6 +13,8 @@ const ChatWidget = () => {
   const [sessionId, setSessionId] = useState(null);
 
   const chatEndRef = useRef(null);
+  const [isTyping, setIsTyping] = useState(false);
+
 
   // Auto-scroll chat
   useEffect(() => {
@@ -53,7 +55,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
 
     const messageToSend = input;
     setInput("");
-
+ setIsTyping(true);
     try {
       
       const payload = {
@@ -78,6 +80,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
         { sender: "agent", text: "Sorry, something went wrong." },
       ]);
     }
+      setIsTyping(false);
   };
 
   return (
@@ -108,6 +111,12 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
                 {msg.text}
               </p>
             ))}
+             {/* ⭐ Agent Typing Indicator */}
+  {isTyping && (
+    <p className="agent-msg typing-indicator">
+      Agent is typing<span className="dots"></span>
+    </p>
+  )}
             <div ref={chatEndRef} />
           </div>
 

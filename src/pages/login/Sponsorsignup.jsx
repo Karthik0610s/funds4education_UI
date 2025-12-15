@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Link } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 import "../../pages/styles.css";
 import { useDispatch } from "react-redux";
 import { addNewSponsor, fetchSponsorList } from "../../app/redux/slices/SponsorSlice"; 
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-
-
+import Swal from "sweetalert2";
+import { uploadFormFilesReq } from "../../api/scholarshipapplication/scholarshipapplication";
+import { useNavigate } from "react-router-dom";
 export default function SponsorSignUpPage() {
     const [step, setStep] = useState(0);
     const [userType, setUserType] = useState("sponsor"); // default to sponsor
@@ -17,6 +18,7 @@ export default function SponsorSignUpPage() {
         email: "",
         phone: "",
         website: "",
+         documents: [],
     });
     const [showPassword, setShowPassword] = useState(false);
     const [verification, setVerification] = useState({ username: "", password: "" });
@@ -33,8 +35,47 @@ export default function SponsorSignUpPage() {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
     const websiteOrLinkedInRegex =
        /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$|^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9_-]+\/?$/;
+const fileInputRef = useRef(null);
+ const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+const [filesList, setFilesList] = useState( []); // display names
+const [fileSelected, setFileSelected] = useState(false);
+  const navigate = useNavigate();
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  if (!files || files.length === 0) return;
 
+  setSelectedFiles(files);               // store File objects
+  setFilesList(files.map(f => f.name));  // store names for display
 
+  setBasicDetails({ ...basicDetails, documents: files }); // attach to basicDetails
+  setFileSelected(true);
+};
+  // Upload files function returns uploaded file names
+  const uploadFiles = async (applicationId) => {
+    if (selectedFiles.length < 1) return [];
+
+    const formDataPayload = new FormData();
+    selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
+    formDataPayload.append("TypeofUser", "sponsor");
+    formDataPayload.append("id", applicationId);
+
+    try {
+      await uploadFormFilesReq(formDataPayload);
+
+      // Return names of uploaded files for merging
+      return selectedFiles.map(f => f.name);
+    } catch (ex) {
+      console.error("File upload failed:", ex);
+      return [];
+    }
+  };
+const handleClear = () => {
+  setSelectedFiles([]);
+  setFilesList([]);
+  setFileSelected(false);
+  setBasicDetails({ ...basicDetails, documents: [] }); // clear documents
+  if (fileInputRef.current) fileInputRef.current.value = null;
+};
 
 
     // --- Step validation ---
@@ -92,11 +133,37 @@ export default function SponsorSignUpPage() {
     };
 
     try {
-        await addNewSponsor(data, dispatch);
+     const res =    await addNewSponsor(data, dispatch);
+     const userId =res.id;
+      if (!userId) return; // stop if insertion failed
 //alert("Sponsor registered successfully!");
+// 2️⃣ Upload documents if any
+  if (basicDetails.documents && basicDetails.documents.length > 0) {
+    try {
+      await uploadFiles(userId);
+    } catch (err) {
+      console.error("File upload failed:", err);
+      Swal.fire({
+        text: "Documents upload failed!",
+        icon: "error",
+      });
+      return;
+    }
+  }
+
+ 
         setBasicDetails({ sponsorName: "", orgType: "", email: "", phone: "", website: "" });
         setVerification({ username: "", password: "" });
         setStep(0);
+         // 3️⃣ Show success alert after everything
+  await Swal.fire({
+    text: "Signup successful!",
+    icon: "success",
+    confirmButtonText: "OK",
+  });
+
+  // 4️⃣ Navigate to login
+  navigate("/login");
     } catch (error) {
         console.error("Error saving sponsor:", error);
     }
@@ -259,7 +326,49 @@ export default function SponsorSignUpPage() {
         />
         {errors.website && <p className="error-text">{errors.website}</p>}
       </div>
+      
     </div>
+       <div className="form-group col-12">
+                <label>Upload Profile Photo</label>
+                <input
+                  type="file"
+                   accept="image/*"  
+                  name="documents"
+                  onChange={handleFileChange}
+                  //multiple
+                  ref={fileInputRef}
+                 // disabled={isViewMode}
+                />
+
+                {fileSelected && filesList.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger mt-2"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                )}
+
+               {filesList.length > 0 && (
+    <div className="d-flex flex-column mt-2 rounded">
+      {filesList.map((fileName, index) => (
+        <div
+          key={index}
+          className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+           style={{
+          gap: "12px",
+          paddingLeft: "14px",
+          paddingRight: "12px",
+          color:"black"
+        }}
+        >
+          <span>{fileName}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  </div>
   </div>
 )}
 

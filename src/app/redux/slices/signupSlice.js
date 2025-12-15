@@ -44,14 +44,14 @@ export const insertNewUser = (data, navigate) => async (dispatch) => {
 
     dispatch(setUser(res.data)); // store user if API returns it
 
-    await Swal.fire({
+    /*await Swal.fire({
       text: res.message || "Signup successful!",
       icon: "success",
       confirmButtonText: "OK",
-    });
-
+    });*/
+  return res.data.id; 
     // ⭐ Navigate AFTER user clicks OK
-    navigate("/login"); 
+  //  navigate("/login"); 
   } catch (error) {
     dispatch(setError());
 

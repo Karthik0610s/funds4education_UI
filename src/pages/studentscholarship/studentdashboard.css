@@ -68,6 +68,7 @@ body, .scholarship-card, .sidebar, .main-content {
 @media (max-width: 768px) {
   .main-content {
     margin-top: 0;
+    padding:10px;
   }
 }
 .main-content::-webkit-scrollbar {
@@ -791,7 +792,35 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
     top: 28px; /* reduce top when zoomed out */
   }
 }
+.mobile-filter-icon {
+  display: none;
+}
 
+@media (max-width: 920px) {
+  .mobile-filter-icon {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #395b61;
+    color: white;
+  
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: fit-content;
+    margin-top:55px;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar {
+    margin-top: 0px !important;
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-container-SC {
+    margin-top: 0px !important;
+  }
+}
 /* ------------------- MOBILE (<850px) ------------------- */
 @media (max-width: 850px) {
  
