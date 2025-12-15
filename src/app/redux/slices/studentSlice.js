@@ -54,11 +54,11 @@ export const updateStudent = createAsyncThunk(
       };
 
       // ✅ Update student record
-      await updateStudentProfile(formattedData);
+    const response =  await updateStudentProfile(formattedData);
       // ✅ Refresh profile data after update
       await dispatch(fetchStudentProfile());
 
-      Swal.fire({
+      /*Swal.fire({
         icon: "success",
         title: "Profile Updated",
         text: "Your profile has been updated successfully.",
@@ -78,6 +78,18 @@ export const updateStudent = createAsyncThunk(
         text: message,
         confirmButtonColor: "#d33",
       });
+
+      return rejectWithValue(message);
+    }
+  }*/
+   // ⭐ DO NOT SHOW Swal HERE — let handleSubmit show it later
+      return response.data;   // 🔥 return backend response including ID
+
+    } catch (err) {
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to update profile.";
 
       return rejectWithValue(message);
     }

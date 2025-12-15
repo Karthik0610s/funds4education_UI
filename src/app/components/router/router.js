@@ -67,7 +67,7 @@ const routeToVariant = {
   [RP.sponsorapplication]:"sponsorapplication",
   [RP.SponsorSignUpPage]:"sponsorsignup",
   [RP.scholarshipPage]:"scholarshippage",
- [RP.scholarshipViewPage]: "public",
+ [RP.scholarshipViewPage]: "student-profile",
   [RP.loginSuccess]:"public",
   [RP.SponsoredScholarship]:"sponsor-profile"
 };

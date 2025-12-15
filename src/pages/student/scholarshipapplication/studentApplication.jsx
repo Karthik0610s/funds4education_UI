@@ -143,7 +143,7 @@ const handleView = (app) => {
     <div>
       <Header variant="student-profile" />
      <div className="applications-header">
-  <button className="btn-primary" onClick={handleBack}>Back</button>
+  {/* <button className="btn-primary" onClick={handleBack}>Back</button> */}
 
   <div className="applications-title-wrapper">
     <h1 className="applications-title">My Scholarship Applications</h1>

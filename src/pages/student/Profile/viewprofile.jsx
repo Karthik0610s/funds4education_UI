@@ -89,6 +89,10 @@ const navigate = useNavigate();
               <label>Gender:</label>
               <input type="text" value={profile.gender || ""} readOnly />
             </div>
+            <div className="detail-row">
+              <label>Upload Profile Photo:</label>
+              <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />
+            </div>
           </div>
 
           {/* --- Account Info --- */}

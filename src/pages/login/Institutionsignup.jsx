@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 import "../../pages/styles.css"; // your CSS file
@@ -6,9 +6,11 @@ import { addNewInstitutionSignup } from "../../app/redux/slices/institutionsignu
 //import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
-
+import { uploadFormFilesReq } from "../../api/scholarshipapplication/scholarshipapplication";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 export default function InstitutionSignUpPage() {
-  
+  const fileInputRef = useRef(null);
+   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 const dispatch = useDispatch();
   const [institutionDetails, setInstitutionDetails] = useState({
@@ -24,6 +26,7 @@ const dispatch = useDispatch();
     contactPhone: "",
     numStudentsEligible: "",
     verificationAuthority: "",
+     documents: [],
     
   });
 const [step, setStep] = useState(0);
@@ -165,6 +168,48 @@ const [step, setStep] = useState(0);
   };
   const prevStep = () => setStep(step - 1);
 
+
+
+  const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+  const [filesList, setFilesList] = useState( []); // display names
+  const [fileSelected, setFileSelected] = useState(false);
+  
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
+  
+    setSelectedFiles(files);               // store File objects
+    setFilesList(files.map(f => f.name));  // store names for display
+  
+    setInstitutionDetails({ ...institutionDetails, documents: files }); // attach to basicDetails
+    setFileSelected(true);
+  };
+    // Upload files function returns uploaded file names
+    const uploadFiles = async (applicationId) => {
+      if (selectedFiles.length < 1) return [];
+  
+      const formDataPayload = new FormData();
+      selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
+      formDataPayload.append("TypeofUser", "institution");
+      formDataPayload.append("id", applicationId);
+  
+      try {
+        await uploadFormFilesReq(formDataPayload);
+  
+        // Return names of uploaded files for merging
+        return selectedFiles.map(f => f.name);
+      } catch (ex) {
+        console.error("File upload failed:", ex);
+        return [];
+      }
+    };
+  const handleClear = () => {
+    setSelectedFiles([]);
+    setFilesList([]);
+    setFileSelected(false);
+    setInstitutionDetails({ ...institutionDetails, documents: [] }); // clear documents
+    if (fileInputRef.current) fileInputRef.current.value = null;
+  };
   const handleSave = async () => {
     
     if (!validateStep()) return;
@@ -197,8 +242,25 @@ const [step, setStep] = useState(0);
 
     try {
       const res = await addNewInstitutionSignup(data,dispatch);
-
+debugger;
       if (res && !res.error && res.data) {
+         const userId =res.data.institutionID;
+      if (!userId) return; 
+         // stop if insertion failed
+        
+          // 2️⃣ Upload documents if any
+          if (institutionDetails.documents && institutionDetails.documents.length > 0) {
+            try {
+              await uploadFiles(userId);
+            } catch (err) {
+              console.error("File upload failed:", err);
+              Swal.fire({
+                text: "Documents upload failed!",
+                icon: "error",
+              });
+              return;
+            }
+          }
         // SweetAlert success
         Swal.fire({
           title: "Success!",
@@ -447,6 +509,47 @@ const [step, setStep] = useState(0);
                 <p className="error-text">{errors.verificationAuthority}</p>
               )}
             </div>
+              <div className="form-group col-12">
+                <label>Upload Profile Photo</label>
+                <input
+                  type="file"
+                   accept="image/*"  
+                  name="documents"
+                  onChange={handleFileChange}
+                 // multiple
+                  ref={fileInputRef}
+                 // disabled={isViewMode}
+                />
+
+                {fileSelected && filesList.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger mt-2"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                )}
+
+               {filesList.length > 0 && (
+    <div className="d-flex flex-column mt-2 rounded">
+      {filesList.map((fileName, index) => (
+        <div
+          key={index}
+          className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+           style={{
+          gap: "12px",
+          paddingLeft: "14px",
+          paddingRight: "12px",
+          color:"black"
+        }}
+        >
+          <span>{fileName}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  </div>
           </div>
         )}
 
@@ -479,17 +582,29 @@ const [step, setStep] = useState(0);
         {errors.username && <p className="error-text">{errors.username}</p>}
       </div>
               <div className="form-group">
-                <label>Password *</label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={verification.password}
-                  onChange={handleVerificationChange}
-                  className={errors.password ? "input-error" : ""}
-                />
-                {errors.password && <p className="error-text">{errors.password}</p>}
-              </div>
+               <label>Password *</label>
+             
+               <div className="password-wrapper">
+                 <input
+                   type={showPassword ? "text" : "password"}
+                   placeholder="Password"
+                   value={verification.password}
+                   onChange={(e) =>
+                     setVerification({ ...verification, password: e.target.value })
+                   }
+                   className={errors.password ? "input-error" : ""}
+                 />
+             
+                 <span
+                   className="password-toggle"
+                   onClick={() => setShowPassword(!showPassword)}
+                 >
+                   {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                 </span>
+               </div>
+             
+               {errors.password && <p className="error-text">{errors.password}</p>}
+             </div>
             </div>
           </div>
         )}

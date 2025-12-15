@@ -8,7 +8,9 @@ import { routePath as RP } from "../router/routepath";
 import "./header.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
+import defaultImage from "../../assests/DefaultImage.png";
 import { publicAxios } from "../../../api/config";
+
 const Header = ({ variant = "public" }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,10 +25,13 @@ const Header = ({ variant = "public" }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [imgError, setImgError] = useState(false);
+
 
   const dropdownRef = useRef(null);
-const menuRef = useRef(null);
+//const menuRef = useRef(null);
+const mobileMenuRef = useRef(null);
+const desktopMenuRef = useRef(null);
+
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
@@ -46,7 +51,15 @@ const menuRef = useRef(null);
 // MOBILE MENU CLOSE
 useEffect(() => {
   const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const clickedInsideMobile =
+      mobileMenuRef.current &&
+      mobileMenuRef.current.contains(event.target);
+
+    const clickedInsideDesktop =
+      desktopMenuRef.current &&
+      desktopMenuRef.current.contains(event.target);
+
+    if (!clickedInsideMobile && !clickedInsideDesktop) {
       setMenuOpen(false);
     }
   };
@@ -84,13 +97,16 @@ const finalFileName = cleanFileName.replace(/[^\x20-\x7E]/g, "");
 console.log("🧹 finalFileName =", finalFileName);
 
 // 6️⃣ STEP 3 - Detect if file is image
-const isImage = /\.(png|jpg|jpeg|gif)$/i.test(finalFileName);
+const isImage = finalFileName
+  ? /\.(png|jpg|jpeg|gif)$/i.test(finalFileName)
+  : true;   // ⬅️ IMPORTANT — if empty => use default image
+
 console.log("🖼️ isImage =", isImage);
 
 // 7️⃣ STEP 4 - Encode safe filename
 const encodedFileName = encodeURIComponent(finalFileName);
 console.log("🔐 encodedFileName =", encodedFileName);
-
+console.log("👉 DefaultImage URL =", defaultImage);
 
 // Pick the correct folder
 //const parentFolder = roleName === "Sponsor" ? "sponsor" : "student";
@@ -102,17 +118,32 @@ else if (filePath.includes("sponsor")) parentFolder = "sponsor";
 const profileImageUrl =
   folderName && finalFileName
     ? `${baseUrl}/${parentFolder}/${folderName}/${encodedFileName}`
-    : "/images/default-user.png";
+    : defaultImage;
 
 console.log("🔗 profileImageUrl =", profileImageUrl);
 
 // 9️⃣ STEP 6 - alt text without extension
-const altText =
-  finalFileName.replace(/\.[^/.]+$/, "") || "User Photo";
+const altText = finalFileName
+  ? finalFileName.replace(/\.[^/.]+$/, "")
+  : "";
 
 console.log("🔤 altText =", altText);
 
+  const initialImg = finalFileName ? profileImageUrl : defaultImage;
+const [imgError, setImgError] = useState(initialImg);
+  console.log("imgError",imgError);
+  const [isCompactHeader, setIsCompactHeader] = useState(
+  window.innerWidth <= 912
+);
 
+useEffect(() => {
+  const handleResize = () => {
+    setIsCompactHeader(window.innerWidth <= 912);
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
   const renderVariantLinks = (forcedVariant) => {
   const activeVariant = forcedVariant || variant;
 
@@ -123,7 +154,7 @@ console.log("🔤 altText =", altText);
            {!isLoggedIn && (
           <div className="nav-wrapper">
             <div className="nav-bar">
-              <Link to="/">Home</Link>
+              <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
               <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
               <Link to={RP.studentdashboard}>Scholarships</Link>
             </div>
@@ -163,18 +194,17 @@ console.log("🔤 altText =", altText);
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
 
-              {isImage ? (
-      <img
-        src={profileImageUrl}
-        alt={altText}
-        className="circle-img"
-            onError={() => setImgError(true)}
-            style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    }}
-      />
+             {isImage ? (
+     <img
+     src={imgError}
+  alt={altText}
+  className="circle-img"
+  onError={() => setImgError(defaultImage)}
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}/>
     ) : (
       <div className="alt-logo-text">{altText}</div>
     )}
@@ -230,7 +260,7 @@ console.log("🔤 altText =", altText);
     {!isLoggedIn && (
         <div className="nav-wrapper">
           <div className="nav-bar">
-            <Link to="/">Home</Link>
+         <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
           </div>
@@ -270,18 +300,17 @@ console.log("🔤 altText =", altText);
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
-              {isImage ? (
-      <img
-        src={profileImageUrl}
-        alt={altText}
-        className="circle-img"
-            onError={() => setImgError(true)}
-            style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    }}
-      />
+               {isImage ? (
+     <img
+     src={imgError}
+  alt={altText}
+  className="circle-img"
+  onError={() => setImgError(defaultImage)}
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}/>
     ) : (
       <div className="alt-logo-text">{altText}</div>
     )}
@@ -357,17 +386,16 @@ console.log("🔤 altText =", altText);
               <div className="icon-circle" onClick={toggleDropdown}>
 
               {isImage ? (
-      <img
-        src={profileImageUrl}
-        alt={altText}
-        className="circle-img"
-            onError={() => setImgError(true)}
-            style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-    }}
-      />
+     <img
+     src={imgError}
+  alt={altText}
+  className="circle-img"
+  onError={() => setImgError(defaultImage)}
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}/>
     ) : (
       <div className="alt-logo-text">{altText}</div>
     )}
@@ -432,6 +460,14 @@ console.log("🔤 altText =", altText);
           </div>
         );
 
+       case "profile-role-based":
+  if (!isLoggedIn) return renderVariantLinks("public");
+
+  return roleName === "Student"
+    ? renderVariantLinks("student-profile")
+    : renderVariantLinks("sponsor-profile");
+
+  
       default:
         return null;
     }
@@ -444,8 +480,8 @@ const renderMobileLinks = (forcedVariant) => {
     /* ---------- PUBLIC ---------- */
     case "public":
       return (
-        <>
-          <div className="mobile-item" onClick={() => { navigate("/"); setMenuOpen(false); }}>
+        <> 
+          <div className="mobile-item" onClick={() => { navigate("/",{ state: { scrollTo: "hero" }}); setMenuOpen(false); }}>
             Home
           </div>
 
@@ -585,43 +621,10 @@ const renderMobileLinks = (forcedVariant) => {
       </div>
     )}
 
-    {/* MOBILE MENU DROPDOWN 
-    <nav className={`nav-menu mobile-menu ${menuOpen ? "open" : ""}`}>
-      {isLoggedIn && (
-        <>
-          <div
-            className="dropdown-item"
-            onClick={() => {
-              navigate("/view-profile");
-              setMenuOpen(false);
-            }}>
-            Profile
-          </div>
-
-          <div
-            className="dropdown-item"
-            onClick={() => {
-              navigate("/reset-password");
-              setMenuOpen(false);
-            }}>
-            Reset Password
-          </div>
-
-          {roleName === "Student" && (
-            <div
-              className="dropdown-item"
-              onClick={() => {
-                navigate("/application");
-                setMenuOpen(false);
-              }}>
-              Applications
-            </div>
-          )}
-        </>
-    </nav>*/}
+    
      {/* MOBILE MENU */}
   {menuOpen && (
-  <nav className="mobile-menu"ref={menuRef}>
+  <nav className="mobile-menu"ref={mobileMenuRef}>
     <div className="mobile-menu-items">
       {renderMobileLinks()}
     </div>
@@ -674,16 +677,60 @@ const renderMobileLinks = (forcedVariant) => {
       </div>
     )}
 
-    {/* HAMBURGER (DESKTOP) */}
-    <div className="menu-icon-desktop" onClick={toggleMenu}>
-      {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-    </div>
+      
+    {/* ================= RIGHT SIDE ================= */}
+  <div className="right-desktop" ref={desktopMenuRef}>
 
-    {/* NAV CONTENT (RIGHT SIDE DESKTOP) */}
-    <nav className={`nav-menu ${menuOpen ? "open" : ""}`}>
-      {renderVariantLinks()}
-    </nav>
+    {/* ====== <= 912px → MENU STYLE ====== */}
+    {isCompactHeader ? (
+      <>
+        {isLoggedIn ? (
+          <>
+            <span className="desktop-welcome">Hi, {userName}</span>
 
+            <FiLogOut
+              size={22}
+              className="logout-icon"
+              onClick={() => {
+                localStorage.clear();
+                dispatch(logout());
+                navigate("/");
+              }}
+            />
+
+            <div className="menu-icon-desktop" onClick={toggleMenu}>
+              {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+            </div>
+          </>
+        ) : (
+          <>
+            <span
+              className="desktop-login"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </span>
+
+            <div className="menu-icon-desktop" onClick={toggleMenu}>
+              {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+            </div>
+          </>
+        )}
+
+        {menuOpen && (
+          <div className="desktop-menu" ref={desktopMenuRef}>
+            {renderMobileLinks()}
+          </div>
+        )}
+      </>
+    ) : (
+      /* ====== > 912px → NORMAL DESKTOP LINKS ====== */
+      <div className="desktop-links">
+        {renderVariantLinks()}
+      </div>
+    )}
+
+  </div>
   </div>
 </header>
 

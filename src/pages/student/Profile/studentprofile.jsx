@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateStudent } from "../../../app/redux/slices/studentSlice"; // SweetAlert handled inside slice
 import "../../../pages/styles.css";
-
+import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarshipapplication";
+ import Swal from "sweetalert2";
+ import { ApiKey } from "../../../api/endpoint";
+ import { publicAxios } from "../../../api/config";
 export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const dispatch = useDispatch();
 
@@ -15,16 +18,93 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     dateofBirth: "",
     gender: "",
     userName: "",
+    document:[],
   });
-
+const fileInputRef = useRef(null);
   const [educationList, setEducationList] = useState([]);
   const [education, setEducation] = useState({ degree: "", college: "", year: "" });
   const [editIndex, setEditIndex] = useState(null);
   const [errors, setErrors] = useState({});
+ const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+const [filesList, setFilesList] = useState(formData?.files||[]);
+console.log(filesList,"filelist"); // display names
+const [fileSelected, setFileSelected] = useState(false);
+const [newFileSelected, setNewFileSelected] = useState(false);
+const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
+
+    // No file type restriction
+    setSelectedFiles(files);
+    setFilesList(files.map(f => f.name));
+    setFileSelected(true);
+    setNewFileSelected(true);
+    setFormData({ ...formData, documents: files });
+  };
+  // Upload files function returns uploaded file names
+  const uploadFiles = async (applicationId) => {
+    if (selectedFiles.length < 1) return [];
+
+    const formDataPayload = new FormData();
+    selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
+    formDataPayload.append("TypeofUser", "student");
+    formDataPayload.append("id", applicationId);
+
+    try {
+      await uploadFormFilesReq(formDataPayload);
+
+      // Return names of uploaded files for merging
+      return selectedFiles.map(f => f.name);
+    } catch (ex) {
+      console.error("File upload failed:", ex);
+      return [];
+    }
+  };
+  const downloadFileFun = async (id, type) => {
+      try {
+        //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
+        //const res= await 
+        const res = await publicAxios.get(
+          `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
+          { responseType: "blob" }   // <-- important for file download
+        );
+  
+  
+        const url = window.URL.createObjectURL(
+          new Blob([res.data], { type: "application/zip" })
+        );
+  
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "documents.zip"); // you can rename as needed
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      } catch (err) {
+        console.error("File download failed:", err);
+      }
+    };
+  
+const handleClear = () => {
+    // Clear newly selected files
+    setSelectedFiles([]);
+    setFilesList([]);
+    setFileSelected(false);
+    setNewFileSelected(false);
+
+    // Clear the file input element
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+
+    // Reset documents field in formData
+    setFormData({ ...formData, documents: null });
+  };
 
   // ✅ Load profile data
   useEffect(() => {
     if (profile) {
+      debugger;
       setFormData({
         id: profile.id,
         firstName: profile.firstName || "",
@@ -36,8 +116,9 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
           : "",
         gender: profile.gender || "",
         userName: profile.userName || "",
+       // filesList:profile.files ||""
       });
-
+ setFilesList(profile.files || []);
       try {
         if (profile.education) {
           const parsed = JSON.parse(profile.education);
@@ -169,12 +250,36 @@ if (!formData.userName.trim()) {
       createdDate: profile.createdDate || null,
       modifiedBy: loggedInName,
       modifiedDate: null,
+      document:null,
     };
 
     dispatch(updateStudent(payload))
-      .unwrap()
-      .then(() => onSave(payload))
-      .catch(() => {});
+    .unwrap()
+    .then(async (res) => {
+      const userId = res?.id || payload.id;
+
+      // 2️⃣ Upload documents if any
+      if (selectedFiles?.length > 0) {
+        await uploadFiles(userId);
+      }
+
+      // 3️⃣ Show success AFTER upload completes
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Profile updated successfully!",
+        confirmButtonText: "OK",
+      });
+
+      // 4️⃣ Notify parent component
+      onSave(payload);
+    })
+    .catch((err) => {
+      Swal.fire({
+      icon: "error",
+      text: err || "Update failed!",
+    });
+    });
   };
 
   return (
@@ -291,8 +396,69 @@ if (!formData.userName.trim()) {
               </select>
               {errors.gender && <p className="error-text">{errors.gender}</p>}
             </div>
+               
           </div>
+<div className="form-group col-12">
+                <label>Upload Profile Photo</label>
+                <input
+                  type="file"
+                   accept="image/*"  
+                  name="documents"
+                  onChange={handleFileChange}
+                 // multiple
+                  ref={fileInputRef}
+                 // disabled={isViewMode}
+                />
 
+                {fileSelected && filesList.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger mt-2"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                )}
+
+               {/* Display all files: backend + newly selected */}
+{filesList.length > 0 && (
+  <div className="d-flex flex-column mt-2 rounded">
+
+    {/* Backend + selected files */}
+    {filesList.map((fileName, index) => (
+      <div
+        key={`file-${index}`}
+        className="d-flex align-items-center border rounded p-2 mb-2"
+        style={{
+          gap: "12px",
+          paddingLeft: "14px",
+          paddingRight: "12px",
+          color:"black"
+        }}
+      >
+        <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
+      </div>
+    ))}
+
+    {/* Download button (backend only) */}
+    {selectedFiles.length === 0 && profile?.files?.length > 0 && (
+      <button
+        type="button"
+        className="btn btn-sm btn-primary mt-2"
+        onClick={() => downloadFileFun(formData.id,"Student")}
+        style={{marginTop:"5px",marginLeft:"15px"}}
+        
+      >
+        Download
+      </button>
+    )}
+  </div>
+)}
+
+
+
+                    
+                  </div>
           {/* Education Section */}
           <h3 className="section-title">Education</h3>
 

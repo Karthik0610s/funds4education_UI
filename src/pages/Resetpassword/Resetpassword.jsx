@@ -5,6 +5,7 @@ import resetImg from "../../app/assests/login.jpg";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
+import Header from "../../app/components/header/header";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ export default function ResetPassword() {
   };
 
   return (
+    <><Header variant="profile-role-based"/>
     <div className="login-page">
       <div className="login-card">
         <form
@@ -178,5 +180,6 @@ export default function ResetPassword() {
         ></div>
       </div>
     </div>
+    </>
   );
 }

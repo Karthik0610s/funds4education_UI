@@ -198,9 +198,9 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
   return (
 
     <div className="homepage" >
-      <Header/>
+      <Header varient="public"/>
       {/* Hero Section */}
-    <section className="hero">
+    <section  id="hero" className="hero">
   <div className="hero-left">
   <Carousel
     autoPlay

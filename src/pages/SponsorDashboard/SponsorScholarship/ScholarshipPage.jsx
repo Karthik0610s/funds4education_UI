@@ -168,144 +168,234 @@ const ScholarshipPage = () => {
               </div>
 
               {/* TABLE */}
-<div className="scholarship-table">
-  <div className="table-header">
-    <span>S.No</span>
-    <span>Title</span>
-    <span>Amount</span>
-    <span>Scholarship Limit</span>
-    <span>Status</span>
-    <span>Deadline</span>
-    <span>Actions</span>
+<section className="applications-cards">
+
+  <table className="applications-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Scholarship Limit</th>
+        <th>Status</th>
+        <th>Deadline</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {loading ? (
+        <tr>
+          <td colSpan="7" style={{ textAlign: "center" }}>
+            Loading scholarships...
+          </td>
+        </tr>
+      ) : paginatedScholarships.length > 0 ? (
+        paginatedScholarships.map((sch, index) => (
+          <tr key={sch.id}>
+
+            {/* S.No */}
+            <td data-label="S.No">
+              {(currentPage - 1) * ITEMS_PER_PAGE + index + 1}
+            </td>
+
+            {/* Title */}
+            <td
+              data-label="Title"
+              style={{ position: "relative", cursor: "pointer" }}
+              onMouseEnter={(e) => {
+                const tip = document.createElement("div");
+                tip.innerText = sch.scholarshipName;
+                tip.className = "custom-tooltip";
+                Object.assign(tip.style, {
+                  position: "absolute",
+                  bottom: "120%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  background: "#111827",
+                  color: "#fff",
+                  padding: "6px 10px",
+                  fontSize: "12px",
+                  borderRadius: "6px",
+                  width: "220px",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                  zIndex: 2000,
+                });
+                e.currentTarget.appendChild(tip);
+              }}
+              onMouseLeave={(e) => {
+                const tip = e.currentTarget.querySelector(".custom-tooltip");
+                if (tip) tip.remove();
+              }}
+            >
+        {/* DESKTOP (>800px) - 125 chars */}
+<span className="title-desktop">
+  {sch.scholarshipName?.slice(0, 125)}
+  {sch.scholarshipName.length > 125 ? "..." : ""}
+</span>
+
+{/* TABLET (500–800px) - 180 chars */}
+<span className="title-tablet">
+  {sch.scholarshipName?.slice(0, 180)}
+  {sch.scholarishmentName?.length > 180 ? "..." : ""}
+</span>
+
+{/* MOBILE (<500px) - 50 chars */}
+<span className="title-mobile">
+  {sch.scholarshipName?.slice(0, 50)}
+  {sch.scholarshipName.length > 50 ? "..." : ""}
+</span>
+
+            </td>
+
+            {/* Amount */}
+            <td
+              data-label="Amount"
+              style={{ position: "relative", cursor: "pointer" }}
+              onMouseEnter={(e) => {
+                const tip = document.createElement("div");
+                tip.innerText = sch.benefits;
+                tip.className = "custom-tooltip";
+                Object.assign(tip.style, {
+                  position: "absolute",
+                  bottom: "120%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  background: "#111827",
+                  color: "#fff",
+                  padding: "6px 10px",
+                  fontSize: "12px",
+                  borderRadius: "6px",
+                  width: "220px",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                  zIndex: 2000,
+                });
+                e.currentTarget.appendChild(tip);
+              }}
+              onMouseLeave={(e) => {
+                const tip = e.currentTarget.querySelector(".custom-tooltip");
+                if (tip) tip.remove();
+              }}
+            >
+                   
+        {/* DESKTOP (>800px) - 125 chars */}
+<span className="title-desktop">
+  {sch.benefits?.slice(0, 105)}
+  {sch.benefits.length > 105 ? "..." : ""}
+</span>
+
+{/* TABLET (500–800px) - 180 chars */}
+<span className="title-tablet">
+  {sch.benefits?.slice(0, 180)}
+  {sch.benefits?.length > 180 ? "..." : ""}
+</span>
+
+{/* MOBILE (<500px) - 50 chars */}
+<span className="title-mobile">
+  {sch.benefits?.slice(0, 50)}
+  {sch.benefits.length > 50 ? "..." : ""}
+</span>
+              
+            </td>
+
+            {/* Scholarship Limit */}
+            <td data-label="Scholarship Limit">
+              {sch.scholarshipLimit ?? "-"}
+            </td>
+
+            {/* Status */}
+            <td data-label="Status">
+              <span className={`status ${sch.status?.toLowerCase()}`}>
+                {sch.status}
+              </span>
+            </td>
+
+            {/* Deadline */}
+            <td data-label="Deadline">
+              {sch.endDate ? sch.endDate.split("T")[0] : "-"}
+            </td>
+
+            {/* ACTIONS (same as applications section) */}
+            <td data-label="Status / Actions">
+              <div className="actions-container">
+
+                {/* VIEW */}
+                <button
+                  className="icons-btn view"
+                  onClick={() => console.log("view")}
+                  style={{
+                    color: "#1e40af",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i className="fa-regular fa-eye"></i>
+                </button>
+
+                {/* EDIT */}
+                <button
+                  className="icons-btn edit"
+                  onClick={() => handleEdit(sch)}
+                  style={{
+                    color: "orange",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i className="fa-regular fa-pen-to-square"></i>
+                </button>
+
+                {/* DELETE */}
+                <button
+                  className="icons-btn delete"
+                  onClick={() => handleDelete(sch.id)}
+                  style={{
+                    color: "red",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+
+              </div>
+            </td>
+
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="7" className="applications-no-results">
+            No scholarships found for <strong>{filter}</strong>.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+
+  {/* PAGINATION */}
+  <div className="pagination">
+    <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>
+      Prev
+    </button>
+
+    <span>{currentPage} / {totalPages}</span>
+
+    <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>
+      Next
+    </button>
   </div>
 
-  {loading ? (
-    <p className="loading-text">Loading scholarships...</p>
-  ) : paginatedScholarships.length > 0 ? (
-    paginatedScholarships.map((scholarship, index) => (
-      <div key={scholarship.id} className="table-row">
-
-        {/* S.No */}
-        <span>
-          {(index + 1) + (currentPage - 1) * ITEMS_PER_PAGE}
-        </span>
-
-        {/* Title */}
-       <span
-  className="title"
-  style={{ position: "relative", cursor: "pointer" }}
-  onMouseEnter={(e) => {
-    const tip = document.createElement("div");
-    tip.innerText = scholarship.scholarshipName;
-    tip.style.position = "absolute";
-    tip.style.bottom = "120%";
-    tip.style.left = "50%";
-    tip.style.transform = "translateX(-50%)";
-    tip.style.background = "#111827";
-    tip.style.color = "#fff";
-    tip.style.padding = "6px 10px";
-    tip.style.fontSize = "11px";
-    tip.style.borderRadius = "6px";
-    tip.style.width = "220px";       // ✅ wider tooltip
-  tip.style.maxWidth = "260px";    // optional safe limit
-  tip.style.whiteSpace = "normal";
-  tip.style.wordBreak = "break-word";
-    tip.style.zIndex = 2000;
-    tip.style.pointerEvents = "none";
-    tip.className = "custom-tooltip";
-    e.currentTarget.appendChild(tip);
-  }}
-  onMouseLeave={(e) => {
-    const tip = e.currentTarget.querySelector(".custom-tooltip");
-    if (tip) tip.remove();
-  }}
->
-  {scholarship.scholarshipName?.slice(0, 25) +
-    (scholarship.scholarshipName?.length > 25 ? "..." : "")
-  }
-</span>
-
-
-        {/* Amount */}
-      <span
-  style={{ position: "relative", cursor: "pointer" }}
-  onMouseEnter={(e) => {
-    const tip = document.createElement("div");
-    tip.innerText = scholarship.benefits;
-    tip.style.position = "absolute";
-    tip.style.bottom = "120%";
-    tip.style.left = "50%";
-    tip.style.transform = "translateX(-50%)";
-    tip.style.background = "#111827";
-    tip.style.color = "#fff";
-    tip.style.padding = "6px 10px";
-    tip.style.fontSize = "11px";
-    tip.style.borderRadius = "6px";
-   tip.style.width = "220px";       // ✅ wider tooltip
-  tip.style.maxWidth = "260px";    // optional safe limit
-  tip.style.whiteSpace = "normal";
-  tip.style.wordBreak = "break-word";
-    tip.style.zIndex = 2000;
-    tip.style.pointerEvents = "none";
-    tip.className = "custom-tooltip";
-    e.currentTarget.appendChild(tip);
-  }}
-  onMouseLeave={(e) => {
-    const tip = e.currentTarget.querySelector(".custom-tooltip");
-    if (tip) tip.remove();
-  }}
->
-  {scholarship.benefits?.slice(0, 20) +
-    (scholarship.benefits?.length > 20 ? "..." : "")
-  }
-</span>
+</section>
 
 
 
-        {/* Scholarship Limit */}
-        <span>{scholarship.scholarshipLimit ?? "-"}</span>
-
-        {/* Status */}
-        <span>
-          <span className={`status ${scholarship.status?.toLowerCase()}`}>
-            {scholarship.status}
-          </span>
-        </span>
-
-        {/* Deadline */}
-        <span>
-          {scholarship.endDate ? scholarship.endDate.split("T")[0] : "-"}
-        </span>
-
-        <span className="actions-buttons">
-          <div className="actions">
-
-  <button className="icon-btn" onClick={() => console.log("view")}>
-    <i className="fa fa-eye"></i>
-  </button>
-
-  <button className="icon-btn edit" onClick={() => handleEdit(scholarship)}>
-    <i className="fa fa-pencil"></i>
-  </button>
-
-  <button className="icon-btn delete" onClick={() => handleDelete(scholarship.id)}>
-    <i className="fa fa-trash"></i>
-  </button>
-  </div>
-
-</span>
-
-
-      </div>
-    ))
-  ) : (
-    <p className="applications-no-results">
-      No scholarships found for <strong>{filter}</strong>.
-    </p>
-  )}
-</div>
-
-              {/* PAGINATION */}
+              {/* PAGINATION 
               {displayedScholarships.length > 0 && (
                 <div className="pagination">
                   <button
@@ -326,7 +416,7 @@ const ScholarshipPage = () => {
                     Next
                   </button>
                 </div>
-              )}
+              )}*/}
 
               {/* MODAL */}
               <AddScholarshipModal

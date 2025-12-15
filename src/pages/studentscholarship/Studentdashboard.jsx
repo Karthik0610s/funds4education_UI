@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo ,useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../../app/components/header/header";
@@ -15,7 +15,7 @@ import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
-import { act } from "@testing-library/react";
+
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -27,6 +27,7 @@ const StudentDashboard = () => {
 //const roleName = localStorage.getItem("roleName");
 
 // Condition: user is logged in
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -95,6 +96,53 @@ const canSeeEligibility = userId && roleId && roleName;
   useEffect(() => {
     dispatch(fetchFeaturedScholarships());
   }, [dispatch]);
+const sidebarRef = useRef(null);
+const paginationRef = useRef(null);
+
+ const closeAllDropdowns = () => {
+    setFilters((prev) => ({
+      ...prev,
+      show_class: false,
+      show_country: false,
+      show_gender: false,
+      show_religion: false,
+      show_state: false,
+      show_course: false,
+    }));
+  };
+
+  // CLICK OUTSIDE HANDLER
+ const [isMobile, setIsMobile] = useState(
+  window.matchMedia("(max-width: 920px)").matches
+);
+
+useEffect(() => {
+  const mediaQuery = window.matchMedia("(max-width: 920px)");
+
+  const handleResize = () => setIsMobile(mediaQuery.matches);
+
+  mediaQuery.addEventListener("change", handleResize);
+
+  return () => mediaQuery.removeEventListener("change", handleResize);
+}, []);
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (!showFilter) return; // only run if sidebar is open
+
+    const clickedOutsideSidebar =
+      sidebarRef.current && !sidebarRef.current.contains(event.target);
+
+    if (clickedOutsideSidebar) {
+      setShowFilter(false);
+      closeAllDropdowns();
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, [showFilter]);
+
+
 
   // 🔹 Scholarships reload when filters change
   useEffect(() => {
@@ -232,10 +280,11 @@ useEffect(() => {
     setScholarshipsPerPage(getItemsPerPage());
   
   };
+
   window.addEventListener("resize", handleResize);
   return () => window.removeEventListener("resize", handleResize);
 }, []);
-  //const scholarshipsPerPage = 8;
+  //const scholarshipsPerPage = 10;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -250,7 +299,16 @@ useEffect(() => {
   const totalPages = Math.ceil(
     displayedScholarships.length / scholarshipsPerPage
   );
-
+useEffect(() => {
+  console.log("🔍 Live scholarships:", liveScholarships.length);
+  console.log("🔍 Upcoming scholarships:", upcomingScholarships.length);
+  console.log("🔍 Active tab:", activeTab);
+  console.log("🔍 Search query:", searchQuery);
+  console.log("🔍 Displayed scholarships:", displayedScholarships.length);
+  console.log("🔍 Scholarships per page:", scholarshipsPerPage);
+  console.log("🔍 Total pages:", totalPages);
+  console.log("🔍 Current page:", currentPage);
+}, [liveScholarships, upcomingScholarships, activeTab, searchQuery, displayedScholarships, currentPage]);
   const clearAllFilters = () => {
 
     setFilters({
@@ -396,8 +454,20 @@ const ads1 = [
         <span style={{ marginLeft: "6px" }}>Filters</span>
       </div>
       <div className="dashboard-container-SC">
-        {/* Sidebar Filters */}
-        <aside className={`sidebar ${showFilter ? "mobile-open" : ""}`}>
+       {isMobile && showFilter && (
+    <div
+      className="sidebar-overlay"
+      onClick={() => {
+        setShowFilter(false);
+        closeAllDropdowns();
+      }}
+    />
+  )}
+
+  <aside
+  ref={sidebarRef}
+  className={`sidebar ${showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""}`}
+>
 
           {/* ⭐ MOBILE CLOSE BUTTON */}
           <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
@@ -809,7 +879,7 @@ const ads1 = [
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="pagination-controls">
+              <div className="pagination-controls"  ref={paginationRef}>
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
@@ -834,36 +904,7 @@ const ads1 = [
           </div>
         </main>
       </div>
-      {/* <div
-        className="chat-float-container"
-        onClick={() => setShowChat(true)}
-      >
-        <div className="chat-float-btn">💬</div>
-        <span className="chat-float-text">Chat Us</span>
-      </div> */}
-
-      {/* ⭐ Chat Popup */}
-      {/* {showChat && (
-        <div className="chat-popup">
-          <div className="chat-header">
-            <span>Support Chat</span>
-            <button className="close-chat" onClick={() => setShowChat(false)}>✕</button>
-          </div>
-
-          <div className="chat-body">
-            <p><strong>Agent:</strong> Hi! How can I help you?</p>
-          </div>
-
-          <div className="chat-input-area">
-            <input
-              type="text"
-              placeholder="Type your message..."
-              className="chat-input"
-            />
-            <button className="send-btn">Send</button>
-          </div>
-        </div>
-      )} */}
+    
     </div>
   );
 };
