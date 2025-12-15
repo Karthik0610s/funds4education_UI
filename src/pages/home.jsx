@@ -331,7 +331,7 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
 <section id="achievement-section" className="achievement-section">
   {/* Header */}
  
-
+ <div className="achievement-wrapper"></div>
   {/* Content Row */}
   <div className="achievement-content">
     {/* Left Side — Illustrations */}
