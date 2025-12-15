@@ -4660,7 +4660,7 @@ textarea {
   /* Label on top */
   .applications-table td[data-label="Status / Actions"]:before {
     content: attr(data-label);
-   /* font-weight: 500;
+    /* font-weight: 500;
     color: #374151;*/
     display: block;
     margin-bottom: 6px;
@@ -5225,7 +5225,7 @@ textarea {
 
 /* Cards */
 .applications-cards {
- /* margin-top: 24px;*/
+  /* margin-top: 24px;*/
   display: grid;
   gap: 16px;
 }
@@ -6325,8 +6325,9 @@ p {
 
 @media (max-width: 768px) {
   .applications-table td::before {
-    font-weight: 600; /* bold all data-label text */
-  color :#000;
+    font-weight: 600;
+    /* bold all data-label text */
+    color: #000;
   }
 }
 
@@ -6964,13 +6965,20 @@ p {
   .achievement-header {
     display: flex;
     flex-direction: column;
-    align-items: center;   /* horizontal centering */
-    justify-content: center; /* vertical centering if needed */
-    text-align: center;     /* centers text inside h1/h2 */
-    width: 100%;            /* full width container */
-    padding: 1rem 1rem;     /* spacing from sides */
-    box-sizing: border-box; /* include padding in width */
-    margin: 0 auto;         /* center container itself */
+    align-items: center;
+    /* horizontal centering */
+    justify-content: center;
+    /* vertical centering if needed */
+    text-align: center;
+    /* centers text inside h1/h2 */
+    width: 100%;
+    /* full width container */
+    padding: 1rem 1rem;
+    /* spacing from sides */
+    box-sizing: border-box;
+    /* include padding in width */
+    margin: 0 auto;
+    /* center container itself */
   }
 
   /* Subtitle */
@@ -6979,7 +6987,10 @@ p {
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    margin: 0 0 0.5rem 0;   /* only bottom margin */
+    margin: 0 0 0.5rem 0;
+     position: relative;
+        right: 160px;
+    /* only bottom margin */
     color: #f4b400;
   }
 
@@ -6989,13 +7000,16 @@ p {
     font-weight: 800;
     line-height: 1.2;
     color: #1f2937;
-    margin: 0;              /* remove extra margins */
+    margin: 0;
+    /* remove extra margins */
   }
 
   .achievement-title span {
     color: #f4b400;
   }
-
+.achievement-description {
+        text-align: justify !important;
+    }
   /* Achievement content wrapper */
   .achievement-content {
     display: flex !important;
@@ -7014,7 +7028,8 @@ p {
 
   /* Individual image cards */
   .image-card {
-    max-width: 90%;  /* responsive width */
+    max-width: 90%;
+    /* responsive width */
     padding: 1rem;
     box-sizing: border-box;
   }
@@ -7395,6 +7410,7 @@ p {
 .title-desktop {
   display: inline;
 }
+
 .title-tablet,
 .title-mobile {
   display: none;
@@ -7405,9 +7421,11 @@ p {
   .title-desktop {
     display: none;
   }
+
   .title-tablet {
     display: inline;
   }
+
   .title-mobile {
     display: none;
   }
@@ -7415,10 +7433,12 @@ p {
 
 /* MOBILE (<500px) */
 @media (max-width: 500px) {
+
   .title-desktop,
   .title-tablet {
     display: none;
   }
+
   .title-mobile {
     display: inline;
   }
@@ -7468,12 +7488,23 @@ p {
 }
 
 .va-header h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 6px;
+  margin-top: 50px;
   text-align: center;
   color: #008FFF;
 }
+
+.personal-header {
+  font-size: 24px;
+  color: #2c3e50;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  margin-top: 20px;
+}
+
 
 .va-header p {
   font-size: 1rem;
