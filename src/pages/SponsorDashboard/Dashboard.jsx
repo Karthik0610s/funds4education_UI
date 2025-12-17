@@ -202,7 +202,7 @@ const handleFundPopup = (application) => {
         localStorage.clear();
         sessionStorage.clear();
       } finally {
-        window.location.replace("http://localhost:3000/");
+        window.location.replace("https://funds4education.in");
       }
     };
 
