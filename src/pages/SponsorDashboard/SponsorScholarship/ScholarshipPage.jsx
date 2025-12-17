@@ -227,8 +227,8 @@ const ScholarshipPage = () => {
             >
         {/* DESKTOP (>800px) - 125 chars */}
 <span className="title-desktop">
-  {sch.scholarshipName?.slice(0, 125)}
-  {sch.scholarshipName.length > 125 ? "..." : ""}
+  {sch.scholarshipName?.slice(0, 50)}
+  {sch.scholarshipName.length > 50 ? "..." : ""}
 </span>
 
 {/* TABLET (500–800px) - 180 chars */}
@@ -278,8 +278,8 @@ const ScholarshipPage = () => {
                    
         {/* DESKTOP (>800px) - 125 chars */}
 <span className="title-desktop">
-  {sch.benefits?.slice(0, 105)}
-  {sch.benefits.length > 105 ? "..." : ""}
+  {sch.benefits?.slice(0, 50)}
+  {sch.benefits.length > 50 ? "..." : ""}
 </span>
 
 {/* TABLET (500–800px) - 180 chars */}

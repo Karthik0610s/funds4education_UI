@@ -1,3 +1,4 @@
+import { Group } from "lucide-react";
 
 
 export const ApiKey = {
@@ -26,6 +27,7 @@ export const ApiKey = {
    Religion: "/Filter/religions",
    Class: "/Class",
    Course: "/Course",
+   GroupCourse:"/Course/grouped-by-name",
    CourseByClass: "/Course",
    InsertChat: "/Chat/send",
    GetSessionId: "/Chat/start-session",
