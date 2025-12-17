@@ -374,8 +374,8 @@ const handleClickInstitution = () => checkAndNavigate("4", "institution");
       </div>
 
       <p className="achievement-description">
-        With more highly educated people, the hope is that they can become
-        valuable assets for the country's future development.
+        With more highly educated people, the hope is that they can become valuable 
+        assets for the country's future development.
       </p>
     </div>
   </div>

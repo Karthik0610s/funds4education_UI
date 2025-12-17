@@ -168,7 +168,7 @@ export const fetchDropdownDataReq = async () => {
       publicAxios.get(ApiKey.Gender),
       publicAxios.get(ApiKey.Religion),
       publicAxios.get(ApiKey.Class),
-      publicAxios.get(ApiKey.Course),
+      publicAxios.get(ApiKey.GroupCourse),
     ]);
 
     const countries = Array.isArray(countryRes.data)

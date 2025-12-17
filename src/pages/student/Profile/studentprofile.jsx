@@ -31,6 +31,7 @@ console.log(filesList,"filelist"); // display names
 const [fileSelected, setFileSelected] = useState(false);
 const [newFileSelected, setNewFileSelected] = useState(false);
 const handleFileChange = (e) => {
+  debugger;
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
 
@@ -43,6 +44,7 @@ const handleFileChange = (e) => {
   };
   // Upload files function returns uploaded file names
   const uploadFiles = async (applicationId) => {
+    debugger;
     if (selectedFiles.length < 1) return [];
 
     const formDataPayload = new FormData();
@@ -229,6 +231,7 @@ if (!formData.userName.trim()) {
 
   // ✅ Submit form
   const handleSubmit = async (e) => {
+    debugger;
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -253,35 +256,34 @@ if (!formData.userName.trim()) {
       document:null,
     };
 
-    dispatch(updateStudent(payload))
-    .unwrap()
-    .then(async (res) => {
-      const userId = res?.id || payload.id;
+   try {
+    debugger;
 
-      // 2️⃣ Upload documents if any
-      if (selectedFiles?.length > 0) {
-        await uploadFiles(userId);
-      }
+    // ✅ EXACT sponsor pattern
+    const res = await dispatch(updateStudent(payload)).unwrap();
+    const userId = res?.id || profile.studentId;
 
-      // 3️⃣ Show success AFTER upload completes
-      await Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Profile updated successfully!",
-        confirmButtonText: "OK",
-      });
+    console.log("UserId:", userId);
+    console.log("Selected files:", selectedFiles);
 
-      // 4️⃣ Notify parent component
-      onSave(payload);
-    })
-    .catch((err) => {
-      Swal.fire({
+    if (selectedFiles?.length > 0) {
+      await uploadFiles(userId);
+    }
+
+    await Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: "Profile updated successfully!",
+    });
+
+    onSave(payload);
+  } catch (err) {
+    Swal.fire({
       icon: "error",
-      text: err || "Update failed!",
+      text: "Update failed!",
     });
-    });
-  };
-
+  }
+}
   return (
     <div className="signup-container">
       <div className="signup-card">

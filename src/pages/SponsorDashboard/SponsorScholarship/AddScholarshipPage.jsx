@@ -71,6 +71,8 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
   const [filesList, setFilesList] = useState(formData?.files || []);
   const [fileSelected, setFileSelected] = useState(false);
   const [newFileSelected, setNewFileSelected] = useState(false);
+  const [existingDocFiles, setExistingDocFiles] = useState([]);
+
   // ✅ Regex rules
   const text50 = /^[A-Za-z0-9\s]{0,50}$/; // letters, numbers, spaces only, max 50
   const text350 = /^[A-Za-z0-9\s]{0,350}$/;
@@ -168,6 +170,13 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
            }));
        }
    }, [courses, scholarship]);*/
+
+   useEffect(() => {
+  if (scholarship?.files?.length > 0) {
+    setExistingDocFiles([...scholarship.files]);
+  }
+}, [scholarship]);
+
   useEffect(() => {
     if (scholarship && scholarship.class_ID && courses.length > 0) {
 
@@ -209,7 +218,39 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       value: id
     }));
   };
+const [logoFile, setLogoFile] = useState(null);
+const [logoFileName, setLogoFileName] = useState("");
+const [existingLogo, setExistingLogo] = useState("");
+const [logoRemoved, setLogoRemoved] = useState(false);
 
+
+useEffect(() => {
+  if (scholarship?.logo_FileName) {
+    const name = scholarship.logo_FileName.replace("|", "");
+    setExistingLogo(name);
+  } else {
+    setExistingLogo("");
+  }
+}, [scholarship]);
+
+const handleLogoChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+  if (!allowedTypes.includes(file.type)) {
+    Swal.fire("Invalid File", "Only PNG / JPG images allowed", "warning");
+    return;
+  }
+
+  setLogoFile(file);
+  setLogoFileName(file.name);
+};
+const handleRemoveLogo = () => {
+  setExistingLogo("");
+  setLogoFile(null);
+  setLogoRemoved(true); // ✅ mark for DB null
+};
   const handleReactSelect = (key, selected, allOptions, setFilters) => {
     if (!selected || selected.length === 0) {
       setFilters(prev => ({ ...prev, [key]: "" }));
@@ -229,21 +270,18 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
 
 
   // --- Clear function ---
-  const handleClear = () => {
-    // Clear newly selected files
-    setSelectedFiles([]);
-    setFilesList([]);
-    setFileSelected(false);
-    setNewFileSelected(false);
+ const handleClear = () => {
+  setSelectedFiles([]);
+  setFilesList([]);
+  setExistingDocFiles([]); // ✅ tell backend all removed
+  setFileSelected(false);
+  setNewFileSelected(false);
 
-    // Clear the file input element
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+};
 
-    // Reset documents field in formData
-    setFormData({ ...formData, uploadedFiles: null });
-  };
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
 
@@ -269,36 +307,74 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
   };
 
   // --- File change handler ---
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (!files || files.length === 0) return;
+ const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  if (!files || files.length === 0) return;
 
-    // No file type restriction
-    setSelectedFiles(files);
-    setFilesList(files.map(f => f.name));
-    setFileSelected(true);
-    setNewFileSelected(true);
-    setFormData({ ...formData, uploadedFiles: files });
-  };
+  const allowedTypes = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  ];
+
+  const invalidFiles = files.filter(f => !allowedTypes.includes(f.type));
+
+  if (invalidFiles.length > 0) {
+    Swal.fire(
+      "Invalid File",
+      "Only PDF, DOC, DOCX, XLS, XLSX files are allowed",
+      "warning"
+    );
+    return;
+  }
+
+  setSelectedFiles(files);
+  setFilesList(files.map(f => f.name));
+  setFileSelected(true);
+  setNewFileSelected(true);
+};
+
   // Upload files function returns uploaded file names
-  const uploadFiles = async (applicationId) => {
-    if (selectedFiles.length < 1) return [];
+const uploadFiles = async (scholarshipId) => {
+  const fd = new FormData();
 
-    const formDataPayload = new FormData();
-    selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
-    formDataPayload.append("TypeofUser", "Scholarship");
-    formDataPayload.append("id", applicationId);
+  selectedFiles.forEach(file => fd.append("FormFiles", file));
 
-    try {
-      await uploadFormFilesReq(formDataPayload);
+  // ✅ THIS IS THE KEY
+  existingDocFiles.forEach(name => fd.append("ExistingFiles", name));
 
-      // Return names of uploaded files for merging
-      return selectedFiles.map(f => f.name);
-    } catch (ex) {
-      console.error("File upload failed:", ex);
-      return [];
-    }
-  };
+  fd.append("TypeofUser", "Scholarship");
+  fd.append("id", scholarshipId);
+
+  await uploadFormFilesReq(fd);
+};
+
+  const uploadLogo = async (scholarshipId) => {
+  const fd = new FormData();
+
+  fd.append("TypeofUser", "SCHOLARSHIPLOGO");
+  fd.append("id", scholarshipId);
+
+  // ✅ upload new logo
+  if (logoFile) {
+    fd.append("FormFiles", logoFile);
+  }
+
+  // ❌ logoRemoved = true → NO FILE SENT → backend sets NULL
+  await uploadFormFilesReq(fd);
+};
+
+const clearLogo = () => {
+  setLogoFile(null);
+  setLogoFileName("");
+
+  const logoInput = document.getElementById("logoInput");
+  if (logoInput) logoInput.value = null;
+};
+
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     let regex = null;
@@ -447,6 +523,8 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       uploadedFiles: null,
       startDate: formData.startDate || null,
       endDate: formData.endDate || null,
+      logo_FileName : existingLogo ? existingLogo + "|" : null,
+
 
       // ⛔ DON'T parseInt these anymore
       religion_ID: filters.religion || "",
@@ -487,9 +565,18 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       }
 
       // ✅ Upload files if any
-      if (scholarshipId && selectedFiles.length > 0) {
-        await uploadFiles(scholarshipId);
-      }
+      if (
+  scholarshipId &&
+  (selectedFiles.length > 0 ||
+   existingDocFiles.length !== (scholarship?.files?.length || 0))
+) {
+  await uploadFiles(scholarshipId);
+}
+        // 🖼 Upload logo if selected
+        if (scholarshipId && logoFile) {
+       await uploadLogo(scholarshipId); 
+       }
+       
 
       // ✅ Refresh list
       const UserId = localStorage.getItem("userId");
@@ -512,14 +599,30 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       console.error("Error saving scholarship:", err);
       Swal.fire({ text: "Error saving scholarship!", icon: "error" });
     }
+    // 🖼 Upload logo if selected
+
+
   };
+
 
 
   const handleCloseAndReset = () => {
-    setFormData(initialData);
-    setErrors({});
-    handleClose();
-  };
+  setFormData(initialData);
+  setErrors({});
+  setSelectedFiles([]);
+  setFilesList([]);
+  setFileSelected(false);
+  setNewFileSelected(false);
+  setLogoFile(null);
+  setLogoFileName("");
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+
+  handleClose();
+};
+
   const downloadFileFun = async (id) => {
     try {
       //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
@@ -1151,12 +1254,14 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
   <div className="form-group col-4">
     <label>Upload Documents</label>
     <input
-      type="file"
-      onChange={handleFileChange}
-      disabled={isView}
-      multiple
-      ref={fileInputRef}
-    />
+  type="file"
+  multiple
+  ref={fileInputRef}
+  accept=".pdf,.doc,.docx,.xls,.xlsx"
+  onChange={handleFileChange}
+  disabled={isView}
+/>
+
 
     {fileSelected && filesList.length > 0 && (
       <button
@@ -1173,11 +1278,27 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       <div className="d-flex flex-column mt-4 rounded" style={{ marginTop: "5px" }}>
         {formData?.files?.map((fileName, index) => (
           <div
-            key={`backend-${index}`}
-            className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
-          >
-            <span style={{ marginBottom: "5px", padding: "5px" }}>{fileName || "No File Name"}</span>
-          </div>
+  key={`backend-${index}`}
+  className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+>
+  <span>{fileName}</span>
+
+  {!isView && (
+    <button
+      type="button"
+      className="btn btn-sm btn-outline-danger"
+      onClick={() => {
+  const updated = existingDocFiles.filter((_, i) => i !== index);
+  setExistingDocFiles(updated);
+  setFormData({ ...formData, files: updated });
+}}
+
+    >
+      ×
+    </button>
+  )}
+</div>
+
         ))}
 
         {formData?.files?.length > 0 && (
@@ -1197,6 +1318,58 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
 )}
 
             </div>
+            <div className="form-group col-4">
+  <label>Upload Logo</label>
+
+  {/* VIEW MODE */}
+  {isView ? (
+    <div style={{ textAlign: "left", paddingTop: "6px" }}>
+      {existingLogo ? (
+        <div>{existingLogo}</div>
+      ) : (
+        <div>No logo uploaded</div>
+      )}
+    </div>
+  ) : (
+    <>
+      <input
+        id="logoInput"
+        type="file"
+        accept="image/png,image/jpeg"
+        onChange={handleLogoChange}
+      />
+
+      {/* Existing DB Logo */}
+      {existingLogo && (
+        <div className="d-flex align-items-center justify-content-between border rounded p-2 mt-2">
+          <span>{existingLogo}</span>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger"
+            onClick={handleRemoveLogo}
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Newly selected logo */}
+      {logoFileName && !existingLogo && (
+        <div className="d-flex align-items-center justify-content-between border rounded p-2 mt-2">
+          <span>{logoFileName}</span>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-danger"
+            onClick={clearLogo}
+          >
+            ×
+          </button>
+        </div>
+      )}
+    </>
+  )}
+</div>
+
           </form>
         </div>
 

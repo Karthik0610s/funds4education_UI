@@ -685,7 +685,7 @@ const ads1 = [
  */
                   const imageUrl =
                     folderName && cleanLogoName
-                      ? `${baseUrl}/Scholarship/${folderName}/${cleanLogoName}`
+                      ? `${baseUrl}/SCHOLARSHIPLOGO/${folderName}/${cleanLogoName}`
                       : "/images/before.png";
 
                   // ✅ Create alt text without extension
@@ -826,7 +826,7 @@ const ads1 = [
                     const imageUrl =
                       s.logoPath && cleanLogoName
                         ? `${baseUrl}/${s.logoPath
-                          .replace(/^.*Scholarship[\\/]/, "Scholarship/")
+                          .replace(/^.*SCHOLARSHIPLOGO[\\/]/, "SCHOLARSHIPLOGO/")
                           .replace(/\\/g, "/")}/${encodedLogoName}`
                         : "/images/before.png";
 

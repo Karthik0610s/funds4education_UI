@@ -23,7 +23,7 @@
   justify-content: space-between;
   /* logo left, nav+auth spread */
   box-sizing: border-box;
-
+  height: 72px;
   position: relative;
   z-index: 10;
 }
@@ -83,19 +83,14 @@
 
 /* Center nav items */
 .nav-bar {
-  display: flex;
-  /*justify-content: center;
-  flex: 1;
-  gap: 36px;*/
-
+  position: fixed;              /* 🔑 NOT absolute */
+  left: 50%;                   /* half of header height */
+  transform: translateX(-50%);
   display: flex;
   gap: 60px;
-    position: absolute;
-    /* left: 50%; */
-    transform: translateX(-180%);
-    white-space: nowrap;         /* keeps About Us in one line */
-
-
+  white-space: nowrap;
+  z-index: 100;
+  align-items: center;
 }
 
 /* Right aligned links */

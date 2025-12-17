@@ -327,8 +327,8 @@ export const fetchDropdownData = () => async (dispatch) => {
           name: cl.className ?? cl.name,
         })),
         courses: courses.map((cl) => ({
-          id: cl.id ?? cl.courseId,
-          name: cl.name ?? cl.courseName,
+          id: cl.id ?? cl.courseIds,
+          name: cl.name ?? cl.groupName,
         })),
       };
 
