@@ -18,6 +18,29 @@ export default function SponsorApplications() {
     dispatch(logout());
     navigate("/login");
   };
+  const formatAmount = (val) => {
+  
+  if (!val) return "₹0";
+
+  let amount = String(val).trim();
+
+  // already contains any currency → return as is
+ if (/(₹|rs\.?\b|inr\b|usd\b|\$|€|£)/i.test(amount)) {
+    return amount;
+  }
+
+  // extract the number part only (before any text)
+  const match = amount.match(/[\d,]+\/?-?/);
+  if (match) {
+    const numPart = match[0]; // like "20,000/-"
+    const rest = amount.slice(numPart.length); // remaining text
+
+    return `₹${numPart}${rest}`;
+  }
+
+  // fallback for unknown format
+  return `₹${amount}`;
+};
 
   const [filter, setFilter] = useState("All");
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -99,48 +122,53 @@ export default function SponsorApplications() {
       }
     });
   };
-  const handleFundPopup = (app) => {
+const handleFundPopup = (application) => {
+  const { applicationId, firstName, lastName, scholarshipName, amount } = application;
+
   Swal.fire({
     title: "Fund Student",
     html: `
-      <p><strong>Student:</strong> ${app.firstName} ${app.lastName}</p>
-      <p><strong>Scholarship:</strong> ${app.scholarshipName}</p>
-      <label><strong>Enter Fund Amount</strong></label>
-      <input id="fundAmount" type="number" class="swal2-input" min="1" />
+      <div style="text-align:left;">
+        <p><strong>Student:</strong> ${firstName} ${lastName}</p>
+        <p><strong>Scholarship:</strong> ${scholarshipName}</p>
+        <p><strong>Scholarship Amount:</strong> ${formatAmount(amount)}</p>
+        <br/>
+        <label><strong>Enter Fund Amount:</strong></label>
+        <input type="number" id="fundAmount" class="swal2-input" placeholder="Enter amount" min="1" />
+      </div>
     `,
+    focusConfirm: false,
     showCancelButton: true,
-    confirmButtonText: "Fund",
+    confirmButtonText: "Submit Funding",
+    cancelButtonText: "Cancel",
     preConfirm: () => {
       const fundAmount = document.getElementById("fundAmount").value;
-      if (!fundAmount || fundAmount <= 0) {
-        Swal.showValidationMessage("Please enter a valid amount");
+
+      if (!fundAmount || Number(fundAmount) <= 0) {
+        Swal.showValidationMessage("Please enter a valid fund amount.");
         return false;
       }
-      return fundAmount;
-    },
+
+      return { fundAmount };
+    }
   }).then(async (result) => {
     if (result.isConfirmed) {
-      const modifiedBy = localStorage.getItem("name") || "SponsorUser";
-      const sponsorId = localStorage.getItem("userId");
+      const sponsorName = localStorage.getItem("name") || "SponsorUser";
 
       await dispatch(
-        updateApplicationStatus(
-          app.applicationId,
-          "Funded",
-          modifiedBy,
-          Number(result.value)
-        )
+        updateApplicationStatus(applicationId, "Funded", sponsorName, result.value.fundAmount)
       );
-
-      dispatch(fetchApplicationsBySponsor(sponsorId));
 
       Swal.fire({
         icon: "success",
-        title: "Student Funded",
-        text: `₹${result.value} funded successfully`,
+        title: "Student Funded!",
+        text: `Fund Amount: ₹${result.value.fundAmount}`,
         timer: 1500,
-        showConfirmButton: false,
+        showConfirmButton: false
       });
+
+      const sponsorId = localStorage.getItem("userId");
+      setTimeout(() => dispatch(fetchApplicationsBySponsor(sponsorId)), 500);
     }
   });
 };

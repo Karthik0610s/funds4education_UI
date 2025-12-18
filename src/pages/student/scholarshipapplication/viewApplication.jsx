@@ -8,6 +8,9 @@ import { logout } from "../../../app/redux/slices/authSlice";
 import "../../../pages/styles.css";
 import { publicAxios } from "../../../api/config";
 import { ApiKey } from "../../../api/endpoint";
+import Swal from "sweetalert2";
+import { updateApplicationStatus , fetchApplicationsBySponsor } from "../../../app/redux/slices/ScholarshipSlice";
+
 
 const ViewApplication = () => {
   const { id } = useParams();
@@ -33,12 +36,85 @@ const ViewApplication = () => {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
+  };const handleFundPopup = (application) => {
+    const { applicationId, firstName, lastName, scholarshipName, amount } = application;
+  
+    Swal.fire({
+      title: "Fund Student",
+      html: `
+        <div style="text-align:left;">
+          <p><strong>Student:</strong> ${firstName} ${lastName}</p>
+          <p><strong>Scholarship:</strong> ${scholarshipName}</p>
+          <p><strong>Scholarship Amount:</strong> ${formatAmount(amount)}</p>
+          <br/>
+          <label><strong>Enter Fund Amount:</strong></label>
+          <input type="number" id="fundAmount" class="swal2-input" placeholder="Enter amount" min="1" />
+        </div>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Submit Funding",
+      cancelButtonText: "Cancel",
+      preConfirm: () => {
+        const fundAmount = document.getElementById("fundAmount").value;
+  
+        if (!fundAmount || Number(fundAmount) <= 0) {
+          Swal.showValidationMessage("Please enter a valid fund amount.");
+          return false;
+        }
+  
+        return { fundAmount };
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const sponsorName = localStorage.getItem("name") || "SponsorUser";
+  
+        await dispatch(
+          updateApplicationStatus(applicationId, "Funded", sponsorName, result.value.fundAmount)
+        );
+  
+        Swal.fire({
+          icon: "success",
+          title: "Student Funded!",
+          text: `Fund Amount: ₹${result.value.fundAmount}`,
+          timer: 1500,
+          showConfirmButton: false
+        });
+  
+        const sponsorId = localStorage.getItem("userId");
+        setTimeout(() => dispatch(fetchApplicationsBySponsor(sponsorId)), 500);
+      }
+    });
   };
 
   const name = localStorage.getItem("name") || "Student";
 
   // Move data definition here to avoid undefined in downloadFiles
   const data = applicationData;
+
+  const formatAmount = (val) => {
+  
+  if (!val) return "₹0";
+
+  let amount = String(val).trim();
+
+  // already contains any currency → return as is
+ if (/(₹|rs\.?\b|inr\b|usd\b|\$|€|£)/i.test(amount)) {
+    return amount;
+  }
+
+  // extract the number part only (before any text)
+  const match = amount.match(/[\d,]+\/?-?/);
+  if (match) {
+    const numPart = match[0]; // like "20,000/-"
+    const rest = amount.slice(numPart.length); // remaining text
+
+    return `₹${numPart}${rest}`;
+  }
+
+  // fallback for unknown format
+  return `₹${amount}`;
+};
 
   const downloadFiles = async () => {
     try {
@@ -168,6 +244,21 @@ const ViewApplication = () => {
             <p>No files uploaded</p>
           )}
         </div>
+        {data.status?.toLowerCase() === "approved" && (
+  <button
+    className="btn btn-fund"
+    onClick={() => handleFundPopup(data)}
+  >
+    Fund Student
+  </button>
+)}
+{data.status?.toLowerCase() === "funded" && (
+  <p style={{ color: "green", fontWeight: "bold" }}>
+    ✅ This student has already been funded
+  </p>
+)}
+
+
       </div>
     </div>
 
