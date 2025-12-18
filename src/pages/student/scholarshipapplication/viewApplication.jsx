@@ -45,7 +45,6 @@ const ViewApplication = () => {
         <div style="text-align:left;">
           <p><strong>Student:</strong> ${firstName} ${lastName}</p>
           <p><strong>Scholarship:</strong> ${scholarshipName}</p>
-          <p><strong>Scholarship Amount:</strong> ${formatAmount(amount)}</p>
           <br/>
           <label><strong>Enter Fund Amount:</strong></label>
           <input type="number" id="fundAmount" class="swal2-input" placeholder="Enter amount" min="1" />
@@ -92,29 +91,7 @@ const ViewApplication = () => {
   // Move data definition here to avoid undefined in downloadFiles
   const data = applicationData;
 
-  const formatAmount = (val) => {
   
-  if (!val) return "₹0";
-
-  let amount = String(val).trim();
-
-  // already contains any currency → return as is
- if (/(₹|rs\.?\b|inr\b|usd\b|\$|€|£)/i.test(amount)) {
-    return amount;
-  }
-
-  // extract the number part only (before any text)
-  const match = amount.match(/[\d,]+\/?-?/);
-  if (match) {
-    const numPart = match[0]; // like "20,000/-"
-    const rest = amount.slice(numPart.length); // remaining text
-
-    return `₹${numPart}${rest}`;
-  }
-
-  // fallback for unknown format
-  return `₹${amount}`;
-};
 
   const downloadFiles = async () => {
     try {
