@@ -2,7 +2,8 @@ import axios from "axios";
 
 const _ProductURL = "http://103.53.52.215:85/api";
 
-const _baseURL = "https://localhost:44315/api/V1";
+
+
 //const _baseURL = "http://103.62.146.210:89/api";
 //const _baseURL = "http://tptams.co.in:89/api";
 

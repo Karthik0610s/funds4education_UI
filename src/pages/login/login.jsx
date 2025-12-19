@@ -28,7 +28,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
 // ✅ Update API base URL to match your backend
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://localhost:44315/api/Auth";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "https://funds4education.in/api/v1/Auth";
 
 const handleOAuthLogin = (provider) => {
   if (!userType) {
@@ -38,7 +38,7 @@ const handleOAuthLogin = (provider) => {
 
   // Redirect to backend OAuth endpoint
   //window.location.href = `${API_BASE_URL}/${provider}/login?role=${userType}`;
-  window.location.href = `https://localhost:44315/api/Auth/${provider}/${userType}/login`;
+  window.location.href = `https://funds4education.in/api/v1/Auth/${provider}/${userType}/login`;
 };
 /*const handleOAuthLogin = async (provider) => {
   if (!userType) {
