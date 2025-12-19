@@ -3611,7 +3611,7 @@ input:not([type="radio"]) {
 
   .right-container {
     width: 100%;
-    padding: 12px;
+    padding: 0px;
   }
 }
 
@@ -7421,12 +7421,10 @@ p {
 
 /* Sidebar */
 .va-left-container {
-  width: 280px;
   background: #ffffff;
-  border-right: 1px solid #ddd;
+  border-right: 1px;
   padding: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 /* Main content */
@@ -7450,6 +7448,7 @@ p {
 /* Header */
 .va-header {
   margin-bottom: 0px;
+  margin-top: 25px;
 }
 
 .va-header h1 {
@@ -7504,6 +7503,8 @@ p {
   font-size: 1rem;
   margin-bottom: 12px;
   line-height: 1.4;
+  margin-bottom: 15px;
+
 
 }
 
@@ -7512,6 +7513,7 @@ p {
   display: inline-block;
   font-weight: 700;
   color: #513E51;
+  padding: 0%;
 }
 
 .va-section-content p {
@@ -7542,13 +7544,18 @@ p {
 .va-section-content ul {
   list-style-type: disc;
   padding-left: 20px;
-  margin-bottom: 12px;
+
+    margin-top: 2px;
 }
 
 .va-section-content ul li {
   font-size: 1rem;
   color: #513E51;
   margin-bottom: 6px;
+  
+    margin-top: 2px;
+    margin-bottom: 9px;
+
 }
 
 /* Download button */
@@ -7574,7 +7581,10 @@ p {
   .va-page-split {
     flex-direction: column;
   }
-
+ .va-header h1 {
+    margin-top: 8px; /* or 0 */
+    font-size: 1.8rem; /* optional: better mobile fit */
+  }
   /* Sidebar takes full width on mobile */
   .va-left-container {
     width: 100%;

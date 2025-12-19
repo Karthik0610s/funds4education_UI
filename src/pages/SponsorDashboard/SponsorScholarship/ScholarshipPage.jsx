@@ -170,8 +170,8 @@ const ScholarshipPage = () => {
     <thead>
       <tr>
         <th>S.No</th>
-        <th>Title</th>
-        <th>Amount</th>
+        <th>Scholarship Name</th>
+        <th>Scholarship Amount</th>
         <th>Scholarship Limit</th>
         <th>Status</th>
         <th>Deadline</th>
@@ -197,7 +197,7 @@ const ScholarshipPage = () => {
 
             {/* Title */}
             <td
-              data-label="Title"
+              data-label="Scholarship Name"
               style={{ position: "relative", cursor: "pointer" }}
               onMouseEnter={(e) => {
                 const tip = document.createElement("div");
@@ -247,7 +247,7 @@ const ScholarshipPage = () => {
 
             {/* Amount */}
             <td
-              data-label="Amount"
+              data-label="Scholarship Amount"
               style={{ position: "relative", cursor: "pointer" }}
               onMouseEnter={(e) => {
                 const tip = document.createElement("div");
