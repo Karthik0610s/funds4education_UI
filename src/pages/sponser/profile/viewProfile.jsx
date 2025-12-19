@@ -77,9 +77,9 @@ export default function ViewProfile() {
           <div className="profile-details">
             <div className="detail-row"><label>Contact Person:</label><input type="text" value={profile.contactPerson} readOnly /></div>
             <div className="detail-row"><label>Address:</label><input type="text" value={profile.address} readOnly /></div>
-            <div className="detail-row"><label>Budget:</label><input type="text" value={profile.budget} readOnly /></div>
+            {/*<div className="detail-row"><label>Budget:</label><input type="text" value={profile.budget} readOnly /></div>
             <div className="detail-row"><label>Student Criteria:</label><input type="text" value={profile.studentCriteria} readOnly /></div>
-            <div className="detail-row"><label>Study Levels:</label><input type="text" value={profile.studyLevels} readOnly /></div>
+            <div className="detail-row"><label>Study Levels:</label><input type="text" value={profile.studyLevels} readOnly /></div>*/}
           </div>
         </div>
       ) : (

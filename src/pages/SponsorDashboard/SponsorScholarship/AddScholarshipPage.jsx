@@ -755,6 +755,7 @@ const clearLogo = () => {
                   name="eligibilityCriteria"
                   value={formData.eligibilityCriteria}
                   onChange={handleChange}
+                   disabled={isView}
                   className={errors.eligibilityCriteria ? "form-field-error" : ""}
                 />
                 {errors.eligibilityCriteria && (

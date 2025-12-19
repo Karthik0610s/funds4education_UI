@@ -144,7 +144,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 24px;
-  padding: 40px 60px;
+  padding: 20px 0px;
   margin-top: 1px;
 }
 
@@ -161,6 +161,7 @@ body {
   font-size: 1rem;
   color: #000205;
   margin-top: 8px;
+  word-break: break-word; 
 }
 
 
@@ -270,7 +271,14 @@ body {
   .roles {
     flex-direction: column;
     align-items: center;
+        background: #f6f6fb;
   }
+  .role-card p {
+    font-size: 1rem;
+    color: #000205;
+    margin-top: 8px;
+    word-break: break-word;
+}
 }
 
 /* Mobile screens */
@@ -307,6 +315,7 @@ body {
 
   .roles {
     gap: 16px;
+    padding: 20px 60px;
   }
 
   .role-card {
@@ -316,6 +325,12 @@ body {
   .benefits-right {
     grid-template-columns: 1fr;
   }
+  .role-card p {
+    font-size: 1rem;
+    color: #000205;
+    margin-top: 8px;
+    word-break: break-word;
+}
 }
 
 .carousel-image-slide img {
@@ -2650,6 +2665,7 @@ body {
   margin-top: 25px;
   margin-bottom: 10px;
   color: #0c0c0c;
+  font-size: 32px;
 }
 
 .row {
@@ -2813,6 +2829,7 @@ input:not([type="radio"]) {
   text-align: center;
   margin: 20px auto;
   font-weight: "bold";
+  font-size: 32px;
 }
 
 .wallettitle {
@@ -7640,4 +7657,34 @@ p {
     padding: 8px 16px;
     font-size: 0.95rem;
   }
+}
+.tooltip-cell {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Tooltip hidden */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+  width: 220px;
+  white-space: normal;
+  word-break: break-word;
+  z-index: 2000;
+  transition: opacity 0.2s ease;
+}
+
+/* Show on hover */
+.tooltip-cell:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
