@@ -60,9 +60,40 @@ const ScholarshipPage = () => {
           (s) => s.status?.toLowerCase() === filter.toLowerCase()
         );
 
-  const displayedScholarships = filteredScholarships.filter((s) =>
+  /*const displayedScholarships = filteredScholarships.filter((s) =>
     s.scholarshipName?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  );*/
+  const extractAmount = (amountText) => {
+  if (!amountText) return 0;
+
+  // Remove ₹ , commas, text → keep only numbers
+  const match = amountText.replace(/,/g, "").match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+};
+ const displayedScholarships = filteredScholarships.filter((s) => {
+  const query = searchQuery.toLowerCase();
+
+  const nameMatch =
+    s.scholarshipName?.toLowerCase().includes(query);
+
+  const statusMatch =
+    s.status?.toLowerCase().includes(query);
+
+  // 🔥 Amount match (₹20,000, 20000, 20k)
+  const amountNumber = extractAmount(s.amount);
+  const amountMatch =
+    s.benefits?.toLowerCase().includes(query) ||
+    amountNumber.toString().includes(query);
+
+  const endDateMatch =
+    s.endDate
+      ? s.endDate.split("T")[0].includes(query)
+      : false;
+
+  return nameMatch || statusMatch || amountMatch || endDateMatch;
+});
+
+
 
   // Pagination logic
   const totalPages = Math.ceil(displayedScholarships.length / ITEMS_PER_PAGE);
@@ -170,8 +201,8 @@ const ScholarshipPage = () => {
     <thead>
       <tr>
         <th>S.No</th>
-        <th>Title</th>
-        <th>Amount</th>
+        <th>Scholarship Name</th>
+        <th>Scholarship Amount</th>
         <th>Scholarship Limit</th>
         <th>Status</th>
         <th>Deadline</th>
@@ -196,105 +227,63 @@ const ScholarshipPage = () => {
             </td>
 
             {/* Title */}
-            <td
-              data-label="Title"
-              style={{ position: "relative", cursor: "pointer" }}
-              onMouseEnter={(e) => {
-                const tip = document.createElement("div");
-                tip.innerText = sch.scholarshipName;
-                tip.className = "custom-tooltip";
-                Object.assign(tip.style, {
-                  position: "absolute",
-                  bottom: "120%",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "#111827",
-                  color: "#fff",
-                  padding: "6px 10px",
-                  fontSize: "12px",
-                  borderRadius: "6px",
-                  width: "220px",
-                  whiteSpace: "normal",
-                  wordBreak: "break-word",
-                  zIndex: 2000,
-                });
-                e.currentTarget.appendChild(tip);
-              }}
-              onMouseLeave={(e) => {
-                const tip = e.currentTarget.querySelector(".custom-tooltip");
-                if (tip) tip.remove();
-              }}
-            >
-        {/* DESKTOP (>800px) - 125 chars */}
-<span className="title-desktop">
-  {sch.scholarshipName?.slice(0, 50)}
-  {sch.scholarshipName.length > 50 ? "..." : ""}
-</span>
+<td data-label="Title" className="tooltip-cell">
 
-{/* TABLET (500–800px) - 180 chars */}
-<span className="title-tablet">
-  {sch.scholarshipName?.slice(0, 180)}
-  {sch.scholarishmentName?.length > 180 ? "..." : ""}
-</span>
+  {/* Tooltip content */}
+  <span className="tooltip-text">
+    {sch.scholarshipName}
+  </span>
 
-{/* MOBILE (<500px) - 50 chars */}
-<span className="title-mobile">
-  {sch.scholarshipName?.slice(0, 50)}
-  {sch.scholarshipName.length > 50 ? "..." : ""}
-</span>
+  {/* DESKTOP */}
+  <span className="title-desktop">
+    {sch.scholarshipName?.slice(0, 50)}
+    {sch.scholarshipName?.length > 50 ? "..." : ""}
+  </span>
 
-            </td>
+  {/* TABLET */}
+  <span className="title-tablet">
+    {sch.scholarshipName?.slice(0, 180)}
+    {sch.scholarshipName?.length > 180 ? "..." : ""}
+  </span>
+
+  {/* MOBILE */}
+  <span className="title-mobile">
+    {sch.scholarshipName?.slice(0, 50)}
+    {sch.scholarshipName?.length > 50 ? "..." : ""}
+  </span>
+
+</td>
+
 
             {/* Amount */}
-            <td
-              data-label="Amount"
-              style={{ position: "relative", cursor: "pointer" }}
-              onMouseEnter={(e) => {
-                const tip = document.createElement("div");
-                tip.innerText = sch.benefits;
-                tip.className = "custom-tooltip";
-                Object.assign(tip.style, {
-                  position: "absolute",
-                  bottom: "120%",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "#111827",
-                  color: "#fff",
-                  padding: "6px 10px",
-                  fontSize: "12px",
-                  borderRadius: "6px",
-                  width: "220px",
-                  whiteSpace: "normal",
-                  wordBreak: "break-word",
-                  zIndex: 2000,
-                });
-                e.currentTarget.appendChild(tip);
-              }}
-              onMouseLeave={(e) => {
-                const tip = e.currentTarget.querySelector(".custom-tooltip");
-                if (tip) tip.remove();
-              }}
-            >
-                   
-        {/* DESKTOP (>800px) - 125 chars */}
-<span className="title-desktop">
-  {sch.benefits?.slice(0, 50)}
-  {sch.benefits.length > 50 ? "..." : ""}
-</span>
+          {/* Amount */}
+<td data-label="Amount" className="tooltip-cell">
 
-{/* TABLET (500–800px) - 180 chars */}
-<span className="title-tablet">
-  {sch.benefits?.slice(0, 180)}
-  {sch.benefits?.length > 180 ? "..." : ""}
-</span>
+  {/* Tooltip content */}
+  <span className="tooltip-text">
+    {sch.benefits}
+  </span>
 
-{/* MOBILE (<500px) - 50 chars */}
-<span className="title-mobile">
-  {sch.benefits?.slice(0, 50)}
-  {sch.benefits.length > 50 ? "..." : ""}
-</span>
-              
-            </td>
+  {/* DESKTOP */}
+  <span className="title-desktop">
+    {sch.benefits?.slice(0, 50)}
+    {sch.benefits?.length > 50 ? "..." : ""}
+  </span>
+
+  {/* TABLET */}
+  <span className="title-tablet">
+    {sch.benefits?.slice(0, 180)}
+    {sch.benefits?.length > 180 ? "..." : ""}
+  </span>
+
+  {/* MOBILE */}
+  <span className="title-mobile">
+    {sch.benefits?.slice(0, 50)}
+    {sch.benefits?.length > 50 ? "..." : ""}
+  </span>
+
+</td>
+
 
             {/* Scholarship Limit */}
             <td data-label="Scholarship Limit">

@@ -119,7 +119,10 @@ const isValidEmail = (email) => {
       else if (roleId === 2) navigate("/sponsor-dashboard");
       else if (roleId === 4) navigate("/institution-dashboard");
     })
-    .catch(() => {});
+    .catch((err) => {
+      
+  console.error("Login failed:", err);
+});
 };
 
 
@@ -172,35 +175,42 @@ const isValidEmail = (email) => {
         </div>
 
         {/* === Username / Email === */}
-        <div className="form-group">
-          <label>Username or Email</label>
-          <input
-            type="text"
-            value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="Enter username or email"
-          />
-          {errors.identifier && <p className="error">{errors.identifier}</p>}
-        </div>
+         {/* Username */}
+          <div className="input-group">
+            <label>Username or Email</label>
+            <input
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="Enter username or email"
+            />
+            <p className="error">{errors.identifier || " "}</p>
+          </div>
 
         {/* === Password === */}
-        <div className="form-group password-field">
-          <label>Password</label>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button
-            type="button"
-            className="toggle-password"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-          </button>
-          {errors.password && <p className="error">{errors.password}</p>}
-        </div>
+           {/* Password */}
+          <div className="input-group">
+            <label>Password</label>
+
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </button>
+            </div>
+
+            <p className="error">{errors.password || " "}</p>
+          </div>
         <div className="forgot-password">
   <Link
     to="#"
