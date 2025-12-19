@@ -201,8 +201,8 @@ const ScholarshipPage = () => {
     <thead>
       <tr>
         <th>S.No</th>
-        <th>Title</th>
-        <th>Amount</th>
+        <th>Scholarship Name</th>
+        <th>Scholarship Amount</th>
         <th>Scholarship Limit</th>
         <th>Status</th>
         <th>Deadline</th>
