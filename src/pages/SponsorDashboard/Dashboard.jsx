@@ -463,7 +463,11 @@ const formatAmount = (val) => {
             </div> */}
 <div className="app-card-container">
 
-  {applications
+{applications.length === 0 ? (
+    <div className="no-applications">
+      No applications found
+    </div>
+  ) : ( applications
     .filter(s => ["approved", "submitted"].includes((s.status || "").toLowerCase()))
       .sort((a, b) => new Date(b.applicationDate) - new Date(a.applicationDate))
      .slice((currentPage - 1) * pageSize, currentPage * pageSize)
@@ -553,7 +557,7 @@ const formatAmount = (val) => {
           </div>
         </div>
       );
-    })}
+    }) )}
 </div>
 
 

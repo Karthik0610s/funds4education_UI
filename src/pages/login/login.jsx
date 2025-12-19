@@ -119,7 +119,10 @@ const isValidEmail = (email) => {
       else if (roleId === 2) navigate("/sponsor-dashboard");
       else if (roleId === 4) navigate("/institution-dashboard");
     })
-    .catch(() => {});
+    .catch((err) => {
+      
+  console.error("Login failed:", err);
+});
 };
 
 

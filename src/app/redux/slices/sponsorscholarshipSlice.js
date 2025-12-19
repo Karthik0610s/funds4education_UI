@@ -165,7 +165,7 @@ export const updateScholarship = async (formData, dispatch) => {
 export const deleteScholarship = (id, modifiedBy) => async (dispatch) => {
   try {
    
-
+debugger;
     const response = await deleteScholarshipReq(id, modifiedBy);
 
     if (response.error) {

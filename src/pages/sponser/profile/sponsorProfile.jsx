@@ -332,7 +332,7 @@ const fileInputRef = useRef(null);
         {errors.address && <p className="error-text">{errors.address}</p>}
       </div>
 
-      <h3 className="section-title">Scholarship Preferences</h3>
+     {/* <h3 className="section-title">Scholarship Preferences</h3>
 
       <div className="row">
         <div className="form-group">
@@ -374,7 +374,7 @@ const fileInputRef = useRef(null);
           <option value="PhD">PhD</option>
         </select>
         {errors.studyLevels && <p className="error-text">{errors.studyLevels}</p>}
-      </div>
+      </div>*/}
   <div className="form-group col-12">
                 <label>Upload Profile Photo </label>
                 <input
