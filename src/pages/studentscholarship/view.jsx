@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchScholarshipById } from "../../app/redux/slices/ScholarshipSlice";
+import { publicAxios } from "../../api/config";
+import { ApiKey } from "../../api/endpoint";
 
 const ScholarshipViewPage = () => {
     const dispatch = useDispatch();
@@ -16,6 +18,33 @@ const ScholarshipViewPage = () => {
     const { selectedScholarship: scholarship, loading } = useSelector(
         (state) => state.scholarship
     );
+const [downloading, setDownloading] = useState(false);
+
+const downloadFileFun = async (id) => {
+  try {
+    setDownloading(true);
+    const res = await publicAxios.get(
+      `${ApiKey.downloadsponsorscholarshipFiles}/${id}`,
+      { responseType: "blob" }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([res.data], { type: "application/zip" })
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "documents.zip");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error("File download failed:", err);
+  } finally {
+    setDownloading(false);
+  }
+};
+
 
 
    const handleApplyNowClick = () => {
@@ -39,9 +68,17 @@ const ScholarshipViewPage = () => {
         }
     }, [dispatch, id]);
 
-    if (loading) return <p>Loading scholarship details...</p>;
-    if (!scholarship) return <p>No scholarship found.</p>;
+  const fileList =
+    scholarship?.fileName?.trim()
+      ? scholarship.fileName
+          .split("|")
+          .map(f => f.trim())
+          .filter(Boolean)
+      : [];
 
+  // ✅ Early returns AFTER hooks
+  if (loading) return <p>Loading scholarship details...</p>;
+  if (!scholarship) return <p>No scholarship found.</p>;
   return (
   <div className="scholarshipview-page">
     {/* 🔙 Back Button */}
@@ -220,7 +257,49 @@ const ScholarshipViewPage = () => {
       {scholarship.renewalCriteria || "Not specified"}
     </p>
   )}
+</div>   
+{/* Documents Section */}
+<div className="scholarship-eligibility-header">
+  <h3>Documents</h3>
 </div>
+
+<div className="scholarship-detail-container">
+  {fileList.length > 0 ? (
+    <>
+      <ul className="scholarship-view-text">
+        {fileList.map((file, index) => (
+          <li key={index}>{file}</li>
+        ))}
+      </ul>
+
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <button
+          type="button"
+          disabled={downloading}
+          onClick={() => downloadFileFun(scholarship.id)}
+          style={{
+            background: "linear-gradient(to right, #0E2ACE, #3BB7BF)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            padding: "10px 30px",
+            fontWeight: "600",
+            fontSize: "16px",
+            cursor: downloading ? "not-allowed" : "pointer",
+          }}
+        >
+          {downloading ? "Downloading..." : "⬇️ Download Documents"}
+        </button>
+      </div>
+    </>
+  ) : (
+    <p className="scholarship-view-text">No documents available.</p>
+  )}
+</div>
+
+
+
+
       </div>
     </div>
   </div>
