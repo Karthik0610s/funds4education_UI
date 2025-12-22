@@ -61,6 +61,7 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
     createdBy: "",
     scholarshipLimit: 0,
     modifiedBy: "",
+
   };
 
   const [formData, setFormData] = useState(initialData);
@@ -72,7 +73,7 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
   const [fileSelected, setFileSelected] = useState(false);
   const [newFileSelected, setNewFileSelected] = useState(false);
   const [existingDocFiles, setExistingDocFiles] = useState([]);
-
+const [originalFiles, setOriginalFiles] = useState([]);
   // ✅ Regex rules
   const text50 = /^[A-Za-z0-9\s]{0,50}$/; // letters, numbers, spaces only, max 50
   const text350 = /^[A-Za-z0-9\s]{0,350}$/;
@@ -171,11 +172,12 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
        }
    }, [courses, scholarship]);*/
 
-   useEffect(() => {
-  if (scholarship?.files?.length > 0) {
-    setExistingDocFiles([...scholarship.files]);
-  }
-}, [scholarship]);
+  useEffect(() => {
+    if (scholarship?.files?.length > 0) {
+      setExistingDocFiles([...scholarship.files]);
+         setOriginalFiles([...scholarship.files]);
+    }
+  }, [scholarship]);
 
   useEffect(() => {
     if (scholarship && scholarship.class_ID && courses.length > 0) {
@@ -186,6 +188,9 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       }));
     }
   }, [courses, scholarship]);
+  
+
+
 
   /*const handleReactSelect = (name, selectedOptions, list) => {
     const selectedValues = selectedOptions.map(o => o.value);
@@ -218,39 +223,42 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
       value: id
     }));
   };
-const [logoFile, setLogoFile] = useState(null);
-const [logoFileName, setLogoFileName] = useState("");
-const [existingLogo, setExistingLogo] = useState("");
-const [logoRemoved, setLogoRemoved] = useState(false);
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoFileName, setLogoFileName] = useState("");
+  const [existingLogo, setExistingLogo] = useState("");  // from API
+  const [logoRemoved, setLogoRemoved] = useState(false);
 
 
-useEffect(() => {
-  if (scholarship?.logo_FileName) {
-    const name = scholarship.logo_FileName.replace("|", "");
-    setExistingLogo(name);
+  useEffect(() => {
+  if (formData?.logoFiles?.length > 0) {
+    setExistingLogo(formData.logoFiles[0]); // ✅ bind from API
+    setLogoRemoved(false);                  // user has NOT removed it
   } else {
     setExistingLogo("");
   }
-}, [scholarship]);
+}, [formData]);
 
-const handleLogoChange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
 
-  const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-  if (!allowedTypes.includes(file.type)) {
-    Swal.fire("Invalid File", "Only PNG / JPG images allowed", "warning");
-    return;
-  }
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  setLogoFile(file);
-  setLogoFileName(file.name);
-};
-const handleRemoveLogo = () => {
-  setExistingLogo("");
-  setLogoFile(null);
-  setLogoRemoved(true); // ✅ mark for DB null
-};
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      Swal.fire("Invalid File", "Only PNG / JPG images allowed", "warning");
+      return;
+    }
+
+    setLogoFile(file);
+    setLogoFileName(file.name);
+     setExistingLogo("");   // hide old logo
+  setLogoRemoved(false);
+  };
+  const handleRemoveLogo = () => {
+    setExistingLogo("");
+    setLogoFile(null);
+    setLogoRemoved(true); // ✅ mark for DB null
+  };
   const handleReactSelect = (key, selected, allOptions, setFilters) => {
     if (!selected || selected.length === 0) {
       setFilters(prev => ({ ...prev, [key]: "" }));
@@ -267,20 +275,38 @@ const handleRemoveLogo = () => {
       setFilters(prev => ({ ...prev, [key]: ids.join(",") }));
     }
   };
+  const handleRemoveSingleFile = (index) => {
+    const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+
+    setExistingDocFiles(updatedFiles);
+
+    setFormData(prev => ({
+      ...prev,
+      files: updatedFiles,
+      FileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+      // FilePath: updatedFiles.length > 0 ? prev.FilePath : ""
+    }));
+  };
+
 
 
   // --- Clear function ---
- const handleClear = () => {
-  setSelectedFiles([]);
-  setFilesList([]);
-  setExistingDocFiles([]); // ✅ tell backend all removed
-  setFileSelected(false);
-  setNewFileSelected(false);
+  const handleClear = () => {
+    setSelectedFiles([]);
+    setFilesList([]);
+    setExistingDocFiles([]);
+    setFormData(prev => ({
+      ...prev,
+      FileName: "",
+      //FilePath: ""
+    }));// ✅ tell backend all removed
+    setFileSelected(false);
+    setNewFileSelected(false);
 
-  if (fileInputRef.current) {
-    fileInputRef.current.value = null;
-  }
-};
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -307,72 +333,72 @@ const handleRemoveLogo = () => {
   };
 
   // --- File change handler ---
- const handleFileChange = (e) => {
-  const files = Array.from(e.target.files);
-  if (!files || files.length === 0) return;
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
 
-  const allowedTypes = [
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/vnd.ms-excel",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  ];
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ];
 
-  const invalidFiles = files.filter(f => !allowedTypes.includes(f.type));
+    const invalidFiles = files.filter(f => !allowedTypes.includes(f.type));
 
-  if (invalidFiles.length > 0) {
-    Swal.fire(
-      "Invalid File",
-      "Only PDF, DOC, DOCX, XLS, XLSX files are allowed",
-      "warning"
-    );
-    return;
-  }
+    if (invalidFiles.length > 0) {
+      Swal.fire(
+        "Invalid File",
+        "Only PDF, DOC, DOCX, XLS, XLSX files are allowed",
+        "warning"
+      );
+      return;
+    }
 
-  setSelectedFiles(files);
-  setFilesList(files.map(f => f.name));
-  setFileSelected(true);
-  setNewFileSelected(true);
-};
+    setSelectedFiles(files);
+    setFilesList(files.map(f => f.name));
+    setFileSelected(true);
+    setNewFileSelected(true);
+  };
 
   // Upload files function returns uploaded file names
-const uploadFiles = async (scholarshipId) => {
-  const fd = new FormData();
+  const uploadFiles = async (scholarshipId) => {
+    const fd = new FormData();
 
-  selectedFiles.forEach(file => fd.append("FormFiles", file));
+    selectedFiles.forEach(file => fd.append("FormFiles", file));
 
-  // ✅ THIS IS THE KEY
-  existingDocFiles.forEach(name => fd.append("ExistingFiles", name));
+    // ✅ THIS IS THE KEY
+    existingDocFiles.forEach(name => fd.append("ExistingFiles", name));
 
-  fd.append("TypeofUser", "Scholarship");
-  fd.append("id", scholarshipId);
+    fd.append("TypeofUser", "Scholarship");
+    fd.append("id", scholarshipId);
 
-  await uploadFormFilesReq(fd);
-};
+    await uploadFormFilesReq(fd);
+  };
 
   const uploadLogo = async (scholarshipId) => {
-  const fd = new FormData();
+    const fd = new FormData();
 
-  fd.append("TypeofUser", "SCHOLARSHIPLOGO");
-  fd.append("id", scholarshipId);
+    fd.append("TypeofUser", "SCHOLARSHIPLOGO");
+    fd.append("id", scholarshipId);
 
-  // ✅ upload new logo
-  if (logoFile) {
-    fd.append("FormFiles", logoFile);
-  }
+    // ✅ upload new logo
+    if (logoFile) {
+      fd.append("FormFiles", logoFile);
+    }
 
-  // ❌ logoRemoved = true → NO FILE SENT → backend sets NULL
-  await uploadFormFilesReq(fd);
-};
+    // ❌ logoRemoved = true → NO FILE SENT → backend sets NULL
+    await uploadFormFilesReq(fd);
+  };
 
-const clearLogo = () => {
-  setLogoFile(null);
-  setLogoFileName("");
+  const clearLogo = () => {
+    setLogoFile(null);
+    setLogoFileName("");
 
-  const logoInput = document.getElementById("logoInput");
-  if (logoInput) logoInput.value = null;
-};
+    const logoInput = document.getElementById("logoInput");
+    if (logoInput) logoInput.value = null;
+  };
 
 
   const handleChange = (e) => {
@@ -510,12 +536,14 @@ const clearLogo = () => {
 
 
   const handleSubmit = async (e) => {
-
+    debugger;
     e.preventDefault();
     if (!validateForm()) return;
 
     const payload = {
       ...formData,
+      fileName: formData.fileName ?? "",
+      filePath: formData.filePath ?? "",
       minPercentageOrCGPA: formData.minPercentageOrCGPA || null,
       maxFamilyIncome: formData.maxFamilyIncome || null,
       scholarshipAmount: formData.benefits || null,
@@ -523,7 +551,7 @@ const clearLogo = () => {
       uploadedFiles: null,
       startDate: formData.startDate || null,
       endDate: formData.endDate || null,
-      logo_FileName : existingLogo ? existingLogo + "|" : null,
+      logo_FileName: existingLogo ? existingLogo + "|" : null,
 
 
       // ⛔ DON'T parseInt these anymore
@@ -566,17 +594,17 @@ const clearLogo = () => {
 
       // ✅ Upload files if any
       if (
-  scholarshipId &&
-  (selectedFiles.length > 0 ||
-   existingDocFiles.length !== (scholarship?.files?.length || 0))
-) {
-  await uploadFiles(scholarshipId);
-}
-        // 🖼 Upload logo if selected
-        if (scholarshipId && logoFile) {
-       await uploadLogo(scholarshipId); 
-       }
-       
+        scholarshipId &&
+        (selectedFiles.length > 0 ||
+          existingDocFiles.length !== (scholarship?.files?.length || 0))
+      ) {
+        await uploadFiles(scholarshipId);
+      }
+      // 🖼 Upload logo if selected
+      if (scholarshipId && logoFile) {
+        await uploadLogo(scholarshipId);
+      }
+
 
       // ✅ Refresh list
       const UserId = localStorage.getItem("userId");
@@ -607,21 +635,27 @@ const clearLogo = () => {
 
 
   const handleCloseAndReset = () => {
-  setFormData(initialData);
-  setErrors({});
-  setSelectedFiles([]);
-  setFilesList([]);
-  setFileSelected(false);
-  setNewFileSelected(false);
-  setLogoFile(null);
-  setLogoFileName("");
+   setExistingDocFiles([...originalFiles]);
 
-  if (fileInputRef.current) {
-    fileInputRef.current.value = null;
-  }
+  setFormData(prev => ({
+    ...prev,
+    files: [...originalFiles],
+    FileName: originalFiles.join("|")
+  }));
+    setErrors({});
+    setSelectedFiles([]);
+    setFilesList([]);
+    setFileSelected(false);
+    setNewFileSelected(false);
+    setLogoFile(null);
+    setLogoFileName("");
 
-  handleClose();
-};
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+
+    handleClose();
+  };
 
   const downloadFileFun = async (id) => {
     try {
@@ -731,7 +765,7 @@ const clearLogo = () => {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                   disabled={isView} 
+                  disabled={isView}
                   placeholder="Scholarship details..."
                 />
               </div>
@@ -755,7 +789,7 @@ const clearLogo = () => {
                   name="eligibilityCriteria"
                   value={formData.eligibilityCriteria}
                   onChange={handleChange}
-                   disabled={isView}
+                  disabled={isView}
                   className={errors.eligibilityCriteria ? "form-field-error" : ""}
                 />
                 {errors.eligibilityCriteria && (
@@ -774,22 +808,22 @@ const clearLogo = () => {
                 <div className="form-group col-6">
                   <label>Religion</label>
                   <Select
-  isMulti
-  isDisabled={isView}
-  options={[
-    { label: "ALL", value: "ALL" },
-    ...religions.map(r => ({ label: r.religion_Name, value: r.id.toString() }))
-  ]}
-  value={getSelectValue(filters.religion, religions, "religion_Name", "id")}
-  onChange={(selected) =>
-    handleReactSelect(
-      "religion",
-      selected,
-      religions.map(r => ({ label: r.religion_Name, value: r.id.toString() })),
-      setFilters
-    )
-  }
-/>
+                    isMulti
+                    isDisabled={isView}
+                    options={[
+                      { label: "ALL", value: "ALL" },
+                      ...religions.map(r => ({ label: r.religion_Name, value: r.id.toString() }))
+                    ]}
+                    value={getSelectValue(filters.religion, religions, "religion_Name", "id")}
+                    onChange={(selected) =>
+                      handleReactSelect(
+                        "religion",
+                        selected,
+                        religions.map(r => ({ label: r.religion_Name, value: r.id.toString() })),
+                        setFilters
+                      )
+                    }
+                  />
                 </div>
 
                 {/* Country */}
@@ -860,7 +894,7 @@ const clearLogo = () => {
                       )
                     }
                   />
-                  
+
                 </div>
               </div>
 
@@ -931,8 +965,8 @@ const clearLogo = () => {
                   <label>Course</label>
                   <Select
                     isMulti
-                    
-                    isDisabled={isView ||!filters.className}
+
+                    isDisabled={isView || !filters.className}
                     options={[
                       { label: "ALL", value: "ALL" },
                       ...courses.map(c => ({ label: c.courseName, value: c.courseId.toString() }))
@@ -1114,7 +1148,7 @@ const clearLogo = () => {
                   name="isRenewable"
                   checked={formData.isRenewable}
                   onChange={handleChange}
-                  
+
                   disabled={isView}
                 />
               </div>
@@ -1166,9 +1200,9 @@ const clearLogo = () => {
               <div className="form-group">
                 <label>Status</label>
                 <select name="status" value={formData.status} onChange={handleChange}
-                disabled={isView} 
+                  disabled={isView}
                 >
-                  
+
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                 </select>
@@ -1194,7 +1228,7 @@ const clearLogo = () => {
                     name="documents"
                     value={formData.documents || ""}
                     onChange={handleChange}
-                     disabled={isView} 
+                    disabled={isView}
                     placeholder=""
                     maxLength={3000}
                   />
@@ -1205,7 +1239,7 @@ const clearLogo = () => {
                     name="canApply"
                     value={formData.canApply || ""}
                     onChange={handleChange}
-                     disabled={isView} 
+                    disabled={isView}
                     placeholder="Who can apply for this scholarship?"
                   />
                 </div>
@@ -1228,102 +1262,98 @@ const clearLogo = () => {
                     name="contactDetails"
                     value={formData.contactDetails || ""}
                     onChange={handleChange}
-                     disabled={isView} 
+                    disabled={isView}
                     placeholder="Email / Phone / Address"
                   />
                 </div>
               </div>
 
-             {isView ? (
-  <div className="form-group col-4">
-    <label style={{ marginTop: "auto" }}>
-    Uploaded Documents
-  </label>
-     <div style={{ textAlign: "left" }}>
-    {formData?.files?.length > 0 ? (
-      formData.files.map((fileName, index) => (
-        <div key={index} style={{ padding: "5px 0" }}>
-          {fileName || "No File Name"}
-        </div>
-      ))
-    ) : (
-      <div>No files uploaded</div>
-    )}
-  </div>
-  </div>
-) : (
-  <div className="form-group col-4">
-    <label>Upload Documents</label>
-    <input
-  type="file"
-  multiple
-  ref={fileInputRef}
-  accept=".pdf,.doc,.docx,.xls,.xlsx"
-  onChange={handleFileChange}
-  disabled={isView}
-/>
+              {isView ? (
+                <div className="form-group col-4">
+                  <label style={{ marginTop: "auto" }}>
+                    Uploaded Documents
+                  </label>
+                  <div style={{ textAlign: "left" }}>
+                    {formData?.files?.length > 0 ? (
+                      formData.files.map((fileName, index) => (
+                        <div key={index} style={{ padding: "5px 0" }}>
+                          {fileName || "No File Name"}
+                        </div>
+                      ))
+                    ) : (
+                      <div>No files uploaded</div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="form-group col-4">
+                  <label>Upload Documents</label>
+                  <input
+                    type="file"
+                    multiple
+                    ref={fileInputRef}
+                    accept=".pdf,.doc,.docx,.xls,.xlsx"
+                    onChange={handleFileChange}
+                    disabled={isView}
+                  />
 
 
-    {fileSelected && filesList.length > 0 && (
-      <button
-        type="button"
-        className="btn-danger mt-2"
-        onClick={handleClear}
-        style={{ marginTop: "5px" }}
-      >
-        Clear
-      </button>
-    )}
+                  {fileSelected && filesList.length > 0 && (
+                    <button
+                      type="button"
+                      className="btn-danger mt-2"
+                      onClick={handleClear}
+                      style={{ marginTop: "10px" }}
+                    >
+                      Clear
+                    </button>
+                  )}
 
-    {(formData?.files?.length > 0 || filesList.length > 0) && (
-      <div className="d-flex flex-column mt-4 rounded" style={{ marginTop: "5px" }}>
-        {formData?.files?.map((fileName, index) => (
-          <div
-  key={`backend-${index}`}
-  className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
->
-  <span>{fileName}</span>
+                  {(formData?.files?.length > 0 || filesList.length > 0) && (
+                    <div className="d-flex flex-column mt-4 rounded" style={{ marginTop: "5px" }}>
+                      {formData?.files?.map((fileName, index) => (
+                        <div
+                          key={`backend-${index}`}
+                          className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+                        >
+                          <span>{fileName}</span>
 
-  {!isView && (
-    <button
-      type="button"
-      className="btn btn-sm btn-outline-danger"
-      onClick={() => {
-  const updated = existingDocFiles.filter((_, i) => i !== index);
-  setExistingDocFiles(updated);
-  setFormData({ ...formData, files: updated });
-}}
+                          {!isView && (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-outline-danger"
+                              onClick={() => handleRemoveSingleFile(index)}
+  style={{marginLeft:"5px"}}
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
 
-    >
-      ×
-    </button>
-  )}
-</div>
+                      ))}
 
-        ))}
-
-        {formData?.files?.length > 0 && (
-          <button
-            type="button"
-            className="btn btn-sm btn-primary mt-2"
-            onClick={() => downloadFileFun(formData.id)}
-            disabled={isView}
-            style={{ marginTop: "5px" }}
-          >
-            Download
-          </button>
-        )}
-      </div>
-    )}
-  </div>
-)}
+                      {formData?.files?.length > 0 && (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary mt-2"
+                          onClick={() => downloadFileFun(formData.id)}
+                          disabled={isView}
+                          style={{ marginTop: "5px" }}
+                        >
+                          Download
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
             <div className="form-group col-4">
-  <label>Upload Logo</label>
+              <label>Upload Logo</label>
 
-  {/* VIEW MODE */}
-  {isView ? (
+              {/* VIEW MODE */}
+{isView ? (
     <div style={{ textAlign: "left", paddingTop: "6px" }}>
       {existingLogo ? (
         <div>{existingLogo}</div>
@@ -1348,6 +1378,7 @@ const clearLogo = () => {
             type="button"
             className="btn btn-sm btn-outline-danger"
             onClick={handleRemoveLogo}
+              style={{marginLeft:"5px"}}
           >
             ×
           </button>
@@ -1362,6 +1393,7 @@ const clearLogo = () => {
             type="button"
             className="btn btn-sm btn-outline-danger"
             onClick={clearLogo}
+            style={{marginLeft:"5px"}}
           >
             ×
           </button>
@@ -1369,7 +1401,7 @@ const clearLogo = () => {
       )}
     </>
   )}
-</div>
+            </div>
 
           </form>
         </div>

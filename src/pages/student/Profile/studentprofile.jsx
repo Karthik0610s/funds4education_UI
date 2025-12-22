@@ -6,6 +6,7 @@ import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarsh
  import Swal from "sweetalert2";
  import { ApiKey } from "../../../api/endpoint";
  import { publicAxios } from "../../../api/config";
+ import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
 export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const dispatch = useDispatch();
 
@@ -19,6 +20,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     gender: "",
     userName: "",
     document:[],
+    studentId:""
   });
 const fileInputRef = useRef(null);
   const [educationList, setEducationList] = useState([]);
@@ -30,6 +32,8 @@ const [filesList, setFilesList] = useState(formData?.files||[]);
 console.log(filesList,"filelist"); // display names
 const [fileSelected, setFileSelected] = useState(false);
 const [newFileSelected, setNewFileSelected] = useState(false);
+ const [existingDocFiles, setExistingDocFiles] = useState([]);
+const [originalFiles, setOriginalFiles] = useState([]);
 const handleFileChange = (e) => {
   debugger;
     const files = Array.from(e.target.files);
@@ -88,20 +92,27 @@ const handleFileChange = (e) => {
     };
   
 const handleClear = () => {
-    // Clear newly selected files
-    setSelectedFiles([]);
-    setFilesList([]);
-    setFileSelected(false);
-    setNewFileSelected(false);
+  // clear only newly selected files
+  setSelectedFiles([]);
 
-    // Clear the file input element
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
+  // 🔑 restore backend files in UI
+  setFilesList([...originalFiles]);
 
-    // Reset documents field in formData
-    setFormData({ ...formData, documents: null });
-  };
+  // 🔑 keep backend payload intact
+  setFormData(prev => ({
+    ...prev,
+    fileName: originalFiles.join("|"),
+    filePath: prev.filePath
+  }));
+
+  setFileSelected(false);
+  setNewFileSelected(false);
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+};
+
 
   // ✅ Load profile data
   useEffect(() => {
@@ -109,6 +120,7 @@ const handleClear = () => {
       debugger;
       setFormData({
         id: profile.id,
+        studentId:profile.studentId,
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",
         email: profile.email || "",
@@ -131,7 +143,44 @@ const handleClear = () => {
       }
     }
   }, [profile]);
+ useEffect(() => {
+  if (profile) {
+    setFilesList(profile.files || []);
+    setExistingDocFiles(profile.files || []);
+    setOriginalFiles(profile.files || []);
 
+    setFormData(prev => ({
+      ...prev,
+      fileName: profile.files?.join("|") || "",
+      filePath: profile.filePath || ""
+    }));
+  }
+}, [profile?.id]);
+
+
+  const handleRemoveSingleFile = (index) => { 
+    debugger;
+  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+  //setExistingDocFiles(updatedFiles);
+   setFilesList(updatedFiles);
+
+  setFormData(prev => ({
+    ...prev,
+    files: updatedFiles,
+    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+  }));
+   // flags
+  if (updatedFiles.length === 0) {
+    setFileSelected(false);
+    setNewFileSelected(false);
+  }
+
+  // clear input
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+  
+};
   // ✅ Format date for backend
   const formatDateForBackend = (dateStr) => {
     if (!dateStr) return null;
@@ -236,9 +285,13 @@ if (!formData.userName.trim()) {
     if (!validateForm()) return;
 
     const loggedInName = localStorage.getItem("name") || "System";
-
-    const payload = {
+const isFileRemoved =
+  originalFiles.length > 0 && filesList.length === 0;
+ //const finalFiles = filesList;
+   
+ const payload = {
       id: formData.id,
+      studentId:formData.studentId,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.trim().toLowerCase(),
@@ -254,7 +307,13 @@ if (!formData.userName.trim()) {
       modifiedBy: loggedInName,
       modifiedDate: null,
       document:null,
-    };
+   //   fileName: finalFiles.length > 0 ? filesList.join("|") : null,
+//filePath: finalFiles.length > 0 ? formData.filePath : null,
+//fileName: finalFiles.length > 0 ? finalFiles.join("|") : "",
+ fileName: isFileRemoved ? "" : filesList.join("|"),
+  filePath: formData.filePath   // 👈 ALWAYS send filePath
+//filePath: formData.filePath || null   
+};
 
    try {
     debugger;
@@ -275,8 +334,12 @@ if (!formData.userName.trim()) {
       title: "Success",
       text: "Profile updated successfully!",
     });
+// 2️⃣ Force fresh fetch BEFORE view page
+await dispatch(fetchStudentProfile(formData.id)).unwrap();
 
-    onSave(payload);
+// 3️⃣ Now navigate
+onSave(payload);
+  //  onSave(payload);
   } catch (err) {
     Swal.fire({
       icon: "error",
@@ -417,14 +480,15 @@ if (!formData.userName.trim()) {
                     type="button"
                     className="btn btn-sm btn-danger mt-2"
                     onClick={handleClear}
+                    style={{ marginTop: "10px" }}
                   >
                     Clear
                   </button>
                 )}
 
                {/* Display all files: backend + newly selected */}
-{filesList.length > 0 && (
-  <div className="d-flex flex-column mt-2 rounded">
+{ filesList.length > 0 && (
+  <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
 
     {/* Backend + selected files */}
     {filesList.map((fileName, index) => (
@@ -439,6 +503,14 @@ if (!formData.userName.trim()) {
         }}
       >
         <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
+          <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => handleRemoveSingleFile(index)}
+              style={{ marginLeft: "5px" }}
+            >
+              ×
+            </button>
       </div>
     ))}
 

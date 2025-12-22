@@ -9,6 +9,7 @@ import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarsh
 
  import { ApiKey } from "../../../api/endpoint";
  import { publicAxios } from "../../../api/config";
+ import { fetchSponsorById } from "../../../app/redux/slices/SponsorSlice";
 export default function SponsorProfileForm({ profile, onCancel, onSave }) {
   const [formData, setFormData] = useState(profile || {});
   const [errors, setErrors] = useState({});
@@ -111,7 +112,10 @@ const fileInputRef = useRef(null);
   const [filesList, setFilesList] = useState(profile?.files||[]);
   console.log(filesList,"filelist"); // display names
   const [fileSelected, setFileSelected] = useState(false);
+  //const [newFileSelected, setNewFileSelected] = useState(false);
   const [newFileSelected, setNewFileSelected] = useState(false);
+   const [existingDocFiles, setExistingDocFiles] = useState([]);
+  const [originalFiles, setOriginalFiles] = useState([]);
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
@@ -166,22 +170,66 @@ const fileInputRef = useRef(null);
           console.error("File download failed:", err);
         }
       };
+     useEffect(() => {
+      if (profile) {
+        setFilesList(profile.files || []);
+        setExistingDocFiles(profile.files || []);
+        setOriginalFiles(profile.files || []);
     
-  const handleClear = () => {
-      // Clear newly selected files
-      setSelectedFiles([]);
-      setFilesList([]);
-      setFileSelected(false);
-      setNewFileSelected(false);
-  
-      // Clear the file input element
-      if (fileInputRef.current) {
-        fileInputRef.current.value = null;
+        setFormData(prev => ({
+          ...prev,
+          fileName: profile.files?.join("|") || "",
+          filePath: profile.filePath || ""
+          
+        }));
       }
+    }, [profile?.id]);
+  const handleRemoveSingleFile = (index) => { 
+    debugger;
+  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+  //setExistingDocFiles(updatedFiles);
+   setFilesList(updatedFiles);
+
+  setFormData(prev => ({
+    ...prev,
+    files: updatedFiles,
+    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+    filePath: prev.filePath 
+  }));
+   // flags
+  if (updatedFiles.length === 0) {
+    setFileSelected(false);
+    setNewFileSelected(false);
+  }
+
+  // clear input
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
   
-      // Reset documents field in formData
-      setFormData({ ...formData, documents: null });
-    };
+};
+  const handleClear = () => {
+  // clear only newly selected files
+  setSelectedFiles([]);
+
+  // 🔑 restore backend files in UI
+  setFilesList([...originalFiles]);
+
+  // 🔑 keep backend payload intact
+  setFormData(prev => ({
+    ...prev,
+    fileName: originalFiles.join("|"),
+    filePath: prev.filePath
+  }));
+
+  setFileSelected(false);
+  setNewFileSelected(false);
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+};
+
   
   // -------------------------------
   // SUBMIT
@@ -192,9 +240,11 @@ const fileInputRef = useRef(null);
     if (!validateForm()) return;
 
     const sponsorId = localStorage.getItem("userId");
-
+const isFileRemoved =
+  originalFiles.length > 0 && filesList.length === 0;
     const updateData = {
       id: sponsorId,
+      sponsorId:formData.sponsorId,
       organizationName: formData.sponsorName,
       organizationType: formData.sponsorType,
       website: formData.website,
@@ -205,12 +255,15 @@ const fileInputRef = useRef(null);
       budget: formData.budget,
       studentCriteria: formData.studentCriteria,
       studyLevels: formData.studyLevels,
+      fileName: isFileRemoved ? "" : filesList.join("|"),
+filePath: formData.filePath   // ✅ ALWAYS PASS
+
       
     };
 
     try {
      const res= await updateSponsor(updateData, dispatch);
-        const userId = res?.id || updateData.id;
+        const userId = res?.id || profile.sponsorId;
       
             // 2️⃣ Upload documents if any
             if (selectedFiles?.length > 0) {
@@ -224,7 +277,7 @@ const fileInputRef = useRef(null);
               text: "Profile updated successfully!",
               confirmButtonText: "OK",
             });
-      
+      await dispatch(fetchSponsorById(formData.sponsorId));
       onSave(formData);
     } catch (err) {
       Swal.fire({ text: "Failed to update profile!", icon: "error" });
@@ -392,6 +445,7 @@ const fileInputRef = useRef(null);
                     type="button"
                     className="btn btn-sm btn-danger mt-2"
                     onClick={handleClear}
+                       style={{ marginTop: "10px" }}
                   >
                     Clear
                   </button>
@@ -399,7 +453,7 @@ const fileInputRef = useRef(null);
 
                {/* Display all files: backend + newly selected */}
 {filesList.length > 0 && (
-  <div className="d-flex flex-column mt-2 rounded">
+  <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
 
     {/* Backend + selected files */}
     {filesList.map((fileName, index) => (
@@ -414,6 +468,14 @@ const fileInputRef = useRef(null);
         }}
       >
         <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
+       <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => handleRemoveSingleFile(index)}
+              style={{ marginLeft: "5px" }}
+            >
+              ×
+            </button>
       </div>
     ))}
 

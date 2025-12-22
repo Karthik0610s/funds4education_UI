@@ -74,14 +74,20 @@ useEffect(() => {
 }, [menuOpen]);
 
 // 1️⃣ Get values from localStorage
-const filePath = (localStorage.getItem("filepath") || "").replace(/\\/g, "/");
+const filePath = (localStorage.getItem("filepath") || "");
+//.replace(/\\/g, "/");
 const fileNameRaw = localStorage.getItem("filename") || "";
 
 console.log("📁 filePath =", filePath);
 console.log("📝 fileNameRaw =", fileNameRaw);
+// normalize slashes & remove trailing //
+const normalizedPath = filePath
+  .replace(/\\/g, "/")
+  .replace(/\/+$/, "");
 
+console.log("📁 normalizedPath =", normalizedPath);
 // 2️⃣ Extract folder name (student-26)
-const folderName = filePath.split("/").pop();
+const folderName = normalizedPath.split("/").pop();
 console.log("📂 folderName =", folderName);
 
 // 3️⃣ Base URL
