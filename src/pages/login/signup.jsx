@@ -43,9 +43,9 @@ const fileInputRef = useRef(null);
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
-  const phoneRegex = /^[0-9]{0,10}$/;
-  const courseRegex = /^[A-Za-z\s.]{1,150}$/;
-  const collegeRegex = /^[A-Za-z\s]{1,250}$/;
+  const phoneRegex = /^\d{10}$/;
+  const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
+  const collegeRegex = /^[A-Za-z\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
@@ -73,7 +73,7 @@ const fileInputRef = useRef(null);
       if (!basicDetails.dob) stepErrors.dob = "Date of birth is required.";
       if (!basicDetails.gender) stepErrors.gender = "Gender is required.";
     }
-
+    
     if (step === 1) {
       if (educationList.length === 0)
         stepErrors.education = "Add at least one education record.";
@@ -377,10 +377,14 @@ debugger;
                   type="text"
                   maxLength={10}
                   value={basicDetails.phone}
-                  onChange={(e) =>
-                    phoneRegex.test(e.target.value) &&
-                    setBasicDetails({ ...basicDetails, phone: e.target.value })
-                  }
+                  onChange={(e) => {
+    const value = e.target.value;
+
+    // allow only numbers while typing
+    if (/^\d*$/.test(value)) {
+      setBasicDetails({ ...basicDetails, phone: value });
+    }
+  }}
                   className={errors.phone ? "input-error" : ""}
                   placeholder="Phone"
                 />
@@ -577,30 +581,33 @@ debugger;
 
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
-               <input
-                    type="text"
-                    placeholder="Course / Class "
-                    value={education.degree}
-                    maxLength={150}
-                    onChange={(e) => {
-                      if (courseRegex.test(e.target.value)) {
-                        setEducation({ ...education, degree: e.target.value });
-                      }
-                    }}
-                  />
+<input
+  type="text"
+  placeholder="Course / Class"
+  value={education.degree}
+  maxLength={150}
+  onChange={(e) => {
+    if (courseRegex.test(e.target.value)) {
+      setEducation({ ...education, degree: e.target.value });
+    }
+  }}
+/>
+
+
                  
 
                   <input
-                    type="text"
-                    placeholder="College / University / School"
-                    value={education.college}
-                    maxLength={250}
-                    onChange={(e) => {
-                      if (collegeRegex.test(e.target.value)) {
-                        setEducation({ ...education, college: e.target.value });
-                      }
-                    }}
-                  />
+  type="text"
+  placeholder="College / University / School"
+  value={education.college}
+  maxLength={250}
+  onChange={(e) => {
+    if (collegeRegex.test(e.target.value)) {
+      setEducation({ ...education, college: e.target.value });
+    }
+  }}
+/>
+
                 
 
                   <input
@@ -652,7 +659,7 @@ debugger;
             <h3>Verification</h3>
             <div className="row">
               <div className="form-group">
-               <label>Username *</label>
+               <label>Email *</label>
 <input
   type="text"
   placeholder="Enter your email"
