@@ -38,6 +38,7 @@ import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredSchol
 import ForgotPassword from "../../../pages/ForgotPassword/forgotPassword.jsx";
 import ViewApplication from "../../../pages/student/scholarshipapplication/viewApplication.jsx";
 import TermsAndConditions from "../../../pages/termsandcondition.jsx";
+import InstitutionsPage from "../../../pages/InstitutionsPage.jsx";
 import ContactUs from "../../../pages/contact.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
@@ -72,7 +73,9 @@ const routeToVariant = {
   [RP.scholarshipPage]:"scholarshippage",
  [RP.scholarshipViewPage]: "student-profile",
   [RP.loginSuccess]:"public",
-  [RP.SponsoredScholarship]:"sponsor-profile"
+  [RP.SponsoredScholarship]:"sponsor-profile",
+  [RP.InstitutionsPage]: "Institutions-list"
+
 };
 
 // 🔹 Layout wrapper
@@ -152,6 +155,7 @@ function App() {
            <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact" element={<ContactUs />} />
          <Route path="/privacy" element={<PrivacyPolicy />} />
+         <Route path={RP.InstitutionsPage} element={<InstitutionsPage/>} />
         </Routes>
       </Layout>
     </Router>

@@ -35,6 +35,9 @@ addscholarshippage:"/sponsor-dashboard/addscholarshipPage",
  SponsoredScholarship: "/Sponsored-Scholarship",
  ForgotPassword:"/forgot-password",
  viewApplication:"/student/scholarship-application/:id/view",
+ InstitutionsPage:"/Institutions-list",
+ 
+ 
 };
 
 

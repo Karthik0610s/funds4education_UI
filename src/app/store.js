@@ -12,6 +12,7 @@ import studentReducer from "./redux/slices/studentSlice";
 import scholarshipReducer from "./redux/slices/ScholarshipSlice";
 import sponsorScholarshipReducer from "./redux/slices/sponsorscholarshipSlice";
 import dashboardCountReducer from "./redux/slices/dashboardCountSlice"
+import institutionListReducer from "./redux/slices/InstitutionlistSlice"
 const persistConfig = {
   key: "root",
   storage,
@@ -30,7 +31,9 @@ const persistedReducer = persistReducer(
     // scholarship:scholarshipReducer,
     scholarship: scholarshipReducer,
     sponsorScholarship: sponsorScholarshipReducer, 
-    dashboardCounts: dashboardCountReducer,  // ✅ ADD THIS
+    dashboardCounts: dashboardCountReducer,  // ✅ ADD THIS\
+    institutionList:institutionListReducer,
+
 
 
 
