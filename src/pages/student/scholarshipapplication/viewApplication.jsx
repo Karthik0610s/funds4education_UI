@@ -133,7 +133,7 @@ const ViewApplication = () => {
       </div>
 
       {/* Right Side */}
-      <div className="right-container">
+<div className="va-right-container">
         <Header variant="sponsor-profile" />
 
         <div className="va-header">
@@ -146,7 +146,7 @@ const ViewApplication = () => {
 
         {/* Personal Details Container */}
 
-        <h2 class="personal-header">Personal Details</h2>
+        <h2 className="personal-header">Personal Details</h2>
         <div className="va-section-content">
           <p><strong>Full Name:</strong> {data.firstName} {data.lastName}</p>
           <p><strong>Email:</strong> {data.email}</p>
@@ -222,12 +222,15 @@ const ViewApplication = () => {
           )}
         </div>
         {data.status?.toLowerCase() === "approved" && (
+ <div className="fund-btn-wrapper">
   <button
     className="btn btn-fund"
     onClick={() => handleFundPopup(data)}
   >
     Fund Student
   </button>
+</div>
+
 )}
 {data.status?.toLowerCase() === "funded" && (
   <p style={{ color: "green", fontWeight: "bold" }}>

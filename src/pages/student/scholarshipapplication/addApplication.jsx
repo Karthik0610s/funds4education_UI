@@ -117,8 +117,8 @@ const minAllowedDOB = minDOB.toISOString().split("T")[0];
   const [filesList, setFilesList] = useState(formData?.files || []);
   const [fileSelected, setFileSelected] = useState(false);
   const [newFileSelected, setNewFileSelected] = useState(false);
-
-
+ const [existingDocFiles, setExistingDocFiles] = useState([]);
+const [originalFiles, setOriginalFiles] = useState([]);
 
 
 const convertDOB = (dateStr) => {
@@ -178,7 +178,23 @@ useEffect(() => {
   setErrors({});
 }, [application, show]);
 
+useEffect(() => {
+    if (application?.files?.length > 0) {
+      setExistingDocFiles([...application.files]);
+       setOriginalFiles([...application.files]); // ✅ immutable backup
+    }
+  }, [application]);
+// Remove backend file
+const handleRemoveSingleFile = (index) => { 
+  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+  setExistingDocFiles(updatedFiles);
 
+  setFormData(prev => ({
+    ...prev,
+    files: updatedFiles,
+    FileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+  }));
+};
   /* const handleChange = (e) => {
      const { name, value, files } = e.target;
      let regex = null;
@@ -347,33 +363,52 @@ if (name === "gpaOrMarks") {
 
   // --- Clear function ---
   const handleClear = () => {
-    // Clear newly selected files
     setSelectedFiles([]);
     setFilesList([]);
+    setExistingDocFiles([]);
+    setFormData(prev => ({
+      ...prev,
+      FileName: "",
+      //FilePath: ""
+    }));// ✅ tell backend all removed
     setFileSelected(false);
     setNewFileSelected(false);
 
-    // Clear the file input element
     if (fileInputRef.current) {
       fileInputRef.current.value = null;
     }
-
-    // Reset documents field in formData
-    setFormData({ ...formData, documents: null });
   };
 
   // --- File change handler ---
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (!files || files.length === 0) return;
-
-    // No file type restriction
-    setSelectedFiles(files);
-    setFilesList(files.map(f => f.name));
-    setFileSelected(true);
-    setNewFileSelected(true);
-    setFormData({ ...formData, documents: files });
-  };
+    const handleFileChange = (e) => {
+      const files = Array.from(e.target.files);
+      if (!files || files.length === 0) return;
+  
+      const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      ];
+  
+      const invalidFiles = files.filter(f => !allowedTypes.includes(f.type));
+  
+      if (invalidFiles.length > 0) {
+        Swal.fire(
+          "Invalid File",
+          "Only PDF, DOC, DOCX, XLS, XLSX files are allowed",
+          "warning"
+        );
+        return;
+      }
+  
+      setSelectedFiles(files);
+      setFilesList(files.map(f => f.name));
+      setFileSelected(true);
+      setNewFileSelected(true);
+    };
+  
   // Upload files function returns uploaded file names
   const uploadFiles = async (applicationId) => {
     if (selectedFiles.length < 1) return [];
@@ -536,17 +571,37 @@ await sendScholarshipEmailReq(applicationId);
 
 
   const handleCloseAndReset = () => {
-    setFormData(initialFormData);
-    setErrors({});
-    handleClose();
-  };
+  // 🔥 Restore ORIGINAL backend files
+  setExistingDocFiles([...originalFiles]);
+
+  setFormData(prev => ({
+    ...prev,
+    files: [...originalFiles],
+    FileName: originalFiles.join("|")
+  }));
+
+  setErrors({});
+  setSelectedFiles([]);
+  setFilesList([]);
+  setFileSelected(false);
+  setNewFileSelected(false);
+  //setLogoFile(null);
+  //setLogoFileName("");
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+
+  handleClose();
+};
+
 
   const downloadFileFun = async (id) => {
     try {
       //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
       //const res= await 
       const res = await publicAxios.get(
-        `${ApiKey.downloadscholarshipFiles}/${id}`,
+        `${ApiKey.downloadscholarshipFiles}/${id}/${"ScholarshipApplication"}`,
         { responseType: "blob" }   // <-- important for file download
       );
 
@@ -877,55 +932,85 @@ await sendScholarshipEmailReq(applicationId);
 )}*/}
 
 
-              <div className="form-group col-12">
-                <label>Upload Documents</label>
-                <input
-                  type="file"
-                  name="documents"
-                  onChange={handleFileChange}
-                  multiple
-                  ref={fileInputRef}
-                  disabled={isViewMode}
-                />
+         {isViewMode ? (
+  /* ================= VIEW MODE ================= */
+  <div className="form-group col-12">
+    <label>Uploaded Documents</label>
 
-                {fileSelected && filesList.length > 0 && (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-danger mt-2"
-                    onClick={handleClear}
-                  >
-                    Clear
-                  </button>
-                )}
+    <div style={{ textAlign: "left" }}>
+      {formData?.files?.length > 0 ? (
+        formData.files.map((fileName, index) => (
+          <div key={index} style={{ padding: "5px 0" }}>
+            {fileName || "No File Name"}
+          </div>
+        ))
+      ) : (
+        <div>No files uploaded</div>
+      )}
+    </div>
+  </div>
+) : (
+  /* ================= EDIT MODE ================= */
+  <div className="form-group col-12">
+    <label>Upload Documents</label>
 
-                {/* Display all files: backend + newly selected */}
-                {(formData?.files?.length > 0 || filesList.length > 0) && (
-                  <div className="d-flex flex-column mt-2 rounded">
-                    {/* Existing backend files */}
-                    {formData?.files?.map((fileName, index) => (
-                      <div
-                        key={`backend-${index}`}
-                        className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
-                      >
-                        <span>{fileName || "No File Name"}</span>
-                      </div>
-                    ))}
+    <input
+      type="file"
+      name="documents"
+      multiple
+      ref={fileInputRef}
+accept=".pdf,.doc,.docx,.xls,.xlsx"
 
+      onChange={handleFileChange}
+    />
 
+    {fileSelected && filesList.length > 0 && (
+      <button
+        type="button"
+        className="btn btn-sm btn-danger mt-2"
+        onClick={handleClear}
+        style={{ marginTop: "10px" }}
+      >
+        Clear
+      </button>
+    )}
 
-                    {/* Download button for backend files */}
-                    {formData?.files?.length > 0 && (
-                      <button
-                        type="button"
-                        className="btn btn-sm btn-primary mt-2"
-                        onClick={() => downloadFileFun(formData.id)}
-                      >
-                        Download
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
+    {(formData?.files?.length > 0 || filesList.length > 0) && (
+      <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
+        {/* Backend files */}
+        {formData?.files?.map((fileName, index) => (
+          <div
+            key={`backend-${index}`}
+            className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+          >
+            <span>{fileName || "No File Name"}</span>
+
+            <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => handleRemoveSingleFile(index)}
+              style={{ marginLeft: "5px" }}
+            >
+              ×
+            </button>
+          </div>
+        ))}
+
+        {/* Download button */}
+        {formData?.files?.length > 0 && (
+          <button
+            type="button"
+            className="btn btn-sm btn-primary mt-2"
+            onClick={() => downloadFileFun(formData.id)}
+          >
+            Download
+          </button>
+        )}
+      </div>
+    )}
+  </div>
+)}
+
 
 
 

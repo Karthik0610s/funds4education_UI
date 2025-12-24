@@ -13,31 +13,39 @@ export default function ViewProfile() {
 
   const handleBack = () => navigate(-1);
 
+  const loadSponsorProfile = async () => {
+  const sponsorId = localStorage.getItem("userId");
+
+  if (!sponsorId) return;
+
+  try {
+    const data = await dispatch(fetchSponsorById(sponsorId));
+    const sponsor = data.payload ? data.payload[0] : data;
+
+    setProfile({
+      sponsorName: sponsor.organizationName || "",
+      sponsorType: sponsor.organizationType || "",
+      website: sponsor.website || "",
+      email: sponsor.email || "",
+      phone: sponsor.phone || "",
+      contactPerson: sponsor.contactPerson || "",
+      address: sponsor.address || "",
+      budget: sponsor.budget || "",
+      studentCriteria: sponsor.studentCriteria || "",
+      studyLevels: sponsor.studyLevels || "",
+      fileName: sponsor.fileName || "",
+      files: sponsor.files || [],
+      filePath: sponsor.filePath || "",
+      sponsorId: sponsor.sponsorId || 0
+    });
+  } catch (err) {
+    console.error("❌ Error fetching sponsor:", err);
+  }
+};
+
   useEffect(() => {
-    const sponsorId = localStorage.getItem("userId"); // logged-in sponsor ID
-    if (sponsorId) {
-      dispatch(fetchSponsorById(sponsorId))
-        .then((data) => {
-          const sponsor = data.payload ? data.payload[0] : data; // adjust based on return
-          setProfile({
-            sponsorName: sponsor.organizationName || "",
-            sponsorType: sponsor.organizationType || "",
-            website: sponsor.website || "",
-            email: sponsor.email || "",
-            phone: sponsor.phone || "",
-            contactPerson: sponsor.contactPerson || "",
-            address: sponsor.address || "",
-            budget: sponsor.budget || "",
-            studentCriteria: sponsor.studentCriteria || "",
-            studyLevels: sponsor.studyLevels || "",
-            fileName:sponsor.fileName ||"",
-            files:sponsor.files ||[],
-            sponsorId:sponsor.sponsorId||0
-          });
-        })
-        .catch((err) => console.error("❌ Error fetching sponsor:", err));
-    }
-  }, [dispatch]);
+  loadSponsorProfile();
+}, [dispatch]);
 
   if (!profile) return <p>Loading sponsor profile...</p>;
 
@@ -86,8 +94,9 @@ export default function ViewProfile() {
         <SponsorProfileForm
           profile={profile}
           onCancel={() => setIsEditing(false)}
-          onSave={(updatedProfile) => {
-            setProfile(updatedProfile);
+          onSave={async () =>  {
+           // setProfile(updatedProfile);
+           await loadSponsorProfile();  
             setIsEditing(false);
           }}
         />

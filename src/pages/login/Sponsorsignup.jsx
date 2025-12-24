@@ -39,6 +39,9 @@ const fileInputRef = useRef(null);
  const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
 const [filesList, setFilesList] = useState( []); // display names
 const [fileSelected, setFileSelected] = useState(false);
+const [newFileSelected, setNewFileSelected] = useState(false);
+ const [existingDocFiles, setExistingDocFiles] = useState([]);
+const [originalFiles, setOriginalFiles] = useState([]);
   const navigate = useNavigate();
 const handleFileChange = (e) => {
   const files = Array.from(e.target.files);
@@ -69,6 +72,29 @@ const handleFileChange = (e) => {
       return [];
     }
   };
+  const handleRemoveSingleFile = (index) => { 
+    debugger;
+  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+  //setExistingDocFiles(updatedFiles);
+   setFilesList(updatedFiles);
+
+  /*setFormData(prev => ({
+    ...prev,
+    files: updatedFiles,
+    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+  }));*/
+   // flags
+  if (updatedFiles.length === 0) {
+    setFileSelected(false);
+    setNewFileSelected(false);
+  }
+
+  // clear input
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+  
+};
 const handleClear = () => {
   setSelectedFiles([]);
   setFilesList([]);
@@ -345,13 +371,14 @@ const handleClear = () => {
                     type="button"
                     className="btn btn-sm btn-danger mt-2"
                     onClick={handleClear}
+                     style={{ marginTop: "10px" }}
                   >
                     Clear
                   </button>
                 )}
 
                {filesList.length > 0 && (
-    <div className="d-flex flex-column mt-2 rounded">
+    <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
       {filesList.map((fileName, index) => (
         <div
           key={index}
@@ -364,6 +391,14 @@ const handleClear = () => {
         }}
         >
           <span>{fileName}</span>
+          <button
+              type="button"
+              className="btn btn-sm btn-outline-danger"
+              onClick={() => handleRemoveSingleFile(index)}
+              style={{ marginLeft: "5px" }}
+            >
+              ×
+            </button>
         </div>
       ))}
     </div>
