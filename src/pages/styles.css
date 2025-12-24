@@ -5032,6 +5032,7 @@ textarea {
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 20px;
 }
 
 .btn-approve {
@@ -7447,11 +7448,12 @@ p {
 /* Main content */
 .va-right-container {
   flex: 1;
-  padding: 30px 40px;
+  padding:10px 40px;
   overflow-y: auto;
   box-sizing: border-box;
   background: #fff;
 }
+
 
 /* Section heading spacing */
 .va-right-container h2 {
@@ -7580,10 +7582,10 @@ p {
   background-color: #367E7F;
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 12px;
   transition: background-color 0.3s ease;
 }
 
@@ -7654,8 +7656,8 @@ p {
 
   /* Download button smaller */
   .va-btn-download {
-    padding: 8px 16px;
-    font-size: 0.95rem;
+    padding: 4px 8px;
+    font-size: 0.65rem;
   }
 }
 .tooltip-cell {
@@ -7681,6 +7683,11 @@ p {
   word-break: break-word;
   z-index: 2000;
   transition: opacity 0.2s ease;
+}
+.fund-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 /* Show on hover */
