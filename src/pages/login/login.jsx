@@ -271,7 +271,7 @@ export default function LoginPage() {
             <button type="button" onClick={() => handleOAuthLogin("facebook")}>
               <FaFacebook /> Facebook
             </button>
-            <button type="button" onClick={() => handleOAuthLogin("linkedin")}>
+           {/* <button type="button" onClick={() => handleOAuthLogin("linkedin")}>
               <FaLinkedin /> LinkedIn
             </button>
             <button type="button" onClick={() => handleOAuthLogin("instagram")}>
@@ -283,6 +283,7 @@ export default function LoginPage() {
             <button type="button" onClick={() => handleOAuthLogin("pinterest")}>
               <FaPinterest /> Pinterest
             </button>
+            */}
           </div>
         </form>
 
