@@ -4,6 +4,7 @@ import Header from "../app/components/header/header";
 import { useDispatch, useSelector } from "react-redux";
 import { publicAxios } from "../api/config";
 import { ApiKey } from "../api/endpoint";
+import { useNavigate } from "react-router-dom";
 import "../pages/styles.css"
 import {
   fetchInstitutionList,
@@ -16,7 +17,8 @@ import {
 
 export default function InstitutionsPage() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+ 
   const {
     institutions,
     loading,
@@ -275,8 +277,13 @@ export default function InstitutionsPage() {
             <p style={{ color: "#6b7280" }}>No institutions found</p>
           )}
 
-          {paginatedInstitutions.map((inst) => (
-            <div className="institution-card" key={inst.id}>
+         {paginatedInstitutions.map((inst) => (
+  <div
+    className="institution-card"
+    key={inst.id}
+    onClick={() => navigate(`/institution/view/${inst.id}`)}
+    style={{ cursor: "pointer" }}
+  >
               <div className="card-header">
                 <h2>{inst.name}</h2>
               </div>

@@ -7916,3 +7916,92 @@ p {
     padding: 20px;
   }
 }
+/* 🌈 Institution Page Title */
+.institution-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(90deg, #0066ff, #00b7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: capitalize;
+  padding: 1rem 0;
+  width: 100%;
+  background-color: #f0f7ff; /* soft strip behind title */
+}
+
+/* 🧩 Institution Detail Card */
+.institution-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  border: 1px solid #e0e0e0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.institution-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Section Headers */
+.institution-section {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1c3c64;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  text-transform: capitalize;
+}
+
+/* ← Back Button */
+/* Institution Page Back Button */
+/* Institution Page Back Button */
+/* Institution Page Back Button */
+.institution-back-btn {
+  background: #fe8200;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 30px;  /* Add space above */
+}
+
+.institution-back-btn:hover {
+  background: #e67300;
+}
+/* Container for each detail row */
+.institution-detail-row {
+  display: flex;
+  margin-bottom: 10px; 
+  align-items: center;/* space between rows */
+}
+
+/* Label (before colon) */
+.institution-detail-label {
+  width: 180px; /* fixed width for alignment */
+  font-weight: 600;
+  text-align: left; /* align text to right */
+  margin-right: 10px; /* space before value */
+}
+
+/* Value */
+.institution-detail-value {
+  flex: 1; /* take remaining space */
+}
+
+
+
