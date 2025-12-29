@@ -2,15 +2,17 @@ import "../../../pages/styles.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchStudentProfile,
-  updateStudent,
-} from "../../../app/redux/slices/studentSlice.js";
-import StudentProfileForm from "./studentprofile.jsx";
+  fetchFacultyUserProfile,
+  updateFacultyUserProfile,
+} from "../../../app/redux/slices/facultySlice.js";
+import FacultyProfileForm from "./facultyProfile.jsx";
 import { useNavigate } from "react-router-dom";
-export default function StudentProfile() {
+export default function FacultyProfile() {
   const dispatch = useDispatch();
-  const { profile, status, error } = useSelector((state) => state.student);
+  const { profile, status, error } = useSelector((state) => state.faculty);
+  console.log("profile",profile);
   const [isEditing, setIsEditing] = useState(false);
+  const id =localStorage.getItem("userId");
 const navigate = useNavigate();
 
   const handleBack = () => {
@@ -19,7 +21,7 @@ const navigate = useNavigate();
 
   // ✅ Fetch logged-in student's profile on mount
   useEffect(() => {
-    dispatch(fetchStudentProfile());
+    dispatch(fetchFacultyUserProfile(id));
   }, [dispatch]);
 
   // ✅ Parse Education JSON safely
@@ -33,6 +35,18 @@ const navigate = useNavigate();
     console.warn("⚠️ Invalid education JSON:", profile.education, err);
     educationArray = [];
   }
+  let workArray = [];
+
+try {
+  if (profile && profile.work) {
+    const parsed = JSON.parse(profile.work);
+    workArray = Array.isArray(parsed) ? parsed : [parsed];
+  }
+} catch (err) {
+  console.warn("⚠️ Invalid work JSON:", profile.work, err);
+  workArray = [];
+}
+
 
   // ✅ Format date of birth properly (local date)
   const formattedDOB = profile?.dateofBirth
@@ -53,7 +67,7 @@ const navigate = useNavigate();
       {!isEditing ? (
         <div className="signup-card">
           <div className="profile-header">
-            <h2 className="headers">Student Profile</h2>
+            <h2 className="headers">Faculty Profile</h2>
             <div className="button-group">
     <button className="sign-action-btn"onClick={handleBack}>Back</button>
     <button className="sign-action-btn" onClick={() => setIsEditing(true)}>
@@ -90,7 +104,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.gender || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Profile Photo:</label>
+              <label>Upload Profile Photo:</label>
               <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />
             </div>
           </div>
@@ -113,7 +127,7 @@ const navigate = useNavigate();
           </div>
 
           {/* --- Education --- */}
-          <h3 className="section-title">Education</h3>
+          <h3 className="section-title">Qualification</h3>
           {educationArray.length > 0 ? (
             <div className="profile-details">
               {educationArray.map((edu, index) => (
@@ -139,14 +153,52 @@ const navigate = useNavigate();
           ) : (
             <p>No education details available.</p>
           )}
+
+
+           <h3 className="section-title">Work Details</h3>
+          {workArray.length > 0 ? (
+            <div className="profile-details">
+              {workArray.map((edu, index) => (
+                <div key={index} className="education-item">
+                  <div className="detail-row">
+                    <label>Organization:</label>
+                    <input type="text" value={edu.organization || ""} readOnly />
+                  </div>
+                  <div className="detail-row">
+                    <label>StartDate:</label>
+                    <input type="text" value={edu.startDate || ""} readOnly />
+                  </div>
+                  {!edu.currentlyWorking && (
+  <div className="detail-row">
+    <label>End Date:</label>
+    <input type="text" value={edu.endDate || ""} readOnly />
+  </div>
+)}
+                  <div className="detail-row">
+                    <label>Role:</label>
+                    <input type="text" value={edu.role || ""} readOnly />
+                  </div>
+                  <div className="detail-row">
+                    <label>Currently Working:</label>
+                    <input type="text" value={edu.currentlyWorking ? "Yes" : "No"} readOnly />
+                  </div>
+                  {index < workArray.length - 1 && (
+                    <hr className="divider" />
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No work details available.</p>
+          )}
         </div>
       ) : (
         // ✅ Edit Form Mode
-        <StudentProfileForm
+        <FacultyProfileForm
           profile={profile}
           onCancel={() => setIsEditing(false)}
           onSave={(updatedData) => {
-            dispatch(updateStudent(updatedData)).then(() => {
+            dispatch(updateFacultyUserProfile(updatedData)).then(() => {
               setIsEditing(false); // ✅ Return to view mode
             });
           }}

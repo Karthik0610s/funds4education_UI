@@ -1,3 +1,5 @@
+import FacultyProfile from "../../../pages/Faculty/login/viewProfile";
+
 export const routePath = {
   login: "/login",
   studentwallet: "/student-wallet",
@@ -35,6 +37,10 @@ addscholarshippage:"/sponsor-dashboard/addscholarshipPage",
  SponsoredScholarship: "/Sponsored-Scholarship",
  ForgotPassword:"/forgot-password",
  viewApplication:"/student/scholarship-application/:id/view",
+ facultyDashboard:"/facultyDashboard",
+ facultySignup:"/facultySignup",
+ viewFacultyProfile:"/view-faculty-profile",
+ facultyProfile:"/faculty-profile",
  InstitutionsPage:"/Institutions-list",
 InstitutionViewPage: "/institution/view/:id",
  

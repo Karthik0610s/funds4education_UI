@@ -11,6 +11,9 @@ import signupReducer from "./redux/slices/signupSlice"
 import studentReducer from "./redux/slices/studentSlice";
 import scholarshipReducer from "./redux/slices/ScholarshipSlice";
 import sponsorScholarshipReducer from "./redux/slices/sponsorscholarshipSlice";
+import dashboardCountReducer from "./redux/slices/dashboardCountSlice";
+import videoContentReducer from "./redux/slices/VideoFacultySlics"
+import facultyReducer from "./redux/slices/facultySlice";
 import dashboardCountReducer from "./redux/slices/dashboardCountSlice"
 import institutionListReducer from "./redux/slices/InstitutionlistSlice"
 const persistConfig = {
@@ -27,10 +30,13 @@ const persistedReducer = persistReducer(
     scholarshipList: scholarshipReducer,
     //  InstitutionSignupList:InstitutionSignUpPage,
     signup: signupReducer,
+    faculty:facultyReducer,
     student: studentReducer,
     // scholarship:scholarshipReducer,
     scholarship: scholarshipReducer,
     sponsorScholarship: sponsorScholarshipReducer, 
+    dashboardCounts: dashboardCountReducer,  // ✅ ADD THIS
+videoContent:videoContentReducer,
     dashboardCounts: dashboardCountReducer,  // ✅ ADD THIS\
     institutionList:institutionListReducer,
 

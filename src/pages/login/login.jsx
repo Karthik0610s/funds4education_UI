@@ -134,6 +134,7 @@ export default function LoginPage() {
         if (roleId === 1) navigate("/student-dashboard");
         else if (roleId === 2) navigate("/sponsor-dashboard");
         else if (roleId === 4) navigate("/institution-dashboard");
+        else if (roleId === 5) navigate("/facultydashboard");
       })
       .catch(() => {});
   };
@@ -164,7 +165,7 @@ export default function LoginPage() {
                     ? RP.signup
                     : userType === "sponsor"
                     ? RP.signupSponsor
-                    : RP.signupInstitution;
+                    : RP.facultySignup;
 
                 navigate(path, { state: { userType } });
               }}
@@ -174,7 +175,7 @@ export default function LoginPage() {
           </p>
 
           <div className="user-radio-group">
-            {["student", "sponsor", "institution"].map((type) => (
+            {["student", "sponsor", "faculty"].map((type) => (
               <label key={type} className="user-radio-label">
                 <input
                   type="radio"
