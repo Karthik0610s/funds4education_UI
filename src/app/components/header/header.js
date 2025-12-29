@@ -180,7 +180,7 @@ useEffect(() => {
               <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
               <Link to={RP.studentdashboard}>Scholarships</Link>
                <Link to={RP.facultyDashboard}>E-Learning</Link>
-                <Link to={RP.facultyDashboard}>Institution</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
             </div>
             <div className="header-right">
               <Link to="/login">Login</Link>
@@ -296,7 +296,7 @@ useEffect(() => {
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
            <Link to={RP.facultyDashboard}>E-Learning</Link>
-                <Link to={RP.facultyDashboard}>Institution</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
 
           <div className="header-right">
@@ -479,7 +479,7 @@ useEffect(() => {
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
             <Link to={RP.facultyDashboard}>E-Learning</Link>
-                <Link to={RP.facultyDashboard}>Institution</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
 
           <div className="header-right">
@@ -635,7 +635,7 @@ const renderMobileLinks = (forcedVariant) => {
           <div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
             E-Learning
           </div>
-<div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
+<div className="mobile-item" onClick={() => { navigate(RP.InstitutionsPage); setMenuOpen(false); }}>
            Institution
           </div>
           <div className="mobile-item"
