@@ -1,28 +1,28 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../../pages/styles.css";
 import { useNavigate } from "react-router-dom";
 import { routePath as RP } from "../../../app/components/router/routepath";
 import { useDispatch } from "react-redux";
 import { updateSponsor } from "../../../app/redux/slices/SponsorSlice";
 import Swal from "sweetalert2";
-import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarshipapplication";
+import { uploadFormFilesReq } from "../../../api/scholarshipapplication/scholarshipapplication";
 
- import { ApiKey } from "../../../api/endpoint";
- import { publicAxios } from "../../../api/config";
- import { fetchSponsorById } from "../../../app/redux/slices/SponsorSlice";
+import { ApiKey } from "../../../api/endpoint";
+import { publicAxios } from "../../../api/config";
+import { fetchSponsorById } from "../../../app/redux/slices/SponsorSlice";
 export default function SponsorProfileForm({ profile, onCancel, onSave }) {
   const [formData, setFormData] = useState(profile || {});
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
   // -------------------------------
   // REGEX RULES
   // -------------------------------
   const orgNameRegex = /^[A-Za-z ]+$/;
   const nameRegex = /^[A-Za-z ]+$/;
   //const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|org|edu)$/;
-       const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
 
   const phoneRegex = /^[0-9]{10}$/;
   const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
@@ -76,13 +76,13 @@ const fileInputRef = useRef(null);
       errs.sponsorType = "Organization type is required.";
     }
 
-    if (formData.website && !urlRegex.test(formData.website)) {
-      errs.website = "Enter a valid website URL.";
-    }
+    // if (formData.website && !urlRegex.test(formData.website)) {
+    //   errs.website = "Enter a valid website URL.";
+    // }
 
-    if (formData.contactPerson && !nameRegex.test(formData.contactPerson)) {
-      errs.contactPerson = "Only letters and spaces allowed.";
-    }
+    // if (formData.contactPerson && !nameRegex.test(formData.contactPerson)) {
+    //   errs.contactPerson = "Only letters and spaces allowed.";
+    // }
 
     if (!formData.email || !emailRegex.test(formData.email)) {
       errs.email = "Enter a valid email (.com, .org, .edu).";
@@ -96,25 +96,25 @@ const fileInputRef = useRef(null);
       errs.address = "Address must be at least 5 characters.";
     }
 
-    if (!formData.budget || !numberRegex.test(formData.budget)) {
-      errs.budget = "Budget must be a valid number.";
-    }
+    // if (!formData.budget || !numberRegex.test(formData.budget)) {
+    //   errs.budget = "Budget must be a valid number.";
+    // }
 
-    if (!formData.studyLevels) {
-      errs.studyLevels = "Please select a study level.";
-    }
+    // if (!formData.studyLevels) {
+    //   errs.studyLevels = "Please select a study level.";
+    // }
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
-   const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
-  const [filesList, setFilesList] = useState(profile?.files||[]);
-  console.log(filesList,"filelist"); // display names
+  const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+  const [filesList, setFilesList] = useState(profile?.files || []);
+  console.log(filesList, "filelist"); // display names
   const [fileSelected, setFileSelected] = useState(false);
   //const [newFileSelected, setNewFileSelected] = useState(false);
   const [newFileSelected, setNewFileSelected] = useState(false);
-   const [existingDocFiles, setExistingDocFiles] = useState([]);
+  const [existingDocFiles, setExistingDocFiles] = useState([]);
   const [originalFiles, setOriginalFiles] = useState([]);
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -127,110 +127,111 @@ const fileInputRef = useRef(null);
     setNewFileSelected(true);
     setFormData({ ...formData, documents: files });
   };
-    // Upload files function returns uploaded file names
-    const uploadFiles = async (applicationId) => {
-      if (selectedFiles.length < 1) return [];
-  
-      const formDataPayload = new FormData();
-      selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
-      formDataPayload.append("TypeofUser", "sponsor");
-      formDataPayload.append("id", applicationId);
-  
-      try {
-        await uploadFormFilesReq(formDataPayload);
-  
-        // Return names of uploaded files for merging
-        return selectedFiles.map(f => f.name);
-      } catch (ex) {
-        console.error("File upload failed:", ex);
-        return [];
-      }
-    };
-    const downloadFileFun = async (id,type) => {
-        try {debugger;
-          //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
-          //const res= await 
-          const res = await publicAxios.get(
-            `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
-            { responseType: "blob" }   // <-- important for file download
-          );
-    
-    
-          const url = window.URL.createObjectURL(
-            new Blob([res.data], { type: "application/zip" })
-          );
-    
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", "documents.zip"); // you can rename as needed
-          document.body.appendChild(link);
-          link.click();
-          link.parentNode.removeChild(link);
-        } catch (err) {
-          console.error("File download failed:", err);
-        }
-      };
-     useEffect(() => {
-      if (profile) {
-        setFilesList(profile.files || []);
-        setExistingDocFiles(profile.files || []);
-        setOriginalFiles(profile.files || []);
-    
-        setFormData(prev => ({
-          ...prev,
-          fileName: profile.files?.join("|") || "",
-          filePath: profile.filePath || ""
-          
-        }));
-      }
-    }, [profile?.id]);
-  const handleRemoveSingleFile = (index) => { 
-    debugger;
-  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
-  //setExistingDocFiles(updatedFiles);
-   setFilesList(updatedFiles);
+  // Upload files function returns uploaded file names
+  const uploadFiles = async (applicationId) => {
+    if (selectedFiles.length < 1) return [];
 
-  setFormData(prev => ({
-    ...prev,
-    files: updatedFiles,
-    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
-    filePath: prev.filePath 
-  }));
-   // flags
-  if (updatedFiles.length === 0) {
+    const formDataPayload = new FormData();
+    selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
+    formDataPayload.append("TypeofUser", "sponsor");
+    formDataPayload.append("id", applicationId);
+
+    try {
+      await uploadFormFilesReq(formDataPayload);
+
+      // Return names of uploaded files for merging
+      return selectedFiles.map(f => f.name);
+    } catch (ex) {
+      console.error("File upload failed:", ex);
+      return [];
+    }
+  };
+  const downloadFileFun = async (id, type) => {
+    try {
+      debugger;
+      //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
+      //const res= await 
+      const res = await publicAxios.get(
+        `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
+        { responseType: "blob" }   // <-- important for file download
+      );
+
+
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/zip" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "documents.zip"); // you can rename as needed
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.error("File download failed:", err);
+    }
+  };
+  useEffect(() => {
+    if (profile) {
+      setFilesList(profile.files || []);
+      setExistingDocFiles(profile.files || []);
+      setOriginalFiles(profile.files || []);
+
+      setFormData(prev => ({
+        ...prev,
+        fileName: profile.files?.join("|") || "",
+        filePath: profile.filePath || ""
+
+      }));
+    }
+  }, [profile?.id]);
+  const handleRemoveSingleFile = (index) => {
+    debugger;
+    const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+    //setExistingDocFiles(updatedFiles);
+    setFilesList(updatedFiles);
+
+    setFormData(prev => ({
+      ...prev,
+      files: updatedFiles,
+      fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+      filePath: prev.filePath
+    }));
+    // flags
+    if (updatedFiles.length === 0) {
+      setFileSelected(false);
+      setNewFileSelected(false);
+    }
+
+    // clear input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+  };
+  const handleClear = () => {
+    // clear only newly selected files
+    setSelectedFiles([]);
+
+    // 🔑 restore backend files in UI
+    setFilesList([...originalFiles]);
+
+    // 🔑 keep backend payload intact
+    setFormData(prev => ({
+      ...prev,
+      fileName: originalFiles.join("|"),
+      filePath: prev.filePath
+    }));
+
     setFileSelected(false);
     setNewFileSelected(false);
-  }
 
-  // clear input
-  if (fileInputRef.current) {
-    fileInputRef.current.value = "";
-  }
-  
-};
-  const handleClear = () => {
-  // clear only newly selected files
-  setSelectedFiles([]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
 
-  // 🔑 restore backend files in UI
-  setFilesList([...originalFiles]);
 
-  // 🔑 keep backend payload intact
-  setFormData(prev => ({
-    ...prev,
-    fileName: originalFiles.join("|"),
-    filePath: prev.filePath
-  }));
-
-  setFileSelected(false);
-  setNewFileSelected(false);
-
-  if (fileInputRef.current) {
-    fileInputRef.current.value = null;
-  }
-};
-
-  
   // -------------------------------
   // SUBMIT
   // -------------------------------
@@ -240,11 +241,11 @@ const fileInputRef = useRef(null);
     if (!validateForm()) return;
 
     const sponsorId = localStorage.getItem("userId");
-const isFileRemoved =
-  originalFiles.length > 0 && filesList.length === 0;
+    const isFileRemoved =
+      originalFiles.length > 0 && filesList.length === 0;
     const updateData = {
       id: sponsorId,
-      sponsorId:formData.sponsorId,
+      sponsorId: formData.sponsorId,
       organizationName: formData.sponsorName,
       organizationType: formData.sponsorType,
       website: formData.website,
@@ -256,27 +257,27 @@ const isFileRemoved =
       studentCriteria: formData.studentCriteria,
       studyLevels: formData.studyLevels,
       fileName: isFileRemoved ? "" : filesList.join("|"),
-filePath: formData.filePath   // ✅ ALWAYS PASS
+      filePath: formData.filePath   // ✅ ALWAYS PASS
 
-      
+
     };
 
     try {
-     const res= await updateSponsor(updateData, dispatch);
-        const userId = res?.id || profile.sponsorId;
-      
-            // 2️⃣ Upload documents if any
-            if (selectedFiles?.length > 0) {
-              await uploadFiles(userId);
-            }
-      
-            // 3️⃣ Show success AFTER upload completes
-            await Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Profile updated successfully!",
-              confirmButtonText: "OK",
-            });
+      const res = await updateSponsor(updateData, dispatch);
+      const userId = res?.id || profile.sponsorId;
+
+      // 2️⃣ Upload documents if any
+      if (selectedFiles?.length > 0) {
+        await uploadFiles(userId);
+      }
+
+      // 3️⃣ Show success AFTER upload completes
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Profile updated successfully!",
+        confirmButtonText: "OK",
+      });
       await dispatch(fetchSponsorById(formData.sponsorId));
       onSave(formData);
     } catch (err) {
@@ -385,7 +386,7 @@ filePath: formData.filePath   // ✅ ALWAYS PASS
         {errors.address && <p className="error-text">{errors.address}</p>}
       </div>
 
-     {/* <h3 className="section-title">Scholarship Preferences</h3>
+      {/* <h3 className="section-title">Scholarship Preferences</h3>
 
       <div className="row">
         <div className="form-group">
@@ -428,75 +429,75 @@ filePath: formData.filePath   // ✅ ALWAYS PASS
         </select>
         {errors.studyLevels && <p className="error-text">{errors.studyLevels}</p>}
       </div>*/}
-  <div className="form-group col-12">
-                <label>Upload Profile Photo </label>
-                <input
-                  type="file"
-                   accept="image/*"  
-                  name="documents"
-                  onChange={handleFileChange}
-                  //multiple
-                  ref={fileInputRef}
-                 // disabled={isViewMode}
-                />
+      <div className="form-group col-12">
+        <label>Upload Profile Photo </label>
+        <input
+          type="file"
+          accept="image/*"
+          name="documents"
+          onChange={handleFileChange}
+          //multiple
+          ref={fileInputRef}
+        // disabled={isViewMode}
+        />
 
-                {fileSelected && filesList.length > 0 && (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-danger mt-2"
-                    onClick={handleClear}
-                       style={{ marginTop: "10px" }}
-                  >
-                    Clear
-                  </button>
-                )}
+        {fileSelected && filesList.length > 0 && (
+          <button
+            type="button"
+            className="btn btn-sm btn-danger mt-2"
+            onClick={handleClear}
+            style={{ marginTop: "10px" }}
+          >
+            Clear
+          </button>
+        )}
 
-               {/* Display all files: backend + newly selected */}
-{filesList.length > 0 && (
-  <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
+        {/* Display all files: backend + newly selected */}
+        {filesList.length > 0 && (
+          <div className="d-flex flex-column mt-2 rounded" style={{ marginTop: "5px" }}>
 
-    {/* Backend + selected files */}
-    {filesList.map((fileName, index) => (
-      <div
-        key={`file-${index}`}
-        className="d-flex align-items-center border rounded p-2 mb-2"
-        style={{
-          gap: "12px",
-          paddingLeft: "14px",
-          paddingRight: "12px",
-          color:"black"
-        }}
-      >
-        <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
-       <button
-              type="button"
-              className="btn btn-sm btn-outline-danger"
-              onClick={() => handleRemoveSingleFile(index)}
-              style={{ marginLeft: "5px" }}
-            >
-              ×
-            </button>
+            {/* Backend + selected files */}
+            {filesList.map((fileName, index) => (
+              <div
+                key={`file-${index}`}
+                className="d-flex align-items-center border rounded p-2 mb-2"
+                style={{
+                  gap: "12px",
+                  paddingLeft: "14px",
+                  paddingRight: "12px",
+                  color: "black"
+                }}
+              >
+                <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-danger"
+                  onClick={() => handleRemoveSingleFile(index)}
+                  style={{ marginLeft: "5px" }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+
+            {/* Download button (backend only) */}
+            {selectedFiles.length === 0 && profile?.files?.length > 0 && (
+              <button
+                type="button"
+                className="btn btn-sm btn-primary mt-2"
+                onClick={() => downloadFileFun(formData.sponsorId, "Sponsor")}
+                style={{ marginTop: "5px", marginLeft: "15px" }}
+              >
+                Download
+              </button>
+            )}
+          </div>
+        )}
+
+
+
+
       </div>
-    ))}
-
-    {/* Download button (backend only) */}
-    {selectedFiles.length === 0 && profile?.files?.length > 0 && (
-  <button
-    type="button"
-    className="btn btn-sm btn-primary mt-2"
-    onClick={() => downloadFileFun(formData.sponsorId,"Sponsor")}
-    style={{ marginTop: "5px", marginLeft: "15px" }}
-  >
-    Download
-  </button>
-)}
-  </div>
-)}
-
-
-
-                    
-                  </div>
 
 
 
