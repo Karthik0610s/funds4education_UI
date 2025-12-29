@@ -34,6 +34,19 @@ export const ApiKey = {
    EmailExistCheck: "/userDto/by-email",
    ChangePassword: "Auth/change-password",
    ResetPassword: "Auth/reset-password",
-   DashboardCount: "DashboardCount"
+   DashboardCount: "DashboardCount",
+uploadVideoContent:"/faculty/UploadFiles",
+VideoContent :"/faculty/GetAllVideos",
+DeleteVideoContent:"/faculty",
+Faculty:"/faculty",
+//UpdateFaculty:"/faculty",
+   DOWNLOAD_COLLEGE_TEMPLATE: "/college-details/download-template",
+  UPLOAD_COLLEGE_EXCEL: "/college-details/upload-excel",
+  CollegeDetails: "college-details",
+  LocationDetails: "/Filter/locations",
+  Managements : "/Filter/management-types",
+  Collegetype : "/Filter/college-types",
+  Districts : "/Filter/districts",
+  States : "/Filter/state",
 
 };
