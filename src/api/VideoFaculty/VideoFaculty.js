@@ -2,9 +2,11 @@ import { publicAxios } from "../config";
 import { ApiKey } from "../endpoint";
 
 /* ================= FETCH ALL VIDEOS ================= */
-export const fetchAllVideoContentReq = async () => {
+export const fetchAllVideoContentReq = async (facultyId = null) => {
   try {
-    const res = await publicAxios.get(ApiKey.VideoContent); 
+    const res = await publicAxios.get(ApiKey.VideoContent, {
+      params: facultyId ? { facultyId } : {},
+    }); 
     // ex: /api/video-content
 
     return {

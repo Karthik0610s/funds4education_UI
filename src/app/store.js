@@ -14,8 +14,8 @@ import sponsorScholarshipReducer from "./redux/slices/sponsorscholarshipSlice";
 import dashboardCountReducer from "./redux/slices/dashboardCountSlice";
 import videoContentReducer from "./redux/slices/VideoFacultySlics"
 import facultyReducer from "./redux/slices/facultySlice";
-import dashboardCountReducer from "./redux/slices/dashboardCountSlice"
-import institutionListReducer from "./redux/slices/InstitutionlistSlice"
+//import dashboardCountReducer from "./redux/slices/dashboardCountSlice";
+import institutionListReducer from "./redux/slices/InstitutionlistSlice";
 const persistConfig = {
   key: "root",
   storage,

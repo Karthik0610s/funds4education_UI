@@ -179,6 +179,8 @@ useEffect(() => {
               <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
               <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
               <Link to={RP.studentdashboard}>Scholarships</Link>
+               <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.facultyDashboard}>Institution</Link>
             </div>
             <div className="header-right">
               <Link to="/login">Login</Link>
@@ -215,21 +217,17 @@ useEffect(() => {
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
-
-             {isImage ? (
-     <img
-      src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+ <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
             </div>
 
             {/* Dropdown Menu */}
@@ -297,6 +295,8 @@ useEffect(() => {
          <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
+           <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.facultyDashboard}>Institution</Link>
           </div>
 
           <div className="header-right">
@@ -334,20 +334,17 @@ useEffect(() => {
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
-               {isImage ? (
-     <img
-     src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+             <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
             </div>
 
             {/* Dropdown Menu */}
@@ -418,21 +415,17 @@ useEffect(() => {
 
               {/* Dropdown Icon */}
               <div className="icon-circle" onClick={toggleDropdown}>
-
-              {isImage ? (
-     <img
-     src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+ <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
               </div>
 
               {/* Dropdown Menu */}
@@ -485,6 +478,8 @@ useEffect(() => {
          <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
+            <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.facultyDashboard}>Institution</Link>
           </div>
 
           <div className="header-right">
@@ -533,6 +528,20 @@ useEffect(() => {
       objectFit: "cover",
     }}
   />
+  {/*{isImage ? (
+     <img
+      src={imgError}
+  alt={altText}
+  className="circle-img"
+  onError={() => setImgError(defaultImage)}
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}/>
+    ) : (
+      <div className="alt-logo-text">{altText}</div>
+    )}*/}
             </div>
 
             {/* Dropdown Menu */}
@@ -623,7 +632,12 @@ const renderMobileLinks = (forcedVariant) => {
           <div className="mobile-item" onClick={() => { navigate(RP.studentdashboard); setMenuOpen(false); }}>
             Scholarships
           </div>
-
+          <div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
+            E-Learning
+          </div>
+<div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
+           Institution
+          </div>
           <div className="mobile-item"
                onClick={() => { setShowSignupModal(true); setMenuOpen(false); }}>
             Sign Up

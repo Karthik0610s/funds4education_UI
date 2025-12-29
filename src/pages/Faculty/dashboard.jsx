@@ -37,6 +37,8 @@ const name =localStorage.getItem("name");
   ]);*/
 
   /* ================= SAFE VIDEO ATTACH ================= */
+  const userId = localStorage.getItem("userId");
+const isLoggedIn = !!userId; // true if userId exists
   useEffect(() => {
     if (isLive && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
@@ -47,8 +49,15 @@ const { data: allVideos, loading } = useSelector(
   (state) => state.videoContent
 );
 useEffect(() => {
-  dispatch(fetchAllVideoContent());
+  const userId = localStorage.getItem("userId");
+
+  if (userId) {
+    dispatch(fetchAllVideoContent(Number(userId)));
+  } else {
+    dispatch(fetchAllVideoContent()); // no id
+  }
 }, [dispatch]);
+
 
 useEffect(() => {
   if (allVideos?.length > 0) {
@@ -282,6 +291,7 @@ const backToCamera = async () => {
   formData.append("FileName", videoName);
  // REQUIRED BY YOUR API
   formData.append("TypeofUser", "VideoContent");
+  formData.append("FacultyId",localStorage.getItem("userId") );
  // formData.append("Id",   0||localStorage.getItem("userId") );
   formData.append("Course", course);
   formData.append("Subject", subject);
@@ -289,7 +299,7 @@ const backToCamera = async () => {
 
   formData.append(
     "CreatedBy",
-    localStorage.getItem("name") || "name"
+    localStorage.getItem("name") || name
   );
 
   formData.append("CreatedDate", new Date().toISOString());
@@ -459,30 +469,156 @@ const formatDate = (date) => {
     </div>
   )}
 
-  {/* Right Panel - Video Grid */}
-  <div className="right-panel">
-    <div className="top-buttons">
-      <button className="live-btn" onClick={() => setShowModal(true)}>LIVE</button>
-      <button className="upload-btn">UPLOAD VIDEO</button>
-    </div>
+  {/* RIGHT PANEL */}
+      <div className="right-panel">
+        <div className="top-buttons">
+          {isLoggedIn && (
+    <>
+      <button className="live-btn" onClick={() => setShowModal(true)}>
+        LIVE
+      </button>
 
-    <div className="video-grid">
-      {filteredVideos.map(v => (
-        <div className="video-card" key={v.Id}>
-          <video src={getVideoUrl(v.filePath, v.fileName)} controls className="thumbnail" />
-          <div className="video-footer">
-            <div className="video-topic">{v.topic}</div>
-            <div className="video-bottom-row">
-              <div className="video-date">Last updated on {formatDate(v.createdDate)}</div>
-              <i className="fa-solid fa-trash delete-icon" onClick={() => handleDeleteVideo(v.id)}></i>
+      <button className="upload-btn">
+        UPLOAD VIDEO
+      </button>
+    </>
+  )}
+        </div>
+
+        <div className="video-grid">
+          {filteredVideos.map((v) => (
+            <div className="video-card" key={v.id}>
+              <video
+                src={getVideoUrl(v.filePath, v.fileName)}
+                controls
+                preload="metadata"
+                className="thumbnail"
+              />
+
+              <div className="video-footer">
+                <div className="video-topic">{v.topic}</div>
+
+                <div className="video-bottom-row">
+                  <div className="video-date">
+                    Last updated on {formatDate(v.createdDate)}
+                  </div>
+
+                 {isLoggedIn && (
+          <i
+            className="fa-solid fa-trash delete-icon"
+            title="Delete video"
+            onClick={() => handleDeleteVideo(v.id)}
+          />
+        )}
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <button className="modal-close" onClick={resetModal}>
+              ✕
+            </button>
+
+            {/* STEP 1 */}
+            {step === 1 && (
+              <>
+                <h3>Select Details</h3>
+
+                <div className="modal-form">
+                  <label>Course</label>
+                  <input value={course} onChange={(e) => setCourse(e.target.value)} />
+
+                  <label>Subject</label>
+                  <input value={subject} onChange={(e) => setSubject(e.target.value)} />
+
+                  <label>Topic</label>
+                  <input value={topic} onChange={(e) => setTopic(e.target.value)} />
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    className="primary-btn"
+                    disabled={!canProceed}
+                    onClick={() => setStep(2)}
+                  >
+                    NEXT
+                  </button>
+
+                  <button className="secondary-btn" onClick={resetModal}>
+                    CANCEL
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* STEP 2 */}
+            {step === 2 && (
+              <>
+                <h3>Start Live Session</h3>
+                <p>Allow camera / microphone</p>
+                <button className="primary-btn" onClick={startCamera}>
+                  🎥 Start Camera
+                </button>
+              </>
+            )}
+
+            {/* STEP 3 */}
+            {step === 3 && isLive && (
+              <>
+                <div className="live-controls">
+                  <button onClick={shareScreen}>🖥 Screen</button>
+                  <button onClick={backToCamera}>🎥 Camera</button>
+                  <button className="stop-btn" onClick={stopLive}>
+                    STOP
+                  </button>
+                </div>
+
+                <video ref={videoRef} autoPlay muted />
+              </>
+            )}
+
+            {/* STEP 4 */}
+            {step === 4 && recordedBlob && (
+              <>
+                <h3>Recording Ready</h3>
+
+                <video
+                  src={URL.createObjectURL(recordedBlob)}
+                  controls
+                  style={{ width: "100%", marginBottom: "10px" }}
+                />
+
+                <div className="modal-form">
+                  <label>Video Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter video name"
+                    value={videoName}
+                    onChange={(e) => setVideoName(e.target.value)}
+                  />
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    className="primary-btn"
+                    onClick={saveRecordedVideo}
+                    disabled={!videoName.trim()}
+                  >
+                    SAVE VIDEO
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
-      ))}
+      )}
     </div>
   </div>
-</div>
- </div>
-
-  );
+);
 }

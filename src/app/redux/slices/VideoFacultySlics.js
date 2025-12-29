@@ -36,10 +36,10 @@ export const { setLoading, addVideos, setError } =
   videoContentSlice.actions;
 
 export default videoContentSlice.reducer;
-export const fetchAllVideoContent = () => async (dispatch) => {
+export const fetchAllVideoContent = (id = null ) => async (dispatch) => {
   try {
     dispatch(setLoading());
-    const res = await fetchAllVideoContentReq();
+    const res = await fetchAllVideoContentReq(id);
     dispatch(addVideos(res.data));
   } catch (error) {
     dispatch(setError());
@@ -48,12 +48,13 @@ export const fetchAllVideoContent = () => async (dispatch) => {
 };
 export const uploadVideoContent = (formData) => async (dispatch) => {
   try {
+     const id =localStorage.getItem("userId");
     dispatch(setLoading());
 
     const res = await uploadVideoReq(formData);
 
     // 🔄 Refresh video list after upload
-    await dispatch(fetchAllVideoContent());
+    await dispatch(fetchAllVideoContent(id));
 
     Swal.fire({
       text: res.message || "Video uploaded successfully!",
@@ -72,11 +73,12 @@ export const uploadVideoContent = (formData) => async (dispatch) => {
 };
 export const deleteFacultyVideo = (videoId, dispatch) => async (dispatch) => {
   try {
+    const id =localStorage.getItem("userId");
     dispatch(setLoading());
     await deleteVideoContentReq(videoId); // API delete call
 
     // Fetch updated list after deletion
-    await dispatch(fetchAllVideoContent());
+    await dispatch(fetchAllVideoContent(id));
 
     Swal.fire("Deleted!", "Video has been deleted.", "success");
   } catch (error) {

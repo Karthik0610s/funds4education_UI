@@ -65,6 +65,9 @@ const location = useLocation();
       case "4":
         navigate(RP.institutiondashboard);
         break;
+         case "5":
+        navigate(RP.facultyDashboard);
+        break;
       default:
         break;
     }
@@ -183,7 +186,7 @@ const { sponsorCount, studentCount, activeScholarshipCount } = useSelector(
 );
 
 const handleClickSponsor = () => checkAndNavigate("2", "sponsor");
-const handleClickInstitution = () => checkAndNavigate("4", "institution");
+const handleClickInstitution = () => checkAndNavigate("5", "faculty");
  const testimonials = [
     {
       text: "VidyāSetu helped me secure a scholarship that made my education possible.",
