@@ -30,7 +30,7 @@ export default function ViewProfile() {
       phone: sponsor.phone || "",
       contactPerson: sponsor.contactPerson || "",
       address: sponsor.address || "",
-      budget: sponsor.budget || "",
+      budget: sponsor.budget || 0,
       studentCriteria: sponsor.studentCriteria || "",
       studyLevels: sponsor.studyLevels || "",
       fileName: sponsor.fileName || "",
@@ -75,7 +75,7 @@ export default function ViewProfile() {
             <div className="detail-row"><label>Email:</label><input type="text" value={profile.email} readOnly /></div>
             <div className="detail-row"><label>Phone:</label><input type="text" value={profile.phone} readOnly /></div>
             <div className="detail-row">
-              <label>Upload Profile Photo:</label>
+              <label>Profile Photo:</label>
               <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />
             </div>
           </div>

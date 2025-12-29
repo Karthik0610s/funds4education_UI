@@ -56,9 +56,9 @@ export const fetchScholarshipByStatusReq = async (filters = {}) => {
     const params = {};
     params.StatusType = statusType;
     params.filterType=filterType;// 🔹 Note: capital S to match backend
-      const studentId = localStorage.getItem("id");
+      const studentId = localStorage.getItem("userId");
     if (studentId) params.StudentId = studentId;
-    const role = localStorage.getItem("userType");
+    const role = localStorage.getItem("roleName");
     if (role) params.Role = role
 
 if (filters.classId?.length) params.Class_ID = filters.classId.join(',');
