@@ -40,5 +40,13 @@ VideoContent :"/faculty/GetAllVideos",
 DeleteVideoContent:"/faculty",
 Faculty:"/faculty",
 //UpdateFaculty:"/faculty",
+   DOWNLOAD_COLLEGE_TEMPLATE: "/college-details/download-template",
+  UPLOAD_COLLEGE_EXCEL: "/college-details/upload-excel",
+  CollegeDetails: "college-details",
+  LocationDetails: "/Filter/locations",
+  Managements : "/Filter/management-types",
+  Collegetype : "/Filter/college-types",
+  Districts : "/Filter/districts",
+  States : "/Filter/state",
 
 };

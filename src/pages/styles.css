@@ -5076,6 +5076,7 @@ textarea {
   font-size: 14px;
   cursor: pointer;
   transition: background 0.2s;
+  margin-top: 20px;
 }
 
 .btn-approve {
@@ -7491,11 +7492,12 @@ p {
 /* Main content */
 .va-right-container {
   flex: 1;
-  padding: 30px 40px;
+  padding:10px 40px;
   overflow-y: auto;
   box-sizing: border-box;
   background: #fff;
 }
+
 
 /* Section heading spacing */
 .va-right-container h2 {
@@ -7624,10 +7626,10 @@ p {
   background-color: #367E7F;
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 12px;
   transition: background-color 0.3s ease;
 }
 
@@ -7698,8 +7700,8 @@ p {
 
   /* Download button smaller */
   .va-btn-download {
-    padding: 8px 16px;
-    font-size: 0.95rem;
+    padding: 4px 8px;
+    font-size: 0.65rem;
   }
 }
 .tooltip-cell {
@@ -7725,6 +7727,11 @@ p {
   word-break: break-word;
   z-index: 2000;
   transition: opacity 0.2s ease;
+}
+.fund-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 /* Show on hover */
@@ -7764,3 +7771,313 @@ p {
 .checkbox-group {
   justify-content: flex-end;
 }
+.page-container {
+  padding: 50px 24px;
+}
+
+/*INSTITUTION PAGE*/
+.top-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Search Input */
+.global-search {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+}
+
+.global-search:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+
+.top-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Download Template Button */
+.template-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+
+  border: none;
+  border-radius: 8px;
+
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+  transition: all 0.2s ease-in-out;
+}
+
+.template-btn::before {
+  content: "⬇";
+  font-size: 14px;
+}
+
+.template-btn:hover {
+  background: linear-gradient(135deg, #fb8c00);
+  transform: translateY(-1px);
+}
+
+.template-btn:active {
+  transform: translateY(0);
+}
+
+/* Upload Button */
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 16px;
+  background: #10b981;
+  color: #ffffff;
+
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease-in-out;
+}
+
+.upload-btn::before {
+  content: "⬆";
+  font-size: 14px;
+}
+
+.upload-btn:hover {
+  background: #fb8c00;
+  transform: translateY(-1px);
+}
+
+.upload-btn:active {
+  transform: translateY(0);
+}
+
+
+.content-layouts {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+
+.filter-card {
+  width: 260px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.filter-groups {
+  margin-bottom: 14px;
+}
+
+.filter-labels {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.filter-groups select {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111827;
+  border-radius: 12px;
+  border: 2px solid #dbe1ea;
+  background-color: #ffffff;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 18px;
+}
+
+.filter-groups select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Clear All Button */
+.clear-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: #ff9800;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background: #fb8c00;
+}
+
+.list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.institution-card {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: box-shadow 0.2s ease;
+}
+
+.institution-card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.card-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-details {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.card-details p {
+  margin: 4px 0;
+}
+
+@media (max-width: 1024px) {
+  .content-layouts {
+    flex-direction: column;
+  }
+
+  .filter-card {
+    width: 100%;
+  }
+
+  .top-bar {
+    flex-wrap: wrap;
+    padding: 20px;
+  }
+}
+/* 🌈 Institution Page Title */
+.institution-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(90deg, #0066ff, #00b7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: capitalize;
+  padding: 1rem 0;
+  width: 100%;
+  background-color: #f0f7ff; /* soft strip behind title */
+}
+
+/* 🧩 Institution Detail Card */
+.institution-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  border: 1px solid #e0e0e0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.institution-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Section Headers */
+.institution-section {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1c3c64;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  text-transform: capitalize;
+}
+
+/* ← Back Button */
+/* Institution Page Back Button */
+/* Institution Page Back Button */
+/* Institution Page Back Button */
+.institution-back-btn {
+  background: #fe8200;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 30px;  /* Add space above */
+}
+
+.institution-back-btn:hover {
+  background: #e67300;
+}
+/* Container for each detail row */
+.institution-detail-row {
+  display: flex;
+  margin-bottom: 10px; 
+  align-items: center;/* space between rows */
+}
+
+/* Label (before colon) */
+.institution-detail-label {
+  width: 180px; /* fixed width for alignment */
+  font-weight: 600;
+  text-align: left; /* align text to right */
+  margin-right: 10px; /* space before value */
+}
+
+/* Value */
+.institution-detail-value {
+  flex: 1; /* take remaining space */
+}
+
+
+

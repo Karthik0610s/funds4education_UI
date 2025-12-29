@@ -40,7 +40,9 @@ import ViewApplication from "../../../pages/student/scholarshipapplication/viewA
 import TermsAndConditions from "../../../pages/termsandcondition.jsx";
 import FacultyDashboard from "../../../pages/Faculty/dashboard.jsx";
 import FacultySignup from "../../../pages/login/facultySignup.jsx";
+import InstitutionsPage from "../../../pages/InstitutionsPage.jsx";
 import ContactUs from "../../../pages/contact.jsx";
+import InstitutionViewPage from "../../../pages/InstitutionDetailsview.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 import PrivacyPolicy from "../../../pages/privacypolicy.jsx";
@@ -81,6 +83,9 @@ const routeToVariant = {
   [RP.facultySignup]:"faculty-profile",
   [RP.viewFacultyProfile]:"faculty-profile",
   [RP.facultyProfile]:"faculty-profile",
+  [RP.InstitutionsPage]: "Institutions-list",
+  [RP.InstitutionViewPage]: "Institution-view",
+
 };
 
 // 🔹 Layout wrapper
@@ -165,6 +170,8 @@ function App() {
            <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact" element={<ContactUs />} />
          <Route path="/privacy" element={<PrivacyPolicy />} />
+         <Route path={RP.InstitutionsPage} element={<InstitutionsPage/>} />
+<Route path="/institution/view/:id" element={<InstitutionViewPage />} />
         </Routes>
       </Layout>
     </Router>

@@ -40,7 +40,11 @@ addscholarshippage:"/sponsor-dashboard/addscholarshipPage",
  facultyDashboard:"/facultyDashboard",
  facultySignup:"/facultySignup",
  viewFacultyProfile:"/view-faculty-profile",
- facultyProfile:"/faculty-profile"
+ facultyProfile:"/faculty-profile",
+ InstitutionsPage:"/Institutions-list",
+InstitutionViewPage: "/institution/view/:id",
+ 
+ 
 };
 
 
