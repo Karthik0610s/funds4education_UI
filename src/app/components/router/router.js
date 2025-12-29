@@ -38,10 +38,14 @@ import SponsoredScholarship from "../../../pages/SponsorDashboard/SponsoredSchol
 import ForgotPassword from "../../../pages/ForgotPassword/forgotPassword.jsx";
 import ViewApplication from "../../../pages/student/scholarshipapplication/viewApplication.jsx";
 import TermsAndConditions from "../../../pages/termsandcondition.jsx";
+import FacultyDashboard from "../../../pages/Faculty/dashboard.jsx";
+import FacultySignup from "../../../pages/login/facultySignup.jsx";
 import ContactUs from "../../../pages/contact.jsx";
 // ⭐ ADD THIS IMPORT
 import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 import PrivacyPolicy from "../../../pages/privacypolicy.jsx";
+import ViewFacultyProfile from "../../../pages/Faculty/login/viewProfile.jsx";
+import FacultyProfile from "../../../pages/Faculty/login/facultyProfile.jsx";
 const routeToVariant = {
   [RP.home]: "public",
   [RP.studentdashboard]: "student-profile",
@@ -72,7 +76,11 @@ const routeToVariant = {
   [RP.scholarshipPage]:"scholarshippage",
  [RP.scholarshipViewPage]: "student-profile",
   [RP.loginSuccess]:"public",
-  [RP.SponsoredScholarship]:"sponsor-profile"
+  [RP.SponsoredScholarship]:"sponsor-profile",
+  [RP.facultyDashboard]:"faculty-profile",
+  [RP.facultySignup]:"faculty-profile",
+  [RP.viewFacultyProfile]:"faculty-profile",
+  [RP.facultyProfile]:"faculty-profile",
 };
 
 // 🔹 Layout wrapper
@@ -149,6 +157,11 @@ function App() {
           <Route path={RP.SponsoredScholarship} element={<SponsoredScholarship />} />
           <Route path={RP.ForgotPassword} element={<ForgotPassword />} />
           <Route path={RP.viewApplication} element={<ViewApplication />} />
+          
+           <Route path={RP.facultyDashboard} element={<FacultyDashboard />} />
+             <Route path={RP.facultySignup} element={<FacultySignup />} />
+  <Route path={RP.viewFacultyProfile} element={<ViewFacultyProfile />} />
+               <Route path={RP.facultyProfile} element={<FacultyProfile />} />
            <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact" element={<ContactUs />} />
          <Route path="/privacy" element={<PrivacyPolicy />} />

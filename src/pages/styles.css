@@ -2695,7 +2695,7 @@ input:not([type="radio"]) {
   padding: 10px;
   font-size: 16px;
   flex: 1;
-  min-width: 200px;
+ /* min-width: 200px;*/
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
@@ -2785,13 +2785,57 @@ input:not([type="radio"]) {
   margin-bottom: 10px;
 }
 
+/* Second row layout */
+.work-row-2 {
+  grid-column: 1 / -1; /* full width */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Checkbox alignment */
+.work-checkbox {
+ 
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.education-grid.header {
+  font-weight: 600;
+  color: #555;
+  background: #f8f9fa;
+  padding: 8px 0;
+}
+
+.education-grid.header div {
+  font-size: 14px;
+}
+.date-input:before {
+  content: attr(data-placeholder);
+  color: #999;
+}
+
+.date-input:focus:before,
+.date-input:not([value=""]):before {
+  content: "";
+}
+
 .education-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 100px;
+  grid-template-columns: 1fr 1fr 1fr ;
   gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+ 
   align-items: center;
+}
+input:not([type="radio"]):not([type="checkbox"]) {
+  padding: 10px;
+  font-size: 16px;
+  flex: 1 1;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
 }
 
 .education-grid.header {
@@ -7687,4 +7731,36 @@ p {
 .tooltip-cell:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+.label-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label-value .label {
+  font-size: 12px;
+  color: #777;
+  font-weight: 500;
+}
+
+.label-value .value {
+  font-size: 15px;
+  color: #222;
+  font-weight: 500;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
+
+.checkbox-group {
+  justify-content: flex-end;
 }

@@ -138,3 +138,30 @@ export const sendScholarshipEmailReq = async (applicationId) => {
     };
   }
 };
+
+export const uploadVideoReq = async (formData) => {
+  try {
+    debugger;
+     const res = await publicAxios.post(ApiKey.uploadVideoContent,formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    return {
+      success: true,
+      data: res.data,
+      message: res.data?.Message || "Video uploaded successfully",
+    };
+  } catch (err) {
+    let error;
+    if (err.response) error = err.response.data?.message || "Response error";
+    else if (err.request) error = "Request error";
+    else error = "Something went wrong";
+
+    throw {
+      success: false,
+      errorMsg: error,
+    };
+  }
+};
