@@ -62,7 +62,7 @@
 }
 
 .live-btn {
-  background: #fe8200;
+  background: #396d70;
   color: white;
   padding: 10px 22px;
   border-radius: 20px;
@@ -98,6 +98,10 @@
   border-radius: 20px;
   border: none;
   cursor: pointer;
+}
+.live-btn:hover {
+  background: #fb8c00;
+  transform: translateY(-1px);
 }
 
 /* ================= VIDEO GRID ================= */
@@ -361,6 +365,11 @@ button:disabled {
       margin: 2px;
 
 }
+.step2-footer {
+  display: flex;
+  justify-content: flex-end;
+  /* margin-top: 16px; */
+}
 .secondary-btn {
   background: #eee;
   color: #333;
@@ -435,4 +444,13 @@ button:disabled {
   .mobile-filter-overlay {
     display: none;
   }
+  .pause-btn {
+  background: #ffc107;
+  color: #000;
+}
+
+.resume-btn {
+  background: #28a745;
+  color: #fff;
+}
 }

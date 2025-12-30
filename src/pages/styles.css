@@ -7874,7 +7874,15 @@ p {
 .upload-btn:active {
   transform: translateY(0);
 }
-
+.live-btn {
+  background: #396d70;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 .content-layouts {
   display: flex;
