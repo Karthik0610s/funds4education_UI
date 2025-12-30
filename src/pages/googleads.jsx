@@ -44,7 +44,7 @@ const GoogleAd = () => {
        style={{ display: "block", width: "100%", height: "210px" }}
       data-ad-client="ca-pub-6996708698661424"
       data-ad-slot="8637042416"
-      data-ad-format="rectangle"
+      data-ad-format="square"
       data-full-width-responsive="true"
     />
   );

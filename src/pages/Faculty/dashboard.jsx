@@ -120,6 +120,8 @@ useEffect(() => {
     setSubject("");
     setTopic("");
     setVideoName("");
+     setUploadMode(false);
+  setSelectedFile(null);
   };
 
   /* ================= START CAMERA ================= */
@@ -503,7 +505,7 @@ const formatDate = (date) => {
         <div className="top-buttons">
           {isLoggedIn && (
     <>
-      <button className="live-btn" onClick={() => setShowModal(true)}>
+      <button className="live-btn" onClick={() => {setShowModal(true);   setUploadMode(false); }}>
         LIVE
       </button>
 
