@@ -52,6 +52,7 @@ export default function LoginSuccess() {
         if (roleName === "Student") navigate("/student-dashboard");
         else if (roleName === "Sponsor") navigate("/sponsor-dashboard");
         else if (roleName === "Institution") navigate("/institution-dashboard");
+          else if (roleName === "Faculty") navigate("/facultydashboard");
         else navigate("/");
       }, 500);
     } else {

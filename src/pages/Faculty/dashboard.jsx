@@ -514,36 +514,43 @@ const formatDate = (date) => {
   )}
         </div>
 
-        <div className="video-grid">
-          {filteredVideos.map((v) => (
-            <div className="video-card" key={v.id}>
-              <video
-                src={getVideoUrl(v.filePath, v.fileName)}
-                controls
-                preload="metadata"
-                className="thumbnail"
-              />
+       <div className="video-grid">
+  {filteredVideos.length > 0 ? (
+    filteredVideos.map((v) => (
+      <div className="video-card" key={v.id}>
+        <video
+          src={getVideoUrl(v.filePath, v.fileName)}
+          controls
+          preload="metadata"
+          className="thumbnail"
+        />
 
-              <div className="video-footer">
-                <div className="video-topic">{v.topic}</div>
+        <div className="video-footer">
+          <div className="video-topic">{v.topic}</div>
 
-                <div className="video-bottom-row">
-                  <div className="video-date">
-                    Last updated on {formatDate(v.createdDate)}
-                  </div>
-
-                 {isLoggedIn && (
-          <i
-            className="fa-solid fa-trash delete-icon"
-            title="Delete video"
-            onClick={() => handleDeleteVideo(v.id)}
-          />
-        )}
-                </div>
-              </div>
+          <div className="video-bottom-row">
+            <div className="video-date">
+              Last updated on {formatDate(v.createdDate)}
             </div>
-          ))}
+
+            {isLoggedIn && (
+              <i
+                className="fa-solid fa-trash delete-icon"
+                title="Delete video"
+                onClick={() => handleDeleteVideo(v.id)}
+              />
+            )}
+          </div>
         </div>
+      </div>
+    ))
+  ) : (
+    <div className="no-videos">
+   <strong>   No video content available</strong>
+    </div>
+  )}
+</div>
+
       </div>
 
       {/* MODAL */}
