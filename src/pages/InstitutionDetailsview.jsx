@@ -90,11 +90,12 @@ export default function InstitutionViewPage() {
                     )}
                 </div>
 
-                {/* CREATED DATE */}
+                {/* CREATED DATE 
                 <h3 className="institution-section">Created Date</h3>
                 <div className="institution-card">
                     {new Date(institution.createdAt).toLocaleDateString("en-IN")}
                 </div>
+                */}
             </div>
         </div>
     );
