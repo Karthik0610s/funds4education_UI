@@ -22,6 +22,9 @@ export default function FacultyDashboard() {
   const [step, setStep] = useState(1);
   const [isLive, setIsLive] = useState(false);
   const [recordedBlob, setRecordedBlob] = useState(null);
+  const [uploadMode, setUploadMode] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const [isPaused, setIsPaused] = useState(false);
   const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
   const [course, setCourse] = useState("");
@@ -168,14 +171,41 @@ export default function FacultyDashboard() {
       // Preview screen
       videoRef.current.srcObject = screenStream;
 
-      screenStream.getVideoTracks()[0].onended = () => {
-        alert("Screen sharing stopped. Recording will end.");
-        stopLive();
-      };
-    } catch (err) {
-      //alert("Permission denied");
-    }
-  };
+    screenStream.getVideoTracks()[0].onended = () => {
+      alert("Screen sharing stopped. Recording will end.");
+      stopLive();
+    };
+  } catch (err) {
+    //alert("Permission denied");
+  }
+};
+//HANDLE UPLOADVIDEO
+const handleUploadFile = async () => {
+  if (!selectedFile || !videoName) {
+    Swal.fire("Please enter video name and select a file");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("FormFiles", selectedFile);
+  formData.append("FileName", videoName + "." + selectedFile.name.split(".").pop());
+  formData.append("TypeofUser", "VideoContent");
+  formData.append("FacultyId", localStorage.getItem("userId"));
+  formData.append("Course", course);
+  formData.append("Subject", subject);
+  formData.append("Topic", topic);
+  formData.append("CreatedBy", localStorage.getItem("name") || name);
+  formData.append("CreatedDate", new Date().toISOString());
+
+  try {
+    Swal.fire({ title: "Uploading...", didOpen: () => Swal.showLoading() });
+    const res = await dispatch(uploadVideoContent(formData));
+    Swal.fire("Success!", "Video uploaded successfully", "success");
+    resetModal();
+  } catch (error) {
+    Swal.fire("Upload Failed", error.message, "error");
+  }
+};
 
 
   /* ================= SCREEN SHARE ================= */
@@ -512,12 +542,12 @@ export default function FacultyDashboard() {
                   LIVE
                 </button>
 
-                <button className="upload-btn">
-                  UPLOAD VIDEO
-                </button>
-              </>
-            )}
-          </div>
+      <button className="upload-btn" onClick={() => {setUploadMode(true);setShowModal(true);setStep(1);}}>
+        UPLOAD VIDEO
+      </button>
+    </>
+  )}
+        </div>
 
           <div className="video-grid">
             {filteredVideos.length > 0 ? (
@@ -598,19 +628,66 @@ export default function FacultyDashboard() {
                 </>
               )}
 
-              {/* STEP 2 */}
-             {step === 2 && (
-                <>
-                  <h3>Start Live Session</h3>
-                  <p>Allow camera / microphone</p>
+            {/* STEP 2 */}
+            {/* STEP 2 */}
+{step === 2 && (
+  <>
+    {/* UPLOAD MODE */}
+    {uploadMode ? (
+      <>
+        <h3>Upload Video File</h3>
 
-                  <div className="step2-footer">
+        <div className="modal-form">
+          <label>Video Name</label>
+          <input
+            type="text"
+            placeholder="Enter video name"
+            value={videoName}
+            onChange={(e) => setVideoName(e.target.value)}
+          />
+        </div>
+
+        <input
+          type="file"
+          accept="video/*"
+          onChange={(e) => setSelectedFile(e.target.files[0])}
+          style={{ marginTop: "10px" }}
+        />
+
+        <div className="modal-footer">
+          <button
+            className="primary-btn"
+            disabled={!selectedFile || !videoName.trim()}
+            onClick={handleUploadFile}
+          >
+            📤 Upload File
+          </button>
+
+          <button className="secondary-btn" onClick={resetModal}>
+            Cancel
+          </button>
+        </div>
+      </>
+    ) : (
+      /* LIVE MODE */
+      <>
+        <h3>Start Live Session</h3>
+        <p>Allow camera & microphone to begin</p>
+
+         <div className="step2-footer">
                     <button className="primary-btn" onClick={startCamera}>
                       🎥 Start Recording
                     </button>
                   </div>
-                </>
-              )}
+        <div className="modal-footer">
+          <button className="secondary-btn" onClick={resetModal}>
+            Cancel
+          </button>
+        </div>
+      </>
+    )}
+  </>
+)}
 
 
               {/* STEP 3 */}

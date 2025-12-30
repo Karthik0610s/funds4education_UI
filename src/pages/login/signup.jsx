@@ -283,7 +283,7 @@ debugger;
       <div className="signup-card">
         {/* Header */}
         <div className="signup-header">
-          <h2>Sign up</h2>
+          <h2>Student Sign up</h2>
           <p>
             Already a member?{" "}
             <Link to={RP.login} state={{ userType }} className="signup-link">
@@ -583,7 +583,7 @@ debugger;
               <div className="education-grid">
 <input
   type="text"
-  placeholder="Course / Class"
+  placeholder="Class/Course"
   value={education.degree}
   maxLength={150}
   onChange={(e) => {
@@ -598,7 +598,7 @@ debugger;
 
                   <input
   type="text"
-  placeholder="College / University / School"
+  placeholder="School / College / University"
   value={education.college}
   maxLength={250}
   onChange={(e) => {

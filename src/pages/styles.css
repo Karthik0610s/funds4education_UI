@@ -6346,7 +6346,6 @@ body {
 h2,
 h3,
 p {
-  margin: 0;
   padding: 0;
 }
 
@@ -8090,6 +8089,5 @@ p {
 .institution-detail-value {
   flex: 1; /* take remaining space */
 }
-
 
 
