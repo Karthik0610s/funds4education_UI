@@ -4531,7 +4531,7 @@ textarea {
 /* Checkbox */
 .checkbox-row input[type="checkbox"] {
   /* removes default checkbox styling */
-  margin: -40%;
+  margin: -27%;
   /* removes browser default left margin */
   width: 18px;
   height: 18px;
