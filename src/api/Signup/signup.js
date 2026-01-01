@@ -7,22 +7,40 @@ export const insertUserReq = async (data) => {
     const res = await publicAxios.post(`${ApiKey.signup}`, data);
     return { error: false, data: res.data, message: res.data.message || "Signup successful", errorMsg: "" };
   } catch (err) {
-    let errorMsg;
-    if (err.response) {
-      console.error("API Error Response:", err.response.data);
+  let errorMsg = "Something went wrong, please try again later";
 
-      if (err.response.data?.errors) {
-        errorMsg = Object.values(err.response.data.errors).flat().join(", ");
-      } else {
-        errorMsg = err.response.data?.message || "Response error";
-      }
-    } else if (err.request) {
-      errorMsg = "Request error (server unreachable)";
-    } else {
-      errorMsg = "Something went wrong, please try again later";
+  if (err.response) {
+    debugger;
+    const { status, data } = err.response;
+    console.error("API Error Response:", data);
+
+    // ✅ SQL duplicate username case (TOP priority)
+    if (
+      status === 500 &&
+      data?.detail?.includes("Username already exists")
+    ) {
+      errorMsg = "Username already exists. Please choose another one.";
     }
-    throw new Error(errorMsg);
+    // ✅ Validation errors
+    else if (data?.errors) {
+      errorMsg = Object.values(data.errors).flat().join(", ");
+    }
+    // ✅ Normal API message
+    else if (data?.message) {
+      errorMsg = data.message;
+    }
+    // ✅ Fallback response error
+    else {
+      errorMsg = "Response error";
+    }
+  } 
+  else if (err.request) {
+    errorMsg = "Request error (server unreachable)";
   }
+
+  throw new Error(errorMsg);
+}
+
 };
 
 
@@ -35,12 +53,38 @@ export const updateUserReq = async (data) => {
     const _data = res.data;
     return { error: false, data: _data, message: msg || "", errorMsg: "" };
   } catch (err) {
-    let error;
-    if (err.response) error = err.response.data.message || "Response error";
-    else if (err.request) error = "Request error";
-    else error = "Something went wrong, please try again later";
-    throw { error: true, data: "", message: "", errorMsg: error };
+  let errorMsg = "Something went wrong, please try again later";
+
+  if (err.response) {
+    const { status, data } = err.response;
+    console.error("API Error Response:", data);
+
+    // ✅ SQL duplicate username case (TOP priority)
+    if (
+      status === 500 &&
+      data?.detail?.includes("Username already exists")
+    ) {
+      errorMsg = "Username already exists. Please choose another one.";
+    }
+    // ✅ Validation errors
+    else if (data?.errors) {
+      errorMsg = Object.values(data.errors).flat().join(", ");
+    }
+    // ✅ Normal API message
+    else if (data?.message) {
+      errorMsg = data.message;
+    }
+    // ✅ Fallback response error
+    else {
+      errorMsg = "Response error";
+    }
+  } 
+  else if (err.request) {
+    errorMsg = "Request error (server unreachable)";
   }
+
+  throw new Error(errorMsg);
+}
 };
 
 // ✅ Fetch user profile (after login or for profile page)

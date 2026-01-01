@@ -418,7 +418,7 @@ const deleteWork = (index) => {
 
         {/* Error / Loading messages */}
         {loading && <p className="loading-text">Processing...</p>}
-        {error && <p className="error-text">Something went wrong, try again!</p>}
+      
 
         {/* Step Content */}
         {/* Step 0: Basic Details */}
@@ -669,7 +669,7 @@ const deleteWork = (index) => {
                   </div>
                 </div>
               ) : (
-                <div className="education-grid" key={index}>
+                
                   <div className="education-grid" key={index}>
   <div className="label-value">
     <span className="label">Course</span>
@@ -703,7 +703,7 @@ const deleteWork = (index) => {
   </div>
 </div>
 
-                </div>
+               
               )
             )}
 

@@ -140,6 +140,9 @@ export default function FacultyDashboard() {
     setSubjectText("");
     setTopicText("");
     setVideoName("");
+      // ✅ ADD THESE
+  setUploadMode(false);
+  setSelectedFile(null);
   };
 
   /* ================= START CAMERA ================= */
@@ -538,7 +541,7 @@ const handleUploadFile = async () => {
           <div className="top-buttons">
             {isLoggedIn && (
               <>
-                <button className="live-btn" onClick={() => setShowModal(true)}>
+                <button className="live-btn" onClick={() => {setShowModal(true);setUploadMode(false)}}>
                   LIVE
                 </button>
 

@@ -104,7 +104,7 @@ try {
               <input type="text" value={profile.gender || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Upload Profile Photo:</label>
+              <label>Profile Photo:</label>
               <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />
             </div>
           </div>
@@ -197,10 +197,11 @@ try {
         <FacultyProfileForm
           profile={profile}
           onCancel={() => setIsEditing(false)}
-          onSave={(updatedData) => {
-            dispatch(updateFacultyUserProfile(updatedData)).then(() => {
+          onSave={() => {
+         /*   dispatch(updateFacultyUserProfile(updatedData)).then(() => {
               setIsEditing(false); // ✅ Return to view mode
-            });
+            });*/
+            setIsEditing(false);
           }}
         />
       )}

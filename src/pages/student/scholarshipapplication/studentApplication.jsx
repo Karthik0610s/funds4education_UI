@@ -39,16 +39,25 @@ const ApplicationsPage = () => {
         (app) => app.status.toLowerCase() === filter.toLowerCase()
       );
 
-  // Filter further by search query
   const displayedApps = filteredApps.filter((app) => {
   const query = searchQuery.toLowerCase();
+
+  const formattedDate = app.applicationDate
+    ? new Date(app.applicationDate).toLocaleDateString("en-IN", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }).toLowerCase()
+    : "";
 
   return (
     app.scholarshipName?.toLowerCase().includes(query) ||
     app.firstName?.toLowerCase().includes(query) ||
-    app.lastName?.toLowerCase().includes(query)
+    app.lastName?.toLowerCase().includes(query) ||
+    formattedDate.includes(query)
   );
 });
+
 
   useEffect(() => {
     // ✅ Open Add Modal automatically when user came from Apply Now

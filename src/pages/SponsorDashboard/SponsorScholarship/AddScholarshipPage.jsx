@@ -690,9 +690,9 @@ const [originalFiles, setOriginalFiles] = useState([]);
     <div className="modal-overlay">
       <div className="modal">
         <div className="modal-header">
-          <h3>
+          <span><strong>
             {isView ? "View Scholarship" : isEdit ? "Edit Scholarship" : "Add Scholarship"}
-          </h3>                    <button className="close-btn" onClick={handleCloseAndReset}>×</button>
+         </strong> </span>                    <button className="close-btn" onClick={handleCloseAndReset}>×</button>
         </div>
 
         <div className="modal-body">

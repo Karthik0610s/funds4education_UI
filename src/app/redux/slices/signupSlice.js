@@ -38,6 +38,7 @@ export default signupSlice.reducer;
 // ✅ Action to insert (signup)
 export const insertNewUser = (data, navigate) => async (dispatch) => {
   try {
+    debugger;
     dispatch(setLoading());
 
     const res = await insertUserReq(data);
@@ -53,12 +54,16 @@ export const insertNewUser = (data, navigate) => async (dispatch) => {
     // ⭐ Navigate AFTER user clicks OK
   //  navigate("/login"); 
   } catch (error) {
+    debugger
     dispatch(setError());
-
+  
     Swal.fire({
-      text: error.message || "Signup failed. Try again!",
+      text: error.message || "Error! Try Again!",
       icon: "error",
     });
+  
+    // Optional: rethrow if needed elsewhere
+    //throw error;
   }
 };
 
