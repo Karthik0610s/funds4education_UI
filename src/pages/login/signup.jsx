@@ -314,7 +314,7 @@ debugger;
 
         {/* Error / Loading messages */}
         {loading && <p className="loading-text">Processing...</p>}
-        {error && <p className="error-text">Something went wrong, try again!</p>}
+        {/* {error && <p className="error-text">Something went wrong, try again!</p>} */}
 
         {/* Step Content */}
         {/* Step 0: Basic Details */}

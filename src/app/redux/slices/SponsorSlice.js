@@ -61,7 +61,7 @@ export const addNewSponsor = async (data, dispatch) => {
   });
 
   // Optional: rethrow if needed elsewhere
-  throw error;
+ // throw error;
 }
 };
 

@@ -10,6 +10,7 @@ export const insertUserReq = async (data) => {
   let errorMsg = "Something went wrong, please try again later";
 
   if (err.response) {
+    debugger;
     const { status, data } = err.response;
     console.error("API Error Response:", data);
 
