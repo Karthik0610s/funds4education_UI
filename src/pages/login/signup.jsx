@@ -283,7 +283,7 @@ debugger;
       <div className="signup-card">
         {/* Header */}
         <div className="signup-header">
-          <h2>Sign up</h2>
+          <h2>Student Sign up</h2>
           <p>
             Already a member?{" "}
             <Link to={RP.login} state={{ userType }} className="signup-link">
@@ -320,9 +320,12 @@ debugger;
         {/* Step 0: Basic Details */}
         {step === 0 && (
           <div>
-            <h3 className="section-title">Basic Details</h3>
+          {/*  <h3 className="section-title">Basic Details</h3> */}
+          <h3 className="sponsor-section-title">Basic Details</h3>
+
+            
             <div className="row">
-              <div className="form-group">
+              <div className="form-group" >
                 <label>First Name *</label>
                 <input
                   type="text"
