@@ -6,10 +6,11 @@ import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarsh
  import { ApiKey } from "../../../api/endpoint";
  import { publicAxios } from "../../../api/config";
  import { fetchFacultyUserProfile, updateFacultyUserProfile } from "../../../app/redux/slices/facultySlice";
+import { useNavigate } from "react-router-dom";
 export default function FacultyProfileForm({ profile, onCancel, onSave }) {
   console.log("profile",profile);
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: "",
     firstName: "",
@@ -330,13 +331,15 @@ if (!formData.userName.trim()) {
 const deleteWork = (index) => {
   setWorkList(workList.filter((_, i) => i !== index));
 };
+const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ✅ Submit form
   const handleSubmit = async (e) => {
     debugger;
     e.preventDefault();
+    if (isSubmitting) return;   // 🔒 BLOCK second call
     if (!validateForm()) return;
-
+ setIsSubmitting(true);
     const loggedInName = localStorage.getItem("name") || "System";
 const isFileRemoved =
   originalFiles.length > 0 && filesList.length === 0;
@@ -379,27 +382,33 @@ const isFileRemoved =
 
     console.log("UserId:", userId);
     console.log("Selected files:", selectedFiles);
-
+debugger;
     if (selectedFiles?.length > 0) {
       await uploadFiles(userId);
     }
 
-    await Swal.fire({
+    
+// 2️⃣ Force fresh fetch BEFORE view page
+await dispatch(fetchFacultyUserProfile(formData.facultyId));
+   await Swal.fire({
       icon: "success",
       title: "Success",
       text: "Profile updated successfully!",
+      confirmButtonText: "OK",
+      allowOutsideClick: false,
     });
-// 2️⃣ Force fresh fetch BEFORE view page
-await dispatch(fetchFacultyUserProfile(formData.facultyId));
 
-// 3️⃣ Now navigate
-onSave(payload);
+    // ✅ navigate ONCE
+  onSave(); // just exit edit mode
+navigate("/view-faculty-profile", { replace: true });
+   
   //  onSave(payload);
   } catch (err) {
     Swal.fire({
       icon: "error",
       text: "Update failed!",
     });
+    setIsSubmitting(false); // allow retry only on error
   }
 }
   return (

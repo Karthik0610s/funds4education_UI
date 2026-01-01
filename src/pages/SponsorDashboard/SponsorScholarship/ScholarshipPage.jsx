@@ -133,7 +133,30 @@ const ScholarshipPage = () => {
       dispatch(fetchScholarshipBySponsor(UserId, role));
     }
   };
+const useResponsiveSlice = () => {
+  const getSliceLen = () => {
+    const width = window.innerWidth;
 
+    if (width <= 767) return 40;                 // Mobile
+    if (width === 768 ) return 180;
+   // if(width>769) return 10;// Tablet
+    if (width > 769 && width === 1024) return 15;            // Exact 1024
+    if (width >= 1280) return 20;                // Desktop
+
+    return 20; // Fallback
+  };
+
+  const [sliceLen, setSliceLen] = useState(getSliceLen());
+
+  useEffect(() => {
+    const handleResize = () => setSliceLen(getSliceLen());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return sliceLen;
+};
+const sliceLen = useResponsiveSlice();
   return (
     <>
       <Header variant="sponsor-profile" />
@@ -203,7 +226,7 @@ const ScholarshipPage = () => {
         <th>S.No</th>
         <th>Scholarship Name</th>
         <th>Scholarship Amount</th>
-        <th>Scholarship Limit</th>
+        {/* <th>Scholarship Limit</th> */}
         <th>Status</th>
         <th>Deadline</th>
         <th>Actions</th>
@@ -227,68 +250,58 @@ const ScholarshipPage = () => {
             </td>
 
             {/* Title */}
-<td data-label="Title" className="tooltip-cell">
+{/*<td data-label="Title" className="tooltip-cell">
 
-  {/* Tooltip content */}
+  
   <span className="tooltip-text">
     {sch.scholarshipName}
   </span>
 
-  {/* DESKTOP */}
+  
   <span className="title-desktop">
-    {sch.scholarshipName?.slice(0, 50)}
-    {sch.scholarshipName?.length > 50 ? "..." : ""}
+    {sch.scholarshipName?.slice(0, 12)}
+    {sch.scholarshipName?.length > 12? "..." : ""}
   </span>
 
-  {/* TABLET */}
+  
   <span className="title-tablet">
     {sch.scholarshipName?.slice(0, 180)}
     {sch.scholarshipName?.length > 180 ? "..." : ""}
   </span>
 
-  {/* MOBILE */}
+
   <span className="title-mobile">
-    {sch.scholarshipName?.slice(0, 50)}
-    {sch.scholarshipName?.length > 50 ? "..." : ""}
+    {sch.scholarshipName?.slice(0, 40)}
+    {sch.scholarshipName?.length > 40 ? "..." : ""}
   </span>
 
-</td>
+</td>*/}
+<td data-label="Title" className="tooltip-cell">
+      <span className="tooltip-text">{sch.benefits}</span>
+
+      <span>
+        {sch.scholarshipName?.slice(0, sliceLen)}
+        {sch.scholarshipName?.length > sliceLen ? "..." : ""}
+      </span>
+    </td>
 
 
             {/* Amount */}
           {/* Amount */}
 <td data-label="Amount" className="tooltip-cell">
+      <span className="tooltip-text">{sch.benefits}</span>
 
-  {/* Tooltip content */}
-  <span className="tooltip-text">
-    {sch.benefits}
-  </span>
-
-  {/* DESKTOP */}
-  <span className="title-desktop">
-    {sch.benefits?.slice(0, 50)}
-    {sch.benefits?.length > 50 ? "..." : ""}
-  </span>
-
-  {/* TABLET */}
-  <span className="title-tablet">
-    {sch.benefits?.slice(0, 180)}
-    {sch.benefits?.length > 180 ? "..." : ""}
-  </span>
-
-  {/* MOBILE */}
-  <span className="title-mobile">
-    {sch.benefits?.slice(0, 50)}
-    {sch.benefits?.length > 50 ? "..." : ""}
-  </span>
-
-</td>
+      <span>
+        {sch.benefits?.slice(0, sliceLen)}
+        {sch.benefits?.length > sliceLen ? "..." : ""}
+      </span>
+    </td>
 
 
             {/* Scholarship Limit */}
-            <td data-label="Scholarship Limit">
+            {/* <td data-label="Scholarship Limit">
               {sch.scholarshipLimit ?? "-"}
-            </td>
+            </td> */}
 
             {/* Status */}
             <td data-label="Status">

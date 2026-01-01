@@ -387,7 +387,7 @@ const deleteWork = (index) => {
       <div className="signup-card">
         {/* Header */}
         <div className="signup-header">
-          <h2>Sign up</h2>
+          <h2>Faculty Sign up</h2>
           <p>
             Already a member?{" "}
             <Link to={RP.login} state={{ userType }} className="signup-link">
@@ -669,7 +669,7 @@ const deleteWork = (index) => {
                   </div>
                 </div>
               ) : (
-                <div className="education-grid" key={index}>
+                
                   <div className="education-grid" key={index}>
   <div className="label-value">
     <span className="label">Course</span>
@@ -703,17 +703,18 @@ const deleteWork = (index) => {
   </div>
 </div>
 
-                </div>
+               
               )
             )}
 
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
                   <div className="form-group">
-    <label>Course / Class<span className="required">*</span></label>   
+    <label>Subject / Specialization
+<span className="required">*</span></label>   
 <input
   type="text"
-  placeholder="Course / Class"
+  placeholder="Course"
   value={education.degree}
   maxLength={150}
   onChange={(e) => {
@@ -726,11 +727,11 @@ const deleteWork = (index) => {
 
 
     <div className="form-group">
-    <label>College / University / School <span className="required">*</span></label>                  
+    <label>College / University Name <span className="required">*</span></label>                  
 
                   <input
   type="text"
-  placeholder="College / University / School"
+  placeholder="College / University"
   value={education.college}
   maxLength={250}
   onChange={(e) => {
@@ -742,7 +743,7 @@ const deleteWork = (index) => {
 </div>
 
              <div className="form-group">
-    <label>Year<span className="required">*</span></label>   
+    <label>Year of Passing<span className="required">*</span></label>   
 
                   <input
                     type="text"

@@ -19,12 +19,10 @@ const phoneRegex = /^[0-9]{0,10}$/;
 const courseRegex = /^[A-Za-z\s-./]{0,150}$/;
 const collegeRegex = /^[A-Za-z\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
-const gpaRegex = /^\d{0,3}(\.\d{1,2})?$/;
+const gpaRegex = /^\d{0,2}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
 //const text250Regex = /^[A-Za-z0-9.,\/\-\s]{0,250}$/;
 const text250Regex = /^[\s\S]{0,250}$/;
-
-const RequiredMark = () => <span className="validation-error-label">*</span>;
 
 
 /*const scholarshipOptions = [
@@ -120,7 +118,18 @@ const minAllowedDOB = minDOB.toISOString().split("T")[0];
  const [existingDocFiles, setExistingDocFiles] = useState([]);
 const [originalFiles, setOriginalFiles] = useState([]);
 
-
+const RequiredMark = () => <span className="validation-error-label">*</span>;
+const requiredProfileFields = [
+  "firstName",
+  "lastName",
+  "gender",
+  "email",
+  "phoneNumber",
+];
+const isProfileIncomplete = requiredProfileFields.some(
+  key => !localStorage.getItem(key) || localStorage.getItem(key).trim() === ""
+);
+console.log(isProfileIncomplete,"isProfileIncomplete")
 const convertDOB = (dateStr) => {
   if (!dateStr) return { inputFormat: "", displayFormat: "" };
 
@@ -322,20 +331,26 @@ if (name === "yearOfStudy") {
     
     // Marks: allow only 0–100
 if (name === "gpaOrMarks") {
-  let cleaned = value.replace(/\D/g, ""); // keep only digits
+  // keep digits AND decimal point
+  let cleaned = value.replace(/[^0-9.]/g, "");
+
+  // allow only ONE decimal point
+  const dotCount = (cleaned.match(/\./g) || []).length;
+  if (dotCount > 1) return;
+
+  // limit to 2 decimal places
+  const parts = cleaned.split(".");
+  if (parts[1]?.length > 2) return;
 
   // Block numbers greater than 100
   if (cleaned !== "" && Number(cleaned) > 100) {
     return; // do NOT update the state
   }
 
-  // Limit to max 3 digits
-  cleaned = cleaned.slice(0, 3);
-  
-
   setFormData({ ...formData, gpaOrMarks: cleaned });
   return;
 }
+
 
 
       if (!regex || regex.test(value)) {
@@ -491,83 +506,113 @@ if (name === "gpaOrMarks") {
     handleCloseAndReset();
   };*/
   const handleSubmit = async (e, statusType) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  e.preventDefault();
+  if (!validateForm()) return;
 
-    const finalData = {
-      ...formData,
-      status: statusType,
-      dateOfBirth: formData.dateOfBirth || null,
-      yearOfStudy: formData.yearOfStudy || null,
-      phoneNumber: formData.phoneNumber || "",
-      schoolName: formData.schoolName || "",
-      courseOrMajor: formData.courseOrMajor || "",
-      documents: null,
-    };
-
-    let applicationId = null;
-
-    try {
-      // Create or update application
-      if (application) {
-        applicationId = application.id;
-        await updateScholarshipApplication(finalData, dispatch);
-      } else {
-        const res = await addNewScholarshipApplication(finalData, dispatch);
-        applicationId = res?.id;
-      }
-
-      // Upload files if any
-      if (applicationId && selectedFiles.length > 0) {
-        await uploadFiles(applicationId);
-      }
-      
-// NOW call email send API after upload is done
-await sendScholarshipEmailReq(applicationId);
-      // Fetch updated application by ID to get the latest files
-      if (applicationId) {
-        
-        const updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
-        setFormData((prev) => ({
-          ...prev,
-          ...updatedApp.data,
-          dateOfBirth: updatedApp.data.dateOfBirth
-            ? updatedApp.data.dateOfBirth.split("T")[0]
-            : "",
-          applicationDate: updatedApp.data.applicationDate
-            ? updatedApp.data.applicationDate.split("T")[0]
-            : today,
-        }));
-      }
-
-      // Reset selected files
-      setSelectedFiles([]);
-      //setFilesList([]);
-
-      // Fetch latest list for Redux
-      // await dispatch(fetchScholarshipApplicationList());
-
-      // Show success Swal
-      const result = await Swal.fire({
-        text: application ? "Application updated successfully!" : "Application added successfully!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-
-      // Navigate after OK
-      if (result.isConfirmed) {
-        navigation("/application"); // useNavigate hook
-      }
-
-      handleCloseAndReset();
-    } catch (err) {
-      console.error("Submit failed:", err);
-      Swal.fire({
-        text: "Error! Try Again!",
-        icon: "error",
-      });
-    }
+  const finalData = {
+    ...formData,
+    status: statusType,
+    dateOfBirth: formData.dateOfBirth || null,
+    yearOfStudy: formData.yearOfStudy || null,
+    phoneNumber: formData.phoneNumber || "",
+    schoolName: formData.schoolName || "",
+    courseOrMajor: formData.courseOrMajor || "",
+    documents: null,
   };
+
+  let applicationId = null;
+  let updatedApp = null;
+  let emailError = false; // ✅ Track email status
+
+  /* =============================
+     1️⃣ INSERT / UPDATE
+  ============================== */
+  try {
+    if (application) {
+      applicationId = application.id;
+      await updateScholarshipApplication(finalData, dispatch);
+    } else {
+      const res = await addNewScholarshipApplication(finalData, dispatch);
+      applicationId = res?.id;
+    }
+
+    // Upload files
+    if (applicationId && selectedFiles.length > 0) {
+      await uploadFiles(applicationId);
+    }
+
+    // Fetch latest data
+    updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
+
+    setFormData((prev) => ({
+      ...prev,
+      ...updatedApp.data,
+      dateOfBirth: updatedApp.data.dateOfBirth
+        ? updatedApp.data.dateOfBirth.split("T")[0]
+        : "",
+      applicationDate: updatedApp.data.applicationDate
+        ? updatedApp.data.applicationDate.split("T")[0]
+        : today,
+    }));
+
+    setSelectedFiles([]);
+
+  } catch (appErr) {
+    console.error("Application Save Error:", appErr);
+
+    Swal.fire({
+      title: "Application Failed",
+      text:
+        appErr?.response?.data?.message ||
+        "Application could not be saved. Please try again.",
+      icon: "error",
+    });
+
+    // ❌ STOP HERE — DO NOT CALL EMAIL
+    return;
+  }
+
+  /* =============================
+     2️⃣ EMAIL SEND (ONLY IF SAVE SUCCESS)
+  ============================== */
+  if (updatedApp?.data[0]?.status === "Submitted") {
+    try {
+      await sendScholarshipEmailReq(applicationId);
+    } catch (mailErr) {
+      emailError = true; // mark that email failed
+
+      const errorMessage =
+        mailErr?.response?.data?.message ||
+        mailErr?.message ||
+        "Application submitted successfully, but error sending email to sponsor.";
+
+      Swal.fire({
+        title: "Email Not Sent",
+        text: errorMessage,
+        icon: "warning",
+      });
+
+      console.error("Email Error:", mailErr);
+    }
+  }
+
+  /* =============================
+     3️⃣ SUCCESS MESSAGE (ONLY IF EMAIL SUCCEEDED OR NOT NEEDED)
+  ============================== */
+  if (!emailError) {
+    await Swal.fire({
+      text: application
+        ? "Application updated successfully!"
+        : "Application submitted successfully!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  }
+
+  navigation("/application");
+  handleCloseAndReset();
+};
+
 
 
   const handleCloseAndReset = () => {
@@ -630,13 +675,13 @@ await sendScholarshipEmailReq(applicationId);
       <div className="modal">
         {/* Header */}
         <div className="modal-header">
-         <h3>
+         <span><strong>
   {mode === "view"
     ? "View Application"
     : application
     ? "Edit Application"
     : "New Application"}
-</h3>
+</strong></span>
 
           <button className="close-btn" onClick={handleCloseAndReset}>×</button>
         </div>
@@ -644,7 +689,33 @@ await sendScholarshipEmailReq(applicationId);
         {/* Body */}
         <div className="modal-body">
           <form>
-            <h4>Personal Information</h4>
+           {/* <div className="personal-info-header" style={{paddingBottom: "10px",
+    paddingTop: "10px"}}>
+    <span><strong>Personal Information</strong></span>
+
+    {isProfileIncomplete && (
+      <span className="profile-error">
+        ⚠️ Please update your profile
+      </span>
+    )}
+  </div>*/}<div
+  className="personal-info-header"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "20px 0",
+  }}
+>
+  <h4 style={{ margin: 0 }}>Personal Information</h4>
+
+  {isProfileIncomplete && (
+    <span className="profile-error">
+      ⚠️ Please update your profile
+    </span>
+  )}
+</div>
+
 
             <div className="row">
               <div className="form-group col-6">
@@ -765,7 +836,7 @@ await sendScholarshipEmailReq(applicationId);
             </div>
             <div className="row">
               <div className="form-group col-6">
-                <label>College</label>
+                <label>School/College</label>
                 <input
                   type="text"
                   name="schoolName"
@@ -779,7 +850,7 @@ await sendScholarshipEmailReq(applicationId);
 
             <div className="row">
               <div className="form-group col-6">
-                <label>Course / Major</label>
+                <label>Class/Course / Major</label>
                 <input
                   type="text"
                   name="courseOrMajor"

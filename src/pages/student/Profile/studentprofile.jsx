@@ -338,7 +338,7 @@ const isFileRemoved =
 await dispatch(fetchStudentProfile(formData.id)).unwrap();
 
 // 3️⃣ Now navigate
-onSave(payload);
+onSave();
   //  onSave(payload);
   } catch (err) {
     Swal.fire({

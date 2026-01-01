@@ -145,10 +145,11 @@ const navigate = useNavigate();
         <StudentProfileForm
           profile={profile}
           onCancel={() => setIsEditing(false)}
-          onSave={(updatedData) => {
-            dispatch(updateStudent(updatedData)).then(() => {
+          onSave={() => {
+            /*dispatch(updateStudent(updatedData)).then(() => {
               setIsEditing(false); // ✅ Return to view mode
-            });
+            });*/
+             setIsEditing(false);
           }}
         />
       )}

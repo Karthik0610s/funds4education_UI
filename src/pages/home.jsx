@@ -408,7 +408,7 @@ const handleClickInstitution = () => checkAndNavigate("5", "faculty");
 <div className="role-card role-institution cursor-pointer" onClick={handleClickInstitution}>
   <FaUniversity size={70} color='#396D70' />
   <h3>For Faculty</h3>
-  <p>Connect your students to a wide range of scholarships.</p>
+  <p>Video lessons and guidance for classes and courses.</p>
 </div>
 
       </section>
