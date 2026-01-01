@@ -3873,22 +3873,18 @@ input:not([type="radio"]):not([type="checkbox"]) {
     margin-bottom: 2px;
   }
 }
-
 /* ===========================
    Page & Container Padding
 =========================== */
 .scholarshipview-page,
 .scholarship-detail-container {
   padding: 20px;
-  /* consistent padding for all containers */
 }
 
 @media (max-width: 420px) {
-
   .scholarshipview-page,
   .scholarship-detail-container {
     padding: 12px;
-    /* smaller padding for mobile */
   }
 }
 
@@ -3940,59 +3936,51 @@ input:not([type="radio"]):not([type="checkbox"]) {
 }
 
 /* ===========================
-   Uniform List & Bullets
+   Lists (Desktop Default)
 =========================== */
 ul.scholarship-view-text,
 ul.scholarship-view-text li {
   list-style-type: disc;
-  /* standard bullets */
   list-style-position: inside;
-  /* bullets aligned with text */
-  font-size: 16px;
-  /* consistent font size */
+  font-size: 16px;      /* SAME TEXT & BULLET SIZE */
   line-height: 1.5;
-  /* spacing between lines */
   margin: 0;
   padding-left: 20px;
-  /* indentation for bullets */
 }
 
 ul.scholarship-view-text li {
   margin-bottom: 8px;
-  /* spacing between bullets */
 }
 
 /* ===========================
-   Mobile List Adjustments
+   Tablet View (421px - 768px)
 =========================== */
-@media (max-width: 420px) {
-
+@media (max-width: 768px) {
   ul.scholarship-view-text,
   ul.scholarship-view-text li {
-    font-size: 14px;
-    padding-left: 16px;
-    /* smaller indent for mobile */
-    margin-bottom: 6px;
+    font-size: 15px;    /* slightly smaller but equal */
+    padding-left: 18px;
+  }
+
+  .scholarship-view-text {
+    font-size: 15px;
   }
 }
 
-
 /* ===========================
-   General List Styles
+   Mobile View (<= 420px)
 =========================== */
-ul.scholarship-view-text,
-ul.scholarship-view-text li {
-  list-style-type: disc;
-  list-style-position: inside;
-  font-size: 1.1rem;
-  line-height: 1.5;
-  margin: 0;
- /* padding-left: 30px; */
-}
+@media (max-width: 420px) {
+  ul.scholarship-view-text,
+  ul.scholarship-view-text li {
+    font-size: 14px;    /* SAME SIZE & CLEAN */
+    padding-left: 16px;
+    margin-bottom: 6px;
+  }
 
-ul.scholarship-view-text li {
-  margin-bottom: 8px;
-  /* spacing between bullets on desktop */
+  .scholarship-view-text {
+    font-size: 14px;
+  }
 }
 
 
@@ -6753,7 +6741,7 @@ p {
     ul.scholarship-view-text li {
     line-height: 1.35;
     align-items: flex-start; /* avoids over-centering */
-    font-size: small;
+    font-size: 1.1rem;
   }
   .scholarship-eligibility-header h3 { font-size: 1.1rem; }
   .scholarship-detail-container { padding: 12px; }
@@ -6762,6 +6750,9 @@ p {
     flex-direction: column;
     align-items: flex-start;
     font-size: 0.9rem;
+  }
+  .mobile-only {
+    display: list-item;
   }
 }
 
@@ -6866,7 +6857,9 @@ p {
   .scholarship-view-back-btn {
     margin: 1rem;
   }
-
+.mobile-only {
+    display: list-item;
+}
   .scholarship-view-title {
     font-size: 2rem;
     padding: 0.75rem 0;
