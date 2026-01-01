@@ -560,26 +560,28 @@ const formatAmount = (val) => {
     }) )}
 </div>
 
+{filteredApps.length > 0 && totalPages > 1 && (
+  <div className="pagination">
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((prev) => prev - 1)}
+    >
+      Prev
+    </button>
 
-<div className="pagination">
-  <button
-    disabled={currentPage === 1}
-    onClick={() => setCurrentPage(prev => prev - 1)}
-  >
-    Prev
-  </button>
+    <span>
+      Page {currentPage} / {totalPages}
+    </span>
 
-  <span>
-    Page {currentPage} / {totalPages}
-  </span>
+    <button
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((prev) => prev + 1)}
+    >
+      Next
+    </button>
+  </div>
+)}
 
-  <button
-    disabled={currentPage === totalPages}
-    onClick={() => setCurrentPage(prev => prev + 1)}
-  >
-    Next
-  </button>
-</div>
 
 
 

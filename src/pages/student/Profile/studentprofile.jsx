@@ -288,9 +288,9 @@ if (!formData.userName.trim()) {
 const isFileRemoved =
   originalFiles.length > 0 && filesList.length === 0;
  //const finalFiles = filesList;
-   
+   debugger;
  const payload = {
-      id: formData.id,
+      id: formData.studentId,
       studentId:formData.studentId,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
@@ -519,7 +519,7 @@ onSave();
       <button
         type="button"
         className="btn btn-sm btn-primary mt-2"
-        onClick={() => downloadFileFun(formData.id,"Student")}
+        onClick={() => downloadFileFun(formData.studentId,"Student")}
         style={{marginTop:"5px",marginLeft:"15px"}}
         
       >
@@ -539,7 +539,7 @@ onSave();
           <div className="row">
             <input
               type="text"
-              placeholder="Course"
+              placeholder="Class/Course"
               value={education.degree}
               onChange={(e) =>
                 setEducation({ ...education, degree: e.target.value })
@@ -547,7 +547,7 @@ onSave();
             />
             <input
               type="text"
-              placeholder="College"
+              placeholder="School/College"
               value={education.college}
               onChange={(e) =>
                 setEducation({ ...education, college: e.target.value })

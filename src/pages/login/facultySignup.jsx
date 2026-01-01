@@ -710,7 +710,7 @@ const deleteWork = (index) => {
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
                   <div className="form-group">
-    <label>Subject / Specialization
+    <label>Specialization
 <span className="required">*</span></label>   
 <input
   type="text"

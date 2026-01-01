@@ -15,6 +15,14 @@ export default function InstitutionViewPage() {
         (state) => state.institutionList
     );
 
+    // 👇 Helper function for empty values
+    const formatValue = (value) => {
+        if (!value || value === "-" || value === "" || value === null || value === undefined) {
+            return "Nil"; // or "No Data"
+        }
+        return value;
+    };
+
     // Fetch institutions if empty
     useEffect(() => {
         if (institutions.length === 0) {
@@ -33,69 +41,57 @@ export default function InstitutionViewPage() {
             <Header />
 
             <div style={{ padding: "20px" }}>
-                <button
-  className="institution-back-btn"
-  onClick={() => navigate(-1)}
->
-  ← Back
-</button>
+                <button className="institution-back-btn" onClick={() => navigate(-1)}>
+                    ← Back
+                </button>
 
-
-
-                <h2 className="institution-title">{institution.name}</h2>
+                <h2 className="institution-title">{formatValue(institution.name)}</h2>
 
                 {/* BASIC INFO */}
-            <h3 className="institution-section">College Details</h3>
-
+                <h3 className="institution-section">College Details</h3>
                 <div className="institution-card">
-                    <p><strong>AISHE Code:</strong> {institution.aisheCode}</p>
-                    <p><strong>College Type:</strong> {institution.collegeType}</p>
-                    <p><strong>Management:</strong> {institution.management}</p>
-                    <p><strong>Year Of Establishment:</strong> {institution.yearOfEstablishment}</p>
-                    <p><strong>Location:</strong> {institution.location}</p>
+                    <p><strong>AISHE Code:</strong> {formatValue(institution.aisheCode)}</p>
+                    <p><strong>College Type:</strong> {formatValue(institution.collegeType)}</p>
+                    <p><strong>Management:</strong> {formatValue(institution.management)}</p>
+                    <p><strong>Year Of Establishment:</strong> {formatValue(institution.yearOfEstablishment)}</p>
+                    <p><strong>Location:</strong> {formatValue(institution.location)}</p>
                 </div>
 
                 {/* LOCATION DETAILS */}
                 <h3 className="institution-section">Location Details</h3>
                 <div className="institution-card">
-                    <p><strong>State:</strong> {institution.state}</p>
-                    <p><strong>District:</strong> {institution.district}</p>
+                    <p><strong>State:</strong> {formatValue(institution.state)}</p>
+                    <p><strong>District:</strong> {formatValue(institution.district)}</p>
                 </div>
 
                 {/* UNIVERSITY DETAILS */}
                 <h3 className="institution-section">University Details</h3>
                 <div className="institution-card">
-                    <p><strong>University Name:</strong> {institution.universityName}</p>
-                    <p><strong>University AISHE Code:</strong> {institution.universityAisheCode}</p>
-                    <p><strong>University Type:</strong> {institution.universityType}</p>
+                    <p><strong>University Name:</strong> {formatValue(institution.universityName)}</p>
+                    <p><strong>University AISHE Code:</strong> {formatValue(institution.universityAisheCode)}</p>
+                    <p><strong>University Type:</strong> {formatValue(institution.universityType)}</p>
                 </div>
 
                 {/* WEBSITE */}
                 <h3 className="institution-section">Website</h3>
-                <div className="institution-card">
-                    {institution.website ? (
-                        <a
-                            href={
-                                institution.website.startsWith("http")
-                                    ? institution.website
-                                    : `https://${institution.website}`
-                            }
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {institution.website}
-                        </a>
-                    ) : (
-                        "Not available"
-                    )}
-                </div>
+<div className="institution-card">
+  {institution.website && institution.website.trim() !== "" && institution.website !== "-" ? (
+    <a
+      href={
+        institution.website.startsWith("http")
+          ? institution.website
+          : `https://${institution.website}`
+      }
+      target="_blank"
+      rel="noreferrer"
+    >
+      {institution.website}
+    </a>
+  ) : (
+    <span>Nil</span>
+  )}
+</div>
 
-                {/* CREATED DATE 
-                <h3 className="institution-section">Created Date</h3>
-                <div className="institution-card">
-                    {new Date(institution.createdAt).toLocaleDateString("en-IN")}
-                </div>
-                */}
             </div>
         </div>
     );

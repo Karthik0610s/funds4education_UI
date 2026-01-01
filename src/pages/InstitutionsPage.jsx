@@ -130,7 +130,7 @@ export default function InstitutionsPage() {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by institution, location, management..."
         />
-
+       {/*
         <div className="top-actions">
           <button className="template-btn" onClick={handleDownloadTemplate}>
             Download Template
@@ -146,6 +146,7 @@ export default function InstitutionsPage() {
             />
           </label>
         </div>
+        */}
       </div>
 
       {/* ===== MAIN CONTENT ===== */}
