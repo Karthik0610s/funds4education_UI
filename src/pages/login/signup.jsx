@@ -314,7 +314,7 @@ debugger;
 
         {/* Error / Loading messages */}
         {loading && <p className="loading-text">Processing...</p>}
-        {error && <p className="error-text">Something went wrong, try again!</p>}
+        {/* {error && <p className="error-text">Something went wrong, try again!</p>} */}
 
         {/* Step Content */}
         {/* Step 0: Basic Details */}
@@ -515,117 +515,137 @@ debugger;
             )}
 */}
             {educationList.map((edu, index) =>
-              editIndex === index ? (
-                <div className="education-grid" key={index}>
-                  <input
-  type="text"
-  placeholder="Course"
-  value={education.degree}
-  onChange={(e) => setEducation({ ...education, degree: e.target.value })}
-/>
-{eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
+  editIndex === index ? (
+    <div className="education-grid" key={index}>
+<div className="form-group">
+      <label>Class / Course  <span className="required">*</span></label>
+      <input
+        type="text"
+        placeholder="Class / Course "
+        value={education.degree}
+        onChange={(e) => setEducation({ ...education, degree: e.target.value })}
+      />
+    </div>
 
-<input
-  type="text"
-  placeholder="College / University  "
-  value={education.college}
-  onChange={(e) => setEducation({ ...education, college: e.target.value })}
-/>
-{eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
+    <div className="form-group">
+      <label>School / College / University <span className="required">*</span></label>
+      <input
+        type="text"
+        placeholder="School / College / University"
+        value={education.college}
+        onChange={(e) => setEducation({ ...education, college: e.target.value })}
+      />
+    </div>
 
-<input
-  type="text"
-  placeholder="Year"
-  value={education.year}
-  onChange={(e) => setEducation({ ...education, year: e.target.value })}
-  maxLength={4}
-/>
-{eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
+    <div className="form-group">
+      <label>Year<span className="required">*</span></label>
+      <input
+        type="text"
+        placeholder="Year"
+        maxLength={4}
+        value={education.year}
+        onChange={(e) => setEducation({ ...education, year: e.target.value })}
+      />
+    </div>
 
+    <div className="sign-action-btns">
+      <button onClick={() => updateEducation(index)} className="sign-action-btn">Save</button>
+      <button onClick={() => {
+        setEditIndex(null);
+        setEducation({ degree: "", college: "", year: "" });
+      }} className="sign-action-btn">Cancel</button>
+    </div>
+  </div>
+) : (
+    <div className="education-grid" key={index}>
 
-                  <div className="sign-action-btns">
-                    <button onClick={() => updateEducation(index)} className="sign-action-btn">
-                      Save
-                    </button>
-                    <button
-                      onClick={() => {
-                        setEditIndex(null);
-                        setEducation({ degree: "", college: "", year: "" });
-                      }}
-                      className="sign-action-btn"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="education-grid" key={index}>
-                  <div>{edu.degree}</div>
-                  <div>{edu.college}</div>
-                  <div>{edu.year}</div>
-                  <div className="sign-action-btns">
-                    <button
-                      onClick={() => {
-                        setEditIndex(index);
-                        setEducation(edu);
-                        setShowEducationFields(false);
-                      }}
-                      className="sign-action-btn"
-                    >
-                      Edit
-                    </button>
-                    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              )
-            )}
+  <div className="label-value">
+    <span className="label">Class / Course</span>
+    <span className="value">{edu.degree}</span>
+  </div>
+
+  <div className="label-value">
+    <span className="label">School / College / University</span>
+    <span className="value">{edu.college}</span>
+  </div>
+
+  <div className="label-value">
+    <span className="label">Year</span>
+    <span className="value">{edu.year}</span>
+  </div>
+
+  <div className="sign-action-btns">
+    <button
+      onClick={() => {
+        setEditIndex(index);
+        setEducation(edu);
+        setShowEducationFields(false);
+      }}
+      className="sign-action-btn"
+    >
+      Edit
+    </button>
+    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
+      Delete
+    </button>
+  </div>
+
+</div>
+
+  )
+)}
+
 
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
-<input
-  type="text"
-  placeholder="Class/Course"
-  value={education.degree}
-  maxLength={150}
-  onChange={(e) => {
-    if (courseRegex.test(e.target.value)) {
-      setEducation({ ...education, degree: e.target.value });
-    }
-  }}
-/>
+<div className="form-group">
+      <label>Class / Course *</label>
+      <input
+        type="text"
+        placeholder="Class / Course"
+        value={education.degree}
+        maxLength={150}
+        onChange={(e) =>
+          courseRegex.test(e.target.value) &&
+          setEducation({ ...education, degree: e.target.value })
+        }
+        className={eduErrors.degree ? "input-error" : ""}
+      />
+      {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
+    </div>
 
 
-                 
-
-                  <input
-  type="text"
-  placeholder="School / College / University"
-  value={education.college}
-  maxLength={250}
-  onChange={(e) => {
-    if (collegeRegex.test(e.target.value)) {
-      setEducation({ ...education, college: e.target.value });
-    }
-  }}
-/>
-
+    <div className="form-group">
+      <label>School / College / University *</label>
+      <input
+        type="text"
+        placeholder="School / College / University"
+        value={education.college}
+        maxLength={250}
+        onChange={(e) =>
+          collegeRegex.test(e.target.value) &&
+          setEducation({ ...education, college: e.target.value })
+        }
+        className={eduErrors.college ? "input-error" : ""}
+      />
+      {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
+    </div>
                 
 
-                  <input
-                    type="text"
-                    placeholder="Year"
-                    value={education.year}
-                    maxLength={4}
-                    onChange={(e) => {
-    const value = e.target.value;
-    // Allow only numbers while typing
-    if (/^\d*$/.test(value)) {
-      setEducation({ ...education, year: value });
-    }
-  }}
-                  />
+                      <div className="form-group">
+      <label>Year *</label>
+      <input
+        type="text"
+        placeholder="Year"
+        value={education.year}
+        maxLength={4}
+        onChange={(e) => /^\d*$/.test(e.target.value) &&
+          setEducation({ ...education, year: e.target.value })
+        }
+        className={eduErrors.year ? "input-error" : ""}
+      />
+      {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
+    </div>
                  
 
                 <div className="sign-action-btns">

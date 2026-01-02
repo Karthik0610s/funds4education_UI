@@ -43,11 +43,11 @@ export const addNewSponsorReq = async (data) => {
         return { error: false, data: _data, message: msg, errorMsg: "" };
     }catch (err) {
       debugger;
-  let errorMsg = "Something went wrong, please try again later";
+  let errorMsg  = "Something went wrong, please try again later";
 
   if (err.response) {
     const { status, data } = err.response;
- //   console.error("API Error Response:", data);
+    console.error("API Error Response:", data);
 
     // ✅ SQL duplicate username case (TOP priority)
     if (

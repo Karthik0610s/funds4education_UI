@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchScholarshipById } from "../../app/redux/slices/ScholarshipSlice";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
-
+import "../../pages/styles.css";
 const ScholarshipViewPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -180,15 +180,19 @@ const downloadFileFun = async (id) => {
             <div className="scholarship-detail-container">
               <ul className="scholarship-view-text">
                 {scholarship.webportaltoApply
-                  .split(/\r?\n|\. /)
-                  .map((line) => line.trim())
-                  .filter(
-                    (line) =>
-                      line.length > 0 && !line.toLowerCase().startsWith("note")
-                  )
-                  .map((line, idx) => (
-                    <li key={idx}>{line}</li>
-                  ))}
+  .split(/\r?\n|\. /)
+  .map((line) => {
+    const domainMatch = line.match(/^(.*?\.com)/i); // capture up to .com
+    return domainMatch ? domainMatch[1] : line;
+  })
+  .map((line) => line.trim())
+  .filter(
+    (line) => line.length > 0 && !line.toLowerCase().startsWith("note")
+  )
+  .map((line, idx) => (
+    <li key={idx} className="mobile-only">{line}</li>
+  ))}
+
               </ul>
 
               <div style={{ textAlign: "center", marginTop: "20px" }}>
