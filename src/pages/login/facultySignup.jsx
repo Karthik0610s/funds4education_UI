@@ -56,7 +56,7 @@ const fileInputRef = useRef(null);
   const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
-  const phoneRegex = /^\d{10}$/;
+const phoneRegex = /^[1-9]\d{9}$/;
   const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
   const collegeRegex = /^[A-Za-z\s]{0,250}$/;
   const roleRegex = /^[A-Za-z0-9\s.]{0,150}$/;
@@ -81,10 +81,16 @@ const fileInputRef = useRef(null);
         stepErrors.firstName = "First name required (alphabets only, max 150).";
       if (!basicDetails.lastName || !nameRegex.test(basicDetails.lastName))
         stepErrors.lastName = "Last name required (alphabets only, max 150).";
-      if (!basicDetails.email || !isValidEmail(basicDetails.email))
-        stepErrors.email = "Invalid email.";
-      if (!basicDetails.phone || !phoneRegex.test(basicDetails.phone))
-        stepErrors.phone = "Phone number max 10 digits.";
+      if (!basicDetails.email) {
+      stepErrors.email = "Email is required.";
+    } else if (!isValidEmail(basicDetails.email)) {
+      stepErrors.email = "Invalid email address.";
+    }
+      if (!basicDetails.phone) {
+      stepErrors.phone = "Phone number is required.";
+    } else if (!phoneRegex.test(basicDetails.phone)) {
+      stepErrors.phone = "Phone number must be 10 digits.";
+    }
       if (!basicDetails.dob) stepErrors.dob = "Date of birth is required.";
       if (!basicDetails.gender) stepErrors.gender = "Gender is required.";
     }
@@ -96,13 +102,22 @@ const fileInputRef = useRef(null);
         stepErrors.work = "Add at least one work record.";
     }
 
-    if (step === 2) {
-      if (!verification.username || !isValidEmail(verification.username))
-  stepErrors.username = "Enter a valid email.";
-      if (!verification.password || !passwordRegex.test(verification.password))
-        stepErrors.password =
-          "Password must be min 6 chars, include letters, numbers & special char.";
+     if (step === 2) {
+    // Username / Email
+    if (!verification.username) {
+      stepErrors.username = "Email is required.";
+    } else if (!isValidEmail(verification.username)) {
+      stepErrors.username = "Enter a valid email.";
     }
+
+    // Password
+    if (!verification.password) {
+      stepErrors.password = "Password is required.";
+    } else if (!passwordRegex.test(verification.password)) {
+      stepErrors.password =
+        "Password must be min 6 chars, include letters, numbers & special char.";
+    }
+  }
 
     setErrors(stepErrors);
     return Object.keys(stepErrors).length === 0;
@@ -482,13 +497,26 @@ const deleteWork = (index) => {
                   maxLength={10}
                   value={basicDetails.phone}
                   onChange={(e) => {
-    const value = e.target.value;
+  const value = e.target.value;
 
-    // allow only numbers while typing
-    if (/^\d*$/.test(value)) {
-      setBasicDetails({ ...basicDetails, phone: value });
-    }
-  }}
+  // allow only numbers
+  if (!/^\d*$/.test(value)) return;
+
+  // block starting with 0
+  if (value.length === 1 && value === "0") {
+    setErrors(prev => ({
+      ...prev,
+      phone: "Phone number should not start with 0."
+    }));
+    return;
+  }
+
+  // clear error if valid typing
+  setErrors(prev => ({ ...prev, phone: "" }));
+
+  setBasicDetails({ ...basicDetails, phone: value });
+}}
+
                   className={errors.phone ? "input-error" : ""}
                   placeholder="Phone"
                 />

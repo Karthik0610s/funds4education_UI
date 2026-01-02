@@ -57,39 +57,76 @@ const fileInputRef = useRef(null);
     return tldSet.size === tldMatches.length;
   };
 
-  // --- Validation per step ---
-  const validateStep = () => {
-    let stepErrors = {};
 
-    if (step === 0) {
-      if (!basicDetails.firstName || !nameRegex.test(basicDetails.firstName))
-        stepErrors.firstName = "First name required (alphabets only, max 150).";
-      if (!basicDetails.lastName || !nameRegex.test(basicDetails.lastName))
-        stepErrors.lastName = "Last name required (alphabets only, max 150).";
-      if (!basicDetails.email || !isValidEmail(basicDetails.email))
-        stepErrors.email = "Invalid email.";
-      if (!basicDetails.phone || !phoneRegex.test(basicDetails.phone))
-        stepErrors.phone = "Phone number max 10 digits.";
-      if (!basicDetails.dob) stepErrors.dob = "Date of birth is required.";
-      if (!basicDetails.gender) stepErrors.gender = "Gender is required.";
-    }
-    
-    if (step === 1) {
-      if (educationList.length === 0)
-        stepErrors.education = "Add at least one education record.";
+// --- Validation per step ---
+const validateStep = () => {
+  let stepErrors = {};
+
+  if (step === 0) {
+    // First Name
+    if (!basicDetails.firstName) {
+      stepErrors.firstName = "First name is required.";
+    } else if (!nameRegex.test(basicDetails.firstName)) {
+      stepErrors.firstName = "Only alphabets allowed (max 150).";
     }
 
-    if (step === 2) {
-      if (!verification.username || !isValidEmail(verification.username))
-  stepErrors.username = "Enter a valid email.";
-      if (!verification.password || !passwordRegex.test(verification.password))
-        stepErrors.password =
-          "Password must be min 6 chars, include letters, numbers & special char.";
+    // Last Name
+    if (!basicDetails.lastName) {
+      stepErrors.lastName = "Last name is required.";
+    } else if (!nameRegex.test(basicDetails.lastName)) {
+      stepErrors.lastName = "Only alphabets allowed (max 150).";
     }
 
-    setErrors(stepErrors);
-    return Object.keys(stepErrors).length === 0;
-  };
+    // Email
+    if (!basicDetails.email) {
+      stepErrors.email = "Email is required.";
+    } else if (!isValidEmail(basicDetails.email)) {
+      stepErrors.email = "Invalid email address.";
+    }
+
+    // Phone
+    if (!basicDetails.phone) {
+      stepErrors.phone = "Phone number is required.";
+    } else if (!phoneRegex.test(basicDetails.phone)) {
+      stepErrors.phone = "Phone number must be 10 digits.";
+    }
+
+    // Date of Birth
+    if (!basicDetails.dob) {
+      stepErrors.dob = "Date of birth is required.";
+    }
+
+    // Gender
+    if (!basicDetails.gender) {
+      stepErrors.gender = "Gender is required.";
+    }
+  }
+
+  if (step === 1) {
+    if (educationList.length === 0)
+      stepErrors.education = "Add at least one education record.";
+  }
+
+  if (step === 2) {
+    // Username / Email
+    if (!verification.username) {
+      stepErrors.username = "Email is required.";
+    } else if (!isValidEmail(verification.username)) {
+      stepErrors.username = "Enter a valid email.";
+    }
+
+    // Password
+    if (!verification.password) {
+      stepErrors.password = "Password is required.";
+    } else if (!passwordRegex.test(verification.password)) {
+      stepErrors.password =
+        "Password must be min 6 chars, include letters, numbers & special char.";
+    }
+  }
+
+  setErrors(stepErrors);
+  return Object.keys(stepErrors).length === 0;
+};
 
   // --- Step navigation ---
   const nextStep = () => {

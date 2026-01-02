@@ -108,31 +108,53 @@ const handleClear = () => {
     const validateStep = () => {
         let stepErrors = {};
 
-        if (step === 0) {
-            if (!basicDetails.sponsorName || !nameRegex.test(basicDetails.sponsorName))
-                stepErrors.sponsorName = "Sponsor/Org name required (letters only, max 150).";
-            if (!basicDetails.orgType) stepErrors.orgType = "Organization type required.";
-            if (!basicDetails.email || !emailRegex.test(basicDetails.email))
-                stepErrors.email = "Invalid email (use .com, .org, .edu, etc).";
-            if (!basicDetails.phone || !phoneRegex.test(basicDetails.phone))
-                stepErrors.phone = "Phone number must be 10 digits.";
-            if (
-  !basicDetails.website ||
-  !websiteOrLinkedInRegex.test(basicDetails.website)
-) {
-  stepErrors.website =
-    "Enter a valid Website or LinkedIn URL (https://...).";
+       if (step === 0) {
+    // Sponsor Name
+    if (!basicDetails.sponsorName) 
+        stepErrors.sponsorName = "Sponsor/Org name required (letters only, max 150).";
+    else if (!nameRegex.test(basicDetails.sponsorName))
+        stepErrors.sponsorName = "Sponsor/Org name must be letters only (max 150).";
+
+    // Organization Type
+    if (!basicDetails.orgType) 
+        stepErrors.orgType = "Organization type required.";
+
+    // Email
+    if (!basicDetails.email)
+        stepErrors.email = "Email is required.";
+    else if (!emailRegex.test(basicDetails.email))
+        stepErrors.email = "Invalid email (use .com, .org, .edu, etc).";
+
+    // Phone
+    if (!basicDetails.phone)
+        stepErrors.phone = "Phone number is required.";
+    else if (!phoneRegex.test(basicDetails.phone))
+        stepErrors.phone = "Phone number must be 10 digits.";
+
+    // Website
+    if (!basicDetails.website)
+        stepErrors.website = "Website / LinkedIn is required.";
+    else if (!websiteOrLinkedInRegex.test(basicDetails.website))
+        stepErrors.website = "Enter a valid Website or LinkedIn URL (https://...).";
 }
 
-        }
+       if (step === 1) {
+    // Username
+    if (!verification.username) {
+        stepErrors.username = "Username is required.";
+    } else if (!emailRegex.test(verification.username)) {
+        stepErrors.username = "Enter a valid email.";
+    }
 
-        if (step === 1) {
-            if (!verification.username || !emailRegex.test(verification.username))
-  stepErrors.username = "Enter a valid email.";
-            if (!verification.password || !passwordRegex.test(verification.password))
-                stepErrors.password =
-                    "Password min 6 chars, must include letters, numbers & 1 special char.";
-        }
+    // Password
+    if (!verification.password) {
+        stepErrors.password = "Password is required.";
+    } else if (!passwordRegex.test(verification.password)) {
+        stepErrors.password =
+            "Password min 6 chars, must include letters, numbers & 1 special char.";
+    }
+}
+
 
         setErrors(stepErrors);
         return Object.keys(stepErrors).length === 0;
