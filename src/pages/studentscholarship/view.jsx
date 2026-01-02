@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { fetchScholarshipById } from "../../app/redux/slices/ScholarshipSlice";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
-
+import "../../pages/styles.css";
 const ScholarshipViewPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

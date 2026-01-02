@@ -566,13 +566,13 @@ body {
   }
 
   .image-card {
-    width: 180px;
-    height: 180px;
+    width: 320px;
+    height: 320px;
   }
 
   .image-card img {
-    width: 100px;
-    height: 100px;
+    width: 180px;
+    height: 180px;
   }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -592,20 +592,20 @@ body {
   }
 
   .image-card {
-    width: 120px;
-    height: 120px;
+    width: 320px;
+    height: 320px;
   }
 
   .image-card img {
-    width: 70px;
-    height: 70px;
+    width: 180px;
+    height: 180px;
   }
 }
 @media screen and (max-width: 540px) {
 
   /* ================= Outer Section ================= */
   .achievement-section {
-    padding-block: 40px; /* top & bottom spacing */
+    padding-block: 0px; /* top & bottom spacing */
     padding-inline: 0;   /* horizontal handled by wrapper */
     width: 100%;
   }
@@ -2234,7 +2234,7 @@ body {
 }
 
 .scholarship-view-text ul {
-  padding-left: 20px;
+  padding-left: 0px;
 }
 
 
@@ -2270,7 +2270,7 @@ body {
 }
 
 .hero-right p {
-  font-size: 15px;
+  font-size: 1rem;
   /* Body text */
   font-weight: 400;
   color: #0F1B1A;
@@ -3942,10 +3942,18 @@ ul.scholarship-view-text,
 ul.scholarship-view-text li {
   list-style-type: disc;
   list-style-position: inside;
-  font-size: 16px;      /* SAME TEXT & BULLET SIZE */
+  font-size: 1.1rem;      /* SAME TEXT & BULLET SIZE */
   line-height: 1.5;
   margin: 0;
   padding-left: 20px;
+}
+.scholarship-view-text ul li {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 8px;
+  text-indent: -8px;
+  margin: 6px 0;
+  font-size: 1.1rem;
 }
 
 ul.scholarship-view-text li {
@@ -3956,27 +3964,35 @@ ul.scholarship-view-text li {
    Tablet View (421px - 768px)
 =========================== */
 @media (max-width: 768px) {
-  ul.scholarship-view-text,
-  ul.scholarship-view-text li {
-    font-size: 15px;    /* slightly smaller but equal */
-    padding-left: 18px;
-  }
+ .scholarship-view-text ul li {
+    list-style-type: disc;
+    list-style-position: inside;
+    padding-left: 28px;
+    text-indent: -2px;
+    margin: 6px 0;
+    font-size: 1.1rem;
+}
 
   .scholarship-view-text {
     font-size: 15px;
   }
+
+
 }
+
 
 /* ===========================
    Mobile View (<= 420px)
 =========================== */
 @media (max-width: 420px) {
-  ul.scholarship-view-text,
-  ul.scholarship-view-text li {
-    font-size: 14px;    /* SAME SIZE & CLEAN */
-    padding-left: 16px;
-    margin-bottom: 6px;
-  }
+.scholarship-view-text ul li {
+    list-style-type: disc;
+    list-style-position: inside;
+    padding-left: 28px;
+    text-indent: -23px;
+    margin: 6px 0;
+    font-size: 1.1rem;
+}
 
   .scholarship-view-text {
     font-size: 14px;
@@ -6742,8 +6758,10 @@ p {
     line-height: 1.35;
     align-items: flex-start; /* avoids over-centering */
     font-size: 1.1rem;
+    text-indent: -23px;
   }
-  .scholarship-eligibility-header h3 { font-size: 1.1rem; }
+  .scholarship-eligibility-header h3 { font-size: 1.1rem;
+  padding-left: 12px; }
   .scholarship-detail-container { padding: 12px; }
 
   .deadline-info {
@@ -6752,7 +6770,7 @@ p {
     font-size: 0.9rem;
   }
   .mobile-only {
-    display: list-item;
+    display: contents;
   }
 }
 
@@ -6858,7 +6876,7 @@ p {
     margin: 1rem;
   }
 .mobile-only {
-    display: list-item;
+    display: contents;
 }
   .scholarship-view-title {
     font-size: 2rem;
@@ -6876,7 +6894,6 @@ p {
   }
 }
 
-.scholarship-view-text {}
 
 .about-card {
   background: #ffffff;
@@ -7080,7 +7097,7 @@ p {
 
 .benefit-card p {
   color: #4b5563;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
