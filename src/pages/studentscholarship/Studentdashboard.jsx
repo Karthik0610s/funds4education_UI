@@ -14,7 +14,7 @@ import { routePath as RP } from "../../app/components/router/routepath";
 //import { FaSearch } from "react-icons/fa";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
-
+import GoogleAd from "../googleads";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -636,13 +636,13 @@ const ads1 = [
             </div>
  </div>
             {/* RIGHT SIDE ADS */}
-            <div className="right-content">
-              <div className="ad-box">
-                <h4>{ads1[currentAd].title}</h4>
-                <p>{ads1[currentAd].text}</p>
-                <button>{ads1[currentAd].button}</button>
-              </div>
-            </div>
+            {!loading && currentScholarships.length > 0 && (
+  <div className="right-content">
+    
+      <GoogleAd />
+    
+  </div>
+)}
 
          </div>
 
@@ -800,11 +800,11 @@ const ads1 = [
             </div>
 
             <div className="ads-container">
-              <div className="ad-box" style={{marginBottom:"8px"}}>
-                <h4>{ads[currentAd].title}</h4>
+               {/*<div className="ad-box" style={{marginBottom:"8px"}}>
+                {/*<h4>{ads[currentAd].title}</h4>
                 <p>{ads[currentAd].text}</p>
                 <button>{ads[currentAd].button}</button>
-              </div>
+              </div>*/}
 
               {/* Featured Sidebar */}
               <aside className="featured-sidebar">

@@ -15,6 +15,9 @@ export default function LoginSuccess() {
     const name = params.get("name");
     const userId = params.get("userId");
     const id = params.get("id");
+    const filePath = params.get("filePath");
+    const fileName = params.get("fileName");
+    
 
     if (token) {
       // ✅ Save each value separately in localStorage
@@ -26,7 +29,8 @@ export default function LoginSuccess() {
       localStorage.setItem("name", name);
       localStorage.setItem("userId", userId);
       localStorage.setItem("id", id);
-
+      localStorage.setItem("filepath",filePath) ;  
+      localStorage.setItem("filename",fileName) ; 
       // ✅ Optional: log for debugging
       console.log("Login successful:", {
         token,
@@ -36,7 +40,9 @@ export default function LoginSuccess() {
         username,
         name,
         userId,
-        id
+        id,
+        filePath,
+        fileName,
       });
 
       // ✅ Show success popup, then navigate
@@ -46,6 +52,7 @@ export default function LoginSuccess() {
         if (roleName === "Student") navigate("/student-dashboard");
         else if (roleName === "Sponsor") navigate("/sponsor-dashboard");
         else if (roleName === "Institution") navigate("/institution-dashboard");
+          else if (roleName === "Faculty") navigate("/facultydashboard");
         else navigate("/");
       }, 500);
     } else {

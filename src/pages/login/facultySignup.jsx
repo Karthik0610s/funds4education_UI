@@ -1,7 +1,7 @@
 import React, { useState,useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { insertNewUser } from "../../app/redux/slices/signupSlice";
+import { insertFacultyNewUser } from "../../app/redux/slices/facultySlice";
 import { routePath as RP } from "../../app/components/router/routepath";
 import { useNavigate } from "react-router-dom";
 import "../../pages/styles.css";
@@ -12,6 +12,7 @@ export default function SignUpPage() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState("student"); // default to student
   const [showPassword, setShowPassword] = useState(false);
+const [workErrors, setWorkErrors] = useState({});
 
 const fileInputRef = useRef(null);
   const [basicDetails, setBasicDetails] = useState({
@@ -29,7 +30,19 @@ const fileInputRef = useRef(null);
   const [education, setEducation] = useState({ degree: "", college: "", year: "" });
   const [showEducationFields, setShowEducationFields] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+/* ================= WORK DETAILS ================= */
+  const [workList, setWorkList] = useState([]);
+  const [work, setWork] = useState({
+    organization: "",
+    startDate: "",
+    endDate: "",
+    role: "",
+    currentlyWorking: false,
+  });
+  const [showWorkFields, setShowWorkFields] = useState(false);
+  const [editWorkIndex, setEditWorkIndex] = useState(null);
 
+  /* ================= VERIFICATION ================= */
   const [verification, setVerification] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
 
@@ -46,6 +59,8 @@ const fileInputRef = useRef(null);
   const phoneRegex = /^\d{10}$/;
   const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
   const collegeRegex = /^[A-Za-z\s]{0,250}$/;
+  const roleRegex = /^[A-Za-z0-9\s.]{0,150}$/;
+  const organizationRegex = /^[A-Za-z\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
@@ -77,6 +92,8 @@ const fileInputRef = useRef(null);
     if (step === 1) {
       if (educationList.length === 0)
         stepErrors.education = "Add at least one education record.";
+       if (workList.length === 0)
+        stepErrors.work = "Add at least one work record.";
     }
 
     if (step === 2) {
@@ -119,7 +136,7 @@ const handleFileChange = (e) => {
 
     const formDataPayload = new FormData();
     selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
-    formDataPayload.append("TypeofUser", "student");
+    formDataPayload.append("TypeofUser", "faculty");
     formDataPayload.append("id", applicationId);
 
     try {
@@ -165,6 +182,7 @@ const handleClear = () => {
 
   // --- Save (Signup dispatch) ---
   const handleSave = async() => {
+    debugger;
     if (!validateStep()) return;
   const createdBy = `${basicDetails.firstName} ${basicDetails.lastName}`.trim();
 const payload = {
@@ -176,14 +194,16 @@ const payload = {
   Gender: basicDetails.gender,
   UserName: verification.username,      // ✅ rename
   PasswordHash: verification.password,  // ✅ raw password
-  RoleId: "1",
-  Education: JSON.stringify(educationList) ,// ✅ backend expects string
+  RoleId:  5,
+  Education: JSON.stringify(educationList) ,
+  // ✅ backend expects string
+   Work: JSON.stringify(workList), // ✅ ADDED
   CreatedBy: createdBy,  
 };
 
 debugger;
    // 1️⃣ Insert user and get ID
-  const userId = await dispatch(insertNewUser(payload));
+  const userId = await dispatch(insertFacultyNewUser(payload));
   if (!userId) return; // stop if insertion failed
 
   // 2️⃣ Upload documents if any
@@ -252,6 +272,90 @@ debugger;
     const updated = educationList.filter((_, i) => i !== index);
     setEducationList(updated);
   };
+const addWork = () => {
+  let errorsObj = {};
+
+ if (!work.organization?.trim()) {
+  errorsObj.organization = "Organization is required.";
+} else if (!organizationRegex.test(work.organization)) {
+  errorsObj.organization = "Invalid organization name.";
+}
+
+  if (!work.startDate) {
+    errorsObj.startDate = "Start date is required.";
+  }
+
+  if (!work.currentlyWorking && !work.endDate) {
+    errorsObj.endDate = "End date is required.";
+  }
+
+  if (!work.role?.trim()) {
+  errorsObj.role = "Role is required.";
+} else if (!work.currentlyWorking && !roleRegex.test(work.role)) {
+  errorsObj.role = "Invalid role.";
+}
+
+  if (Object.keys(errorsObj).length > 0) {
+    setWorkErrors(errorsObj);
+    return;
+  }
+
+  setWorkList([...workList, work]);
+  setWork({
+    organization: "",
+    startDate: "",
+    endDate: "",
+    role: "",
+    currentlyWorking: false,
+  });
+  setShowWorkFields(false);
+  setWorkErrors({});
+};
+
+
+const updateWork = (index) => {
+  let errorsObj = {};
+
+  if (!organizationRegex.test(work.organization)) {
+    errorsObj.organization = "Invalid organization name.";
+  }
+
+  if (!work.startDate) {
+    errorsObj.startDate = "Start date is required.";
+  }
+
+  if (!work.currentlyWorking && !work.endDate) {
+    errorsObj.endDate = "End date is required.";
+  }
+
+  if (!work.currentlyWorking && !roleRegex.test(work.role)) {
+    errorsObj.role = "Invalid role.";
+  }
+
+  if (Object.keys(errorsObj).length > 0) {
+    setWorkErrors(errorsObj);
+    return;
+  }
+
+  const updated = [...workList];
+  updated[index] = work;
+  setWorkList(updated);
+  setEditWorkIndex(null);
+  setWorkErrors({});
+  setWork({
+    organization: "",
+    startDate: "",
+    endDate: "",
+    role: "",
+    currentlyWorking: false,
+  });
+};
+
+
+
+const deleteWork = (index) => {
+  setWorkList(workList.filter((_, i) => i !== index));
+};
 
   // --- DOB restrictions ---
   const today = new Date().toISOString().split("T")[0];
@@ -283,7 +387,7 @@ debugger;
       <div className="signup-card">
         {/* Header */}
         <div className="signup-header">
-          <h2>Student Sign up</h2>
+          <h2>Faculty Sign up</h2>
           <p>
             Already a member?{" "}
             <Link to={RP.login} state={{ userType }} className="signup-link">
@@ -294,7 +398,7 @@ debugger;
 
         {/* Step navigation */}
         <div className="signup-steps">
-          {["Basic Details", "Education", "Verification"].map((label, i) => (
+          {["Basic Details", "Qualification", "Verification"].map((label, i) => (
             <div key={i} className="step-item">
               <div
                 className={`step-circle ${i === step ? "active" : ""} ${
@@ -320,12 +424,9 @@ debugger;
         {/* Step 0: Basic Details */}
         {step === 0 && (
           <div>
-          {/*  <h3 className="section-title">Basic Details</h3> */}
-          <h3 className="sponsor-section-title">Basic Details</h3>
-
-            
+            <h3 className="section-title">Basic Details</h3>
             <div className="row">
-              <div className="form-group" >
+              <div className="form-group">
                 <label>First Name *</label>
                 <input
                   type="text"
@@ -493,12 +594,13 @@ debugger;
 
         {/* Education Step */}
         {step === 1 && (
+            <>
           <div>
             <div className="education-header">
-              <h3>Education</h3>
+              <h3>Qualification</h3>
               {!showEducationFields && editIndex === null && (
                 <button onClick={() => setShowEducationFields(true)} className="add-btn">
-                  + Add Education
+                  + Add Qualification
                 </button>
               )}
             </div>
@@ -514,25 +616,32 @@ debugger;
               </div>
             )}
 */}
+
             {educationList.map((edu, index) =>
               editIndex === index ? (
                 <div className="education-grid" key={index}>
+                   <div className="field-group">
+    <label className="field-label">Course</label>
                   <input
   type="text"
   placeholder="Course"
   value={education.degree}
   onChange={(e) => setEducation({ ...education, degree: e.target.value })}
 />
+</div>
 {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
-
+  <div className="field-group">
+    <label className="field-label">College / University</label>
 <input
   type="text"
   placeholder="College / University  "
   value={education.college}
   onChange={(e) => setEducation({ ...education, college: e.target.value })}
 />
+</div>
 {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
-
+<div className="field-group">
+    <label className="field-label">Year</label>
 <input
   type="text"
   placeholder="Year"
@@ -540,6 +649,7 @@ debugger;
   onChange={(e) => setEducation({ ...education, year: e.target.value })}
   maxLength={4}
 />
+</div>
 {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
 
 
@@ -559,34 +669,52 @@ debugger;
                   </div>
                 </div>
               ) : (
-                <div className="education-grid" key={index}>
-                  <div>{edu.degree}</div>
-                  <div>{edu.college}</div>
-                  <div>{edu.year}</div>
-                  <div className="sign-action-btns">
-                    <button
-                      onClick={() => {
-                        setEditIndex(index);
-                        setEducation(edu);
-                        setShowEducationFields(false);
-                      }}
-                      className="sign-action-btn"
-                    >
-                      Edit
-                    </button>
-                    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
-                      Delete
-                    </button>
-                  </div>
-                </div>
+                
+                  <div className="education-grid" key={index}>
+  <div className="label-value">
+    <span className="label">Course</span>
+    <span className="value">{edu.degree}</span>
+  </div>
+
+  <div className="label-value">
+    <span className="label">College / University</span>
+    <span className="value">{edu.college}</span>
+  </div>
+
+  <div className="label-value">
+    <span className="label">Year</span>
+    <span className="value">{edu.year}</span>
+  </div>
+
+  <div className="sign-action-btns">
+    <button
+      onClick={() => {
+        setEditIndex(index);
+        setEducation(edu);
+        setShowEducationFields(false);
+      }}
+      className="sign-action-btn"
+    >
+      Edit
+    </button>
+    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
+      Delete
+    </button>
+  </div>
+</div>
+
+               
               )
             )}
 
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
+                  <div className="form-group">
+    <label>Specialization
+<span className="required">*</span></label>   
 <input
   type="text"
-  placeholder="Class/Course"
+  placeholder="Course"
   value={education.degree}
   maxLength={150}
   onChange={(e) => {
@@ -595,13 +723,15 @@ debugger;
     }
   }}
 />
+</div>
 
 
-                 
+    <div className="form-group">
+    <label>College / University Name <span className="required">*</span></label>                  
 
                   <input
   type="text"
-  placeholder="School / College / University"
+  placeholder="College / University"
   value={education.college}
   maxLength={250}
   onChange={(e) => {
@@ -610,8 +740,10 @@ debugger;
     }
   }}
 />
+</div>
 
-                
+             <div className="form-group">
+    <label>Year of Passing<span className="required">*</span></label>   
 
                   <input
                     type="text"
@@ -626,6 +758,7 @@ debugger;
     }
   }}
                   />
+                  </div>
                  
 
                 <div className="sign-action-btns">
@@ -654,6 +787,241 @@ debugger;
       </div>
     )}
           </div>
+
+<div style={{ marginTop: "40px" }}>
+  <div className="education-header">
+    <h3>Work Details</h3>
+    {!showWorkFields && editWorkIndex === null && (
+      <button onClick={() => setShowWorkFields(true)} className="add-btn">
+        + Add Work
+      </button>
+    )}
+  </div>
+{errors.work && <p className="error-text">{errors.work}</p>}
+ 
+
+  {workList.map((w, index) =>
+    editWorkIndex === index ? (
+      <div className="education-grid" key={index}>
+        <div className="field-group">
+          <label className="field-label">Organization</label>
+          <input
+            type="text"
+            value={work.organization}
+            onChange={(e) => setWork({ ...work, organization: e.target.value })}
+          />
+        </div>
+
+        <div className="field-group">
+          <label className="field-label">Start Date</label>
+          <input
+            type="date"
+            
+            value={work.startDate}
+               max={new Date().toISOString().split("T")[0]} 
+            onChange={(e) => setWork({ ...work, startDate: e.target.value })}
+          />
+        </div>
+
+        <div className="field-group">
+          <label className="field-label">End Date</label>
+          <input
+            type="date"
+            value={work.endDate}
+            disabled={work.currentlyWorking}
+               min={work.startDate || undefined}  
+            max={new Date().toISOString().split("T")[0]} 
+            onChange={(e) => setWork({ ...work, endDate: e.target.value })}
+          />
+        </div>
+
+        <div className="field-group">
+          <label className="field-label">Role</label>
+          <input
+            type="text"
+            value={work.role}
+            onChange={(e) => setWork({ ...work, role: e.target.value })}
+          />
+        </div>
+
+        <div className="field-group checkbox-group">
+          <label className="work-checkbox">
+            <input
+              type="checkbox"
+              checked={work.currentlyWorking}
+              onChange={(e) =>
+                setWork({
+                  ...work,
+                  currentlyWorking: e.target.checked,
+                  endDate: e.target.checked ? "" : work.endDate,
+                })
+              }
+            />
+            Currently Working
+          </label>
+        </div>
+
+        <div className="sign-action-btns">
+          <button onClick={() => updateWork(index)} className="sign-action-btn">
+            Save
+          </button>
+          <button
+            onClick={() => {
+              setEditWorkIndex(null);
+              setWork({ organization: "", startDate: "", endDate: "", role: "", currentlyWorking: false });
+              setWorkErrors({}); // clear errors on cancel
+            }}
+            className="sign-action-btn"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div className="education-grid" key={index}>
+        <div className="label-value">
+          <span className="label">Organization</span>
+          <span className="value">{w.organization}</span>
+        </div>
+
+       {/* <div className="label-value">
+          <span className="label">Start Date</span>
+          <span className="value">{w.startDate}</span>
+        </div>
+
+        <div className="label-value">
+          <span className="label">Currently Working</span>
+          <span className="value">{w.currentlyWorking ? "Present" : w.endDate}</span>
+        </div>*/}
+        <div className="label-value">
+  <span className="label">Duration</span>
+  <span className="value">
+    {w.startDate} – {w.currentlyWorking ? "Present" : w.endDate}
+  </span>
+</div>
+
+
+        <div className="label-value">
+          <span className="label">Role</span>
+          <span className="value">{w.role}</span>
+        </div>
+
+        <div className="sign-action-btns">
+          <button
+            onClick={() => {
+              setEditWorkIndex(index);
+              setWork(w);
+              setShowWorkFields(false);
+            }}
+            className="sign-action-btn"
+          >
+            Edit
+          </button>
+          <button onClick={() => deleteWork(index)} className="sign-action-btn">
+            Delete
+          </button>
+        </div>
+      </div>
+    )
+  )}
+
+  {/* Add New Work */}
+  {showWorkFields && editWorkIndex === null && (
+    <div className="education-grid">
+        <div className="form-group">
+    <label>Organization<span className="required">*</span></label>
+      <input
+        type="text"
+        placeholder="Organization"
+        value={work.organization}
+        onChange={(e) => setWork({ ...work, organization: e.target.value })}
+      />
+      </div>
+  <div className="form-group">
+    <label>Start Date<span className="required">*</span></label>
+      <input
+        type="date"
+         className="date-input"
+  //data-placeholder="Start Date"
+        value={work.startDate}
+          max={new Date().toISOString().split("T")[0]} 
+        onChange={(e) => setWork({ ...work, startDate: e.target.value })}
+      />
+      </div>
+
+      {!work.currentlyWorking && (
+       <div className="form-group">
+    <label>End Date</label>
+    <input
+      type="date"
+      className="date-input"
+      value={work.endDate}
+      min={work.startDate || undefined}
+      max={new Date().toISOString().split("T")[0]}
+      onChange={(e) =>
+        setWork({ ...work, endDate: e.target.value })
+      }
+    />
+  </div>
+      )}
+
+   <div className="form-group">
+    <label>Role<span className="required">*</span></label>
+        <input
+          type="text"
+          placeholder="Role"
+          value={work.role}
+          onChange={(e) => setWork({ ...work, role: e.target.value })}
+        />
+      </div>
+
+      <label style={{ alignItems: "center", gap: "6px" }}>
+        <input
+          type="checkbox"
+          checked={work.currentlyWorking}
+          onChange={(e) =>
+            setWork({
+              ...work,
+              currentlyWorking: e.target.checked,
+              endDate: e.target.checked ? "" : work.endDate,
+            })
+          }
+        />
+        Currently Working
+      </label>
+
+      <div className="sign-action-btns">
+        <button onClick={addWork} className="sign-action-btn">
+          Save
+        </button>
+        <button
+          onClick={() => {
+            setShowWorkFields(false);
+            setWork({ organization: "", startDate: "", endDate: "", role: "", currentlyWorking: false });
+            setWorkErrors({}); // clear errors on cancel
+          }}
+          className="sign-action-btn"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )}
+   {/* Show all errors in one block after Save */}
+  {Object.keys(workErrors).length > 0 && (
+    <div className="error-block">
+      {workErrors.organization && <p className="error-text">{workErrors.organization}</p>}
+      {workErrors.startDate && <p className="error-text">{workErrors.startDate}</p>}
+     
+      {workErrors.role && <p className="error-text">{workErrors.role}</p>}
+      {workErrors.general && <p className="error-text">{workErrors.general}</p>}
+    </div>
+  )}
+</div>
+
+
+
+</>
         )}
 
         {/* Step 2: Verification */}

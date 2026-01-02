@@ -9,7 +9,7 @@ export const fetchStudentProfile = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       // ✅ Always use the student record ID (id), not userId
-      const id = localStorage.getItem("id"); // From login response
+      const id = localStorage.getItem("userId"); // From login response
       if (!id) throw new Error("No student ID found in localStorage");
 
       const data = await getStudentProfile(id);

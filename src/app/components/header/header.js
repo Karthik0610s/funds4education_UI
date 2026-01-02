@@ -120,7 +120,7 @@ let parentFolder = "";
 
 if (roleName === "Student") parentFolder = "student";
 else if (roleName === "Sponsor") parentFolder = "sponsor";
-
+else if (roleName ==="Faculty") parentFolder="faculty";
 // 8️⃣ STEP 5 - Build final image URL
 const profileImageUrl =
   folderName && finalFileName
@@ -128,6 +128,17 @@ const profileImageUrl =
     : defaultImage;
 
 console.log("🔗 profileImageUrl =", profileImageUrl);
+ // 🔟 Image src state
+  const [imgSrc, setImgSrc] = useState(defaultImage);
+
+  // 1️⃣1️⃣ Update image when data changes
+  useEffect(() => {
+    if (isImage && profileImageUrl) {
+      setImgSrc(profileImageUrl);
+    } else {
+      setImgSrc(defaultImage);
+    }
+  }, [profileImageUrl, isImage]);
 
 // 9️⃣ STEP 6 - alt text without extension
 const altText = finalFileName
@@ -168,6 +179,8 @@ useEffect(() => {
               <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
               <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
               <Link to={RP.studentdashboard}>Scholarships</Link>
+               <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
             </div>
             <div className="header-right">
               <Link to="/login">Login</Link>
@@ -204,21 +217,17 @@ useEffect(() => {
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
-
-             {isImage ? (
-     <img
-      src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+ <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
             </div>
 
             {/* Dropdown Menu */}
@@ -226,7 +235,19 @@ useEffect(() => {
               <div className="dropdown-menu">
                 <div
                   className="dropdown-item"
-                  onClick={() => {
+               /*  onClick={() => {
+  if (roleName === "Student") {
+    navigate("/view-profile");
+  } 
+  else if (roleName === "Faculty") {
+    navigate("/view-faculty-profile"); // ✅ THIS fixes faculty
+  } 
+  else if (roleName === "Sponsor") {
+    navigate("/view-sponsor-profile");
+  }
+
+  setDropdownOpen(false);
+}}*/ onClick={() => {
                     navigate("/view-profile");
                     setDropdownOpen(false);
                   }}
@@ -274,6 +295,8 @@ useEffect(() => {
          <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
+           <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
 
           <div className="header-right">
@@ -311,20 +334,17 @@ useEffect(() => {
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
-               {isImage ? (
-     <img
-     src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+             <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
             </div>
 
             {/* Dropdown Menu */}
@@ -395,21 +415,17 @@ useEffect(() => {
 
               {/* Dropdown Icon */}
               <div className="icon-circle" onClick={toggleDropdown}>
-
-              {isImage ? (
-     <img
-     src={imgError}
-  alt={altText}
-  className="circle-img"
-  onError={() => setImgError(defaultImage)}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}/>
-    ) : (
-      <div className="alt-logo-text">{altText}</div>
-    )}
+ <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
               </div>
 
               {/* Dropdown Menu */}
@@ -453,14 +469,124 @@ useEffect(() => {
             </div>
           </div>
         );
-         case "student":
-        return (
-          <div className="nav-links">
-            <Link to="/my-scholarships">Dashboard</Link>
-            <Link to="/applications">Saved</Link>
-            <Link to="/profile">Message</Link>
+           case "faculty-profile":
+  return (
+    <>
+    {!isLoggedIn && (
+        <div className="nav-wrapper">
+          <div className="nav-bar">
+         <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
+            <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+            <Link to={RP.studentdashboard}>Scholarships</Link>
+            <Link to={RP.facultyDashboard}>E-Learning</Link>
+                <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
-        );
+
+          <div className="header-right">
+            <Link to="/login">Login</Link>
+            <Link
+              to="#"
+              className="signup-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowSignupModal(true);
+              }}
+            >
+              Sign Up
+            </Link>
+          </div>
+        </div>
+      )}
+    <div className="header-actions student-profile-header" ref={dropdownRef}>
+ {/* ---------- NOT LOGGED IN → SHOW PUBLIC HEADER (ABOVE RIGHT SECTION) ---------- */}
+      
+      
+      <div className="right-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+
+        
+
+        {/* IF LOGGED IN → Show Profile Header */}
+        {isLoggedIn && (
+          <>
+            <span style={{ fontWeight: 600 }}>
+              Welcome, {userName || "User"}
+            </span>
+
+            {/* Bell Icon */}
+            <FiBell size={22} className="cursor-pointer" />
+
+            {/* Dropdown Icon */}
+            <div className="icon-circle" onClick={toggleDropdown}>
+                <img
+    src={imgSrc}
+    alt={altText || "Profile"}
+    className="circle-img"
+    onError={() => setImgSrc(defaultImage)}
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+    }}
+  />
+  {/*{isImage ? (
+     <img
+      src={imgError}
+  alt={altText}
+  className="circle-img"
+  onError={() => setImgError(defaultImage)}
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  }}/>
+    ) : (
+      <div className="alt-logo-text">{altText}</div>
+    )}*/}
+            </div>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/view-faculty-profile");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Profile
+                </div>
+
+                <div
+                  className="dropdown-item"
+                  onClick={() => {
+                    navigate("/reset-password");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Reset Password
+                </div>
+              </div>
+            )}
+
+            {/* Logout */}
+            <FiLogOut
+              size={22}
+              className="logout-icon"
+              onClick={() => {
+                localStorage.clear();
+                dispatch(logout());
+                navigate("/");
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          </>
+        )}
+
+      </div>
+    </div>
+    </>
+  );
 
       case "dashboard":
         return (
@@ -475,8 +601,10 @@ useEffect(() => {
   if (!isLoggedIn) return renderVariantLinks("public");
 
   return roleName === "Student"
-    ? renderVariantLinks("student-profile")
-    : renderVariantLinks("sponsor-profile");
+    ? renderMobileLinks("student-profile")
+    : roleName === "Faculty"
+      ? renderMobileLinks("faculty-profile")
+      : renderMobileLinks("sponsor-profile");
 
   
       default:
@@ -504,7 +632,12 @@ const renderMobileLinks = (forcedVariant) => {
           <div className="mobile-item" onClick={() => { navigate(RP.studentdashboard); setMenuOpen(false); }}>
             Scholarships
           </div>
-
+          <div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
+            E-Learning
+          </div>
+<div className="mobile-item" onClick={() => { navigate(RP.InstitutionsPage); setMenuOpen(false); }}>
+           Institution
+          </div>
           <div className="mobile-item"
                onClick={() => { setShowSignupModal(true); setMenuOpen(false); }}>
             Sign Up
@@ -560,12 +693,31 @@ const renderMobileLinks = (forcedVariant) => {
         renderMobileLinks("public")
       );
 
+      case "faculty-profile":
+      return isLoggedIn ? (
+        <>
+          <div className="mobile-item" onClick={() => { navigate("/view-faculty-profile"); setMenuOpen(false); }}>
+            Profile
+          </div>
+
+          <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
+            Reset Password
+          </div>
+
+          
+        </>
+      ) : (
+        renderMobileLinks("public")
+      );
+
       case "profile-role-based":
   if (!isLoggedIn) return renderMobileLinks("public");
 
-  return roleName === "Student"
+ return roleName === "Student"
     ? renderMobileLinks("student-profile")
-    : renderMobileLinks("sponsor-profile");
+    : roleName === "Faculty"
+      ? renderMobileLinks("faculty-profile")
+      : renderMobileLinks("sponsor-profile");
 
     default:
       return null;
@@ -590,6 +742,7 @@ const renderMobileLinks = (forcedVariant) => {
           if (isLoggedIn) {
             if (roleName === "Student") navigate("/student-dashboard");
             else if (roleName === "Sponsor") navigate("/sponsor-dashboard");
+             else if (roleName === "Faculty") navigate("/facultydashboard");
           } else {
             navigate("/");
           }
@@ -674,7 +827,17 @@ const renderMobileLinks = (forcedVariant) => {
           <span className="brand">VidyāSetu</span>
         </div>
       </div>
-    ) : (
+    ) : isLoggedIn && roleName === "Faculty" ? (
+      <div className="left-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+        <div
+          onClick={() => navigate("/facultydashboard")}
+          style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
+        >
+          <img src={logo} alt="Vidyasetu" className="logo" />
+          <span className="brand">VidyāSetu</span>
+        </div>
+      </div>
+    ): (
       <div
         className="header-left"
         onClick={() => {
@@ -774,10 +937,10 @@ const renderMobileLinks = (forcedVariant) => {
   className="role-button institution"
   onClick={() => {
     setShowSignupModal(false);
-    navigate("/institution/signup");
+    navigate("/facultySignup");
   }}
 >
-  Institution
+  Faculty
 </button>
 
             <span className="close-btn" onClick={() => setShowSignupModal(false)}>✖</span>

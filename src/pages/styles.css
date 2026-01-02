@@ -2665,7 +2665,7 @@ body {
   margin-top: 25px;
   margin-bottom: 10px;
   color: #0c0c0c;
-  font-size: 32px;
+ 
 }
 
 .row {
@@ -2695,7 +2695,7 @@ input:not([type="radio"]) {
   padding: 10px;
   font-size: 16px;
   flex: 1;
-  min-width: 200px;
+ /* min-width: 200px;*/
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
@@ -2785,13 +2785,57 @@ input:not([type="radio"]) {
   margin-bottom: 10px;
 }
 
+/* Second row layout */
+.work-row-2 {
+  grid-column: 1 / -1; /* full width */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Checkbox alignment */
+.work-checkbox {
+ 
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.education-grid.header {
+  font-weight: 600;
+  color: #555;
+  background: #f8f9fa;
+  padding: 8px 0;
+}
+
+.education-grid.header div {
+  font-size: 14px;
+}
+.date-input:before {
+  content: attr(data-placeholder);
+  color: #999;
+}
+
+.date-input:focus:before,
+.date-input:not([value=""]):before {
+  content: "";
+}
+
 .education-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 100px;
+  grid-template-columns: 1fr 1fr 1fr ;
   gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+ 
   align-items: center;
+}
+input:not([type="radio"]):not([type="checkbox"]) {
+  padding: 10px;
+  font-size: 16px;
+  flex: 1 1;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
 }
 
 .education-grid.header {
@@ -3468,6 +3512,15 @@ input:not([type="radio"]) {
 /* ==============================
    RESPONSIVE STYLES
 ============================== */
+@media (max-width: 820px) and (min-height: 1180px) {
+   .login-illustration {
+    /*display: none;*/
+    background-size: contain; /* Keeps full image visible */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+  }
+}
 
 /* Tablet (below 1024px) */
 @media (max-width: 1024px) and (min-width:850px) {
@@ -3478,6 +3531,10 @@ input:not([type="radio"]) {
 
   .login-illustration {
     /*display: none;*/
+    background-size: contain; /* Keeps full image visible */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
   }
 
   .login-form {
@@ -3583,7 +3640,7 @@ input:not([type="radio"]) {
   }
 
   .user-radio-group {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     gap: 0.75rem;
   }
@@ -3930,7 +3987,7 @@ ul.scholarship-view-text li {
   font-size: 1.1rem;
   line-height: 1.5;
   margin: 0;
-  padding-left: 30px;
+ /* padding-left: 30px; */
 }
 
 ul.scholarship-view-text li {
@@ -4290,6 +4347,7 @@ ul.scholarship-view-text li {
 /* Modal Body */
 .modal-body {
   padding: 16px;
+  padding-top: 0px;
 }
 
 textarea {
@@ -4474,7 +4532,7 @@ textarea {
 /* Checkbox */
 .checkbox-row input[type="checkbox"] {
   /* removes default checkbox styling */
-  margin: -40%;
+  margin: -27%;
   /* removes browser default left margin */
   width: 18px;
   height: 18px;
@@ -5100,7 +5158,7 @@ textarea {
 /* Modal box */
 .modal {
   background: white;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
   width: 500px;
   max-width: 90%;
@@ -6302,7 +6360,6 @@ body {
 h2,
 h3,
 p {
-  margin: 0;
   padding: 0;
 }
 
@@ -6690,6 +6747,23 @@ p {
   }
 }
 
+@media screen and (max-width: 420px) {
+  /*.scholarshipview-page { padding: 12px; }*/
+  .scholarship-container { padding: 12px; }
+    ul.scholarship-view-text li {
+    line-height: 1.35;
+    align-items: flex-start; /* avoids over-centering */
+    font-size: small;
+  }
+  .scholarship-eligibility-header h3 { font-size: 1.1rem; }
+  .scholarship-detail-container { padding: 12px; }
+
+  .deadline-info {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.9rem;
+  }
+}
 
 /* 📝 Description / Text */
 .scholarship-view-text {
@@ -7087,7 +7161,7 @@ p {
 .close-btn {
   position: absolute;
   right: 12px;
-  top: 12px;
+  top: 5px;
   background: transparent;
   border: none;
   font-size: 24px;
@@ -7695,6 +7769,38 @@ p {
   visibility: visible;
   opacity: 1;
 }
+.label-value {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label-value .label {
+  font-size: 12px;
+  color: #777;
+  font-weight: 500;
+}
+
+.label-value .value {
+  font-size: 15px;
+  color: #222;
+  font-weight: 500;
+}
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
+
+.checkbox-group {
+  justify-content: flex-end;
+}
 .page-container {
   padding: 50px 24px;
 }
@@ -7798,7 +7904,15 @@ p {
 .upload-btn:active {
   transform: translateY(0);
 }
-
+.live-btn {
+  background: #396d70;
+  color: white;
+  padding: 10px 22px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 .content-layouts {
   display: flex;
@@ -7902,7 +8016,7 @@ p {
   margin: 4px 0;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 992px) {
   .content-layouts {
     flex-direction: column;
   }
@@ -7916,7 +8030,6 @@ p {
     padding: 20px;
   }
 }
-/* 🌈 Institution Page Title */
 .institution-title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -7938,13 +8051,18 @@ p {
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   padding: 20px;
-  margin-top: 15px;
-  margin-bottom: 25px;
+ /* margin-top: 15px; */
+ /* margin-bottom: 15px; */
   border: 1px solid #e0e0e0;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-
+.filters-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    /* margin: 12px auto; */
+    text-align: CENTER;
+}
 .institution-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
@@ -8003,5 +8121,11 @@ p {
   flex: 1; /* take remaining space */
 }
 
+.profile-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-left: 12px;
+  font-weight: 500;
+}
 
 

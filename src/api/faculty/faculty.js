@@ -1,10 +1,10 @@
-import { authAxios, publicAxios } from "../config";
+import { publicAxios,authAxios } from "../config";
 import { ApiKey } from "../endpoint";
-
 // ✅ Signup (insert new user)//
-export const insertUserReq = async (data) => {
+export const insertFacultyUserReq = async (data) => {
   try {
-    const res = await publicAxios.post(`${ApiKey.signup}`, data);
+    debugger;
+    const res = await publicAxios.post(`${ApiKey.Faculty}`, data);
     return { error: false, data: res.data, message: res.data.message || "Signup successful", errorMsg: "" };
   } catch (err) {
   let errorMsg = "Something went wrong, please try again later";
@@ -39,14 +39,14 @@ export const insertUserReq = async (data) => {
 
   throw new Error(errorMsg);
 }
-
 };
 
 
 // ✅ Update user profile
-export const updateUserReq = async (data) => {
+export const updateFacultyUserReq = async (data) => {
   try {
-    const res = await authAxios.put(`${ApiKey.signup}`, data); // 🔐 secure with authAxios
+    debugger;
+    const res = await publicAxios.put(`${ApiKey.Faculty}`, data); // 🔐 secure with authAxios
 
     const msg = res.data?.message;
     const _data = res.data;
@@ -87,9 +87,10 @@ export const updateUserReq = async (data) => {
 };
 
 // ✅ Fetch user profile (after login or for profile page)
-export const fetchUserProfileReq = async (idOrEmail) => {
+export const fetchFacultyUserProfileReq = async (idOrEmail) => {
   try {
-    const res = await authAxios.get(`${ApiKey.signup}/${idOrEmail}`);
+    debugger;
+    const res = await publicAxios.get(`${ApiKey.Faculty}/${idOrEmail}`);
 
     const _data = res.data;
     return { error: false, data: _data, message: "", errorMsg: "" };

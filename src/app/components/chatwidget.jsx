@@ -114,7 +114,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
              {/* ⭐ Agent Typing Indicator */}
   {isTyping && (
     <p className="agent-msg typing-indicator">
-      Agent is typing<span className="dots"></span>
+      Agent is typing...<span className="dots"></span>
     </p>
   )}
             <div ref={chatEndRef} />

@@ -1,28 +1,29 @@
 import { publicAxios } from "../config";
 import { ApiKey } from "../endpoint";
-
-export const fetchInstitutionListReq = async () => {
+export const fetchInstitutionListReq = async (params) => {
   try {
-    const url = `${ApiKey.CollegeDetails}`; 
-    const res = await publicAxios.get(url);
+    const query = new URLSearchParams(params).toString();
+    const res = await publicAxios.get(`${ApiKey.CollegeDetails}/filtered?${query}`);
 
     return {
       error: false,
-      data: res.data?.data || res.data || [],
-      errorMsg: "",
+      page: res.data.page,
+      pageSize: res.data.pageSize,
+      totalRecords: res.data.totalRecords,
+      data: res.data.data || [],
     };
   } catch (err) {
     return {
       error: true,
       data: [],
-      errorMsg:
-        err.response?.data?.message ||
-        err.response?.data?.detail ||
-        err.message ||
-        "Unable to fetch institution list",
+      page: 1,
+      pageSize: 0,
+      totalRecords: 0,
+      errorMsg: err.response?.data?.message || "Unable to fetch institution list",
     };
   }
 };
+
 
 export const fetchStatesReq = async () => {
   try {

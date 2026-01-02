@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { updateStudent } from "../../../app/redux/slices/studentSlice"; // SweetAlert handled inside slice
 import "../../../pages/styles.css";
-import { uploadFormFilesReq } from "../../../api/scholarshipapplication/scholarshipapplication";
-import Swal from "sweetalert2";
-import { ApiKey } from "../../../api/endpoint";
-import { publicAxios } from "../../../api/config";
-import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
-export default function StudentProfileForm({ profile, onCancel, onSave }) {
+import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarshipapplication";
+ import Swal from "sweetalert2";
+ import { ApiKey } from "../../../api/endpoint";
+ import { publicAxios } from "../../../api/config";
+ import { fetchFacultyUserProfile, updateFacultyUserProfile } from "../../../app/redux/slices/facultySlice";
+import { useNavigate } from "react-router-dom";
+export default function FacultyProfileForm({ profile, onCancel, onSave }) {
+  console.log("profile",profile);
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   const [formData, setFormData] = useState({
     id: "",
     firstName: "",
@@ -19,23 +20,34 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     dateofBirth: "",
     gender: "",
     userName: "",
-    document: [],
-    studentId: ""
+    document:[],
+    facultyId:""
   });
-  const fileInputRef = useRef(null);
+const fileInputRef = useRef(null);
   const [educationList, setEducationList] = useState([]);
   const [education, setEducation] = useState({ degree: "", college: "", year: "" });
   const [editIndex, setEditIndex] = useState(null);
   const [errors, setErrors] = useState({});
-  const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
-  const [filesList, setFilesList] = useState(formData?.files || []);
-  console.log(filesList, "filelist"); // display names
-  const [fileSelected, setFileSelected] = useState(false);
-  const [newFileSelected, setNewFileSelected] = useState(false);
-  const [existingDocFiles, setExistingDocFiles] = useState([]);
-  const [originalFiles, setOriginalFiles] = useState([]);
-  const handleFileChange = (e) => {
-    debugger;
+ const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+const [filesList, setFilesList] = useState(formData?.files||[]);
+console.log(filesList,"filelist"); // display names
+const [fileSelected, setFileSelected] = useState(false);
+const [newFileSelected, setNewFileSelected] = useState(false);
+ const [existingDocFiles, setExistingDocFiles] = useState([]);
+const [originalFiles, setOriginalFiles] = useState([]);
+// ===== Work Details State =====
+const [workList, setWorkList] = useState([]);
+const [work, setWork] = useState({
+  organization: "",
+  startDate: "",
+  endDate: "",
+  role: "",
+  currentlyWorking: false,
+});
+const [workEditIndex, setWorkEditIndex] = useState(null);
+
+const handleFileChange = (e) => {
+  debugger;
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
 
@@ -53,7 +65,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
 
     const formDataPayload = new FormData();
     selectedFiles.forEach((file) => formDataPayload.append("FormFiles", file));
-    formDataPayload.append("TypeofUser", "student");
+    formDataPayload.append("TypeofUser", "faculty");
     formDataPayload.append("id", applicationId);
 
     try {
@@ -67,51 +79,51 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     }
   };
   const downloadFileFun = async (id, type) => {
-    try {
-      //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
-      //const res= await 
-      const res = await publicAxios.get(
-        `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
-        { responseType: "blob" }   // <-- important for file download
-      );
+      try {
+        //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
+        //const res= await 
+        const res = await publicAxios.get(
+          `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
+          { responseType: "blob" }   // <-- important for file download
+        );
+  
+  
+        const url = window.URL.createObjectURL(
+          new Blob([res.data], { type: "application/zip" })
+        );
+  
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "documents.zip"); // you can rename as needed
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+      } catch (err) {
+        console.error("File download failed:", err);
+      }
+    };
+  
+const handleClear = () => {
+  // clear only newly selected files
+  setSelectedFiles([]);
 
+  // 🔑 restore backend files in UI
+  setFilesList([...originalFiles]);
 
-      const url = window.URL.createObjectURL(
-        new Blob([res.data], { type: "application/zip" })
-      );
+  // 🔑 keep backend payload intact
+  setFormData(prev => ({
+    ...prev,
+    fileName: originalFiles.join("|"),
+    filePath: prev.filePath
+  }));
 
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "documents.zip"); // you can rename as needed
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    } catch (err) {
-      console.error("File download failed:", err);
-    }
-  };
+  setFileSelected(false);
+  setNewFileSelected(false);
 
-  const handleClear = () => {
-    // clear only newly selected files
-    setSelectedFiles([]);
-
-    // 🔑 restore backend files in UI
-    setFilesList([...originalFiles]);
-
-    // 🔑 keep backend payload intact
-    setFormData(prev => ({
-      ...prev,
-      fileName: originalFiles.join("|"),
-      filePath: prev.filePath
-    }));
-
-    setFileSelected(false);
-    setNewFileSelected(false);
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
-  };
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+};
 
 
   // ✅ Load profile data
@@ -120,7 +132,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
       debugger;
       setFormData({
         id: profile.id,
-        studentId: profile.studentId,
+        facultyId:profile.facultyId,
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",
         email: profile.email || "",
@@ -130,57 +142,66 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
           : "",
         gender: profile.gender || "",
         userName: profile.userName || "",
-        // filesList:profile.files ||""
+       // filesList:profile.files ||""
       });
-      setFilesList(profile.files || []);
+ setFilesList(profile.files || []);
       try {
         if (profile.education) {
           const parsed = JSON.parse(profile.education);
           setEducationList(Array.isArray(parsed) ? parsed : [parsed]);
         }
+
       } catch {
         console.warn("⚠️ Invalid education JSON:", profile.education);
-      }
+      }try {
+  if (profile.work) {
+    const parsed = JSON.parse(profile.work);
+    setWorkList(Array.isArray(parsed) ? parsed : [parsed]);
+  }
+} catch {
+  console.warn("⚠️ Invalid workDetails JSON:", profile.workDetails);
+}
+
     }
   }, [profile]);
-  useEffect(() => {
-    if (profile) {
-      setFilesList(profile.files || []);
-      setExistingDocFiles(profile.files || []);
-      setOriginalFiles(profile.files || []);
-
-      setFormData(prev => ({
-        ...prev,
-        fileName: profile.files?.join("|") || "",
-        filePath: profile.filePath || ""
-      }));
-    }
-  }, [profile?.id]);
-
-
-  const handleRemoveSingleFile = (index) => {
-    debugger;
-    const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
-    //setExistingDocFiles(updatedFiles);
-    setFilesList(updatedFiles);
+ useEffect(() => {
+  if (profile) {
+    setFilesList(profile.files || []);
+    setExistingDocFiles(profile.files || []);
+    setOriginalFiles(profile.files || []);
 
     setFormData(prev => ({
       ...prev,
-      files: updatedFiles,
-      fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+      fileName: profile.files?.join("|") || "",
+      filePath: profile.filePath || ""
     }));
-    // flags
-    if (updatedFiles.length === 0) {
-      setFileSelected(false);
-      setNewFileSelected(false);
-    }
+  }
+}, [profile?.id]);
 
-    // clear input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
 
-  };
+  const handleRemoveSingleFile = (index) => { 
+    debugger;
+  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+  //setExistingDocFiles(updatedFiles);
+   setFilesList(updatedFiles);
+
+  setFormData(prev => ({
+    ...prev,
+    files: updatedFiles,
+    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+  }));
+   // flags
+  if (updatedFiles.length === 0) {
+    setFileSelected(false);
+    setNewFileSelected(false);
+  }
+
+  // clear input
+  if (fileInputRef.current) {
+    fileInputRef.current.value = "";
+  }
+  
+};
   // ✅ Format date for backend
   const formatDateForBackend = (dateStr) => {
     if (!dateStr) return null;
@@ -194,9 +215,10 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   // ✅ Validation (same as in UserForm)
   const validateForm = () => {
     const errs = {};
+    
     const nameRegex = /^[A-Za-z .-]+$/;
-    // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+   // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
+     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
@@ -225,11 +247,11 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-    if (!formData.userName.trim()) {
-      errs.userName = "Username is required.";
-    } else if (!emailRegex.test(formData.userName)) {
-      errs.userName = "Enter a valid Gmail address (e.g., user@gmail.com).";
-    }
+if (!formData.userName.trim()) {
+    errs.userName = "Username is required.";
+  } else if (!emailRegex.test(formData.userName)) {
+    errs.userName = "Enter a valid Gmail address (e.g., user@gmail.com).";
+  }
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";
@@ -245,6 +267,10 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
 
     if (educationList.length === 0)
       errs.education = "Add at least one education record.";
+
+    setErrors(errs);
+     if (workList.length === 0)
+      errs.work = "Add at least one work record.";
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -278,30 +304,50 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     setEducationList(educationList.filter((_, i) => i !== index));
   };
 
+
+  const addOrUpdateWork = () => {
+  if (!work.organization || !work.startDate || !work.role) {
+    Swal.fire("Please fill required work fields");
+    return;
+  }
+
+  if (workEditIndex !== null) {
+    const updated = [...workList];
+    updated[workEditIndex] = work;
+    setWorkList(updated);
+    setWorkEditIndex(null);
+  } else {
+    setWorkList([...workList, work]);
+  }
+
+  setWork({
+    organization: "",
+    startDate: "",
+    endDate: "",
+    role: "",
+    currentlyWorking: false,
+  });
+};
+const deleteWork = (index) => {
+  setWorkList(workList.filter((_, i) => i !== index));
+};
+const [isSubmitting, setIsSubmitting] = useState(false);
+
   // ✅ Submit form
   const handleSubmit = async (e) => {
     debugger;
     e.preventDefault();
+    if (isSubmitting) return;   // 🔒 BLOCK second call
     if (!validateForm()) return;
-
+ setIsSubmitting(true);
     const loggedInName = localStorage.getItem("name") || "System";
-<<<<<<< HEAD
-    const isFileRemoved =
-      originalFiles.length > 0 && filesList.length === 0;
-    //const finalFiles = filesList;
-
-    const payload = {
-      id: formData.id,
-      studentId: formData.studentId,
-=======
 const isFileRemoved =
   originalFiles.length > 0 && filesList.length === 0;
  //const finalFiles = filesList;
-   debugger;
+   
  const payload = {
-      id: formData.studentId,
-      studentId:formData.studentId,
->>>>>>> 6f14ed279e11e00bcf06f8a3f4ee7778011dad5d
+      id: formData.id,
+      facultyId:formData.facultyId,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.trim().toLowerCase(),
@@ -311,80 +357,68 @@ const isFileRemoved =
       passwordHash: profile.passwordHash,
       gender: formData.gender,
       education: JSON.stringify(educationList),
-      roleId: "1",
+      worK:JSON.stringify(workList),
+      roleId: 5,
       createdBy: profile.createdBy || null,
       createdDate: profile.createdDate || null,
       modifiedBy: loggedInName,
       modifiedDate: null,
-      document: null,
-      //   fileName: finalFiles.length > 0 ? filesList.join("|") : null,
-      //filePath: finalFiles.length > 0 ? formData.filePath : null,
-      //fileName: finalFiles.length > 0 ? finalFiles.join("|") : "",
-      fileName: isFileRemoved ? "" : filesList.join("|"),
-      filePath: formData.filePath   // 👈 ALWAYS send filePath
-      //filePath: formData.filePath || null   
-    };
+      document:null,
+   //   fileName: finalFiles.length > 0 ? filesList.join("|") : null,
+//filePath: finalFiles.length > 0 ? formData.filePath : null,
+//fileName: finalFiles.length > 0 ? finalFiles.join("|") : "",
+ fileName: isFileRemoved ? "" : filesList.join("|"),
+  filePath: formData.filePath   // 👈 ALWAYS send filePath
+//filePath: formData.filePath || null   
+};
 
-    try {
-      debugger;
+   try {
+    debugger;
 
-      // ✅ EXACT sponsor pattern
-      const res = await dispatch(updateStudent(payload)).unwrap();
-      const userId = res?.id || profile.studentId;
+    // ✅ EXACT sponsor pattern
+    const res = await dispatch(updateFacultyUserProfile(payload));
+    debugger;
+    const userId = res?.id || profile.facultyId;
 
-      console.log("UserId:", userId);
-      console.log("Selected files:", selectedFiles);
-
-      if (selectedFiles?.length > 0) {
-        await uploadFiles(userId);
-      }
-
-      await Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Profile updated successfully!",
-      });
-      // 2️⃣ Force fresh fetch BEFORE view page
-      await dispatch(fetchStudentProfile(formData.id)).unwrap();
-
-      // 3️⃣ Now navigate
-      onSave(payload);
-      //  onSave(payload);
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        text: "Update failed!",
-      });
+    console.log("UserId:", userId);
+    console.log("Selected files:", selectedFiles);
+debugger;
+    if (selectedFiles?.length > 0) {
+      await uploadFiles(userId);
     }
-<<<<<<< HEAD
-=======
 
-    await Swal.fire({
+    
+// 2️⃣ Force fresh fetch BEFORE view page
+await dispatch(fetchFacultyUserProfile(formData.facultyId));
+   await Swal.fire({
       icon: "success",
       title: "Success",
       text: "Profile updated successfully!",
+      confirmButtonText: "OK",
+      allowOutsideClick: false,
     });
-// 2️⃣ Force fresh fetch BEFORE view page
-await dispatch(fetchStudentProfile(formData.id)).unwrap();
 
-// 3️⃣ Now navigate
-onSave();
+    // ✅ navigate ONCE
+  onSave(); // just exit edit mode
+navigate("/view-faculty-profile", { replace: true });
+   
   //  onSave(payload);
   } catch (err) {
     Swal.fire({
       icon: "error",
       text: "Update failed!",
     });
->>>>>>> 6f14ed279e11e00bcf06f8a3f4ee7778011dad5d
+    setIsSubmitting(false); // allow retry only on error
   }
+}
   return (
     <div className="signup-container">
       <div className="signup-card">
-        <h2 className="walletheader">Edit Student Profile</h2>
+        <h2 className="walletheader">Edit Faculty Profile</h2>
 
         <form onSubmit={handleSubmit}>
           {/* Basic Details */}
-          <h2>Basic Details</h2>
+          <h3 className="section-title">Basic Details</h3>
 
           <div className="row">
             <div className="form-group">
@@ -491,75 +525,30 @@ onSave();
               </select>
               {errors.gender && <p className="error-text">{errors.gender}</p>}
             </div>
-
+               
           </div>
-          <div className="form-group col-12">
-            <label>Upload Profile Photo</label>
-            <input
-              type="file"
-              accept="image/*"
-              name="documents"
-              onChange={handleFileChange}
-              // multiple
-              ref={fileInputRef}
-            // disabled={isViewMode}
-            />
+<div className="form-group col-12">
+                <label>Upload Profile Photo</label>
+                <input
+                  type="file"
+                   accept="image/*"  
+                  name="documents"
+                  onChange={handleFileChange}
+                 // multiple
+                  ref={fileInputRef}
+                 // disabled={isViewMode}
+                />
 
-            {fileSelected && filesList.length > 0 && (
-              <button
-                type="button"
-                className="btn btn-sm btn-danger mt-2"
-                onClick={handleClear}
-                style={{ marginTop: "10px" }}
-              >
-                Clear
-              </button>
-            )}
-
-            {/* Display all files: backend + newly selected */}
-            {filesList.length > 0 && (
-              <div className="d-flex flex-column mt-2 rounded" style={{ marginTop: "5px" }}>
-
-                {/* Backend + selected files */}
-                {filesList.map((fileName, index) => (
-                  <div
-                    key={`file-${index}`}
-                    className="d-flex align-items-center border rounded p-2 mb-2"
-                    style={{
-                      gap: "12px",
-                      paddingLeft: "14px",
-                      paddingRight: "12px",
-                      color: "black"
-                    }}
-                  >
-                    <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() => handleRemoveSingleFile(index)}
-                      style={{ marginLeft: "5px" }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-
-                {/* Download button (backend only) */}
-                {selectedFiles.length === 0 && profile?.files?.length > 0 && (
+                {fileSelected && filesList.length > 0 && (
                   <button
                     type="button"
-                    className="btn btn-sm btn-primary mt-2"
-                    onClick={() => downloadFileFun(formData.id, "Student")}
-                    style={{ marginTop: "5px", marginLeft: "15px" }}
-
+                    className="btn btn-sm btn-danger mt-2"
+                    onClick={handleClear}
+                    style={{ marginTop: "10px" }}
                   >
-                    Download
+                    Clear
                   </button>
                 )}
-<<<<<<< HEAD
-              </div>
-            )}
-=======
 
                {/* Display all files: backend + newly selected */}
 { filesList.length > 0 && (
@@ -594,7 +583,7 @@ onSave();
       <button
         type="button"
         className="btn btn-sm btn-primary mt-2"
-        onClick={() => downloadFileFun(formData.studentId,"Student")}
+        onClick={() => downloadFileFun(formData.facultyId,"Faculty")}
         style={{marginTop:"5px",marginLeft:"15px"}}
         
       >
@@ -603,62 +592,82 @@ onSave();
     )}
   </div>
 )}
->>>>>>> 6f14ed279e11e00bcf06f8a3f4ee7778011dad5d
 
 
 
-
-          </div>
+                    
+                  </div>
           {/* Education Section */}
-          <h3 className="section-title">Education</h3>
+          <div className="education-header">
+  <h3 className="section-title">Qualification</h3>
+
+  <button
+    type="button"
+    className="add-btn"
+    onClick={addOrUpdateEducation}
+    disabled={!education.degree || !education.college || !education.year}
+  >
+    {editIndex !== null ? "Update" : "+ Add"}
+  </button>
+</div>
+
 
           <div className="row">
+            <div className="form-group ">
+    <label>Course *</label>
             <input
               type="text"
-              placeholder="Class/Course"
+              placeholder="Course"
               value={education.degree}
               onChange={(e) =>
                 setEducation({ ...education, degree: e.target.value })
               }
             />
+            </div>
+            <div className="form-group ">
+    <label>College *</label>
             <input
               type="text"
-              placeholder="School/College"
+              placeholder="College"
               value={education.college}
               onChange={(e) =>
                 setEducation({ ...education, college: e.target.value })
               }
             />
+            </div>
+              <div className="form-group ">
+    <label>Year *</label>
             <input
-              type="text"
-              placeholder="Year"
-              value={education.year}
-              maxLength={4}
-              onChange={(e) => {
-                let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
-                const currentYear = new Date().getFullYear();
+  type="text"
+  placeholder="Year"
+  value={education.year}
+  maxLength={4}
+  onChange={(e) => {
+    let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
+    const currentYear = new Date().getFullYear();
 
-                if (cleaned === "") {
-                  setEducation({ ...education, year: "" });
-                  return;
-                }
+    if (cleaned === "") {
+      setEducation({ ...education, year: "" });
+      return;
+    }
 
-                const enteredYear = Number(cleaned);
+    const enteredYear = Number(cleaned);
 
-                // ❌ Block entering a future year
-                if (enteredYear > currentYear) return;
+    // ❌ Block entering a future year
+    if (enteredYear > currentYear) return;
 
-                setEducation({ ...education, year: cleaned });
-              }}
-            />
+    setEducation({ ...education, year: cleaned });
+  }}
+/>
+</div>
 
-            <button
+            {/*<button
               type="button"
               className="sign-action-btn"
               onClick={addOrUpdateEducation}
             >
               {editIndex !== null ? "Update" : "Add"}
-            </button>
+            </button>*/}
           </div>
 
           {errors.education && <p className="error-text">{errors.education}</p>}
@@ -703,6 +712,148 @@ onSave();
               </tbody>
             </table>
           )}
+
+<div className="education-header">
+  <h3 className="section-title">Work Details</h3>
+
+  <button
+    type="button"
+    className="add-btn"
+    onClick={addOrUpdateWork}
+    disabled={!work.organization || !work.startDate || !work.role}
+  >
+    {workEditIndex !== null ? "Update" : "+ Add"}
+  </button>
+</div>
+
+
+<div className="row">
+  <div className="form-group ">
+    <label>Organization *</label>
+    <input
+      type="text"
+      value={work.organization}
+      onChange={(e) => setWork({ ...work, organization: e.target.value })}
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Start Date *</label>
+    <input
+      type="date"
+      value={work.startDate}
+      onChange={(e) =>
+      setWork({
+        ...work,
+        startDate: e.target.value,
+        // reset end date if it becomes invalid
+        /*endDate:
+          work.endDate && e.target.value > work.endDate
+            ? ""
+            : work.endDate,*/
+      })
+      
+    }
+       max={new Date().toISOString().split("T")[0]} 
+    />
+  </div>
+
+  <div className="form-group">
+    <label>End Date</label>
+    <input
+      type="date"
+       
+      disabled={work.currentlyWorking}
+         min={work.startDate || undefined}  
+           max={new Date().toISOString().split("T")[0]} 
+    value={work.endDate}
+      onChange={(e) => setWork({ ...work, endDate: e.target.value })}
+    />
+  </div>
+
+
+
+ 
+ <div className="form-group col-lg-3">
+    <label>Role *</label>
+    <input
+      type="text"
+      value={work.role}
+      onChange={(e) => setWork({ ...work, role: e.target.value })}
+      style={{width:"270px"}}
+    />
+  </div>
+  <div className="checkbox-group" style={{alignContent:"center"}}>
+    <label  className="work-checkbox">
+      <input
+        type="checkbox"
+        checked={work.currentlyWorking}
+        onChange={(e) =>
+          setWork({
+            ...work,
+            currentlyWorking: e.target.checked,
+            endDate: e.target.checked ? "" : work.endDate,
+          })
+        }
+      />
+      Currently Working
+    </label>
+  </div>
+  <div className="form-group" ></div>
+  </div>
+
+ {/* <div className="form-group">
+    <button
+      type="button"
+      className="sign-action-btn"
+      onClick={addOrUpdateWork}
+    >
+      {workEditIndex !== null ? "Update" : "Add"}
+    </button>
+  </div>*/}
+
+{workList.length > 0 && (
+  <table className="signup-table">
+    <thead>
+      <tr>
+        <th>Organization</th>
+        <th>Duration</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {workList.map((w, index) => (
+        <tr key={index}>
+          <td>{w.organization}</td>
+          <td>
+            {w.startDate} - {w.currentlyWorking ? "Present" : w.endDate}
+          </td>
+          <td>{w.role}</td>
+          <td>
+            <button
+              type="button"
+              className="sign-action-btn1"
+              onClick={() => {
+                setWork(w);
+                setWorkEditIndex(index);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              className="sign-action-btn1 danger"
+              onClick={() => deleteWork(index)}
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
 
           {/* Username */}
           <h3 className="section-title">Account</h3>
