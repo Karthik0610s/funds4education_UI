@@ -162,13 +162,13 @@ export const fetchFeaturedScholarshipsReq = async () => {
 export const fetchDropdownDataReq = async () => {
   try {
     
-    const [countryRes, stateRes, genderRes, religionRes,classRes,courseRes] = await Promise.all([
+    const [countryRes, stateRes, genderRes, religionRes,classRes] = await Promise.all([
       publicAxios.get(ApiKey.Country),
       publicAxios.get(ApiKey.State),
       publicAxios.get(ApiKey.Gender),
       publicAxios.get(ApiKey.Religion),
       publicAxios.get(ApiKey.Class),
-      publicAxios.get(ApiKey.GroupCourse),
+      //publicAxios.get(ApiKey.GroupCourse),
     ]);
 
     const countries = Array.isArray(countryRes.data)
@@ -190,14 +190,11 @@ export const fetchDropdownDataReq = async () => {
       ? classRes.data
       : classRes.data?.data || [];
 
-       const courses=Array.isArray(courseRes.data)
-      ? courseRes.data
-      : courseRes.data?.data || [];
       
 
     return {
       error: false,
-      data: { countries, states, genders, religions,classList ,courses},
+      data: { countries, states, genders, religions,classList},
       message: "",
       errorMsg: "",
     };
@@ -211,9 +208,24 @@ export const fetchDropdownDataReq = async () => {
     else if (err.request) errorMsg = "Request error";
     else errorMsg = err.errorMsg || "Something went wrong while fetching dropdown data";
 
-    return { error: true, data: { countries: [], states: [], genders: [], religions: [] ,classList:[],courses:[]}, message: "", errorMsg };
+    return { error: true, data: { countries: [], states: [], genders: [], religions: [] ,classList:[]}, message: "", errorMsg };
   }
 };
+export const fetchCoursesByClassIdReq = async (classId) => {
+  const res = await publicAxios.get(
+    `${ApiKey.Course}/by-classid`,
+    { params: { classId } }
+  );
+
+  const data = Array.isArray(res.data) ? res.data : [];
+
+  return data.map(c => ({
+    id: c.courseId,
+    name: c.courseName,
+    classId: c.classId,
+  }));
+};
+
 export const fetchApplicationsBySponsorReq = async (sponsorId, status = "") => {
   try {
     if (!sponsorId) {

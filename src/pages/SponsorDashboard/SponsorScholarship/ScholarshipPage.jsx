@@ -368,17 +368,27 @@ const sliceLen = useResponsiveSlice();
   </table>
 
   {/* PAGINATION */}
+{displayedScholarships.length > 0 && totalPages > 1 && (
   <div className="pagination">
-    <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((prev) => prev - 1)}
+    >
       Prev
     </button>
 
-    <span>{currentPage} / {totalPages}</span>
+    <span>
+      {currentPage} / {totalPages}
+    </span>
 
-    <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>
+    <button
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((prev) => prev + 1)}
+    >
       Next
     </button>
   </div>
+)}
 
 </section>
 

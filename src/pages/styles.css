@@ -2665,6 +2665,7 @@ body {
   margin-top: 25px;
   margin-bottom: 10px;
   color: #0c0c0c;
+  font-size: 32px;
  
 }
 
@@ -5233,6 +5234,7 @@ textarea {
   font-weight: bold;
   margin-bottom: 10px;
   color: #111827;
+  margin-top: 12px;
 
 }
 

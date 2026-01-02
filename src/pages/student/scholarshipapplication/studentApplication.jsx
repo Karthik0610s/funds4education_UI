@@ -179,7 +179,7 @@ const handleView = (app) => {
         >
           <option value="All">All</option>
           <option value="Submitted">Submitted</option>
-          <option value="In Review">In Review</option>
+          {/*<option value="In Review">In Review</option>*/}
           <option value="Rejected">Rejected</option>
           <option value="Approved">Approved</option>
           <option value="Draft">Draft</option>
