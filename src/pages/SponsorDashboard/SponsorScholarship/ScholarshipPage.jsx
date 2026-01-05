@@ -186,7 +186,7 @@ const sliceLen = useResponsiveSlice();
               <div className="scholarship-actions">
                 <input
                   type="text"
-                  placeholder="Search by title..."
+                  placeholder="Search by Scholarships..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -277,7 +277,7 @@ const sliceLen = useResponsiveSlice();
 
 </td>*/}
 <td data-label="Title" className="tooltip-cell">
-      <span className="tooltip-text">{sch.benefits}</span>
+      <span className="tooltip-text">{sch.scholarshipName}</span>
 
       <span>
         {sch.scholarshipName?.slice(0, sliceLen)}

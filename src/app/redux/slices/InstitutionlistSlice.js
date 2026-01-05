@@ -75,11 +75,11 @@ export const fetchInstitutionList = (params) => async (dispatch) => {
       dispatch(setInstitutions(res));
     } else {
       dispatch(setError());
-      Swal.fire("Error", res.errorMsg, "error");
+     /* Swal.fire("Error", res.errorMsg, "error");*/
     }
   } catch {
     dispatch(setError());
-    Swal.fire("Error", "Something went wrong.", "error");
+   /* Swal.fire("Error", "Something went wrong.", "error"); */
   }
 };
 

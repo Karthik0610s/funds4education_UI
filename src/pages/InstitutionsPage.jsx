@@ -209,7 +209,7 @@ export default function InstitutionsPage() {
 
         <section className="list-container">
           {loading && <p>Loading institutions...</p>}
-          {error && <p style={{ color: "red" }}>Failed to load institutions</p>}
+         {/* {error && <p style={{ color: "red" }}>Failed to load institutions</p>} */}
           {!loading && institutions.length === 0 && (
             <p style={{ color: "#6b7280" }}>No institutions found</p>
           )}

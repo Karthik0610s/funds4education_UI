@@ -7,6 +7,7 @@ import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarsh
  import { ApiKey } from "../../../api/endpoint";
  import { publicAxios } from "../../../api/config";
  import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
+ import { FiX } from "react-icons/fi";
 export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const dispatch = useDispatch();
 
@@ -349,7 +350,27 @@ onSave();
 }
   return (
     <div className="signup-container">
-      <div className="signup-card">
+        <div className="signup-card" style={{ position: "relative" }}>
+        <button
+          type="button"
+          onClick={onCancel}
+          aria-label="Close"
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            background: "transparent",
+            border: "none",
+            fontSize: "24px",
+            cursor: "pointer",
+            color: "#555",
+            zIndex: 10
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "#d11a2a")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "#555")}
+        >
+          <FiX />
+        </button>
         <h2 className="walletheader">Edit Student Profile</h2>
 
         <form onSubmit={handleSubmit}>
