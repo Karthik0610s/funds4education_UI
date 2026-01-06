@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiBell, FiMenu, FiX, FiLogOut } from "react-icons/fi";
-
+import { FaUserPlus } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
 import logo from "../../assests/logo2.png";
 import { routePath as RP } from "../router/routepath";
@@ -197,17 +197,61 @@ useEffect(() => {
                 <Link to={RP.InstitutionsPage}>Institution</Link>
             </div>
             <div className="header-right">
-              <Link to="/login">Login</Link>
-              <Link
-                to="#"
-                className="signup-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowSignupModal(true);
-                }}
-              >
-                Sign Up
-              </Link>
+<Link
+  to="/login"
+  style={{
+    display: "inline-flex",
+    fontSize: "1rem",
+    alignItems: "center",
+    position: "relative",
+    top: "4px",   // 👈 adjust 2–6px if needed
+    textDecoration: "none",
+    color: "#1f2937",
+    fontWeight: 500,
+  }}
+>
+  <i
+    className="fa fa-user"
+    aria-hidden="true"
+    style={{
+      marginRight: "6px",
+      fontSize: "18px",
+
+      color: "#0c0907ff",
+    }}
+  ></i>
+  Login
+</Link>
+             <Link
+  to="#"
+  onClick={(e) => {
+    e.preventDefault();
+    setShowSignupModal(true);
+  }}
+  style={{
+    display: "inline-flex",
+    fontSize: "1rem",
+    alignItems: "center",
+    position: "relative",
+    top: "4px", // 👈 adjust if needed
+    textDecoration: "none",
+    color: "#000000",
+    fontWeight: 500,
+    cursor: "pointer",
+  }}
+>
+  <i
+    className="fa fa-user-plus"
+    aria-hidden="true"
+    style={{
+      marginRight: "6px",
+      color: "#000000",
+      fontSize: "18px",
+    }}
+  ></i>
+  Sign Up
+</Link>
+
             </div>
           </div>
            )}
