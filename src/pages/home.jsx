@@ -439,7 +439,10 @@ const handleClickInstitution = () => checkAndNavigate("5", "faculty");
         <div className="footer-left">
           <a href="/contact">Contact Us</a>
           <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of use</a>
+          <a href="/terms">Terms and Conditions</a>
+          <a href="/termsofuse">Terms of Use</a>
+
+
         </div>
         <div className="footer-right">
          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">

@@ -8140,74 +8140,77 @@ p {
   margin-left: 12px;
   font-weight: 500;
 }
-/* Container for the whole page */
-.contact-container {
+/* Page container */
+.terms-container {
   background: #f3f3e9;
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
-  margin: 0;
-  padding: 0;
 }
 
-/* Header section */
-.contact-header {
+/* Header */
+.terms-header {
   background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
-  padding: 25px 40px;
+  padding: 30px 40px;
   margin-top: 45px;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
 }
 
-/* Header title */
-.contact-header h1 {
+.terms-header h1 {
   font-size: 50px;
   font-weight: 500;
-  margin-top: 40px;
   color: #1f2937;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main content */
+.terms-content {
+  padding: 40px 0;
 }
 
 /* Company name */
-.contact-company-name {
-  margin-left: 40px;
-  color: #c2410c;
-  font-weight: 500;
+.terms-company-name {
   margin-left: 80px;
-  margin-bottom: 10px;
+  color: #c2410c;
   font-size: 40px;
-  font-family: inherit;
+  font-weight: 500;
+  margin-bottom: 20px;
 }
 
-/* Section title */
-.contact-section-title {
-  margin-top: 30px;
-  margin-left:80px;
+/* Section titles */
+.terms-section-title {
+  margin-top: 35px;
+  margin-left: 80px;
   font-weight: 600;
   font-size: 28px;
+  color: #1f2937;
 }
 
 /* Paragraph text */
-.contact-text {
+.terms-text {
   font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
   line-height: 1.8;
   font-size: 25px;
   margin-left: 80px;
+  margin-right: 80px;
+  color: #374151;
 }
 
-/* Labels like Phone and Email */
-.contact-label {
-  color: #c2410c;
-  font-family: "Conv_Futura Book BT" !important;
+/* Lists */
+.terms-list {
+  margin-left: 120px;
+  font-size: 24px;
+  line-height: 1.8;
+  color: #374151;
+  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
 }
 
-/* Example for error text */
-.profile-error {
-  color: #d32f2f;
-  font-size: 13px;
-  margin-left: 12px;
-  font-weight: 500;
+/* Footer */
+.terms-footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 20px;
+  color: #1f2937;
 }
-
-

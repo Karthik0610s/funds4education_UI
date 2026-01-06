@@ -1,155 +1,111 @@
 import React from "react";
-const styles = {
-  sectionTitle: {
-    marginTop: "24px",
-    marginBottom: "8px",
-    color: "#1f2937",
-  },
-  paragraph: {
-    marginBottom: "16px",
-    lineHeight: "1.6",
-    color: "#374151",
-  },
-  list: {
-    marginBottom: "16px",
-    paddingLeft: "20px",
-    lineHeight: "1.6",
-    color: "#374151",
-  },
-};
+import "./styles.css";
 
 const TermsAndConditions = () => {
   const currentYear = new Date().getFullYear();
   const lastUpdated = new Date().toLocaleDateString();
 
   return (
-  <div
-    style={{
-      maxWidth: "900px",
-      margin: "40px auto",
-      padding: "20px",
-      background: "#fff",
-      borderRadius: "10px",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-      fontFamily: "Arial, sans-serif",
-      marginBottom: "5px",
-    }}
-  >
-    <h1
-      style={{
-        textAlign: "center",
-        marginBottom: "30px",
-        color: "#1f2937",
-      }}
-    >
-      VidyāSetu – Terms and Conditions
-    </h1>
+    <div className="terms-container">
+      {/* Header */}
+      <div className="terms-header">
+        <h1>Terms & Conditions</h1>
+      </div>
 
-    <p style={styles.paragraph}>
-      <strong>Last updated:</strong> {lastUpdated}
-    </p>
+      {/* Content */}
+      <div className="terms-content">
+        <h2 className="terms-company-name">VidyāSetu</h2>
 
-    <p style={styles.paragraph}>
-      Welcome to VidyāSetu. By accessing or using our website, mobile
-      application, or services (collectively, the “Platform”), you agree to
-      comply with and be bound by these Terms and Conditions (“Terms”).
-    </p>
+        <p className="terms-text">
+          <strong>Last updated:</strong> {lastUpdated}
+        </p>
 
-    <h3 style={styles.sectionTitle}>1. About VidyāSetu</h3>
-    <p style={styles.paragraph}>
-      VidyāSetu is an educational platform that provides information, tools,
-      and services related to scholarships, applications, learning resources,
-      and student support.
-    </p>
+        <p className="terms-text">
+          By accessing, registering, or using the VidyāSetu website or mobile
+          application (“Platform”), you agree to comply with and be bound by
+          these Terms and Conditions, along with our Privacy Policy and other
+          applicable policies.
+        </p>
 
-    <h3 style={styles.sectionTitle}>2. Eligibility</h3>
-    <p style={styles.paragraph}>
-      You must be at least 18 years old to use the Platform, or use it under
-      the supervision of a parent/guardian. You agree to provide accurate and
-      complete information during registration and usage.
-    </p>
+        <h3 className="terms-section-title">1. About VidyāSetu</h3>
+        <p className="terms-text">
+          VidyāSetu is an online platform that enables students to apply for
+          scholarships and access e-learning content, sponsors to review and
+          fund scholarships, and institutions and faculty to upload educational
+          content.
+        </p>
 
-    <h3 style={styles.sectionTitle}>3. User Accounts</h3>
-    <p style={styles.paragraph}>
-      You are responsible for maintaining the confidentiality of your account
-      credentials. Any activity carried out using your account will be deemed
-      as your responsibility. VidyāSetu reserves the right to suspend or
-      terminate accounts that violate these Terms.
-    </p>
+        <h3 className="terms-section-title">2. Eligibility</h3>
+        <p className="terms-text">
+          Users must be 18 years or older to register. Minors may use the
+          Platform only through a parent or legal guardian. Users must be
+          legally capable of entering contracts under the Indian Contract Act,
+          1872.
+        </p>
 
-    <h3 style={styles.sectionTitle}>4. Use of the Platform</h3>
-    <ul style={styles.list}>
-      <li>Not to misuse the Platform or access it for unlawful purposes.</li>
-      <li>Not to upload false, misleading, or harmful content.</li>
-      <li>
-        Not to attempt to disrupt or compromise the security or functionality
-        of the Platform.
-      </li>
-    </ul>
+        <h3 className="terms-section-title">
+          3. User Registration & Account Responsibility
+        </h3>
+        <p className="terms-text">
+          Users must provide accurate information during registration and are
+          responsible for maintaining the confidentiality of login credentials.
+        </p>
 
-    <h3 style={styles.sectionTitle}>
-      5. Scholarship & Information Disclaimer
-    </h3>
-    <p style={styles.paragraph}>
-      VidyāSetu acts as an information facilitator only. We do not guarantee
-      scholarship approval, funding, or selection. Scholarship details may
-      change at any time; users are advised to verify information from official
-      sources.
-    </p>
+        <h3 className="terms-section-title">4. Student Terms</h3>
+        <ul className="terms-list">
+          <li>All application details must be true and accurate</li>
+          <li>Submission does not guarantee scholarship approval</li>
+          <li>False information may lead to account suspension</li>
+        </ul>
 
-    <h3 style={styles.sectionTitle}>6. Intellectual Property</h3>
-    <p style={styles.paragraph}>
-      All content on VidyāSetu, including text, graphics, logos, and software,
-      is the property of VidyāSetu or its licensors.
-    </p>
+        <h3 className="terms-section-title">5. Sponsor Terms</h3>
+        <p className="terms-text">
+          Sponsors approve or reject applications at their discretion.
+          VidyāSetu acts only as a facilitation platform and is not responsible
+          for funding disputes.
+        </p>
 
-    <h3 style={styles.sectionTitle}>7. Payments (If Applicable)</h3>
-    <p style={styles.paragraph}>
-      Certain services may be paid. All payments are non-refundable unless
-      explicitly stated.
-    </p>
+        <h3 className="terms-section-title">
+          6. Faculty & Institution Terms
+        </h3>
+        <p className="terms-text">
+          Faculty and institutions must upload only original or authorized
+          educational content and grant VidyāSetu the right to host and display
+          such content.
+        </p>
 
-    <h3 style={styles.sectionTitle}>8. Third-Party Services & Ads</h3>
-    <p style={styles.paragraph}>
-      The Platform may display third-party links or advertisements (including
-      Google Ads). VidyāSetu is not responsible for third-party content,
-      policies, or practices.
-    </p>
+        <h3 className="terms-section-title">7. Prohibited Activities</h3>
+        <ul className="terms-list">
+          <li>Uploading false or illegal content</li>
+          <li>Unauthorized system access</li>
+          <li>Misuse of user data</li>
+          <li>Abusive or defamatory behavior</li>
+        </ul>
 
-    <h3 style={styles.sectionTitle}>9. Limitation of Liability</h3>
-    <p style={styles.paragraph}>
-      To the maximum extent permitted by law, VidyāSetu shall not be liable
-      for any indirect, incidental, or consequential damages.
-    </p>
+        <h3 className="terms-section-title">8. Intellectual Property</h3>
+        <p className="terms-text">
+          All platform design, logos, and software belong to VidyāSetu. Uploaded
+          content remains owned by the uploader.
+        </p>
 
-    <h3 style={styles.sectionTitle}>10. Privacy</h3>
-    <p style={styles.paragraph}>
-      Your use of the Platform is also governed by our Privacy Policy.
-    </p>
+        <h3 className="terms-section-title">9. Disclaimer</h3>
+        <p className="terms-text">
+          Services are provided on an “as is” basis without guarantees of
+          uninterrupted access or scholarship approval.
+        </p>
 
-    <h3 style={styles.sectionTitle}>11. Termination</h3>
-    <p style={styles.paragraph}>
-      We may suspend or terminate access to the Platform at any time without
-      prior notice if these Terms are violated.
-    </p>
+        <h3 className="terms-section-title">10. Governing Law</h3>
+        <p className="terms-text">
+          These Terms are governed by the laws of India, and courts in India
+          shall have exclusive jurisdiction.
+        </p>
 
-    <h3 style={styles.sectionTitle}>12. Changes to Terms</h3>
-    <p style={styles.paragraph}>
-      VidyāSetu reserves the right to update these Terms at any time.
-    </p>
-
-    <h3 style={styles.sectionTitle}>13. Governing Law</h3>
-    <p style={styles.paragraph}>
-      These Terms shall be governed by and construed in accordance with the
-      laws of India.
-    </p>
-
-    <p style={{ textAlign: "center", marginTop: "40px" }}>
-      © {currentYear} VidyāSetu. All rights reserved.
-    </p>
-  </div>
-);
-
+        <p className="terms-footer">
+          © {currentYear} VidyāSetu. All rights reserved.
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default TermsAndConditions;
