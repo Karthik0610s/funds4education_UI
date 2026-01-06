@@ -8154,6 +8154,7 @@ p {
 .contact-header {
   background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
   padding: 25px 40px;
+  margin-top: 48px;
   box-shadow: 0 3px 5px rgba(0,0,0,0.15);
 }
 
@@ -8161,6 +8162,7 @@ p {
 .contact-header h1 {
   font-size: 40px;
   font-weight: 500;
+  margin-top: 40px;
   color: #1f2937;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: left;
@@ -8169,24 +8171,29 @@ p {
 
 /* Company name */
 .contact-company-name {
+  margin-left: 40px;
   color: #c2410c;
   font-weight: 500;
+  margin-left: 80px;
   margin-bottom: 10px;
-  font-size: 35px;
+  font-size: 40px;
   font-family: inherit;
 }
 
 /* Section title */
 .contact-section-title {
   margin-top: 30px;
+  margin-left:80px;
   font-weight: 600;
   font-size: 28px;
 }
 
 /* Paragraph text */
 .contact-text {
+  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
   line-height: 1.8;
-  font-size: 18px;
+  font-size: 25px;
+  margin-left: 80px;
 }
 
 /* Labels like Phone and Email */
