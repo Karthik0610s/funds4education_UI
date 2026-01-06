@@ -8299,3 +8299,97 @@ p {
   margin: 0; 
   text-align: center;/* remove default margin */
 }
+@media (max-width: 480px) {
+
+  /* Center all text */
+  .contact-container,
+  .terms-container {
+    text-align: center;
+  }
+
+  /* Remove left margins */
+  .contact-company-name,
+  .contact-section-title,
+  .contact-text,
+  .terms-company-name,
+  .terms-section-title,
+  .terms-sub-title,
+  .terms-text,
+  .terms-list {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Header */
+  .contact-header h1,
+  .terms-header h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  /* Paragraph & list text */
+  .contact-text,
+  .terms-text,
+  .terms-list {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  /* List alignment fix */
+  .terms-list {
+    list-style-position: inside;
+    padding-left: 0;
+  }
+
+  /* Last updated text */
+  .terms-last-updated {
+    text-align: center;
+    font-size: 0.75rem;
+  }
+}
+@media (max-width: 768px) {
+
+  /* 🔹 Headings LEFT aligned */
+  .contact-header h1,
+  .terms-header h1,
+  .contact-company-name,
+  .terms-company-name,
+  .contact-section-title,
+  .terms-section-title,
+  .terms-sub-title {
+    text-align: left;
+  }
+
+  /* 🔹 Paragraphs & lists JUSTIFIED */
+  .contact-text,
+  .terms-text,
+  .terms-list {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
+  /* 🔹 Mobile-friendly margins */
+  .contact-company-name,
+  .terms-company-name,
+  .contact-section-title,
+  .terms-section-title,
+  .terms-sub-title,
+  .contact-text,
+  .terms-text {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .terms-list {
+    margin-left: 40px;
+    margin-right: 20px;
+  }
+
+  /* 🔹 Last updated stays center */
+  .terms-last-updated {
+    text-align: center;
+    font-size: 0.75rem;
+  }
+}
+
+
