@@ -3,24 +3,19 @@ import "./styles.css";
 
 const TermsAndConditions = () => {
   const currentYear = new Date().getFullYear();
-  const lastUpdated = new Date().toLocaleDateString();
 
   return (
     <div className="terms-container">
       {/* Header */}
       <div className="terms-header">
         <h1>Terms & Conditions</h1>
+        <p className="terms-last-updated">Last updated on 06 January 2026</p>
       </div>
 
       {/* Content */}
       <div className="terms-content">
         <h2 className="terms-company-name">VidyāSetu</h2>
-
-        <p className="terms-text">
-          <strong>Last updated:</strong> {lastUpdated}
-        </p>
-
-        <p className="terms-text">
+ <p className="terms-text">
           By accessing, registering, or using the VidyāSetu website or mobile
           application (“Platform”), you agree to comply with and be bound by
           these Terms and Conditions, along with our Privacy Policy and other
