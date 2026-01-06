@@ -8293,3 +8293,9 @@ p {
   font-size: 20px;
   color: #1f2937;
 }
+.terms-last-updated {
+  font-size: 1rem; /* smaller text */
+  color: #555; /* optional, lighter color */
+  margin: 0; 
+  text-align: center;/* remove default margin */
+}
