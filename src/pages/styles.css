@@ -8395,8 +8395,8 @@ p {
 .privacy-policy-lastupdate{
   font-size: 1rem;
     line-height: 1.6;
-    margin-left: 20px;
-}
+    margin-left: 79px;
+ }
 /* Responsive */
 @media (max-width: 768px) {
   .privacy-policy-header h1 {
@@ -8423,4 +8423,9 @@ p {
     margin-bottom: 16px;
     padding-left: 10px;
 }
+.privacy-policy-lastupdate{
+  font-size: 1rem;
+    line-height: 1.6;
+    margin-left: 30px;
+ }
 }
