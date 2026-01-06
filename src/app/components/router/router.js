@@ -48,6 +48,7 @@ import ChatWidget from "../chatwidget.jsx";// 🔹 Map routes to header variants
 import PrivacyPolicy from "../../../pages/privacypolicy.jsx";
 import ViewFacultyProfile from "../../../pages/Faculty/login/viewProfile.jsx";
 import FacultyProfile from "../../../pages/Faculty/login/facultyProfile.jsx";
+import TermsAndUse from "../../../pages/termsofuse.jsx";
 const routeToVariant = {
   [RP.home]: "public",
   [RP.studentdashboard]: "student-profile",
@@ -67,6 +68,7 @@ const routeToVariant = {
   [RP.studentrewards]: "studentrewards",
   [RP.studentrewardsredemption]: "studentrewardsredemption",
   [RP.sponsordashboardreport]: "sponsordashboardreport",
+
  // [RP.resetPassword]
 
   [RP.monetizationads]: "monetizationads",
@@ -170,8 +172,10 @@ function App() {
            <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/contact" element={<ContactUs />} />
          <Route path="/privacy" element={<PrivacyPolicy />} />
+           <Route path="/termsofuse" element={<TermsAndUse />} />
          <Route path={RP.InstitutionsPage} element={<InstitutionsPage/>} />
 <Route path="/institution/view/:id" element={<InstitutionViewPage />} />
+
         </Routes>
       </Layout>
     </Router>

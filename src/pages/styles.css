@@ -8258,7 +8258,15 @@ p {
   font-size: 28px;
   color: #1f2937;
 }
-
+/* Sub Titles */
+.terms-sub-title {
+  font-size: 16px;
+      margin-left: 80px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
 /* Paragraph text */
 .terms-text {
   font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
