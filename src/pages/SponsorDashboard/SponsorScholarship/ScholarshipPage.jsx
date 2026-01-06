@@ -186,7 +186,7 @@ const sliceLen = useResponsiveSlice();
               <div className="scholarship-actions">
                 <input
                   type="text"
-                  placeholder="Search by title..."
+                  placeholder="Search by Scholarships..."
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -277,7 +277,7 @@ const sliceLen = useResponsiveSlice();
 
 </td>*/}
 <td data-label="Title" className="tooltip-cell">
-      <span className="tooltip-text">{sch.benefits}</span>
+      <span className="tooltip-text">{sch.scholarshipName}</span>
 
       <span>
         {sch.scholarshipName?.slice(0, sliceLen)}
@@ -368,17 +368,27 @@ const sliceLen = useResponsiveSlice();
   </table>
 
   {/* PAGINATION */}
+{displayedScholarships.length > 0 && totalPages > 1 && (
   <div className="pagination">
-    <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)}>
+    <button
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((prev) => prev - 1)}
+    >
       Prev
     </button>
 
-    <span>{currentPage} / {totalPages}</span>
+    <span>
+      {currentPage} / {totalPages}
+    </span>
 
-    <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>
+    <button
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((prev) => prev + 1)}
+    >
       Next
     </button>
   </div>
+)}
 
 </section>
 

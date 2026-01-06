@@ -597,18 +597,15 @@ useEffect(() => {
           </div>
         );
 
-       case "profile-role-based":
+      case "profile-role-based":
   if (!isLoggedIn) return renderVariantLinks("public");
 
-  return roleName === "Student"
-    ? renderMobileLinks("student-profile")
-    : roleName === "Faculty"
-      ? renderMobileLinks("faculty-profile")
-      : renderMobileLinks("sponsor-profile");
+  if (roleName === "Student") return renderVariantLinks("student-profile");
+  if (roleName === "Faculty") return renderVariantLinks("faculty-profile");
+  if (roleName === "Sponsor") return renderVariantLinks("sponsor-profile");
 
-  
-      default:
-        return null;
+  return null;
+
     }
   };
 

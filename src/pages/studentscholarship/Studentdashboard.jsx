@@ -6,6 +6,7 @@ import { logout } from "../../app/redux/slices/authSlice";
 import {
   fetchScholarshipList,
   fetchFeaturedScholarships,
+  fetchCoursesByClassId,clearCourses,
   fetchDropdownData,
 } from "../../app/redux/slices/ScholarshipSlice";
 import Swal from "sweetalert2";
@@ -36,6 +37,10 @@ const StudentDashboard = () => {
   );
   const { live = [], upcoming = [], featured = [] } = data;
   const [imgError, setImgError] = useState(false);
+  const { courses, courseLoading } = useSelector(
+  (state) => state.scholarship
+);
+
 
   const roleId =
     useSelector((state) => state.auth.roleId) ||
@@ -77,23 +82,39 @@ const canSeeEligibility = userId && roleId && roleName;
   });
 
   // ✅ Load dropdowns once
-  useEffect(() => {
-    const loadDropdowns = async () => {
-      const res = await dispatch(fetchDropdownData());
-      if (res && !res.error) {
-        setDropdownData(res.data);
-      } else {
-        console.error(res?.errorMsg);
-      }
-    };
-    loadDropdowns();
-  }, [dispatch]);
+useEffect(() => {
+  const loadDropdowns = async () => {
+    const res = await dispatch(fetchDropdownData());
+    if (res && !res.error) {
+      setDropdownData({
+        ...res.data,
+        courses: res.data.courses.map(c => ({
+          id: c.courseId,
+          name: c.courseName,
+          classId: c.classId, // keep for future filtering
+        })),
+      });
+    }
+  };
+  loadDropdowns();
+}, [dispatch]);
 
   // ✅ Fetch scholarships whenever filters or tab change
   // 🔹 Load featured only once
   useEffect(() => {
     dispatch(fetchFeaturedScholarships());
   }, [dispatch]);
+
+  useEffect(() => {
+  if (filters.class.length === 0) {
+    dispatch(clearCourses());
+    return;
+  }
+
+  const classId = filters.class[0];
+  dispatch(fetchCoursesByClassId(classId));
+}, [filters.class, dispatch]);
+
 const sidebarRef = useRef(null);
 const paginationRef = useRef(null);
 
@@ -476,12 +497,15 @@ const ads1 = [
 
           <div className="filter-group">
             {[
-              { key: "class", label: "Class", options: dropdownData.classList },
+             /* { key: "class", label: "Class", options: dropdownData.classList }, */
               { key: "country", label: "Country", options: dropdownData.countries },
-              { key: "gender", label: "Gender", options: dropdownData.genders },
-              { key: "religion", label: "Religion", options: dropdownData.religions },
               { key: "state", label: "State", options: dropdownData.states },
-              { key: "course", label: "Course", options: dropdownData.courses },
+              /*{ key: "gender", label: "Gender", options: dropdownData.genders },*/
+              { key: "religion", label: "Religion", options: dropdownData.religions },
+              { key: "gender", label: "Gender", options: dropdownData.genders },
+              /*{ key: "state", label: "State", options: dropdownData.states },*/
+              { key: "class", label: "Class", options: dropdownData.classList },              
+              { key: "course", label: "Course", options: courses },
             ].map(({ key, label, options }) => (
               <div key={key} className="filter-dropdown">
                 <button
