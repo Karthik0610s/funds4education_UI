@@ -8140,6 +8140,77 @@ p {
   margin-left: 12px;
   font-weight: 500;
 }
+/* Container for the whole page */
+.contact-container {
+  background: #f3f3e9;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header section */
+.contact-header {
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+  padding: 25px 40px;
+  margin-top: 45px;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+}
+
+/* Header title */
+.contact-header h1 {
+  font-size: 50px;
+  font-weight: 500;
+  margin-top: 40px;
+  color: #1f2937;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin: 0;
+}
+
+/* Company name */
+.contact-company-name {
+  margin-left: 40px;
+  color: #c2410c;
+  font-weight: 500;
+  margin-left: 80px;
+  margin-bottom: 10px;
+  font-size: 40px;
+  font-family: inherit;
+}
+
+/* Section title */
+.contact-section-title {
+  margin-top: 30px;
+  margin-left:80px;
+  font-weight: 600;
+  font-size: 28px;
+}
+
+/* Paragraph text */
+.contact-text {
+  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
+  line-height: 1.8;
+  font-size: 25px;
+  margin-left: 80px;
+}
+
+/* Labels like Phone and Email */
+.contact-label {
+  color: #c2410c;
+  font-family: "Conv_Futura Book BT" !important;
+}
+
+/* Example for error text */
+.profile-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+
 /* Page container */
 .terms-container {
   background: #f3f3e9;
