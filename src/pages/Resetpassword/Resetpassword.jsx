@@ -59,9 +59,15 @@ export default function ResetPassword() {
       });
 
       if (res.data.success) {
-        setSuccess(res.data.message);
-        setTimeout(() => navigate("/login"), 1500);
-      } else {
+  setSuccess(res.data.message);
+
+  // ✅ FORCE LOGOUT AFTER PASSWORD RESET
+  localStorage.clear();
+  setTimeout(() => {
+    navigate("/login", { replace: true });
+  }, 1500);
+}
+else {
         setError(res.data.message);
       }
     } catch (err) {
@@ -85,13 +91,16 @@ export default function ResetPassword() {
           <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#1D4F56" }}>
             Reset Password
           </h2>
-
+          {/* 
           <p style={{ fontSize: "0.875rem", color: "#1D4F56", marginBottom: "1.5rem" }}>
-            Remembered your password?{" "}
-            <a href="/login" style={{ color: "#1D4F56", textDecoration: "underline" }}>
+            Remembered your password?{" "} 
+            {/*<a href="/login" style={{ color: "#1D4F56", textDecoration: "underline" }}>
               Back to Login
             </a>
+            
           </p>
+          */}
+  
 
           {/* Current Password */}
           <div style={{ marginBottom: "1rem", position: "relative" }}>

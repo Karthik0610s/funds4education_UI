@@ -13,7 +13,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../app/redux/slices/authSlice";
+import { loginUser , clearError  } from "../../app/redux/slices/authSlice";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -185,6 +185,7 @@ export default function LoginPage() {
                   onChange={(e) => {
                     setUserType(e.target.value);
                     setErrors((prev) => ({ ...prev, userType: "" }));
+                    dispatch(clearError()); // ✅ IMPORTANT
                   }}
                 />
                 <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
@@ -202,6 +203,7 @@ export default function LoginPage() {
               onChange={(e) => {
                 setIdentifier(e.target.value);
                 setErrors((prev) => ({ ...prev, identifier: "" }));
+                dispatch(clearError()); 
               }}
               placeholder="Enter username or email"
             />
@@ -219,6 +221,7 @@ export default function LoginPage() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                   setErrors((prev) => ({ ...prev, password: "" }));
+                  dispatch(clearError());
                 }}
               />
               <button

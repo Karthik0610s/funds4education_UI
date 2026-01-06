@@ -31,6 +31,7 @@ export const ApiKey = {
    CourseByClass: "/Course",
    InsertChat: "/Chat/send",
    GetSessionId: "/Chat/start-session",
+   GetSessionClosed:"Chat/close-session",
    EmailExistCheck: "/userDto/by-email",
    ChangePassword: "Auth/change-password",
    ResetPassword: "Auth/reset-password",
@@ -48,5 +49,6 @@ Faculty:"/faculty",
   Collegetype : "/Filter/college-types",
   Districts : "/Filter/districts",
   States : "/Filter/state",
+  GetSessionClosed:"Chat/close-session",
 
 };

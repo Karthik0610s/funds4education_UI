@@ -73,7 +73,11 @@ const authSlice = createSlice({
       state.userId = null;
       state.token = null;
       state.userType = null;
+      state.error = null;
       localStorage.clear();
+    },
+    clearError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -86,6 +90,9 @@ const authSlice = createSlice({
       // ✅ Success
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null; // ✅ safety
+
+        
 
         const {
           name,
@@ -126,5 +133,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout , clearError  } = authSlice.actions;
 export default authSlice.reducer;

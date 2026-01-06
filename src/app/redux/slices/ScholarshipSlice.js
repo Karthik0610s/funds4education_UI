@@ -5,6 +5,7 @@ import {
   fetchScholarshipByStatusReq,
   fetchScholarshipByIdReq,
   fetchFeaturedScholarshipsReq,
+  fetchCoursesByClassIdReq,
   fetchDropdownDataReq, // ✅ added import
   //fetchScholarshipByStatusReq,   // ✅ existing API (live/upcoming)
   //fetchScholarshipByIdReq,        // ✅ existing API (by ID)
@@ -16,23 +17,26 @@ import {
 const scholarshipSlice = createSlice({
   name: "scholarship",
   initialState: {
-    loading: false,
-    error: false,
-    data: {
-      live: [],
-      upcoming: [],
-      featured: [], // ✅ new field
-      applications: [], // ✅ add this field
-
-    },
-    dropdownData: {             // ✅ added dropdown structure
-      countries: [],
-      states: [],
-      genders: [],
-      religions: [],
-    },
-    selectedScholarship: null,
+  loading: false,
+  error: false,
+  courses: [],
+  courseLoading: false,
+  data: {
+    live: [],
+    upcoming: [],
+    featured: [],
+    applications: [],
   },
+  dropdownData: {
+    countries: [],
+    states: [],
+    genders: [],
+    religions: [],
+    classList: [],
+  },
+  selectedScholarship: null,
+},
+
   reducers: {
     setLoading: (state) => {
       state.loading = true;
@@ -90,7 +94,16 @@ const scholarshipSlice = createSlice({
       state.loading = false;
       state.error = false;
       state.data.applications = Array.isArray(payload) ? payload : [];
-    },
+    },setCourses: (state, { payload }) => {
+  state.courseLoading = false;
+  state.courses = Array.isArray(payload) ? payload : [];
+},
+setCourseLoading: (state) => {
+  state.courseLoading = true;
+},
+clearCourses: (state) => {
+  state.courses = [];
+},
     updateApplicationStatusInState: (state, { payload }) => {
       const { applicationId, status, modifiedBy } = payload;
 
@@ -113,14 +126,17 @@ export const {
   addData,
   addFeatured,
   addSponsorScholarship,
-  setDropdownData,   // ✅ added export
+  setDropdownData,
   setError,
   setSelectedScholarship,
   clearSelectedScholarship,
-  setApplications, // ✅ new export
+  setApplications,
   updateApplicationStatusInState,
-
+  setCourses,          // 👈 ADD
+  setCourseLoading,    // 👈 ADD
+  clearCourses,        // 👈 ADD
 } = scholarshipSlice.actions;
+
 
 export default scholarshipSlice.reducer;
 
@@ -326,10 +342,7 @@ export const fetchDropdownData = () => async (dispatch) => {
           id: cl.id ?? cl.classId,
           name: cl.className ?? cl.name,
         })),
-        courses: courses.map((cl) => ({
-          id: cl.id ?? cl.courseIds,
-          name: cl.name ?? cl.groupName,
-        })),
+          courses: [], // EMPTY INITIALLY
       };
 
       dispatch(setDropdownData(normalized));
@@ -344,6 +357,25 @@ export const fetchDropdownData = () => async (dispatch) => {
   }
 };
 
+export const fetchCoursesByClassId =
+  (classId) =>
+  async (dispatch) => {
+    try {
+      if (!classId) {
+        dispatch(clearCourses());
+        return;
+      }
+
+      dispatch(setCourseLoading());
+
+      const courses = await fetchCoursesByClassIdReq(classId);
+
+      dispatch(setCourses(courses));
+    } catch (error) {
+      dispatch(clearCourses());
+      console.error("Failed to fetch courses", error);
+    }
+  };
 
 
 export const updateApplicationStatus =

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
 import defaultImage from "../../assests/DefaultImage.png";
 import { publicAxios } from "../../../api/config";
+import { ApiKey } from "../../../api/endpoint";
 
 const Header = ({ variant = "public" }) => {
   const navigate = useNavigate();
@@ -47,6 +48,19 @@ const desktopMenuRef = useRef(null);
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const handleLogout = async () => {
+  const userId = localStorage.getItem("userId");
+
+  if (userId) {
+    await publicAxios.post((`${ApiKey.GetSessionClosed}?sessionId=${userId}`)
+    );
+  }
+
+  localStorage.clear(); // or remove specific keys
+
+  navigate("/login");
+};
+
   
 // MOBILE MENU CLOSE
 useEffect(() => {
@@ -271,11 +285,7 @@ useEffect(() => {
             <FiLogOut
               size={22}
               className="logout-icon"
-              onClick={() => {
-                localStorage.clear();
-                dispatch(logout());
-                navigate("/");
-              }}
+              onClick={handleLogout}
               style={{ cursor: "pointer" }}
             />
           </>
@@ -376,11 +386,7 @@ useEffect(() => {
             <FiLogOut
               size={22}
               className="logout-icon"
-              onClick={() => {
-                localStorage.clear();
-                dispatch(logout());
-                navigate("/");
-              }}
+              onClick={handleLogout}
               style={{ cursor: "pointer" }}
             />
           </>
@@ -458,11 +464,7 @@ useEffect(() => {
                 <FiLogOut
                   size={22}
                   className="logout-icon"
-                  onClick={() => {
-                    localStorage.clear();
-                    dispatch(logout());
-                    navigate("/");
-                  }}
+                  onClick={handleLogout}
                   style={{ cursor: "pointer" }}
                 />
               )}
@@ -573,11 +575,7 @@ useEffect(() => {
             <FiLogOut
               size={22}
               className="logout-icon"
-              onClick={() => {
-                localStorage.clear();
-                dispatch(logout());
-                navigate("/");
-              }}
+              onClick={handleLogout}
               style={{ cursor: "pointer" }}
             />
           </>
@@ -597,18 +595,15 @@ useEffect(() => {
           </div>
         );
 
-       case "profile-role-based":
+      case "profile-role-based":
   if (!isLoggedIn) return renderVariantLinks("public");
 
-  return roleName === "Student"
-    ? renderMobileLinks("student-profile")
-    : roleName === "Faculty"
-      ? renderMobileLinks("faculty-profile")
-      : renderMobileLinks("sponsor-profile");
+  if (roleName === "Student") return renderVariantLinks("student-profile");
+  if (roleName === "Faculty") return renderVariantLinks("faculty-profile");
+  if (roleName === "Sponsor") return renderVariantLinks("sponsor-profile");
 
-  
-      default:
-        return null;
+  return null;
+
     }
   };
 
@@ -760,11 +755,7 @@ const renderMobileLinks = (forcedVariant) => {
         <FiLogOut
           size={22}
           className="logout-icon"
-          onClick={() => {
-            localStorage.clear();
-            dispatch(logout());
-            navigate("/");
-          }}
+          onClick={handleLogout}
         />
 
         {/* MENU ICON */}
@@ -840,11 +831,7 @@ const renderMobileLinks = (forcedVariant) => {
     ): (
       <div
         className="header-left"
-        onClick={() => {
-          localStorage.clear();
-          dispatch(logout());
-          navigate("/");
-        }}
+        onClick={handleLogout}
       >
         <img src={logo} alt="VidyaSetu Logo" className="logo" />
         <span className="brand">VidyāSetu</span>
@@ -865,11 +852,7 @@ const renderMobileLinks = (forcedVariant) => {
             <FiLogOut
               size={22}
               className="logout-icon"
-              onClick={() => {
-                localStorage.clear();
-                dispatch(logout());
-                navigate("/");
-              }}
+              onClick={handleLogout}
             />
 
             <div className="menu-icon-desktop" onClick={toggleMenu}>
