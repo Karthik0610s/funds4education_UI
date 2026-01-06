@@ -3,19 +3,20 @@ import axios from "axios";
 import "./chatwidget.css";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
-
+ 
 const ChatWidget = () => {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([
     { sender: "agent", text: "Hi! Search your Scholarship" },
   ]);
   const [input, setInput] = useState("");
+  const hasClosedRef = useRef(false);
   const [sessionId, setSessionId] = useState(null);
-
+ 
   const chatEndRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
-
-
+ 
+ 
   // Auto-scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,20 +48,20 @@ const ChatWidget = () => {
 
   // 👉 OPEN CHAT → CHECK SESSION OR CREATE NEW
   const handleOpenChat = async () => {
-    
+   debugger;
     setShowChat(true);
-
+ 
     let storedSession = localStorage.getItem("chatSessionId");
-
+ 
     if (!storedSession) {
       try {
         const userId = localStorage.getItem("userId") || null;
-
-const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);       
-
+ 
+const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);      
+ 
         const newSessionId = res.data.sessionId.sessionId;
         localStorage.setItem("chatSessionId", newSessionId);
-
+ 
         setSessionId(newSessionId);
       } catch (error) {
         console.error("Session creation failed:", error);
@@ -90,29 +91,30 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
 
   // 👉 SEND MESSAGE
   const sendMessage = async () => {
+    debugger;
     if (!input.trim()) return;
-
+ 
     setMessages((prev) => [...prev, { sender: "user", text: input }]);
-
+ 
     const messageToSend = input;
     setInput("");
  setIsTyping(true);
     try {
-      
+     
       const payload = {
         sessionId: localStorage.getItem("chatSessionId")?Number(localStorage.getItem("chatSessionId"))
         :sessionId,
         message: messageToSend,
         sender: localStorage.getItem("username") || "user",
       };
-
+ 
       const res = await publicAxios.post(ApiKey.InsertChat,
         payload
       );
-
+ 
       // 🌟 API RETURNS { answer: "...message..." }
       const reply = res.data.answer;
-
+ 
       setMessages((prev) => [...prev, { sender: "agent", text: reply }]);
     } catch (error) {
       console.error(error);
@@ -123,7 +125,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
     }
       setIsTyping(false);
   };
-
+ 
   return (
     <>
       {/* Floating Button */}
@@ -131,7 +133,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
         <div className="chat-float-btn">💬</div>
         <span className="chat-float-text">Chat Us</span>
       </div>
-
+ 
       {/* CHAT POPUP */}
       {showChat && (
         <div className="chat-popup">
@@ -141,7 +143,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
               ✕
             </button>
           </div>
-
+ 
           <div className="chat-body">
             {messages.map((msg, idx) => (
               <p
@@ -160,7 +162,7 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
   )}
             <div ref={chatEndRef} />
           </div>
-
+ 
           <div className="chat-input-area">
             <input
               type="text"
@@ -179,5 +181,5 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
     </>
   );
 };
-
+ 
 export default ChatWidget;

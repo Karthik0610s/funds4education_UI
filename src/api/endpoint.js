@@ -49,5 +49,6 @@ Faculty:"/faculty",
   Collegetype : "/Filter/college-types",
   Districts : "/Filter/districts",
   States : "/Filter/state",
+  GetSessionClosed:"Chat/close-session",
 
 };
