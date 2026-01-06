@@ -8279,9 +8279,9 @@ p {
 
 /* Lists */
 .terms-list {
-  margin-left: 120px;
+  margin-left: 110px;
   font-size: 24px;
-  line-height: 1.8;
+  line-height: 1.6;
   color: #374151;
   font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
 }
@@ -8325,7 +8325,7 @@ p {
   margin-top: 40px;
   color: #1f2937;
   /*font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
-  text-align: left;
+  text-align: center;
   margin: 0;
 }
 
@@ -8485,7 +8485,9 @@ p {
   .terms-sub-title {
     text-align: left;
   }
-
+  .terms-header h1{
+    text-align: center;
+  }
   /* 🔹 Paragraphs & lists JUSTIFIED */
   .contact-text,
   .terms-text,
