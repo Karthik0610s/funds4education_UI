@@ -20,6 +20,30 @@ const ChatWidget = () => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+ useEffect(() => {
+    const handleTabClose = (e) => {
+      const storedSession = localStorage.getItem("chatSessionId");
+      const userId = localStorage.getItem("userId");
+
+      // ⭐ Call API synchronously best effort
+      if (storedSession) {
+        publicAxios.post(
+          `${ApiKey.GetSessionClosed}?sessionId=${userId}`
+        ).catch(err => console.log("tab close api fail"));
+      }
+
+      // ⭐ Remove ONLY this key
+      localStorage.removeItem("chatSessionId");
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, []);
+
+
 
   // 👉 OPEN CHAT → CHECK SESSION OR CREATE NEW
   const handleOpenChat = async () => {
@@ -46,6 +70,23 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
       setSessionId(storedSession);
     }
   };
+
+  //close session
+  const closeChatSession = async () => {
+  try {
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
+    await publicAxios.post(
+      (`${ApiKey.GetSessionClosed}?sessionId=${userId}`)
+    );
+         //localStorage.clear();
+    localStorage.removeItem("chatSessionId");
+  } catch (error) {
+    console.error("Failed to close session:", error);
+  }
+};
+
 
   // 👉 SEND MESSAGE
   const sendMessage = async () => {
