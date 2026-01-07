@@ -105,7 +105,7 @@ const PrivacyPolicy = () => {
         <p className="privacy-policy-text">
           <strong className="privacy-policy-label">Email:</strong>{" "}
           <a href="mailto:support@vidhyasetu.com" className="privacy-policy-link">
-            support@vidhyasetu.com
+            info@lore-technology.com
           </a>
         </p>
 

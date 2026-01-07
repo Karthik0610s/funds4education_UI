@@ -96,7 +96,7 @@ const TermsAndConditions = () => {
         </p>
 
         <p className="terms-footer">
-          © {currentYear} VidyāSetu. All rights reserved.
+          © 2026 VidyāSetu. All rights reserved.
         </p>
       </div>
     </div>
