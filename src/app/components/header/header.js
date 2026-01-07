@@ -339,8 +339,8 @@ useEffect(() => {
               Welcome, {userName || "User"}
             </span>
 
-            {/* Bell Icon */}
-            <FiBell size={22} className="cursor-pointer" />
+            
+            
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>

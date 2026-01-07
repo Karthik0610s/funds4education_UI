@@ -9,7 +9,7 @@ const TermsAndConditions = () => {
       {/* Header */}
       <div className="terms-header">
         <h1>Terms & Conditions</h1>
-        <p className="terms-last-updated">Last updated on 06 January 2026</p>
+        <p className="terms-last-updated">Last updated on 06 Jan 2026</p>
       </div>
 
       {/* Content */}
