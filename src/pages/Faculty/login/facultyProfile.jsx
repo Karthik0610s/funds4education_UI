@@ -655,34 +655,34 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group ">
               <label>Course *</label>
               <input
-                type="text"
-                placeholder="Course"
-                value={education.degree}
-                onInput={(e) => {
-                  // ❌ hide special chars & numbers while entering
-                  e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-                  e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-                }}
-                onChange={(e) =>
-                  setEducation({ ...education, degree: e.target.value })
-                }
-              />
+  type="text"
+  placeholder="Course"
+  value={education.degree}
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+/>
+
             </div>
             <div className="form-group ">
               <label>College *</label>
               <input
-                type="text"
-                placeholder="College"
-                value={education.college}
-                onInput={(e) => {
-                  // ❌ hide invalid chars
-                  e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-                  e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-                }}
-                onChange={(e) =>
-                  setEducation({ ...education, college: e.target.value })
-                }
-              />
+  type="text"
+  placeholder="College"
+  value={education.college}
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, college: e.target.value })
+  }
+/>
+
 
             </div>
             <div className="form-group ">
@@ -781,10 +781,18 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group ">
               <label>Organization *</label>
               <input
-                type="text"
-                value={work.organization}
-                onChange={(e) => setWork({ ...work, organization: e.target.value })}
-              />
+  type="text"
+  value={work.organization}
+  placeholder="Organization"
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setWork({ ...work, organization: e.target.value })
+  }
+/>
+
 
             </div>
 
@@ -828,11 +836,18 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group col-lg-3">
               <label>Role *</label>
               <input
-                type="text"
-                value={work.role}
-                onChange={(e) => setWork({ ...work, role: e.target.value })}
-                style={{ width: "270px" }}
-              />
+  type="text"
+  value={work.role}
+  placeholder="Role"
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setWork({ ...work, role: e.target.value })
+  }
+/>
+
             </div>
             <div className="checkbox-group" style={{ alignContent: "center" }}>
               <label className="work-checkbox">
@@ -912,7 +927,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
           {/* Username */}
           <h3 className="section-title">Account</h3>
           <div className="form-group">
-            <label>Username *</label>
+            <label>User Name(Email) *</label>
             <input
               type="text"
               value={formData.userName}

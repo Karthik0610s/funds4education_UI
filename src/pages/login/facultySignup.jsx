@@ -58,11 +58,13 @@ const emailRegex =
     const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
 const phoneRegex = /^[1-9]\d{9}$/;
-  const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
+  const courseRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,150}$/;
   const collegeRegex = /^[A-Za-z\s]{0,250}$/;
   const roleRegex = /^[A-Za-z0-9\s.]{0,150}$/;
   const organizationRegex = /^[A-Za-z\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
+  const blockSpecialCharsRegex = /^[^@#$%^*]*$/;
+
 
   const isValidEmail = (email) => {
   return emailRegex.test(email.trim());
@@ -737,30 +739,32 @@ const deleteWork = (index) => {
   type="text"
   placeholder="Course"
   value={education.degree}
-  maxLength={150}
   onChange={(e) => {
-    if (courseRegex.test(e.target.value)) {
-      setEducation({ ...education, degree: e.target.value });
+    const value = e.target.value;
+    if (blockSpecialCharsRegex.test(value)) {
+      setEducation({ ...education, degree: value });
     }
   }}
 />
+
 </div>
 
 
     <div className="form-group">
     <label>College / University Name <span className="required">*</span></label>                  
 
-                  <input
+                 <input
   type="text"
-  placeholder="College / University"
+  placeholder="College / University Name"
   value={education.college}
-  maxLength={250}
   onChange={(e) => {
-    if (collegeRegex.test(e.target.value)) {
-      setEducation({ ...education, college: e.target.value });
+    const value = e.target.value;
+    if (blockSpecialCharsRegex.test(value)) {
+      setEducation({ ...education, college: value });
     }
   }}
 />
+
 </div>
 
              <div className="form-group">
@@ -951,12 +955,18 @@ const deleteWork = (index) => {
     <div className="education-grid">
         <div className="form-group">
     <label>Organization<span className="required">*</span></label>
-      <input
-        type="text"
-        placeholder="Organization"
-        value={work.organization}
-        onChange={(e) => setWork({ ...work, organization: e.target.value })}
-      />
+     <input
+  type="text"
+  placeholder="Organization"
+  value={work.organization}
+  onChange={(e) => {
+    const value = e.target.value;
+    if (blockSpecialCharsRegex.test(value)) {
+      setWork({ ...work, organization: value });
+    }
+  }}
+/>
+
       </div>
   <div className="form-group">
     <label>Start Date<span className="required">*</span></label>
@@ -989,11 +999,17 @@ const deleteWork = (index) => {
    <div className="form-group">
     <label>Role<span className="required">*</span></label>
         <input
-          type="text"
-          placeholder="Role"
-          value={work.role}
-          onChange={(e) => setWork({ ...work, role: e.target.value })}
-        />
+  type="text"
+  placeholder="Role"
+  value={work.role}
+  onChange={(e) => {
+    const value = e.target.value;
+    if (blockSpecialCharsRegex.test(value)) {
+      setWork({ ...work, role: value });
+    }
+  }}
+/>
+
       </div>
 
       <label style={{ alignItems: "center", gap: "6px" }}>

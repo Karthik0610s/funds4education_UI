@@ -21,8 +21,8 @@ const collegeRegex = /^[A-Za-z0-9(),-./\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,2}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
-//const text250Regex = /^[A-Za-z0-9.,\/\-\s]{0,250}$/;
-const text250Regex = /^[\s\S]{0,250}$/;
+const text250Regex = /^[A-Za-z0-9\s.,'"%&(){}|//\-:;!?]{0,250}$/;
+//const text250Regex = /^[A-\s\S]{0,250}$/;
 
 
 /*const scholarshipOptions = [
@@ -279,7 +279,7 @@ const handleRemoveSingleFile = (index) => {
       case "extraCurricularActivities":
       case "awardsAchievements":
       case "notesComments":
-        regex = collegeRegex;
+        regex = text250Regex;
         break;
       default:
         regex = null;
@@ -1133,7 +1133,7 @@ accept=".pdf,.doc,.docx,.xls,.xlsx"
       </button>
 
       <button className="sign-action-btn1" onClick={(e) => handleSubmit(e, "Submitted")}>
-        {application ? "Update" : "Submit"}
+        {application ? "Submit" : "Submit"}
       </button>
     </>
   )}

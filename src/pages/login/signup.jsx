@@ -47,8 +47,8 @@ const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^[1-9]\d{9}$/;
-  const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
-  const collegeRegex = /^[A-Za-z\s]{0,250}$/;
+  const courseRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,150}$/;
+  const collegeRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
@@ -94,9 +94,32 @@ else if (!phoneRegex.test(basicDetails.phone)) {
 
 
     // Date of Birth
-    if (!basicDetails.dob) {
-      stepErrors.dob = "Date of birth is required.";
+    // Date of Birth
+if (!basicDetails.dob) {
+  stepErrors.dob = "Date of birth is required.";
+} else {
+  const dob = new Date(basicDetails.dob);
+  const todayDate = new Date();
+
+  if (dob > todayDate) {
+    stepErrors.dob = "Date of birth cannot be in the future.";
+  } else {
+    let age = todayDate.getFullYear() - dob.getFullYear();
+    const monthDiff = todayDate.getMonth() - dob.getMonth();
+    const dayDiff = todayDate.getDate() - dob.getDate();
+
+    // Adjust age if birthday not yet reached this year
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
     }
+
+    if (age < 10) {
+      stepErrors.dob = "Age must be at least 10 years.";
+    } else if (age > 79) {
+      stepErrors.dob = "Age cannot be more than 79 years.";
+    }
+  }
+}
 
     // Gender
     if (!basicDetails.gender) {

@@ -2664,6 +2664,7 @@ body {
   .signup-header h2 {
     margin-bottom: 0.6rem;
     /* add spacing between lines */
+    font-size: 31px;
   }
 
   .signup-header p {
@@ -6011,6 +6012,7 @@ textarea {
 
   .sponsorsignup-header h2 {
     margin-bottom: 0.6rem;
+    font-size: 31px;
     /* spacing between lines */
   }
 
@@ -6635,6 +6637,34 @@ p {
     font-weight: 600;
     /* bold all data-label text */
     color: #000;
+  }
+  .applications-actions {
+    display: flex;
+    flex-wrap: wrap;        /* keep in one line */
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;         /* allow horizontal scroll */
+  }
+
+  .applications-actions input {
+    min-width: 160px;
+    height: 36px;
+    font-size: 13px;
+    padding: 0 8px;
+  }
+
+  .applications-filter {
+    min-width: 80px;
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .applications-btn-new {
+    height: 36px;
+    font-size: 13px;
+    padding: 0 12px;
+    white-space: nowrap;      /* prevent line break */
   }
 }
 
@@ -7752,40 +7782,9 @@ p {
     flex-direction: column;
   }
 
+  /* Header adjustments */
   .va-header h1 {
     margin-top: 8px;
-    /* or 0 */
-    font-size: 1.8rem;
-    /* optional: better mobile fit */
-  }
-  .va-section-content p span{
-    padding-left: 4px;
-    flex: auto;
-  }
-  .va-section-content p strong{
-  }
-  .va-right-container h2{
-    margin-bottom: 1px;
-  }
-  .va-section-content{
-    margin-top: 12px;
-  }
-  /* Sidebar takes full width on mobile */
-  .va-left-container {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #ddd;
-    padding: 15px 20px;
-  }
-
-  /* Main content takes full width */
-  .va-right-container {
-    width: 100%;
-    padding: 20px;
-  }
-
-  /* Reduce header font size */
-  .va-header h1 {
     font-size: 1.6rem;
   }
 
@@ -7793,26 +7792,59 @@ p {
     font-size: 0.9rem;
   }
 
-  /* Reduce section heading size */
+  /* Sidebar full width */
+  .va-left-container {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 20px;
+  }
+
+  /* Main content full width */
+  .va-right-container {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .va-right-container h2 {
+    margin-bottom: 4px;
+  }
+
+  /* Section spacing */
+  .va-section-content {
+    margin-top: 12px;
+  }
+
+  /* Section heading */
   .va-section h2 {
     font-size: 1.2rem;
     margin-bottom: 12px;
   }
 
-  /* Reduce strong label width so text wraps nicely */
-  .va-section-content p strong {
-    min-width: 120px;
-    width: fit-content;
-  }
-
-  /* Adjust section content font size and spacing */
+  /* Paragraph layout */
   .va-section-content p {
+    display: block;
+    flex-wrap: wrap;
+    gap: 5px;
     font-size: 0.95rem;
     margin-bottom: 10px;
-    gap: 5px;
   }
 
-  /* Uploaded files list adjustments */
+  /* Labels */
+  .va-section-content p strong {
+    min-width: 120px;
+    width: auto;
+    font-weight: 600;
+  }
+
+  /* Values */
+  .va-section-content p span {
+    padding-left: 4px;
+    flex: 1;
+    word-break: break-word;
+  }
+
+  /* Uploaded files list */
   .va-section-content ul {
     padding-left: 15px;
   }
@@ -7822,12 +7854,13 @@ p {
     margin-bottom: 4px;
   }
 
-  /* Download button smaller */
+  /* Download button */
   .va-btn-download {
-    padding: 10px 10px;
-    font-size: 0.65rem;
+    padding: 8px 10px;
+    font-size: 0.7rem;
   }
 }
+
 
 .tooltip-cell {
   position: relative;
@@ -8378,7 +8411,10 @@ p {
   margin-left: 80px;
   margin-right: 80px;
   color: #374151;
-  text-align: center;
+}
+
+.terms-text strong{
+    padding-left: 27.1rem;
 }
 
 /* Lists */

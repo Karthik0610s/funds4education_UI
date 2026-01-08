@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
       
       {/* Header */}
       <div className="privacy-policy-header">
-        <h1>Privacy Policy - VidyaSetu</h1>
+        <h1>Privacy Policy</h1>
          <p className="privacy-policy-lastupdate">
           Last updated: 06 Jan 2026
         </p>
@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
       {/* Content */}
       <div className="privacy-policy-content">
 
-       {/* <h2 className="privacy-policy-platform-name">VidyaSetu</h2> */}
+        <h2 className="privacy-policy-platform-name">VidyaSetu</h2> 
 
         <p className="privacy-policy-text">
           VidyaSetu (“We”, “Us”, “Our”) respects your privacy and is committed to

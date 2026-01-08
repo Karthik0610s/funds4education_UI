@@ -600,7 +600,7 @@ console.log("Errors:", errs);
               value={education.degree}
               onInput={(e) => {
                 // hide numbers + special chars while entering
-                e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+                e.target.value = e.target.value.replace(/[^A-Za-z0-9.,&()_"'/|{}\/\-\s]/g, "");
                 e.target.value = e.target.value.replace(/\s{2,}/g, " ");
               }}
               onChange={(e) =>
@@ -614,7 +614,7 @@ console.log("Errors:", errs);
               value={education.college}
               onInput={(e) => {
                 // hide numbers + special chars
-                e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+                e.target.value = e.target.value.replace(/[^A-Za-z0-9.,&()_"'/|{}\/\-\s]/g, "");
                 e.target.value = e.target.value.replace(/\s{2,}/g, " ");
               }}
               onChange={(e) =>
