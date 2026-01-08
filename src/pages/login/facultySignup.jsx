@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import { uploadFormFilesReq } from "../../api/scholarshipapplication/scholarshipapplication";
 export default function SignUpPage() {
   const [step, setStep] = useState(0);
-  const [userType, setUserType] = useState("student"); // default to student
+  const [userType, setUserType] = useState("faculty"); // default to student
   const [showPassword, setShowPassword] = useState(false);
 const [workErrors, setWorkErrors] = useState({});
 

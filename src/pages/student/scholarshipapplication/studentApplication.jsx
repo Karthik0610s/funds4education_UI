@@ -17,7 +17,7 @@ const ApplicationsPage = () => {
   // Redux state
   const { data: applications = [], loading = false } =
     useSelector((state) => state.scholarshipApplicationList || {});
-
+console.log(applications,"applications");
   const [filter, setFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -26,11 +26,12 @@ const ApplicationsPage = () => {
   const [selectedApplication, setSelectedApplication] = useState(null);
   const studentId = localStorage.getItem("userId");
 
-  useEffect(() => {
-    
-    dispatch(fetchScholarshipApplicationListbyStudent(studentId));
-  }, [dispatch, studentId]);
+ useEffect(() => {
+  // ✅ Data already exists — no need to refetch
+  
 
+  dispatch(fetchScholarshipApplicationListbyStudent(studentId));
+}, [dispatch, studentId]);
   // Filtered applications based on status
   const filteredApps =
     filter === "All"

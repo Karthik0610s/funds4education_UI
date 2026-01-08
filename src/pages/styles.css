@@ -7884,6 +7884,7 @@ p {
   gap: 12px;
   align-items: center;
   margin-bottom: 20px;
+  margin-top:5%
 }
 
 /* Search Input */
@@ -8101,7 +8102,7 @@ p {
 
   .top-bar {
     flex-wrap: wrap;
-    padding: 20px;
+    /* padding: 20px; */
   }
 }
 

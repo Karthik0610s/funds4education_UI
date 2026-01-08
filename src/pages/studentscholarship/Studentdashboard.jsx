@@ -489,11 +489,21 @@ const ads1 = [
 >
 
           {/* ⭐ MOBILE CLOSE BUTTON */}
-          <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
+          {/* <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
             ✕ Close
-          </div>
+          </div> */}
 
-          <div className="filter-title">Category</div>
+          <div className="filter-header">
+  
+
+  <span className="filter-title">Category</span>
+  <span
+    className="mobile-filter-close"
+    onClick={() => setShowFilter(false)}
+  >
+    ✕
+  </span>
+</div>
 
           <div className="filter-group">
             {[
@@ -822,7 +832,30 @@ const ads1 = [
                 <p>No scholarships found.</p>
               )}
             </div>
+ {/* ===== MOBILE ONLY PAGINATION ===== */}
+  {totalPages > 1 && (
+    <div className="pagination-mobile">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(p => p - 1)}
+        className="pagination-btn"
+      >
+        ← Previous
+      </button>
 
+      <span className="page-info">
+        Page {currentPage} of {totalPages}
+      </span>
+
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(p => p + 1)}
+        className="pagination-btn"
+      >
+        Next →
+      </button>
+    </div>
+  )}
             <div className="ads-container">
                {/*<div className="ad-box" style={{marginBottom:"8px"}}>
                 {/*<h4>{ads[currentAd].title}</h4>
@@ -901,7 +934,7 @@ const ads1 = [
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="pagination-controls"  ref={paginationRef}>
+              <div className="pagination-controls desktop-only"  ref={paginationRef}>
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
