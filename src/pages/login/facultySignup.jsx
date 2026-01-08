@@ -97,7 +97,7 @@ const phoneRegex = /^[1-9]\d{9}$/;
     
     if (step === 1) {
       if (educationList.length === 0)
-        stepErrors.education = "Add at least one education record.";
+        stepErrors.education = "At least one qualification details is required.";
        if (workList.length === 0)
         stepErrors.work = "Add at least one work record.";
     }
@@ -1054,7 +1054,7 @@ const deleteWork = (index) => {
 
         {/* Step 2: Verification */}
         {step === 2 && (
-          <div>
+          <div className="verfiy">
             <h3>Verification</h3>
             <div className="row">
               <div className="form-group">

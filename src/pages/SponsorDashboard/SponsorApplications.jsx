@@ -329,21 +329,19 @@ const filteredApplications = useMemo(() => {
 
           {/* Pagination */}
           {filteredApplications.length > 0 && (
-            <div className="pagination">
- <button
-      className="btn"
+<div className="pagination">
+    <button
       disabled={currentPage === 1}
       onClick={() => setCurrentPage((prev) => prev - 1)}
     >
       Prev
     </button>
 
-    <span className="page-indicator">
+    <span>
       {currentPage} / {totalPages}
     </span>
 
     <button
-      className="btn"
       disabled={currentPage === totalPages}
       onClick={() => setCurrentPage((prev) => prev + 1)}
     >

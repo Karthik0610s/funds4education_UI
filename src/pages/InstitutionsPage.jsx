@@ -5,6 +5,8 @@ import { publicAxios } from "../api/config";
 import { ApiKey } from "../api/endpoint";
 import { useNavigate } from "react-router-dom";
 import "../pages/styles.css";
+import { FaFilter } from "react-icons/fa";
+
 import {
   fetchInstitutionList,
   fetchStates,
@@ -32,7 +34,10 @@ export default function InstitutionsPage() {
 const [showFilter, setShowFilter] = useState(false);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
- 
+
+  // 1️⃣ MOBILE OVERLAY STATE
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+
   const [filters, setFilters] = useState({
     state: "",
     district: "",
@@ -43,6 +48,7 @@ const [showFilter, setShowFilter] = useState(false);
 
   const ITEMS_PER_PAGE = 5;
 
+  /* ===== FETCH LIST WITH FILTERS ===== */
   useEffect(() => {
     dispatch(
       fetchInstitutionList({
@@ -58,6 +64,7 @@ const [showFilter, setShowFilter] = useState(false);
     );
   }, [dispatch, currentPage, search, filters]);
 
+  /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
     dispatch(fetchStates());
     dispatch(fetchLocations());
@@ -66,13 +73,16 @@ const [showFilter, setShowFilter] = useState(false);
   }, [dispatch]);
 
   useEffect(() => {
-    if (filters.state) dispatch(fetchDistricts(filters.state));
+    if (filters.state) {
+      dispatch(fetchDistricts(filters.state));
+    }
   }, [filters.state]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filters]);
 
+  /* ===== HANDLERS ===== */
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -91,10 +101,12 @@ const [showFilter, setShowFilter] = useState(false);
     setSearch("");
   };
 
+  /* ===== DOWNLOAD / UPLOAD (OPTIONAL) ===== */
   const handleDownloadTemplate = async () => {
-    const response = await publicAxios.get(ApiKey.DOWNLOAD_COLLEGE_TEMPLATE, {
-      responseType: "blob",
-    });
+    const response = await publicAxios.get(
+      ApiKey.DOWNLOAD_COLLEGE_TEMPLATE,
+      { responseType: "blob" }
+    );
 
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
@@ -114,8 +126,37 @@ const [showFilter, setShowFilter] = useState(false);
     formData.append("file", file);
 
     await publicAxios.post(ApiKey.UPLOAD_COLLEGE_EXCEL, formData);
+
+    // refresh
     dispatch(fetchInstitutionList());
     e.target.value = "";
+  };
+
+  const getVideoUrl = (filePath, fileName) => {
+    if (!filePath || !fileName) return "";
+
+    const normalized = filePath.replace(/\\/g, "/");
+
+    const index = normalized.indexOf("/VideoContent/");
+    if (index === -1) return "";
+
+    let relativePath = normalized.substring(index + "/VideoContent".length);
+    relativePath = relativePath.replace(/^\/+/, "");
+
+    const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
+
+    const encodedFileName = encodeURIComponent(fileName);
+    const url = `${baseUrl}/VideoContent/${relativePath}/${encodedFileName}`;
+
+    console.log("Generated URL:", url);
+    return url;
+  };
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return `${String(d.getDate()).padStart(2, "0")}-${String(
+      d.getMonth() + 1
+    ).padStart(2, "0")}-${d.getFullYear()}`;
   };
 
   return (
@@ -293,9 +334,11 @@ const [showFilter, setShowFilter] = useState(false);
 )}
 
 
+        {/* ===== LIST CONTAINER ===== */}
         <section className="list-container">
+
           {loading && <p>Loading institutions...</p>}
-         {/* {error && <p style={{ color: "red" }}>Failed to load institutions</p>} */}
+
           {!loading && institutions.length === 0 && (
             <p style={{ color: "#6b7280" }}>No institutions found</p>
           )}
@@ -310,24 +353,38 @@ const [showFilter, setShowFilter] = useState(false);
               <div className="card-header">
                 <h2>{inst.name}</h2>
               </div>
+
               <div className="card-details">
-                <p><strong>Location:</strong> {inst.location}</p>
-                <p><strong>College Type:</strong> {inst.collegeType}</p>
+                <p>
+                  <strong>Location:</strong> {inst.location}
+                </p>
+                <p>
+                  <strong>College Type:</strong> {inst.collegeType}
+                </p>
               </div>
             </div>
           ))}
 
-       <div className="pagination">
-  <button disabled={currentPage <= 1} onClick={() => setCurrentPage(p => p - 1)}>
-    Prev
-  </button>
+          {/* ===== PAGINATION ===== */}
+          <div className="pagination">
+            <button
+              disabled={currentPage <= 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+            >
+              Prev
+            </button>
 
-  <span>Page {currentPage} of {totalPages}</span>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
 
-  <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage(p => p + 1)}>
-    Next
-  </button>
-</div>
+            <button
+              disabled={currentPage >= totalCount}
+              onClick={() => setCurrentPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
 
         </section>
       </div>

@@ -113,7 +113,7 @@ const navigate = useNavigate();
           </div>
 
           {/* --- Education --- */}
-          <h3 className="section-title">Education</h3>
+          <h3 className="section-title">Education Details</h3>
           {educationArray.length > 0 ? (
             <div className="profile-details">
               {educationArray.map((edu, index) => (

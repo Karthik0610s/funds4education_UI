@@ -184,31 +184,76 @@ export default function FacultyDashboard() {
 };
 //HANDLE UPLOADVIDEO
 const handleUploadFile = async () => {
-  if (!selectedFile || !videoName) {
-    Swal.fire("Please enter video name and select a file");
+
+  // 1️⃣ Validation same as LIVE logic
+  if (!selectedFile || !videoName.trim()) {
+    Swal.fire({
+      text: "Video name and file are required",
+      icon: "warning",
+    });
     return;
   }
 
   const formData = new FormData();
-  formData.append("FormFiles", selectedFile);
-  formData.append("FileName", videoName + "." + selectedFile.name.split(".").pop());
+
+  // 2️⃣ File attach — correct
+  const ext = selectedFile.name.split(".").pop();
+
+  formData.append(
+    "FormFiles",
+    selectedFile,
+    `${videoName}.${ext}`
+  );
+
+  // 3️⃣ REQUIRED BY API — SAME AS LIVE MODE
+  formData.append("FileName", videoName);
   formData.append("TypeofUser", "VideoContent");
   formData.append("FacultyId", localStorage.getItem("userId"));
-  formData.append("Course", course);
-  formData.append("Subject", subject);
-  formData.append("Topic", topic);
+
+  // ✅ CRITICAL CORRECTION HERE
+  formData.append("Course", courseText);
+  formData.append("Subject", subjectText);
+  formData.append("Topic", topicText);
+
   formData.append("CreatedBy", localStorage.getItem("name") || name);
   formData.append("CreatedDate", new Date().toISOString());
 
+  // 4️⃣ Debug payload check
+  console.log("UPLOAD PAYLOAD →", {
+    courseText,
+    subjectText,
+    topicText,
+    videoName,
+    file: selectedFile.name,
+  });
+
   try {
-    Swal.fire({ title: "Uploading...", didOpen: () => Swal.showLoading() });
+
+    Swal.fire({
+      title: "Uploading video...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     const res = await dispatch(uploadVideoContent(formData));
-    Swal.fire("Success!", "Video uploaded successfully", "success");
+
+    await Swal.fire({
+      text: res.message || "Video uploaded successfully!",
+      icon: "success",
+    });
+
     resetModal();
-  } catch (error) {
-    Swal.fire("Upload Failed", error.message, "error");
+
+  } catch (err) {
+    console.error("UPLOAD ERROR →", err);
+
+    Swal.fire({
+      text: err.errorMsg || err.message || "Course/Subject/Topic required by API",
+      icon: "error",
+    });
   }
 };
+
 
 
   /* ================= SCREEN SHARE ================= */

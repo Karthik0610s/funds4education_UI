@@ -197,7 +197,7 @@ const handleClear = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
    // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
@@ -213,11 +213,12 @@ const handleClear = () => {
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
-    if (!formData.email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      errs.email = "Enter a valid Gmail address (e.g., user@gmail.com).";
-    }
+   if (!formData.email.trim()) {
+  errs.email = "Email is required.";
+} else if (!emailRegex.test(formData.email)) {
+  errs.email = "Enter a valid email address (e.g., user@example.com).";
+}
+
 
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required.";
@@ -227,10 +228,11 @@ const handleClear = () => {
 
     if (!formData.gender) errs.gender = "Gender is required.";
 if (!formData.userName.trim()) {
-    errs.userName = "Username is required.";
-  } else if (!emailRegex.test(formData.userName)) {
-    errs.userName = "Enter a valid Gmail address (e.g., user@gmail.com).";
-  }
+  errs.userName = "Email is required.";
+} else if (!emailRegex.test(formData.userName)) {
+  errs.userName = "Enter a valid email address.";
+}
+
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";
@@ -252,27 +254,55 @@ if (!formData.userName.trim()) {
   };
 
   // ✅ Add/Update Education
-  const addOrUpdateEducation = () => {
-    if (!education.degree || !education.college || !education.year) {
-      // use global popup handled in slice, not here
-      setErrors((prev) => ({
-        ...prev,
-        education: "Please fill in all education fields.",
-      }));
-      return;
-    }
+ const addOrUpdateEducation = () => {
+  const nameRegex = /^[A-Za-z .-]+$/;
 
-    if (editIndex !== null) {
-      const updated = [...educationList];
-      updated[editIndex] = education;
-      setEducationList(updated);
-      setEditIndex(null);
-    } else {
-      setEducationList([...educationList, education]);
-    }
+  if (!education.degree.trim()) {
+    setErrors(prev => ({ ...prev, education: "Course is required." }));
+    return;
+  }
 
-    setEducation({ degree: "", college: "", year: "" });
-  };
+  if (!nameRegex.test(education.degree)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "Course: special characters or numbers not allowed."
+    }));
+    return;
+  }
+
+  if (!education.college.trim()) {
+    setErrors(prev => ({ ...prev, education: "College is required." }));
+    return;
+  }
+
+  if (!nameRegex.test(education.college)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "College: special characters or numbers not allowed."
+    }));
+    return;
+  }
+
+  if (!education.year) {
+    setErrors(prev => ({ ...prev, education: "Year is required." }));
+    return;
+  }
+
+  // clear education error
+  setErrors(prev => ({ ...prev, education: null }));
+
+  if (editIndex !== null) {
+    const updated = [...educationList];
+    updated[editIndex] = education;
+    setEducationList(updated);
+    setEditIndex(null);
+  } else {
+    setEducationList([...educationList, education]);
+  }
+
+  setEducation({ degree: "", college: "", year: "" });
+};
+
 
   // ✅ Delete Education
   const deleteEducation = (index) => {
@@ -421,7 +451,7 @@ onSave();
                   e.target.value = e.target.value
                     .toLowerCase()
                     .replace(/\s+/g, "")
-                    .replace(/[^a-z0-9@._-]/g, "");
+.replace(/[^a-z0-9@._%+-]/g, "");
                 }}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -555,25 +585,36 @@ onSave();
                     
                   </div>
           {/* Education Section */}
-          <h3 className="section-title">Education</h3>
+          <h3 className="section-title">Education Details</h3>
 
           <div className="row">
             <input
-              type="text"
-              placeholder="Class/Course"
-              value={education.degree}
-              onChange={(e) =>
-                setEducation({ ...education, degree: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="School/College"
-              value={education.college}
-              onChange={(e) =>
-                setEducation({ ...education, college: e.target.value })
-              }
-            />
+  type="text"
+  placeholder="Class/Course"
+  value={education.degree}
+  onInput={(e) => {
+    // hide numbers + special chars while entering
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+/>
+
+<input
+  type="text"
+  placeholder="School/College"
+  value={education.college}
+  onInput={(e) => {
+    // hide numbers + special chars
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, college: e.target.value })
+  }
+/>
             <input
   type="text"
   placeholder="Year"
@@ -654,12 +695,12 @@ onSave();
           <div className="form-group">
             <label>Username *</label>
             <input
-              type="text"
-              value={formData.userName}
-              onChange={(e) =>
-                setFormData({ ...formData, userName: e.target.value })
-              }
-            />
+  type="email"
+  value={formData.userName}
+  onChange={(e) =>
+    setFormData({ ...formData, userName: e.target.value })
+  }
+/>
             {errors.userName && <p className="error-text">{errors.userName}</p>}
           </div>
 

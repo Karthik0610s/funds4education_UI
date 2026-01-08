@@ -90,12 +90,23 @@ export default function SponsorDashboard() {
     dispatch(logout());
     navigate("/login");
   };
- const fundedApplications = useMemo(() => {
+ /*const fundedApplications = useMemo(() => {
   return applications.filter(
     (app) => (app.status || "").toLowerCase() === "funded"
   );
+}, [applications]);*/
+
+ const ApprovedApplications = useMemo(() => {
+  return applications.filter(
+    (app) => (app.status || "").toLowerCase() === "approved"
+  );
 }, [applications]);
 
+ const  RejectedApplications = useMemo(() => {
+  return applications.filter(
+    (app) => (app.status || "").toLowerCase() === "rejected"
+  );
+}, [applications]);
 
   const filteredApplications = useMemo(() => {
     
@@ -110,6 +121,7 @@ export default function SponsorDashboard() {
 
     return match ? Number(match[0]) : 0;
   }
+  /*
   const totalFund = fundedApplications.reduce(
   (sum, app) => sum + (Number(app.fundAmount) || 0),
   0
@@ -119,7 +131,7 @@ const formattedFund = totalFund.toLocaleString("en-IN", {
   style: "currency",
   currency: "INR"
 });
-
+*/
   useEffect(() => {
     
     const sponsorId = localStorage.getItem("userId");
@@ -345,12 +357,12 @@ const formatAmount = (val) => {
           <div className="stats-grid">
             <div className="stat-card">
               <p>Sponsored Students</p>
-              <p className="stat-value">{fundedApplications.length}</p>
+              <p className="stat-value">{ApprovedApplications.length}</p>
             </div>
 
             <div className="stat-card">
-              <p>Total Funds</p>
-              <p className="stat-value"> {formattedFund}</p>
+              <p>Rejected Student</p>
+             <p className="stat-value"> {RejectedApplications.length}</p> 
             </div>
           </div>
 
