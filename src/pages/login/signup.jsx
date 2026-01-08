@@ -40,7 +40,10 @@ const fileInputRef = useRef(null);
 
   // --- Validation regex ---
   const nameRegex = /^[A-Za-z]{0,150}$/;
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+// ✅ Updated email validation
+const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+
+
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^\d{10}$/;
@@ -49,13 +52,8 @@ const fileInputRef = useRef(null);
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
-    if (!emailRegex.test(email)) return false;
-    const domainPart = email.split("@")[1];
-    const tldMatches = domainPart.match(/\.[a-z]+/gi);
-    if (!tldMatches) return false;
-    const tldSet = new Set(tldMatches);
-    return tldSet.size === tldMatches.length;
-  };
+  return emailRegex.test(email);
+};
 
 
 // --- Validation per step ---
@@ -395,19 +393,14 @@ debugger;
               <div className="form-group">
                 <label>Email *</label>
 <input
-  type="email"
+  type="text" // can stay email or text
   value={basicDetails.email}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // allow only letters, numbers, @ and dot while typing
-    if (/^[A-Za-z0-9@.]*$/.test(value)) {
-      setBasicDetails({ ...basicDetails, email: value });
-    }
-  }}
+  onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
   className={errors.email ? "input-error" : ""}
   placeholder="Email"
 />
+
+
 
                 {errors.email && <p className="error-text">{errors.email}</p>}
               </div>
@@ -724,16 +717,12 @@ debugger;
   type="text"
   placeholder="Enter your email"
   value={verification.username}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // allow valid email characters while typing
-    if (/^[A-Za-z0-9@._%+-]*$/.test(value)) {
-      setVerification({ ...verification, username: value });
-    }
-  }}
+  onChange={(e) => setVerification({ ...verification, username: e.target.value })}
   className={errors.username ? "input-error" : ""}
 />
+
+
+
 
 {errors.username && <p className="error-text">{errors.username}</p>}
 

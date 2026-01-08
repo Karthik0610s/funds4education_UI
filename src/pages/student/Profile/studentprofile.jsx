@@ -197,7 +197,7 @@ const handleClear = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
    // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
@@ -213,11 +213,12 @@ const handleClear = () => {
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
-    if (!formData.email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      errs.email = "Enter a valid Gmail address (e.g., user@gmail.com).";
-    }
+   if (!formData.email.trim()) {
+  errs.email = "Email is required.";
+} else if (!emailRegex.test(formData.email)) {
+  errs.email = "Enter a valid email address (e.g., user@example.com).";
+}
+
 
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required.";
@@ -227,10 +228,11 @@ const handleClear = () => {
 
     if (!formData.gender) errs.gender = "Gender is required.";
 if (!formData.userName.trim()) {
-    errs.userName = "Username is required.";
-  } else if (!emailRegex.test(formData.userName)) {
-    errs.userName = "Enter a valid Gmail address (e.g., user@gmail.com).";
-  }
+  errs.userName = "Email is required.";
+} else if (!emailRegex.test(formData.userName)) {
+  errs.userName = "Enter a valid email address.";
+}
+
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";
@@ -421,7 +423,7 @@ onSave();
                   e.target.value = e.target.value
                     .toLowerCase()
                     .replace(/\s+/g, "")
-                    .replace(/[^a-z0-9@._-]/g, "");
+.replace(/[^a-z0-9@._%+-]/g, "");
                 }}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -654,12 +656,12 @@ onSave();
           <div className="form-group">
             <label>Username *</label>
             <input
-              type="text"
-              value={formData.userName}
-              onChange={(e) =>
-                setFormData({ ...formData, userName: e.target.value })
-              }
-            />
+  type="email"
+  value={formData.userName}
+  onChange={(e) =>
+    setFormData({ ...formData, userName: e.target.value })
+  }
+/>
             {errors.userName && <p className="error-text">{errors.userName}</p>}
           </div>
 
