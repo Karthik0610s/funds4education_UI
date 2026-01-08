@@ -51,8 +51,8 @@ export default function SignUpPage() {
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const phoneRegex = /^[1-9]\d{9}$/;
-  const courseRegex = /^[A-Za-z0-9\s.]{0,150}$/;
-  const collegeRegex = /^[A-Za-z\s]{0,250}$/;
+  const courseRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,150}$/;
+  const collegeRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
@@ -132,6 +132,33 @@ export default function SignUpPage() {
       if (!basicDetails.dob) {
         stepErrors.dob = "Date of birth is required.";
       }
+    // Date of Birth
+    // Date of Birth
+if (!basicDetails.dob) {
+  stepErrors.dob = "Date of birth is required.";
+} else {
+  const dob = new Date(basicDetails.dob);
+  const todayDate = new Date();
+
+  if (dob > todayDate) {
+    stepErrors.dob = "Date of birth cannot be in the future.";
+  } else {
+    let age = todayDate.getFullYear() - dob.getFullYear();
+    const monthDiff = todayDate.getMonth() - dob.getMonth();
+    const dayDiff = todayDate.getDate() - dob.getDate();
+
+    // Adjust age if birthday not yet reached this year
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    if (age < 10) {
+      stepErrors.dob = "Age must be at least 10 years.";
+    } else if (age > 79) {
+      stepErrors.dob = "Age cannot be more than 79 years.";
+    }
+  }
+}
 
       // Gender
       if (!basicDetails.gender) {
@@ -289,22 +316,39 @@ export default function SignUpPage() {
   };
 
   // --- Education handlers ---
-  const addEducation = () => {
-    let errorsObj = {};
-    if (!courseRegex.test(education.degree)) errorsObj.degree = "Invalid course.";
-    if (!collegeRegex.test(education.college)) errorsObj.college = "Invalid college/university.";
-    if (!yearRegex.test(education.year)) errorsObj.year = "Year must be 4 digits.";
+ const addEducation = () => {
+  let errorsObj = {};
 
-    if (Object.keys(errorsObj).length > 0) {
-      setEduErrors(errorsObj);
-      return;
-    }
+  // REQUIRED validation
+  if (!education.degree.trim()) {
+    errorsObj.degree = "Class / Course is required.";
+  } else if (!courseRegex.test(education.degree)) {
+    errorsObj.degree = "Invalid Class / Course.";
+  }
 
-    setEducationList([...educationList, education]);
-    setEducation({ degree: "", college: "", year: "" });
-    setShowEducationFields(false);
-    setEduErrors({});
-  };
+  if (!education.college.trim()) {
+    errorsObj.college = "School / College / University is required.";
+  } else if (!collegeRegex.test(education.college)) {
+    errorsObj.college = "Invalid School / College / University.";
+  }
+
+  if (!education.year.trim()) {
+    errorsObj.year = "Year is required.";
+  } else if (!yearRegex.test(education.year)) {
+    errorsObj.year = "Year must be 4 digits.";
+  }
+
+  if (Object.keys(errorsObj).length > 0) {
+    setEduErrors(errorsObj);
+    return;
+  }
+
+  setEducationList([...educationList, education]);
+  setEducation({ degree: "", college: "", year: "" });
+  setShowEducationFields(false);
+  setEduErrors({});
+};
+
 
   const updateEducation = (index) => {
     let errorsObj = {};
@@ -736,14 +780,8 @@ export default function SignUpPage() {
                 </div>
               </div>
             )}
-            {/* Show errors only after clicking Save */}
-            {Object.keys(eduErrors).length > 0 && (
-              <div className="error-block">
-                {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
-                {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
-                {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
-              </div>
-            )}
+             {/* Show errors only after clicking Save */}
+    
           </div>
         )}
 

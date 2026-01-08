@@ -265,15 +265,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       else if (age > 90) errs.dateofBirth = "Age cannot be more than 90 years.";
       else if (age < 10) errs.dateofBirth = "Age must be at least 10 years.";
     }
-    educationList.forEach((edu, i) => {
-      if (!nameRegex.test(edu.degree)) {
-        errs.education = `Record ${i + 1}: Course contains invalid characters.`;
-      }
-
-      if (!nameRegex.test(edu.college)) {
-        errs.education = `Record ${i + 1}: College contains invalid characters.`;
-      }
-    });
+    
     if (educationList.length === 0) {
       errs.education = "At least one qualification detail is required.";
     }
@@ -295,7 +287,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       setErrors(prev => ({ ...prev, education: "Course is required." }));
       return;
     }
-
+   {/*
     if (!qualRegex.test(education.degree)) {
       setErrors(prev => ({
         ...prev,
@@ -303,12 +295,12 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       }));
       return;
     }
-
+*/}
     if (!education.college.trim()) {
       setErrors(prev => ({ ...prev, education: "College is required." }));
       return;
     }
-
+   {/* 
     if (!qualRegex.test(education.college)) {
       setErrors(prev => ({
         ...prev,
@@ -316,7 +308,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       }));
       return;
     }
-
+*/}
     if (!education.year) {
       setErrors(prev => ({ ...prev, education: "Year is required." }));
       return;
@@ -342,6 +334,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
   const deleteEducation = (index) => {
     setEducationList(educationList.filter((_, i) => i !== index));
   };
+
 
 
   const addOrUpdateWork = () => {
@@ -655,34 +648,34 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group ">
               <label>Course *</label>
               <input
-                type="text"
-                placeholder="Course"
-                value={education.degree}
-                onInput={(e) => {
-                  // ❌ hide special chars & numbers while entering
-                  e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-                  e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-                }}
-                onChange={(e) =>
-                  setEducation({ ...education, degree: e.target.value })
-                }
-              />
+  type="text"
+  placeholder="Course"
+  value={education.degree}
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+/>
+
             </div>
             <div className="form-group ">
               <label>College *</label>
               <input
-                type="text"
-                placeholder="College"
-                value={education.college}
-                onInput={(e) => {
-                  // ❌ hide invalid chars
-                  e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-                  e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-                }}
-                onChange={(e) =>
-                  setEducation({ ...education, college: e.target.value })
-                }
-              />
+  type="text"
+  placeholder="College"
+  value={education.college}
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, college: e.target.value })
+  }
+/>
+
 
             </div>
             <div className="form-group ">
@@ -781,10 +774,18 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group ">
               <label>Organization *</label>
               <input
-                type="text"
-                value={work.organization}
-                onChange={(e) => setWork({ ...work, organization: e.target.value })}
-              />
+  type="text"
+  value={work.organization}
+  placeholder="Organization"
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setWork({ ...work, organization: e.target.value })
+  }
+/>
+
 
             </div>
 
@@ -828,11 +829,18 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
             <div className="form-group col-lg-3">
               <label>Role *</label>
               <input
-                type="text"
-                value={work.role}
-                onChange={(e) => setWork({ ...work, role: e.target.value })}
-                style={{ width: "270px" }}
-              />
+  type="text"
+  value={work.role}
+  placeholder="Role"
+  onInput={(e) => {
+    e.target.value = e.target.value.replace(/[@#$%^*]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setWork({ ...work, role: e.target.value })
+  }
+/>
+
             </div>
             <div className="checkbox-group" style={{ alignContent: "center" }}>
               <label className="work-checkbox">
@@ -912,7 +920,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
           {/* Username */}
           <h3 className="section-title">Account</h3>
           <div className="form-group">
-            <label>Username *</label>
+            <label>User Name(Email) *</label>
             <input
               type="text"
               value={formData.userName}

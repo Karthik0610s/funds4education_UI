@@ -226,8 +226,9 @@ useEffect(() => {
               Welcome, {userName || "User"}
             </span>
 
-            {/* Bell Icon */}
+            {/* Bell Icon 
             <FiBell size={22} className="cursor-pointer" />
+            */}
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
@@ -416,8 +417,9 @@ useEffect(() => {
                 </span>
               )}
 
-              {/* Bell Icon */}
+              {/* Bell Icon 
               <FiBell size={22} className="cursor-pointer" />
+              */}
 
               {/* Dropdown Icon */}
               <div className="icon-circle" onClick={toggleDropdown}>
@@ -514,8 +516,9 @@ useEffect(() => {
               Welcome, {userName || "User"}
             </span>
 
-            {/* Bell Icon */}
+            {/* Bell Icon 
             <FiBell size={22} className="cursor-pointer" />
+            */}
 
             {/* Dropdown Icon */}
             <div className="icon-circle" onClick={toggleDropdown}>
@@ -590,7 +593,7 @@ useEffect(() => {
         return (
           <div className="header-right">
             <button className="icon-btn">
-              <FiBell size={20} />
+              {/*<FiBell size={20} />*/}
             </button>
           </div>
         );

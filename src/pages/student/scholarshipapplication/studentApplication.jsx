@@ -168,7 +168,7 @@ const handleView = (app) => {
       <div className="applications-actions">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Search by Scholarship Name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
