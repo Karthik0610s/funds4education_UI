@@ -1598,6 +1598,11 @@ main::-webkit-scrollbar-thumb:hover {
   font-weight: bold;
   color: #111827;
 }
+.signup-header h2{
+  font-size: 36px;
+
+}
+
 
 .sub-title {
   font-size: 18px;
@@ -2639,6 +2644,7 @@ body {
 }
 .verfiy{
   color: #1d4f56;
+  font-size: 22px;
 }
 .step-item {
   display: flex;
@@ -2695,7 +2701,6 @@ body {
   margin-top: 25px;
   margin-bottom: 10px;
   color: #1d4f56;
-  font-size: 32px;
 
 }
 
@@ -2815,6 +2820,7 @@ input:not([type="radio"]) {
   align-items: center;
   margin-bottom: 10px;
   color: #1d4f56;
+  font-size: 22px;
 }
 
 /* Second row layout */
@@ -5990,6 +5996,9 @@ textarea {
   margin-bottom: 10px;
   color: #2A5A59;
 }
+  .sponsorsignup-header h2 {
+    font-size: 36px;
+  }
 
 @media (max-width: 580px) {
   .sponsorsignup-header {
@@ -6100,6 +6109,7 @@ textarea {
   margin-top: 25px;
   margin-bottom: 10px;
   color: #1d4f56;
+  font-size: 22px;
 }
 
 /* Form layout same as student */
@@ -7723,7 +7733,7 @@ p {
   background-color: #367E7F;
   color: #fff;
   border: none;
-  padding: 5px 10px;
+  padding: 10px 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 12px;
@@ -7748,7 +7758,18 @@ p {
     font-size: 1.8rem;
     /* optional: better mobile fit */
   }
-
+  .va-section-content p span{
+    padding-left: 4px;
+    flex: auto;
+  }
+  .va-section-content p strong{
+  }
+  .va-right-container h2{
+    margin-bottom: 1px;
+  }
+  .va-section-content{
+    margin-top: 12px;
+  }
   /* Sidebar takes full width on mobile */
   .va-left-container {
     width: 100%;
@@ -7781,12 +7802,14 @@ p {
   /* Reduce strong label width so text wraps nicely */
   .va-section-content p strong {
     min-width: 120px;
+    width: fit-content;
   }
 
   /* Adjust section content font size and spacing */
   .va-section-content p {
     font-size: 0.95rem;
     margin-bottom: 10px;
+    gap: 5px;
   }
 
   /* Uploaded files list adjustments */
@@ -7801,7 +7824,7 @@ p {
 
   /* Download button smaller */
   .va-btn-download {
-    padding: 4px 8px;
+    padding: 10px 10px;
     font-size: 0.65rem;
   }
 }

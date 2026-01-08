@@ -769,18 +769,19 @@ const ads1 = [
                             alt={s.logoName ?? "Scholarship Logo"}
                             className="card-logo"
                           />*/}
-                          {isImage ? (
-                            <img
-                              src={imageUrl}
-                              alt={altText}
-                              className="card-logo"
-                              onError={() => setImgError(true)}
-                            />
-                          ) : (
-                            <div className="alt-logo-text">{ }</div>
-                          )}
-
-                        </div>
+                          {cleanLogoName ? (
+    <img
+      src={imageUrl}
+      alt={altText}
+      className="card-logo"
+      onError={(e) => {
+        e.target.style.display = "none"; // hide broken image
+      }}
+    />
+  ) : (
+    <div className="empty-logo" />
+  )}
+</div>
                       </div>
 
                       <div className="card-body">

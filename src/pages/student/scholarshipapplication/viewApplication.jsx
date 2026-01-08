@@ -221,6 +221,7 @@ const ViewApplication = () => {
             <p>No files uploaded</p>
           )}
         </div>
+        {/*
         {data.status?.toLowerCase() === "approved" && (
           <div className="fund-btn-wrapper">
             <button
@@ -237,7 +238,7 @@ const ViewApplication = () => {
             ✅ This student has already been funded
           </p>
         )}
-
+        */}
 
       </div>
     </div>
