@@ -67,9 +67,39 @@ const phoneRegex = /^[1-9]\d{9}$/;
   const blockSpecialCharsRegex = /^[^@#$%^*]*$/;
 
 
-  const isValidEmail = (email) => {
-  return emailRegex.test(email.trim());
-};
+ const isValidEmail = (email) => {
+    email = email.trim();
+
+    // Basic regex: no spaces, contains @, proper chars
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
+
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
+
+    // Local part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
+
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
+
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
+
+    // Last two domain parts cannot be same (reject domain.com.com)
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+    // Each domain part must contain only letters, numbers, hyphen (no special chars)
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false; // no hyphen at start/end
+    }
+
+    return true;
+  };
 
 
   // --- Validation per step ---
@@ -81,11 +111,11 @@ const phoneRegex = /^[1-9]\d{9}$/;
         stepErrors.firstName = "First name required (alphabets only, max 150).";
       if (!basicDetails.lastName || !nameRegex.test(basicDetails.lastName))
         stepErrors.lastName = "Last name required (alphabets only, max 150).";
-      if (!basicDetails.email) {
-      stepErrors.email = "Email is required.";
-    } else if (!isValidEmail(basicDetails.email)) {
-      stepErrors.email = "Invalid email address.";
-    }
+     if (!basicDetails.email) {
+        stepErrors.email = "Email is required.";
+      } else if (!isValidEmail(basicDetails.email)) {
+        stepErrors.email = "Enter a valid email.";
+      }
       if (!basicDetails.phone) {
       stepErrors.phone = "Phone number is required.";
     } else if (!phoneRegex.test(basicDetails.phone)) {
@@ -134,11 +164,13 @@ if (!basicDetails.dob) {
 
      if (step === 2) {
     // Username / Email
-    if (!verification.username) {
-      stepErrors.username = "Email is required.";
-    } else if (!isValidEmail(verification.username)) {
-      stepErrors.username = "Enter a valid email.";
-    }
+    const username = verification.username.trim();
+
+     if (!username) {
+        stepErrors.username = "Email is required.";
+      } else if (!isValidEmail(username)) {
+        stepErrors.username = "Enter a valid email.";
+      }
 
     // Password
     if (!verification.password) {

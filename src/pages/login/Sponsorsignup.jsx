@@ -27,8 +27,8 @@ export default function SponsorSignUpPage() {
     // --- Validation regex ---
     const nameRegex = /^[A-Za-z\s]{1,150}$/;
   //  const emailRegex =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(com|org|net|edu|co\.in)$/;
-const emailRegex =
-  /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
     const phoneRegex = /^[0-9]{10}$/;
     const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
@@ -43,6 +43,40 @@ const [fileSelected, setFileSelected] = useState(false);
 const [newFileSelected, setNewFileSelected] = useState(false);
  const [existingDocFiles, setExistingDocFiles] = useState([]);
 const [originalFiles, setOriginalFiles] = useState([]);
+const isValidEmail = (email) => {
+    email = email.trim();
+
+    // Basic regex: no spaces, contains @, proper chars
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
+
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
+
+    // Local part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
+
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
+
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
+
+    // Last two domain parts cannot be same (reject domain.com.com)
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+    // Each domain part must contain only letters, numbers, hyphen (no special chars)
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false; // no hyphen at start/end
+    }
+
+    return true;
+  };
+
   const navigate = useNavigate();
 const handleFileChange = (e) => {
   const files = Array.from(e.target.files);
@@ -111,22 +145,18 @@ const handleClear = () => {
 
        if (step === 0) {
     // Sponsor Name
-    if (!basicDetails.sponsorName) 
-        stepErrors.sponsorName = "Sponsor/Org name required (letters only, max 150).";
-    else if (!nameRegex.test(basicDetails.sponsorName))
-        stepErrors.sponsorName = "Sponsor/Org name must be letters only (max 150).";
+   if (!basicDetails.email) {
+        stepErrors.email = "Email is required.";
+      } else if (!isValidEmail(basicDetails.email)) {
+        stepErrors.email = "Enter a valid email.";
+      }
 
     // Organization Type
     if (!basicDetails.orgType) 
         stepErrors.orgType = "Organization type required.";
 
     // Email
-   // Email
-if (!basicDetails.email.trim()) {
-  stepErrors.email = "Email is required.";
-} else if (!emailRegex.test(basicDetails.email.trim())) {
-  stepErrors.email = "Please enter a valid email address.";
-}
+  
 
     // Phone
     if (!basicDetails.phone)
@@ -144,11 +174,13 @@ if (!basicDetails.email.trim()) {
        if (step === 1) {
     // Username
     // Username
-if (!verification.username.trim()) {
-  stepErrors.username = "Username (email) is required.";
-} else if (!emailRegex.test(verification.username.trim())) {
-  stepErrors.username = "Please enter a valid email address.";
-}
+const username = verification.username.trim();
+      if (!username) {
+        stepErrors.username = "Email is required.";
+      } else if (!isValidEmail(username)) {
+        stepErrors.username = "Enter a valid email.";
+      }
+
 
 
     // Password
@@ -231,7 +263,7 @@ if (!verification.username.trim()) {
                 nameRegex.test(basicDetails.sponsorName) &&
                 basicDetails.orgType &&
                 basicDetails.email &&
-                emailRegex.test(basicDetails.email) &&
+        isValidEmail(basicDetails.email) &&
                 basicDetails.phone &&
                 phoneRegex.test(basicDetails.phone) &&
                 basicDetails.website
