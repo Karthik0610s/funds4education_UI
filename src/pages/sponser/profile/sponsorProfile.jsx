@@ -22,7 +22,7 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
   const orgNameRegex = /^[A-Za-z ]+$/;
   const nameRegex = /^[A-Za-z ]+$/;
   //const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|org|edu)$/;
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
 
   const phoneRegex = /^[0-9]{10}$/;
   const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;
@@ -52,9 +52,8 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
 
   // Email (lowercase + block spaces)
   const handleEmailInput = (value) => {
-    const clean = value.replace(/\s/g, "").toLowerCase();
-    setFormData({ ...formData, email: clean });
-  };
+  setFormData({ ...formData, email: value.toLowerCase() });
+};
 
   // Address (remove triple spaces)
   const handleAddressInput = (value) => {
@@ -84,9 +83,13 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
     //   errs.contactPerson = "Only letters and spaces allowed.";
     // }
 
-    if (!formData.email || !emailRegex.test(formData.email)) {
-      errs.email = "Enter a valid email (.com, .org, .edu).";
-    }
+  if (
+  !formData.email || 
+  !emailRegex.test(formData.email) || 
+  formData.email.includes("..")
+) {
+  errs.email = "Enter a valid email address.";
+}
 
     if (!formData.phone || !phoneRegex.test(formData.phone)) {
       errs.phone = "Phone number must be exactly 10 digits.";
