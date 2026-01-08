@@ -16,8 +16,8 @@ import { routePath as RP } from "../../../app/components/router/routepath";
 const nameRegex = /^[A-Za-z\s]{0,150}$/;
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu)$/;
 const phoneRegex = /^[0-9]{0,10}$/;
-const courseRegex = /^[A-Za-z\s-./]{0,150}$/;
-const collegeRegex = /^[A-Za-z\s]{0,250}$/;
+const courseRegex = /^[A-Za-z0-9(),|-\s-./]{0,150}$/;
+const collegeRegex = /^[A-Za-z0-9(),-./\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,2}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
@@ -540,7 +540,7 @@ if (name === "gpaOrMarks") {
     if (applicationId && selectedFiles.length > 0) {
       await uploadFiles(applicationId);
     }
-
+debugger;
     // Fetch latest data
     updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
 
@@ -609,7 +609,7 @@ if (name === "gpaOrMarks") {
     });
   }
 
-  navigation("/application");
+ navigation("/application");
   handleCloseAndReset();
 };
 

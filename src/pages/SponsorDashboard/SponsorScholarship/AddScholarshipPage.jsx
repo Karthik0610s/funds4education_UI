@@ -139,22 +139,38 @@ const [originalFiles, setOriginalFiles] = useState([]);
         if (scholarship.class_ID) {
           dispatch(fetchCoursesByClass(scholarship.class_ID));
         }
-      } else {
-        setFormData({
-          ...initialData,
-          sponsorId: localStorage.getItem("userId"),
-          createdBy: localStorage.getItem("name"),
-        });
+      }  else {
+  // ✅ FULL RESET when clicking "Add Scholarship"
+  setFormData({
+    ...initialData,
+    sponsorId: localStorage.getItem("userId"),
+    createdBy: localStorage.getItem("name"),
+  });
 
-        setFilters({
-          religion: "",
-          country: "",
-          state: "",
-          gender: "",
-          className: "",
-          course: "",
-        });
-      }
+  setFilters({
+    religion: "",
+    country: "",
+    state: "",
+    gender: "",
+    className: "",
+    course: "",
+  });
+
+  setErrors({});
+  setSelectedFiles([]);
+  setFilesList([]);
+  setExistingDocFiles([]);
+  setOriginalFiles([]);
+  setLogoFile(null);
+  setLogoFileName("");
+  setExistingLogo("");
+  setLogoRemoved(false);
+
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
+}
+    
     }
 
     dispatch(fetchReligions());
@@ -635,27 +651,36 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
 
   const handleCloseAndReset = () => {
-   setExistingDocFiles([...originalFiles]);
+  // ✅ Always reset everything
+  setFormData(initialData);
+  setFilters({
+    religion: "",
+    country: "",
+    state: "",
+    gender: "",
+    className: "",
+    course: "",
+  });
 
-  setFormData(prev => ({
-    ...prev,
-    files: [...originalFiles],
-    FileName: originalFiles.join("|")
-  }));
-    setErrors({});
-    setSelectedFiles([]);
-    setFilesList([]);
-    setFileSelected(false);
-    setNewFileSelected(false);
-    setLogoFile(null);
-    setLogoFileName("");
+  setErrors({});
+  setSelectedFiles([]);
+  setFilesList([]);
+  setExistingDocFiles([]);
+  setOriginalFiles([]);
+  setFileSelected(false);
+  setNewFileSelected(false);
+  setLogoFile(null);
+  setLogoFileName("");
+  setExistingLogo("");
+  setLogoRemoved(false);
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null;
-    }
+  if (fileInputRef.current) {
+    fileInputRef.current.value = null;
+  }
 
-    handleClose();
-  };
+  handleClose();
+};
+
 
   const downloadFileFun = async (id) => {
     try {
