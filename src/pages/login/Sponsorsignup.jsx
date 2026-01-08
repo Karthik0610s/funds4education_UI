@@ -433,7 +433,7 @@ if (!verification.username.trim()) {
 
     <div className="row">
       <div className="form-group">
-        <label>Email *</label>
+        <label>User Name(Email) *</label>
        <input
   type="email"
   placeholder="Enter your email"
