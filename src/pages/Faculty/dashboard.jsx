@@ -182,6 +182,7 @@ export default function FacultyDashboard() {
     //alert("Permission denied");
   }
 };
+const MAX_FILE_SIZE = 30 * 1024 * 1024; // 3
 //HANDLE UPLOADVIDEO
 const handleUploadFile = async () => {
 
@@ -189,6 +190,13 @@ const handleUploadFile = async () => {
   if (!selectedFile || !videoName.trim()) {
     Swal.fire({
       text: "Video name and file are required",
+      icon: "warning",
+    });
+    return;
+  }
+   if (selectedFile.size > MAX_FILE_SIZE) {
+    Swal.fire({
+      text: "Files larger than 30 MB are not allowed",
       icon: "warning",
     });
     return;
@@ -703,7 +711,7 @@ const handleUploadFile = async () => {
             value={videoName}
             onChange={(e) => setVideoName(e.target.value)}
           />
-        </div>
+        
 
         <input
           type="file"
@@ -711,7 +719,10 @@ const handleUploadFile = async () => {
           onChange={(e) => setSelectedFile(e.target.files[0])}
           style={{ marginTop: "10px" }}
         />
-
+     <span style={{fontSize:"12px"}}>
+  Please upload a file smaller than 30 MB
+</span>
+</div>
         <div className="modal-footer">
           <button
             className="primary-btn"

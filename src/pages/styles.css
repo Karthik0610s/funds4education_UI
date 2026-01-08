@@ -410,7 +410,7 @@ font-size: 1rem;
         line-height: 1.5;
         max-width: 83%;
         overflow-wrap: anywhere;
-        text-align: center;
+        text-align: justify;
         word-break: break-word;
   }
 }
@@ -2310,6 +2310,8 @@ body {
   line-height: 1.6;
   margin-bottom: 20px;
   margin-top: auto;
+  text-align: justify;
+
 }
 
 .btn-primary {
@@ -7148,6 +7150,7 @@ p {
   max-width: 420px;
   margin-left: auto;
   margin-right: auto;
+  text-align: justify;
 }
 
 @media (min-width: 1024px) {
@@ -8411,6 +8414,7 @@ p {
   margin-left: 80px;
   margin-right: 80px;
   color: #374151;
+  text-align: left;
 }
 
 .terms-text strong{
@@ -8420,7 +8424,7 @@ p {
 /* Lists */
 .terms-list {
   margin-left: 110px;
-  font-size: 20px;
+  font-size: 1rem;
   line-height: 1.6;
   color: #374151;
   font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
@@ -8443,138 +8447,6 @@ p {
   text-align: center;
   /* remove default margin */
 }
-
-/* Container for the whole page */
-.privacy-policy-container {
-  background: #f3f3e9;
-  min-height: 100vh;
-  width: 100%;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-/* Header section */
-.privacy-policy-header {
-  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
-  padding: 20px 20px;
-  margin-top: 48px;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
-  border-bottom: 2px solid #66120a !important;
-}
-
-/* Header title */
-.privacy-policy-header h1 {
-  font-size: 40px;
-  font-weight: 500;
-  margin-top: 40px;
-  color: #1f2937;
-  /*font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
-  text-align: center;
-  margin: 0;
-}
-
-/* Policy title / platform name */
-.privacy-policy-platform-name {
-  color: #c2410c;
-  font-weight: 500;
-  margin-left: 80px;
-  margin-bottom: 10px;
-  font-size: 40px;
-  font-family: inherit;
-}
-
-/* Section title */
-.privacy-policy-section-title {
-  margin-top: 30px;
-  margin-left: 80px;
-  font-weight: 600;
-  font-size: 28px;
-}
-
-/* Paragraph text */
-.privacy-policy-text {
-  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
-  line-height: 1.8;
-  font-size: 20px;
-  margin-left: 80px;
-}
-
-/* Labels like Email and Address */
-.privacy-policy-label {
-  color: #c2410c;
-  font-family: "Conv_Futura Book BT" !important;
-}
-
-/* List UI → li styling */
-.privacy-policy-list {
-  margin-left: 80px;
-  margin-right: 80px;
-  margin-bottom: 16px;
-  padding-left: 10px;
-}
-
-.privacy-policy-list li {
-  margin-bottom: 8px;
-  line-height: 1.7;
-  font-size: 20px;
-}
-
-/* Links */
-.privacy-policy-link {
-  color: #0a4d8c;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.privacy-policy-link:hover {
-  text-decoration: underline;
-}
-
-/* Example for error text */
-.privacy-policy-error {
-  color: #d32f2f;
-  font-size: 13px;
-  margin-left: 12px;
-  font-weight: 500;
-}
-
-.privacy-policy-lastupdate {
-  font-size: 1rem;
-  line-height: 1.6;
-  text-align: center;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .privacy-policy-header h1 {
-    font-size: 21px;
-  }
-
-  .privacy-policy-text {
-    font-size: 16px;
-    margin-left: 33px;
-
-  }
-
-  .privacy-policy-list li {
-    font-size: 15px;
-  }
-
-  .privacy-policy-section-title {
-    margin-top: 10px;
-    margin-left: 22px;
-    font-weight: 600;
-    font-size: 14px;
-  }
-
-  .privacy-policy-list {
-    margin-left: 35px;
-    margin-bottom: 16px;
-    padding-left: 10px;
-}
-}
-
 @media (max-width: 480px) {
 
   /* Center all text */
@@ -8612,7 +8484,6 @@ p {
   .terms-text,
   .terms-list {
     font-size: 16px;
-    padding: 0 15px;
   }
 
   /* List alignment fix */
@@ -8811,5 +8682,165 @@ p {
   .reset-eye-btn {
     top: 40px;
     right: 12px;
+  }
+}
+/* Container for the whole page */
+.privacy-policy-container {
+  background: #f3f3e9;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header section */
+.privacy-policy-header {
+  background: linear-gradient(135deg, #fbbf24 0%, #f97316 100%);
+  padding: 20px 20px;
+  margin-top: 48px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+  border-bottom: 2px solid #66120a !important;
+}
+
+/* Header title */
+.privacy-policy-header h1 {
+  font-size: 40px;
+  font-weight: 500;
+  margin-top: 40px;
+  color: #1f2937;
+  /*font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;*/
+  text-align: center;
+  margin: 0;
+}
+
+/* Policy title / platform name */
+.privacy-policy-platform-name {
+  color: #c2410c;
+  font-weight: 500;
+  margin-left: 80px;
+  margin-bottom: 10px;
+  font-size: 40px;
+  font-family: inherit;
+}
+
+/* Section title */
+.privacy-policy-section-title {
+  margin-top: 30px;
+  margin-left: 80px;
+  font-weight: 600;
+  font-size: 28px;
+}
+
+/* Paragraph text */
+.privacy-policy-text {
+  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
+  line-height: 1.8;
+  font-size: 1.1rem;
+  margin-left: 80px;
+  margin-right: 80px;
+  text-align: justify;
+}
+
+/* Labels like Email and Address */
+.privacy-policy-label {
+  color: #c2410c;
+  font-family: "Conv_Futura Book BT" !important;
+}
+
+/* List UI → li styling */
+.privacy-policy-list {
+  margin-left: 80px;
+  margin-right: 80px;
+  margin-bottom: 16px;
+  padding-left: 10px;
+}
+
+.privacy-policy-list li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* Links */
+.privacy-policy-link {
+  color: #0a4d8c;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.privacy-policy-link:hover {
+  text-decoration: underline;
+}
+
+/* Example for error text */
+.privacy-policy-error {
+  color: #d32f2f;
+  font-size: 13px;
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+.privacy-policy-lastupdate {
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  /* Header */
+  .privacy-policy-header {
+    padding: 15px;
+    margin-top: 48px;
+  }
+
+  .privacy-policy-header h1 {
+    font-size: 22px;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* Platform name */
+  .privacy-policy-platform-name {
+    font-size: 22px;
+    margin-left: 10px;
+    text-align: left;
+  }
+
+  /* Section titles */
+  .privacy-policy-section-title {
+    font-size: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+  }
+
+  /* Paragraph text */
+  .privacy-policy-text {
+    font-size: 15px;
+    margin-left: 16px;
+    margin-right: 16px;
+    line-height: 1.7;
+  }
+
+  /* List */
+  .privacy-policy-list {
+    margin-left: 20px;
+    margin-right: 16px;
+    padding-left: 16px;
+  }
+
+  .privacy-policy-list li {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Last update text */
+  .privacy-policy-lastupdate {
+    font-size: 14px;
+    padding: 0 16px;
+    text-align: center;
   }
 }

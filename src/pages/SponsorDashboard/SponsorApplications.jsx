@@ -285,7 +285,7 @@ const filteredApplications = useMemo(() => {
                       </>
                     )}
 
-                    {normalize(app.status) === "approved" && (
+                   {/* {normalize(app.status) === "approved" && (
                       <button
   className="btn btn-fund"
   onClick={(e) => {
@@ -296,7 +296,7 @@ const filteredApplications = useMemo(() => {
   Fund Student
 </button>
 
-                    )}
+                    )}*/}
                   {/*
                     <button
                       className="btn btn-message"

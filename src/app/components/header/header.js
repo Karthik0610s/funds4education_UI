@@ -746,7 +746,7 @@ const renderMobileLinks = (forcedVariant) => {
           }
         }}
       />
-         <span className="brand">VidyāSetu</span>
+         {/* <span className="brand">VidyāSetu</span> */}
     </div>
 
     {/* RIGHT SIDE MOBILE (LOGGED IN) */}
@@ -843,7 +843,8 @@ const renderMobileLinks = (forcedVariant) => {
     ): (
       <div
         className="header-left"
-        onClick={handleLogout}
+        //onClick={handleLogout}
+         onClick={() => navigate("/")}
       >
         <img src={logo} alt="VidyaSetu Logo" className="logo" />
         <span className="brand">VidyāSetu</span>

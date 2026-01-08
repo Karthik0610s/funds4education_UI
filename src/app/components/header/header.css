@@ -113,7 +113,7 @@
   text-decoration: none;
   color: #1a3742;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   transition: color 0.3s ease;
 }
 
@@ -131,6 +131,7 @@
   color: #1a3742;
   font-weight: 500;
   transition: color 0.3s ease;
+  font-size: 0.9rem;
 }
 
 .header-right a:hover {
@@ -330,7 +331,7 @@
   }
 
   .brand {
-    font-size: 1.4rem;
+    font-size: 1rem;
     padding:5px;
   }
 
