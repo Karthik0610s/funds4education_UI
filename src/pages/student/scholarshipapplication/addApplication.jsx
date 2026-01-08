@@ -279,7 +279,7 @@ const handleRemoveSingleFile = (index) => {
       case "extraCurricularActivities":
       case "awardsAchievements":
       case "notesComments":
-        regex = text250Regex;
+        regex = collegeRegex;
         break;
       default:
         regex = null;

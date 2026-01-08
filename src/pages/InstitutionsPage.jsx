@@ -5,6 +5,8 @@ import { publicAxios } from "../api/config";
 import { ApiKey } from "../api/endpoint";
 import { useNavigate } from "react-router-dom";
 import "../pages/styles.css";
+import { FaFilter } from "react-icons/fa";
+
 import {
   fetchInstitutionList,
   fetchStates,
@@ -32,7 +34,10 @@ export default function InstitutionsPage() {
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
- 
+
+  // 1️⃣ MOBILE OVERLAY STATE
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
+
   const [filters, setFilters] = useState({
     state: "",
     district: "",
@@ -43,6 +48,7 @@ export default function InstitutionsPage() {
 
   const ITEMS_PER_PAGE = 5;
 
+  /* ===== FETCH LIST WITH FILTERS ===== */
   useEffect(() => {
     dispatch(
       fetchInstitutionList({
@@ -58,6 +64,7 @@ export default function InstitutionsPage() {
     );
   }, [dispatch, currentPage, search, filters]);
 
+  /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
     dispatch(fetchStates());
     dispatch(fetchLocations());
@@ -66,13 +73,16 @@ export default function InstitutionsPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (filters.state) dispatch(fetchDistricts(filters.state));
+    if (filters.state) {
+      dispatch(fetchDistricts(filters.state));
+    }
   }, [filters.state]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filters]);
 
+  /* ===== HANDLERS ===== */
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -91,10 +101,12 @@ export default function InstitutionsPage() {
     setSearch("");
   };
 
+  /* ===== DOWNLOAD / UPLOAD (OPTIONAL) ===== */
   const handleDownloadTemplate = async () => {
-    const response = await publicAxios.get(ApiKey.DOWNLOAD_COLLEGE_TEMPLATE, {
-      responseType: "blob",
-    });
+    const response = await publicAxios.get(
+      ApiKey.DOWNLOAD_COLLEGE_TEMPLATE,
+      { responseType: "blob" }
+    );
 
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
@@ -114,15 +126,44 @@ export default function InstitutionsPage() {
     formData.append("file", file);
 
     await publicAxios.post(ApiKey.UPLOAD_COLLEGE_EXCEL, formData);
+
+    // refresh
     dispatch(fetchInstitutionList());
     e.target.value = "";
+  };
+
+  const getVideoUrl = (filePath, fileName) => {
+    if (!filePath || !fileName) return "";
+
+    const normalized = filePath.replace(/\\/g, "/");
+
+    const index = normalized.indexOf("/VideoContent/");
+    if (index === -1) return "";
+
+    let relativePath = normalized.substring(index + "/VideoContent".length);
+    relativePath = relativePath.replace(/^\/+/, "");
+
+    const baseUrl = publicAxios.defaults.baseURL.replace(/\/api$/, "");
+
+    const encodedFileName = encodeURIComponent(fileName);
+    const url = `${baseUrl}/VideoContent/${relativePath}/${encodedFileName}`;
+
+    console.log("Generated URL:", url);
+    return url;
+  };
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return `${String(d.getDate()).padStart(2, "0")}-${String(
+      d.getMonth() + 1
+    ).padStart(2, "0")}-${d.getFullYear()}`;
   };
 
   return (
     <div className="page-container">
       <Header />
 
-      {/* ===== TOP BAR ===== */}
+      {/* ===== TOP SEARCH BAR ===== */}
       <div className="top-bar">
         <input
           className="global-search"
@@ -130,86 +171,227 @@ export default function InstitutionsPage() {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by institution, location, management..."
         />
-       {/*
-        <div className="top-actions">
-          <button className="template-btn" onClick={handleDownloadTemplate}>
-            Download Template
-          </button>
-
-          <label className="upload-btn">
-            Upload
-            <input
-              type="file"
-              accept=".xlsx"
-              hidden
-              onChange={handleUploadExcel}
-            />
-          </label>
-        </div>
-        */}
       </div>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <div className="content-layouts">
-        <aside className="filter-card">
-          <div className="filters-title">Filter</div>
-          <div className="filter-groups">
-          <label>State</label>
-          <select name="state" value={filters.state} onChange={handleFilterChange}>
-            <option value="">Select State</option>
-            {states.map((s) => (
-              <option key={s.state} value={s.state}>{s.state}</option>
-            ))}
-          </select>
-          </div>
-          <div className="filter-groups">
-          <label>District</label>
-          <select
-            name="district"
-            value={filters.district}
-            onChange={handleFilterChange}
-            disabled={!filters.state}
-          >
-            <option value="">Select District</option>
-            {districts.map((d) => (
-              <option key={d.district} value={d.district}>{d.district}</option>
-            ))}
-          </select>
-          </div>
-          <div className="filter-groups">
-          <label>Location</label>
-          <select name="location" value={filters.location} onChange={handleFilterChange}>
-            <option value="">Select Location</option>
-            {locations.map((loc, i) => (
-              <option key={i} value={loc.location}>{loc.location}</option>
-            ))}
-          </select>
-          </div>
-          <div className="filter-groups">
-          <label>College Type</label>
-          <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
-            <option value="">Select College Type</option>
-            {collegeTypes.map((c) => (
-              <option key={c.collegeType} value={c.collegeType}>{c.collegeType}</option>
-            ))}
-          </select>
-          </div>
-          <div className="filter-groups">
-          <label>Management</label>
-          <select name="management" value={filters.management} onChange={handleFilterChange}>
-            <option value="">Select Management</option>
-            {managements.map((m) => (
-              <option key={m.management} value={m.management}>{m.management}</option>
-            ))}
-          </select>
+      {/* ===== MOBILE FILTER ICON ===== */}
+      <div
+        className="mobile-filter-icons"
+        onClick={() => setShowMobileFilter(true)}
+      >
+        <FaFilter />
+        <span style={{ marginLeft: "6px" }}>Filters</span>
+      </div>
+
+      {/* ===== MOBILE OVERLAY DRAWER ===== */}
+      {showMobileFilter && (
+        <div className="mobile-filter-overlay">
+          <div className="filter-card mobile-panel">
+
+            <div
+              className="mobile-filter-close"
+              onClick={() => setShowMobileFilter(false)}
+            >
+              ✕ Close
+            </div>
+
+            <div className="filters-title">Filter</div>
+
+            {/* --- ALL FILTERS (RESTORED) --- */}
+            <div className="filter-groups">
+              <label>State</label>
+              <select
+                name="state"
+                value={filters.state}
+                onChange={handleFilterChange}
+              >
+                <option value="">Select State</option>
+                {states.map((s) => (
+                  <option key={s.state} value={s.state}>
+                    {s.state}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-groups">
+              <label>District</label>
+              <select
+                name="district"
+                value={filters.district}
+                onChange={handleFilterChange}
+                disabled={!filters.state}
+              >
+                <option value="">Select District</option>
+                {districts.map((d) => (
+                  <option key={d.district} value={d.district}>
+                    {d.district}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-groups">
+              <label>Location</label>
+              <select
+                name="location"
+                value={filters.location}
+                onChange={handleFilterChange}
+              >
+                <option value="">Select Location</option>
+                {locations.map((loc, i) => (
+                  <option key={i} value={loc.location}>
+                    {loc.location}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-groups">
+              <label>College Type</label>
+              <select
+                name="collegeType"
+                value={filters.collegeType}
+                onChange={handleFilterChange}
+              >
+                <option value="">Select College Type</option>
+                {collegeTypes.map((c) => (
+                  <option key={c.collegeType} value={c.collegeType}>
+                    {c.collegeType}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="filter-groups">
+              <label>Management</label>
+              <select
+                name="management"
+                value={filters.management}
+                onChange={handleFilterChange}
+              >
+                <option value="">Select Management</option>
+                {managements.map((m) => (
+                  <option key={m.management} value={m.management}>
+                    {m.management}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button className="clear-btn" onClick={clearFilters}>
+              Clear All Filters
+            </button>
           </div>
 
-          <button className="clear-btn" onClick={clearFilters}>Clear All Filters</button>
+          {/* overlay background */}
+          <div
+            className="overlay-background"
+            onClick={() => setShowMobileFilter(false)}
+          />
+        </div>
+      )}
+
+      {/* ===== MAIN DESKTOP + MOBILE CONTENT ===== */}
+      <div className="content-layouts">
+
+        {/* ===== DESKTOP SIDEBAR (NOT MISSING NOW) ===== */}
+        <aside className="filter-card desktop-only">
+
+          <div className="filters-title">Filter</div>
+
+          <div className="filter-groups">
+            <label>State</label>
+            <select
+              name="state"
+              value={filters.state}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select State</option>
+              {states.map((s) => (
+                <option key={s.state} value={s.state}>
+                  {s.state}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-groups">
+            <label>District</label>
+            <select
+              name="district"
+              value={filters.district}
+              onChange={handleFilterChange}
+              disabled={!filters.state}
+            >
+              <option value="">Select District</option>
+              {districts.map((d) => (
+                <option key={d.district} value={d.district}>
+                  {d.district}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 🔁 RESTORED GROUPS */}
+          <div className="filter-groups">
+            <label>Location</label>
+            <select
+              name="location"
+              value={filters.location}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select Location</option>
+              {locations.map((loc, i) => (
+                <option key={i} value={loc.location}>
+                  {loc.location}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-groups">
+            <label>College Type</label>
+            <select
+              name="collegeType"
+              value={filters.collegeType}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select College Type</option>
+              {collegeTypes.map((c) => (
+                <option key={c.collegeType} value={c.collegeType}>
+                  {c.collegeType}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-groups">
+            <label>Management</label>
+            <select
+              name="management"
+              value={filters.management}
+              onChange={handleFilterChange}
+            >
+              <option value="">Select Management</option>
+              {managements.map((m) => (
+                <option key={m.management} value={m.management}>
+                  {m.management}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button className="clear-btn" onClick={clearFilters}>
+            Clear All Filters
+          </button>
+
         </aside>
 
+        {/* ===== LIST CONTAINER ===== */}
         <section className="list-container">
+
           {loading && <p>Loading institutions...</p>}
-         {/* {error && <p style={{ color: "red" }}>Failed to load institutions</p>} */}
+
           {!loading && institutions.length === 0 && (
             <p style={{ color: "#6b7280" }}>No institutions found</p>
           )}
@@ -224,24 +406,38 @@ export default function InstitutionsPage() {
               <div className="card-header">
                 <h2>{inst.name}</h2>
               </div>
+
               <div className="card-details">
-                <p><strong>Location:</strong> {inst.location}</p>
-                <p><strong>College Type:</strong> {inst.collegeType}</p>
+                <p>
+                  <strong>Location:</strong> {inst.location}
+                </p>
+                <p>
+                  <strong>College Type:</strong> {inst.collegeType}
+                </p>
               </div>
             </div>
           ))}
 
-       <div className="pagination">
-  <button disabled={currentPage <= 1} onClick={() => setCurrentPage(p => p - 1)}>
-    Prev
-  </button>
+          {/* ===== PAGINATION ===== */}
+          <div className="pagination">
+            <button
+              disabled={currentPage <= 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
+            >
+              Prev
+            </button>
 
-  <span>Page {currentPage} of {totalPages}</span>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
 
-  <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage(p => p + 1)}>
-    Next
-  </button>
-</div>
+            <button
+              disabled={currentPage >= totalCount}
+              onClick={() => setCurrentPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
 
         </section>
       </div>

@@ -252,27 +252,55 @@ if (!formData.userName.trim()) {
   };
 
   // ✅ Add/Update Education
-  const addOrUpdateEducation = () => {
-    if (!education.degree || !education.college || !education.year) {
-      // use global popup handled in slice, not here
-      setErrors((prev) => ({
-        ...prev,
-        education: "Please fill in all education fields.",
-      }));
-      return;
-    }
+ const addOrUpdateEducation = () => {
+  const nameRegex = /^[A-Za-z .-]+$/;
 
-    if (editIndex !== null) {
-      const updated = [...educationList];
-      updated[editIndex] = education;
-      setEducationList(updated);
-      setEditIndex(null);
-    } else {
-      setEducationList([...educationList, education]);
-    }
+  if (!education.degree.trim()) {
+    setErrors(prev => ({ ...prev, education: "Course is required." }));
+    return;
+  }
 
-    setEducation({ degree: "", college: "", year: "" });
-  };
+  if (!nameRegex.test(education.degree)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "Course: special characters or numbers not allowed."
+    }));
+    return;
+  }
+
+  if (!education.college.trim()) {
+    setErrors(prev => ({ ...prev, education: "College is required." }));
+    return;
+  }
+
+  if (!nameRegex.test(education.college)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "College: special characters or numbers not allowed."
+    }));
+    return;
+  }
+
+  if (!education.year) {
+    setErrors(prev => ({ ...prev, education: "Year is required." }));
+    return;
+  }
+
+  // clear education error
+  setErrors(prev => ({ ...prev, education: null }));
+
+  if (editIndex !== null) {
+    const updated = [...educationList];
+    updated[editIndex] = education;
+    setEducationList(updated);
+    setEditIndex(null);
+  } else {
+    setEducationList([...educationList, education]);
+  }
+
+  setEducation({ degree: "", college: "", year: "" });
+};
+
 
   // ✅ Delete Education
   const deleteEducation = (index) => {
@@ -555,25 +583,36 @@ onSave();
                     
                   </div>
           {/* Education Section */}
-          <h3 className="section-title">Education</h3>
+          <h3 className="section-title">Education Details</h3>
 
           <div className="row">
             <input
-              type="text"
-              placeholder="Class/Course"
-              value={education.degree}
-              onChange={(e) =>
-                setEducation({ ...education, degree: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="School/College"
-              value={education.college}
-              onChange={(e) =>
-                setEducation({ ...education, college: e.target.value })
-              }
-            />
+  type="text"
+  placeholder="Class/Course"
+  value={education.degree}
+  onInput={(e) => {
+    // hide numbers + special chars while entering
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+/>
+
+<input
+  type="text"
+  placeholder="School/College"
+  value={education.college}
+  onInput={(e) => {
+    // hide numbers + special chars
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, college: e.target.value })
+  }
+/>
             <input
   type="text"
   placeholder="Year"
