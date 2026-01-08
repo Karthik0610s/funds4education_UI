@@ -22,7 +22,7 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
   const orgNameRegex = /^[A-Za-z ]+$/;
   const nameRegex = /^[A-Za-z ]+$/;
   //const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.(com|org|edu)$/;
-const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+  const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
   const phoneRegex = /^[0-9]{10}$/;
   const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/;

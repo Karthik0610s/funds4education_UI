@@ -197,8 +197,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-
+const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
 
 ["email", "userName"].forEach(field => {

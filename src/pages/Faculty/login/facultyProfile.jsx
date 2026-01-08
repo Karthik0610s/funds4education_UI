@@ -219,7 +219,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     const nameRegex = /^[A-Za-z .-]+$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
     // Accept all valid emails, block consecutive dots
-    const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
