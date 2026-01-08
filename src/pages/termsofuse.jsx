@@ -10,9 +10,8 @@ const TermsAndUse = () => {
   {/* Header */}
   <div className="terms-header">
     <h1>Terms of Use</h1>
-    <p className="terms-text">
-      <strong>Last updated:</strong> {lastUpdated}
-    </p>
+    <p className="terms-last-updated">Last updated on 06 Jan 2026</p>
+
   </div>
 
   {/* Content */}
@@ -182,12 +181,20 @@ const TermsAndUse = () => {
       have exclusive jurisdiction.
     </p>
 
-    <h3 className="terms-section-title">17. Contact Information</h3>
-    <p className="terms-text">
-      For queries or support, contact:
-      <br />
-      📧 info@lore-technology.com
-    </p>
+   <h3 className="terms-section-title">17. Contact Information</h3>
+
+<p className="terms-text">
+  For queries or support, contact:
+  <br />
+
+  <span className="privacy-policy-label">Email:</span>{" "}
+  <a
+    href="mailto:info@lore-technology.com"
+    className="privacy-policy-link"
+  >
+    info@lore-technology.com
+  </a>
+</p>
 
     <p className="terms-footer">
       © 2026 VidyāSetu. All rights reserved.

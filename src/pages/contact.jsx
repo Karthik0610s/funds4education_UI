@@ -26,10 +26,18 @@ const ContactUs = () => {
           <br />
           Tamil Nadu, India
           <br />
-          <strong className="contact-label">Phone:</strong> +91 73376 54242
-          <br />
-          <strong className="contact-label">Email:</strong>{" "}
-          info@lore-technology.com
+         <strong className="contact-label">Phone:</strong>{" "}
+<span className="privacy-policy-link">+91 73376 54242</span>
+<br />
+
+<strong className="contact-label">Email:</strong>{" "}
+<a
+  href="mailto:info@lore-technology.com"
+  className="privacy-policy-link"
+>
+  info@lore-technology.com
+</a>
+
         </p>
       </div>
     </div>

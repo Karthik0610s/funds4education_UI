@@ -4,19 +4,18 @@ import "./styles.css";
 const PrivacyPolicy = () => {
   return (
     <div className="privacy-policy-container">
-      
+
       {/* Header */}
       <div className="privacy-policy-header">
-        <h1>Privacy Policy - VidyaSetu</h1>
-         <p className="privacy-policy-lastupdate">
-          Last updated: 06 Jan 2026
-        </p>
+        <h1>Privacy Policy</h1>
+        <p className="terms-last-updated">Last updated on 06 Jan 2026</p>
+
       </div>
 
       {/* Content */}
       <div className="privacy-policy-content">
 
-       {/* <h2 className="privacy-policy-platform-name">VidyaSetu</h2> */}
+         <h2 className="privacy-policy-platform-name">VidyaSetu</h2> 
 
         <p className="privacy-policy-text">
           VidyaSetu (“We”, “Us”, “Our”) respects your privacy and is committed to
@@ -106,17 +105,24 @@ const PrivacyPolicy = () => {
         <h3 className="privacy-policy-section-title">13. Contact Us</h3>
 
         <p className="privacy-policy-text">
-          <strong className="privacy-policy-label">Email:</strong>{" "}
-          <a href="mailto:support@vidhyasetu.com" className="privacy-policy-link">
-            info@lore-technology.com
-          </a>
-        </p>
+  <strong className="privacy-policy-label">Email:</strong>{" "}
+  <a
+    href="mailto:info@lore-technology.com"
+    className="privacy-policy-link"
+  >
+    info@lore-technology.com
+  </a>
+  <br />
 
-        <p className="privacy-policy-text">
-          <strong className="privacy-policy-label">Address:</strong><br/>
-          India
-        </p>
-       
+  <strong className="privacy-policy-label">Address:</strong>{" "}
+  <span className="privacy-policy-link">India</span>
+</p>
+
+
+
+
+
+
 
       </div>
     </div>
