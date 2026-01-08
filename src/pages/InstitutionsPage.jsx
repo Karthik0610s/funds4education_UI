@@ -15,7 +15,7 @@ import {
   fetchCollegeTypes,
   fetchManagements,
 } from "../app/redux/slices/InstitutionlistSlice";
-import { FaFilter } from "react-icons/fa";
+//import { FaFilter } from "react-icons/fa";
 export default function InstitutionsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

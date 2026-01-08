@@ -214,7 +214,11 @@ export const fetchDropdownDataReq = async () => {
 export const fetchCoursesByClassIdReq = async (classId) => {
   const res = await publicAxios.get(
     `${ApiKey.Course}/by-classid`,
-    { params: { classId } }
+   {
+      params: {
+        classId: classId.join(",") // ✅ key fix
+      }
+    }
   );
 
   const data = Array.isArray(res.data) ? res.data : [];

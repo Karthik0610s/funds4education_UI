@@ -106,12 +106,14 @@ useEffect(() => {
   }, [dispatch]);
 
   useEffect(() => {
+    debugger;
   if (filters.class.length === 0) {
     dispatch(clearCourses());
     return;
   }
 
-  const classId = filters.class[0];
+  const classId = filters.class;
+  console.log(classId,"classID");
   dispatch(fetchCoursesByClassId(classId));
 }, [filters.class, dispatch]);
 

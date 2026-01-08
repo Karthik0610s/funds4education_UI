@@ -17,7 +17,12 @@ export default function LoginSuccess() {
     const id = params.get("id");
     const filePath = params.get("filePath");
     const fileName = params.get("fileName");
-    
+    const firtName =params.get("firstName");
+const lastName =params.get("lastName");
+const email =params.get("email");
+const dateOfBirth =params.get("dateOfBirth");
+const gender =params.get("gender");
+const phoneNumber =params.get("phoneNumber");
 
     if (token) {
       // ✅ Save each value separately in localStorage
@@ -31,6 +36,12 @@ export default function LoginSuccess() {
       localStorage.setItem("id", id);
       localStorage.setItem("filepath",filePath) ;  
       localStorage.setItem("filename",fileName) ; 
+      localStorage.setItem("firstName", firtName );
+localStorage.setItem("lastName", lastName);
+localStorage.setItem("email", email);
+localStorage.setItem("phoneNumber", phoneNumber);
+localStorage.setItem("dateOfBirth", dateOfBirth);
+localStorage.setItem("gender", gender);  
       // ✅ Optional: log for debugging
       console.log("Login successful:", {
         token,
