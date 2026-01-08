@@ -718,7 +718,7 @@ debugger;
             </div>
             <div className="row">
               <div className="form-group">
-               <label>Email *</label>
+               <label>User Name(Email) *</label>
 <input
   type="text"
   placeholder="Enter your email"

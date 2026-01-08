@@ -699,7 +699,7 @@ console.log("Errors:", errs);
           {/* Username */}
           <h3 className="section-title">Account Details</h3>
           <div className="form-group">
-            <label>Email *</label>
+            <label>User Name(Email) *</label>
             <input
   type="email"
   value={formData.userName}

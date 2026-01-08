@@ -8373,12 +8373,12 @@ p {
 
 /* Paragraph text */
 .terms-text {
-  font-family: "Conv_Futura Book BT", "Montserrat", Arial, sans-serif;
   line-height: 1.8;
-  font-size: 20px;
+  font-size: 1rem;
   margin-left: 80px;
   margin-right: 80px;
   color: #374151;
+  text-align: center;
 }
 
 /* Lists */
@@ -8506,7 +8506,7 @@ p {
 .privacy-policy-lastupdate {
   font-size: 1rem;
   line-height: 1.6;
-  margin-left: 20px;
+  text-align: center;
 }
 
 /* Responsive */
@@ -8558,6 +8558,10 @@ p {
   .terms-list {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .terms-text strong {
+    padding-left: 53px;
   }
 
   /* Header */

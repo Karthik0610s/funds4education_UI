@@ -8,12 +8,15 @@ const PrivacyPolicy = () => {
       {/* Header */}
       <div className="privacy-policy-header">
         <h1>Privacy Policy - VidyaSetu</h1>
+         <p className="privacy-policy-lastupdate">
+          Last updated: 06 Jan 2026
+        </p>
       </div>
 
       {/* Content */}
       <div className="privacy-policy-content">
 
-        <h2 className="privacy-policy-platform-name">VidyaSetu</h2>
+       {/* <h2 className="privacy-policy-platform-name">VidyaSetu</h2> */}
 
         <p className="privacy-policy-text">
           VidyaSetu (“We”, “Us”, “Our”) respects your privacy and is committed to
@@ -113,9 +116,7 @@ const PrivacyPolicy = () => {
           <strong className="privacy-policy-label">Address:</strong><br/>
           India
         </p>
-        <p className="privacy-policy-lastupdate">
-          Last updated: 06 Jan 2026
-        </p>
+       
 
       </div>
     </div>

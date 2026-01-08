@@ -10,15 +10,16 @@ const TermsAndUse = () => {
   {/* Header */}
   <div className="terms-header">
     <h1>Terms of Use</h1>
+    <p className="terms-text">
+      <strong>Last updated:</strong> {lastUpdated}
+    </p>
   </div>
 
   {/* Content */}
   <div className="terms-content">
     <h2 className="terms-company-name">VidyāSetu</h2>
 
-    <p className="terms-text">
-      <strong>Last updated:</strong> {lastUpdated}
-    </p>
+    
 
     <p className="terms-text">
       By accessing or using the VidyāSetu website or mobile application
