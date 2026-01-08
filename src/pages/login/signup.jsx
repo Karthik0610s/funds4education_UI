@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { insertNewUser } from "../../app/redux/slices/signupSlice";
@@ -13,7 +13,7 @@ export default function SignUpPage() {
   const [userType, setUserType] = useState("student"); // default to student
   const [showPassword, setShowPassword] = useState(false);
 
-const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [basicDetails, setBasicDetails] = useState({
     firstName: "",
     lastName: "",
@@ -21,7 +21,7 @@ const fileInputRef = useRef(null);
     phone: "",
     dob: "",
     gender: "",
-      documents: [],
+    documents: [],
   });
 
   const [educationList, setEducationList] = useState([]);
@@ -40,8 +40,12 @@ const fileInputRef = useRef(null);
 
   // --- Validation regex ---
   const nameRegex = /^[A-Za-z]{0,150}$/;
-// ✅ Updated email validation
-const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+  // ✅ Updated email validation
+  // Accepts typical company/college emails
+  // Accept all standard valid email formats
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
 
 
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
@@ -52,83 +56,117 @@ const emailRegex = /^[A-Za-z0-9]+([._%+-]?[A-Za-z0-9]+)*@[A-Za-z0-9-]+(\.[A-Za-z
   const yearRegex = /^[0-9]{4}$/;
 
   const isValidEmail = (email) => {
-  return emailRegex.test(email);
-};
+    email = email.trim();
 
+    // Basic regex: no spaces, contains @, proper chars
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
 
-// --- Validation per step ---
-const validateStep = () => {
-  let stepErrors = {};
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
 
-  if (step === 0) {
-    // First Name
-    if (!basicDetails.firstName) {
-      stepErrors.firstName = "First name is required.";
-    } else if (!nameRegex.test(basicDetails.firstName)) {
-      stepErrors.firstName = "Only alphabets allowed (max 150).";
+    // Local part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
+
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
+
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
+
+    // Last two domain parts cannot be same (reject domain.com.com)
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+    // Each domain part must contain only letters, numbers, hyphen (no special chars)
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false; // no hyphen at start/end
     }
 
-    // Last Name
-    if (!basicDetails.lastName) {
-      stepErrors.lastName = "Last name is required.";
-    } else if (!nameRegex.test(basicDetails.lastName)) {
-      stepErrors.lastName = "Only alphabets allowed (max 150).";
+    return true;
+  };
+
+
+
+
+
+  // --- Validation per step ---
+  const validateStep = () => {
+    let stepErrors = {};
+
+    if (step === 0) {
+      // First Name
+      if (!basicDetails.email) {
+        stepErrors.email = "Email is required.";
+      } else if (!isValidEmail(basicDetails.email)) {
+        stepErrors.email = "Enter a valid email.";
+      }
+
+
+      // Last Name
+      if (!basicDetails.lastName) {
+        stepErrors.lastName = "Last name is required.";
+      } else if (!nameRegex.test(basicDetails.lastName)) {
+        stepErrors.lastName = "Only alphabets allowed (max 150).";
+      }
+
+
+
+
+
+      // Phone
+      if (!basicDetails.phone) {
+        stepErrors.phone = "Phone number is required.";
+      } else if (basicDetails.phone.startsWith("0")) {
+        stepErrors.phone = "Phone number cannot start with 0.";
+      }
+      else if (!phoneRegex.test(basicDetails.phone)) {
+        stepErrors.phone = "Phone number must be 10 digits and contain only numbers.";
+      }
+
+
+      // Date of Birth
+      if (!basicDetails.dob) {
+        stepErrors.dob = "Date of birth is required.";
+      }
+
+      // Gender
+      if (!basicDetails.gender) {
+        stepErrors.gender = "Gender is required.";
+      }
     }
 
-    // Email
-    if (!basicDetails.email) {
-      stepErrors.email = "Email is required.";
-    } else if (!isValidEmail(basicDetails.email)) {
-      stepErrors.email = "Invalid email address.";
+    if (step === 1) {
+      if (educationList.length === 0)
+        stepErrors.education = "Add at least one education record.";
     }
 
-    // Phone
-    if (!basicDetails.phone) {
-      stepErrors.phone = "Phone number is required.";
-    } else if (basicDetails.phone.startsWith("0")) {
-  stepErrors.phone = "Phone number cannot start with 0.";
-} 
-else if (!phoneRegex.test(basicDetails.phone)) {
-  stepErrors.phone = "Phone number must be 10 digits and contain only numbers.";
-}
+    if (step === 2) {
+      const username = verification.username.trim();
+      if (!username) {
+        stepErrors.username = "Email is required.";
+      } else if (!isValidEmail(username)) {
+        stepErrors.username = "Enter a valid email.";
+      }
 
 
-    // Date of Birth
-    if (!basicDetails.dob) {
-      stepErrors.dob = "Date of birth is required.";
+
+
+      // Password
+      if (!verification.password) {
+        stepErrors.password = "Password is required.";
+      } else if (!passwordRegex.test(verification.password)) {
+        stepErrors.password =
+          "Password must be min 6 chars, include letters, numbers & special char.";
+      }
     }
 
-    // Gender
-    if (!basicDetails.gender) {
-      stepErrors.gender = "Gender is required.";
-    }
-  }
-
-  if (step === 1) {
-    if (educationList.length === 0)
-      stepErrors.education = "Add at least one education record.";
-  }
-
-  if (step === 2) {
-    // Username / Email
-    if (!verification.username) {
-      stepErrors.username = "Email is required.";
-    } else if (!isValidEmail(verification.username)) {
-      stepErrors.username = "Enter a valid email.";
-    }
-
-    // Password
-    if (!verification.password) {
-      stepErrors.password = "Password is required.";
-    } else if (!passwordRegex.test(verification.password)) {
-      stepErrors.password =
-        "Password must be min 6 chars, include letters, numbers & special char.";
-    }
-  }
-
-  setErrors(stepErrors);
-  return Object.keys(stepErrors).length === 0;
-};
+    setErrors(stepErrors);
+    return Object.keys(stepErrors).length === 0;
+  };
 
   // --- Step navigation ---
   const nextStep = () => {
@@ -137,21 +175,21 @@ else if (!phoneRegex.test(basicDetails.phone)) {
   const prevStep = () => setStep(step - 1);
 
   const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
-const [filesList, setFilesList] = useState( []); // display names
-const [fileSelected, setFileSelected] = useState(false);
-const [newFileSelected, setNewFileSelected] = useState(false);
- const [existingDocFiles, setExistingDocFiles] = useState([]);
-const [originalFiles, setOriginalFiles] = useState([]);
-const handleFileChange = (e) => {
-  const files = Array.from(e.target.files);
-  if (!files || files.length === 0) return;
+  const [filesList, setFilesList] = useState([]); // display names
+  const [fileSelected, setFileSelected] = useState(false);
+  const [newFileSelected, setNewFileSelected] = useState(false);
+  const [existingDocFiles, setExistingDocFiles] = useState([]);
+  const [originalFiles, setOriginalFiles] = useState([]);
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
 
-  setSelectedFiles(files);               // store File objects
-  setFilesList(files.map(f => f.name));  // store names for display
+    setSelectedFiles(files);               // store File objects
+    setFilesList(files.map(f => f.name));  // store names for display
 
-  setBasicDetails({ ...basicDetails, documents: files }); // attach to basicDetails
-  setFileSelected(true);
-};
+    setBasicDetails({ ...basicDetails, documents: files }); // attach to basicDetails
+    setFileSelected(true);
+  };
   // Upload files function returns uploaded file names
   const uploadFiles = async (applicationId) => {
     if (selectedFiles.length < 1) return [];
@@ -171,84 +209,84 @@ const handleFileChange = (e) => {
       return [];
     }
   };
-  const handleRemoveSingleFile = (index) => { 
+  const handleRemoveSingleFile = (index) => {
     debugger;
-  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
-  //setExistingDocFiles(updatedFiles);
-   setFilesList(updatedFiles);
+    const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+    //setExistingDocFiles(updatedFiles);
+    setFilesList(updatedFiles);
 
-  /*setFormData(prev => ({
-    ...prev,
-    files: updatedFiles,
-    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
-  }));*/
-   // flags
-  if (updatedFiles.length === 0) {
+    /*setFormData(prev => ({
+      ...prev,
+      files: updatedFiles,
+      fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
+    }));*/
+    // flags
+    if (updatedFiles.length === 0) {
+      setFileSelected(false);
+      setNewFileSelected(false);
+    }
+
+    // clear input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
+  };
+  const handleClear = () => {
+    setSelectedFiles([]);
+    setFilesList([]);
     setFileSelected(false);
-    setNewFileSelected(false);
-  }
-
-  // clear input
-  if (fileInputRef.current) {
-    fileInputRef.current.value = "";
-  }
-  
-};
-const handleClear = () => {
-  setSelectedFiles([]);
-  setFilesList([]);
-  setFileSelected(false);
-  setBasicDetails({ ...basicDetails, documents: [] }); // clear documents
-  if (fileInputRef.current) fileInputRef.current.value = null;
-};
+    setBasicDetails({ ...basicDetails, documents: [] }); // clear documents
+    if (fileInputRef.current) fileInputRef.current.value = null;
+  };
 
   // --- Save (Signup dispatch) ---
-  const handleSave = async() => {
+  const handleSave = async () => {
     if (!validateStep()) return;
-  const createdBy = `${basicDetails.firstName} ${basicDetails.lastName}`.trim();
-const payload = {
-  FirstName: basicDetails.firstName,
-  LastName: basicDetails.lastName,
-  Email: basicDetails.email,            // ✅ correct field
-  Phone: basicDetails.phone,
-  DateofBirth: basicDetails.dob,        // ✅ rename
-  Gender: basicDetails.gender,
-  UserName: verification.username,      // ✅ rename
-  PasswordHash: verification.password,  // ✅ raw password
-  RoleId: "1",
-  Education: JSON.stringify(educationList) ,// ✅ backend expects string
-  CreatedBy: createdBy,  
-};
+    const createdBy = `${basicDetails.firstName} ${basicDetails.lastName}`.trim();
+    const payload = {
+      FirstName: basicDetails.firstName,
+      LastName: basicDetails.lastName,
+      Email: basicDetails.email,            // ✅ correct field
+      Phone: basicDetails.phone,
+      DateofBirth: basicDetails.dob,        // ✅ rename
+      Gender: basicDetails.gender,
+      UserName: verification.username,      // ✅ rename
+      PasswordHash: verification.password,  // ✅ raw password
+      RoleId: "1",
+      Education: JSON.stringify(educationList),// ✅ backend expects string
+      CreatedBy: createdBy,
+    };
 
-debugger;
-   // 1️⃣ Insert user and get ID
-  const userId = await dispatch(insertNewUser(payload));
-  if (!userId) return; // stop if insertion failed
+    debugger;
+    // 1️⃣ Insert user and get ID
+    const userId = await dispatch(insertNewUser(payload));
+    if (!userId) return; // stop if insertion failed
 
-  // 2️⃣ Upload documents if any
-  if (basicDetails.documents && basicDetails.documents.length > 0) {
-    try {
-      await uploadFiles(userId);
-    } catch (err) {
-      console.error("File upload failed:", err);
-      Swal.fire({
-        text: "Documents upload failed!",
-        icon: "error",
-      });
-      return;
+    // 2️⃣ Upload documents if any
+    if (basicDetails.documents && basicDetails.documents.length > 0) {
+      try {
+        await uploadFiles(userId);
+      } catch (err) {
+        console.error("File upload failed:", err);
+        Swal.fire({
+          text: "Documents upload failed!",
+          icon: "error",
+        });
+        return;
+      }
     }
-  }
 
-  // 3️⃣ Show success alert after everything
-  await Swal.fire({
-    text: "Signup successful!",
-    icon: "success",
-    confirmButtonText: "OK",
-  });
+    // 3️⃣ Show success alert after everything
+    await Swal.fire({
+      text: "Signup successful!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
 
-  // 4️⃣ Navigate to login
-  navigate("/login");
-};
+    // 4️⃣ Navigate to login
+    navigate("/login");
+  };
 
   // --- Education handlers ---
   const addEducation = () => {
@@ -336,9 +374,8 @@ debugger;
           {["Basic Details", "Education", "Verification"].map((label, i) => (
             <div key={i} className="step-item">
               <div
-                className={`step-circle ${i === step ? "active" : ""} ${
-                  i > 0 && !isStepCompleted(i - 1) ? "disabled" : ""
-                }`}
+                className={`step-circle ${i === step ? "active" : ""} ${i > 0 && !isStepCompleted(i - 1) ? "disabled" : ""
+                  }`}
                 onClick={() => {
                   if (i === 0 || isStepCompleted(i - 1)) setStep(i);
                 }}
@@ -359,10 +396,10 @@ debugger;
         {/* Step 0: Basic Details */}
         {step === 0 && (
           <div>
-          {/*  <h3 className="section-title">Basic Details</h3> */}
-          <h3 className="sponsor-section-title">Basic Details</h3>
+            {/*  <h3 className="section-title">Basic Details</h3> */}
+            <h3 className="sponsor-section-title">Basic Details</h3>
 
-            
+
             <div className="row">
               <div className="form-group" >
                 <label>First Name *</label>
@@ -396,13 +433,13 @@ debugger;
             <div className="row">
               <div className="form-group">
                 <label>Email *</label>
-<input
-  type="text" // can stay email or text
-  value={basicDetails.email}
-  onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
-  className={errors.email ? "input-error" : ""}
-  placeholder="Email"
-/>
+                <input
+                  type="text" // can stay email or text
+                  value={basicDetails.email}
+                  onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
+                  className={errors.email ? "input-error" : ""}
+                  placeholder="Email"
+                />
 
 
 
@@ -415,13 +452,13 @@ debugger;
                   maxLength={10}
                   value={basicDetails.phone}
                   onChange={(e) => {
-    const value = e.target.value;
+                    const value = e.target.value;
 
-    // allow only numbers while typing
-    if (/^\d*$/.test(value)) {
-      setBasicDetails({ ...basicDetails, phone: value });
-    }
-  }}
+                    // allow only numbers while typing
+                    if (/^\d*$/.test(value)) {
+                      setBasicDetails({ ...basicDetails, phone: value });
+                    }
+                  }}
                   className={errors.phone ? "input-error" : ""}
                   placeholder="Phone"
                 />
@@ -446,82 +483,82 @@ debugger;
                 <div className="gender-group">
                   <label>   Male
                   </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      checked={basicDetails.gender === "Male"}
-                      onChange={() => setBasicDetails({ ...basicDetails, gender: "Male" })}
-                    />
-                 
+                  <input
+                    type="radio"
+                    name="gender"
+                    checked={basicDetails.gender === "Male"}
+                    onChange={() => setBasicDetails({ ...basicDetails, gender: "Male" })}
+                  />
+
                   <label>  Female
                   </label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      checked={basicDetails.gender === "Female"}
-                      onChange={() => setBasicDetails({ ...basicDetails, gender: "Female" })}
-                    />
-                  
+                  <input
+                    type="radio"
+                    name="gender"
+                    checked={basicDetails.gender === "Female"}
+                    onChange={() => setBasicDetails({ ...basicDetails, gender: "Female" })}
+                  />
+
                 </div>
                 {errors.gender && <p className="error-text">{errors.gender}</p>}
               </div>
             </div>
-            
-              <div className="form-group col-12">
-                <label>Upload Profile Photo</label>
-                <input
-                 type="file"
-                  accept="image/*"   
-                  name="documents"
-                  onChange={handleFileChange}
-                 // multiple
-                  ref={fileInputRef}
-                 // disabled={isViewMode}
-                />
 
-                {fileSelected && filesList.length > 0 && (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-danger mt-2"
-                    onClick={handleClear}
-                      style={{ marginTop: "10px" }}
-                  >
-                    Clear
-                  </button>
-                )}
+            <div className="form-group col-12">
+              <label>Upload Profile Photo</label>
+              <input
+                type="file"
+                accept="image/*"
+                name="documents"
+                onChange={handleFileChange}
+                // multiple
+                ref={fileInputRef}
+              // disabled={isViewMode}
+              />
 
-               {filesList.length > 0 && (
-    <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
-      {filesList.map((fileName, index) => (
-        <div
-          key={index}
-          className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
-          style={{
-          gap: "12px",
-          paddingLeft: "14px",
-          paddingRight: "12px",
-          color:"black"
-        }}
-        >
-          <span>{fileName}</span>
-          <button
-              type="button"
-              className="btn btn-sm btn-outline-danger"
-              onClick={() => handleRemoveSingleFile(index)}
-              style={{ marginLeft: "5px" }}
-            >
-              ×
-            </button>
-        </div>
-      ))}
-    </div>
-  )}
+              {fileSelected && filesList.length > 0 && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger mt-2"
+                  onClick={handleClear}
+                  style={{ marginTop: "10px" }}
+                >
+                  Clear
+                </button>
+              )}
+
+              {filesList.length > 0 && (
+                <div className="d-flex flex-column mt-2 rounded" style={{ marginTop: "5px" }}>
+                  {filesList.map((fileName, index) => (
+                    <div
+                      key={index}
+                      className="d-flex align-items-center justify-content-between border rounded p-2 mb-1"
+                      style={{
+                        gap: "12px",
+                        paddingLeft: "14px",
+                        paddingRight: "12px",
+                        color: "black"
+                      }}
+                    >
+                      <span>{fileName}</span>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => handleRemoveSingleFile(index)}
+                        style={{ marginLeft: "5px" }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
 
 
-                    
-                  </div>
-              
-              
+
+            </div>
+
+
           </div>
         )}
 
@@ -539,7 +576,7 @@ debugger;
 
             {errors.education && <p className="error-text">{errors.education}</p>}
 
-           {/*{educationList.length > 0 && (
+            {/*{educationList.length > 0 && (
               <div className="education-grid header">
                 <div>Course</div>
                 <div>College / University</div>
@@ -549,138 +586,138 @@ debugger;
             )}
 */}
             {educationList.map((edu, index) =>
-  editIndex === index ? (
-    <div className="education-grid" key={index}>
-<div className="form-group">
-      <label>Class / Course  <span className="required">*</span></label>
-      <input
-        type="text"
-        placeholder="Class / Course "
-        value={education.degree}
-        onChange={(e) => setEducation({ ...education, degree: e.target.value })}
-      />
-    </div>
+              editIndex === index ? (
+                <div className="education-grid" key={index}>
+                  <div className="form-group">
+                    <label>Class / Course  <span className="required">*</span></label>
+                    <input
+                      type="text"
+                      placeholder="Class / Course "
+                      value={education.degree}
+                      onChange={(e) => setEducation({ ...education, degree: e.target.value })}
+                    />
+                  </div>
 
-    <div className="form-group">
-      <label>School / College / University <span className="required">*</span></label>
-      <input
-        type="text"
-        placeholder="School / College / University"
-        value={education.college}
-        onChange={(e) => setEducation({ ...education, college: e.target.value })}
-      />
-    </div>
+                  <div className="form-group">
+                    <label>School / College / University <span className="required">*</span></label>
+                    <input
+                      type="text"
+                      placeholder="School / College / University"
+                      value={education.college}
+                      onChange={(e) => setEducation({ ...education, college: e.target.value })}
+                    />
+                  </div>
 
-    <div className="form-group">
-      <label>Year<span className="required">*</span></label>
-      <input
-        type="text"
-        placeholder="Year"
-        maxLength={4}
-        value={education.year}
-        onChange={(e) => setEducation({ ...education, year: e.target.value })}
-      />
-    </div>
+                  <div className="form-group">
+                    <label>Year<span className="required">*</span></label>
+                    <input
+                      type="text"
+                      placeholder="Year"
+                      maxLength={4}
+                      value={education.year}
+                      onChange={(e) => setEducation({ ...education, year: e.target.value })}
+                    />
+                  </div>
 
-    <div className="sign-action-btns">
-      <button onClick={() => updateEducation(index)} className="sign-action-btn">Save</button>
-      <button onClick={() => {
-        setEditIndex(null);
-        setEducation({ degree: "", college: "", year: "" });
-      }} className="sign-action-btn">Cancel</button>
-    </div>
-  </div>
-) : (
-    <div className="education-grid" key={index}>
+                  <div className="sign-action-btns">
+                    <button onClick={() => updateEducation(index)} className="sign-action-btn">Save</button>
+                    <button onClick={() => {
+                      setEditIndex(null);
+                      setEducation({ degree: "", college: "", year: "" });
+                    }} className="sign-action-btn">Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="education-grid" key={index}>
 
-  <div className="label-value">
-    <span className="label">Class / Course</span>
-    <span className="value">{edu.degree}</span>
-  </div>
+                  <div className="label-value">
+                    <span className="label">Class / Course</span>
+                    <span className="value">{edu.degree}</span>
+                  </div>
 
-  <div className="label-value">
-    <span className="label">School / College / University</span>
-    <span className="value">{edu.college}</span>
-  </div>
+                  <div className="label-value">
+                    <span className="label">School / College / University</span>
+                    <span className="value">{edu.college}</span>
+                  </div>
 
-  <div className="label-value">
-    <span className="label">Year</span>
-    <span className="value">{edu.year}</span>
-  </div>
+                  <div className="label-value">
+                    <span className="label">Year</span>
+                    <span className="value">{edu.year}</span>
+                  </div>
 
-  <div className="sign-action-btns">
-    <button
-      onClick={() => {
-        setEditIndex(index);
-        setEducation(edu);
-        setShowEducationFields(false);
-      }}
-      className="sign-action-btn"
-    >
-      Edit
-    </button>
-    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
-      Delete
-    </button>
-  </div>
+                  <div className="sign-action-btns">
+                    <button
+                      onClick={() => {
+                        setEditIndex(index);
+                        setEducation(edu);
+                        setShowEducationFields(false);
+                      }}
+                      className="sign-action-btn"
+                    >
+                      Edit
+                    </button>
+                    <button onClick={() => deleteEducation(index)} className="sign-action-btn">
+                      Delete
+                    </button>
+                  </div>
 
-</div>
+                </div>
 
-  )
-)}
+              )
+            )}
 
 
             {showEducationFields && editIndex === null && (
               <div className="education-grid">
-<div className="form-group">
-      <label>Class / Course *</label>
-      <input
-        type="text"
-        placeholder="Class / Course"
-        value={education.degree}
-        maxLength={150}
-        onChange={(e) =>
-          courseRegex.test(e.target.value) &&
-          setEducation({ ...education, degree: e.target.value })
-        }
-        className={eduErrors.degree ? "input-error" : ""}
-      />
-      {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
-    </div>
+                <div className="form-group">
+                  <label>Class / Course *</label>
+                  <input
+                    type="text"
+                    placeholder="Class / Course"
+                    value={education.degree}
+                    maxLength={150}
+                    onChange={(e) =>
+                      courseRegex.test(e.target.value) &&
+                      setEducation({ ...education, degree: e.target.value })
+                    }
+                    className={eduErrors.degree ? "input-error" : ""}
+                  />
+                  {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
+                </div>
 
 
-    <div className="form-group">
-      <label>School / College / University *</label>
-      <input
-        type="text"
-        placeholder="School / College / University"
-        value={education.college}
-        maxLength={250}
-        onChange={(e) =>
-          collegeRegex.test(e.target.value) &&
-          setEducation({ ...education, college: e.target.value })
-        }
-        className={eduErrors.college ? "input-error" : ""}
-      />
-      {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
-    </div>
-                
+                <div className="form-group">
+                  <label>School / College / University *</label>
+                  <input
+                    type="text"
+                    placeholder="School / College / University"
+                    value={education.college}
+                    maxLength={250}
+                    onChange={(e) =>
+                      collegeRegex.test(e.target.value) &&
+                      setEducation({ ...education, college: e.target.value })
+                    }
+                    className={eduErrors.college ? "input-error" : ""}
+                  />
+                  {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
+                </div>
 
-                      <div className="form-group">
-      <label>Year *</label>
-      <input
-        type="text"
-        placeholder="Year"
-        value={education.year}
-        maxLength={4}
-        onChange={(e) => /^\d*$/.test(e.target.value) &&
-          setEducation({ ...education, year: e.target.value })
-        }
-        className={eduErrors.year ? "input-error" : ""}
-      />
-      {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
-    </div>
-                 
+
+                <div className="form-group">
+                  <label>Year *</label>
+                  <input
+                    type="text"
+                    placeholder="Year"
+                    value={education.year}
+                    maxLength={4}
+                    onChange={(e) => /^\d*$/.test(e.target.value) &&
+                      setEducation({ ...education, year: e.target.value })
+                    }
+                    className={eduErrors.year ? "input-error" : ""}
+                  />
+                  {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
+                </div>
+
 
                 <div className="sign-action-btns">
                   <button onClick={addEducation} className="sign-action-btn">
@@ -690,7 +727,7 @@ debugger;
                     onClick={() => {
                       setShowEducationFields(false);
                       setEducation({ degree: "", college: "", year: "" });
-                        setEduErrors({}); // 🔹 clear errors on Cancel
+                      setEduErrors({}); // 🔹 clear errors on Cancel
                     }}
                     className="sign-action-btn"
                   >
@@ -699,64 +736,67 @@ debugger;
                 </div>
               </div>
             )}
-             {/* Show errors only after clicking Save */}
-    {Object.keys(eduErrors).length > 0 && (
-      <div className="error-block">
-        {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
-        {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
-        {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
-      </div>
-    )}
+            {/* Show errors only after clicking Save */}
+            {Object.keys(eduErrors).length > 0 && (
+              <div className="error-block">
+                {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
+                {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
+                {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
+              </div>
+            )}
           </div>
         )}
 
         {/* Step 2: Verification */}
         {step === 2 && (
           <div >
-            <div className="verfiy"> 
-            <h3>Verification</h3>
+            <div className="verfiy">
+              <h3>Verification</h3>
             </div>
             <div className="row">
               <div className="form-group">
-               <label>User Name(Email) *</label>
-<input
-  type="text"
-  placeholder="Enter your email"
-  value={verification.username}
-  onChange={(e) => setVerification({ ...verification, username: e.target.value })}
-  className={errors.username ? "input-error" : ""}
-/>
+                <label>User Name(Email) *</label>
+                <input
+                  type="text"
+                  placeholder="Enter your email"
+                  value={verification.username}
+                  onChange={(e) =>
+                    setVerification({ ...verification, username: e.target.value.trim() })
+                  }
+                  className={errors.username ? "input-error" : ""}
+                />
 
 
 
 
-{errors.username && <p className="error-text">{errors.username}</p>}
+
+                {errors.username && <p className="error-text">{errors.username}</p>}
 
               </div>
               <div className="form-group">
-  <label>Password *</label>
+                <label>Password *</label>
 
-  <div className="password-wrapper">
-    <input
-      type={showPassword ? "text" : "password"}
-      placeholder="Password"
-      value={verification.password}
-      onChange={(e) =>
-        setVerification({ ...verification, password: e.target.value })
-      }
-      className={errors.password ? "input-error" : ""}
-    />
+                <div className="password-wrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={verification.password}
+                    onChange={(e) =>
+                      setVerification({ ...verification, password: e.target.value })
+                    }
+                    className={errors.password ? "input-error" : ""}
+                  />
 
-    <span
-      className="password-toggle"
-      onClick={() => setShowPassword(!showPassword)}
-    >
-      {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-    </span>
-  </div>
+                  <span
+                    className="password-toggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                  </span>
+                </div>
 
-  {errors.password && <p className="error-text">{errors.password}</p>}
-</div>
+                {errors.password && <p className="error-text">{errors.password}</p>}
+              </div>
 
             </div>
           </div>
