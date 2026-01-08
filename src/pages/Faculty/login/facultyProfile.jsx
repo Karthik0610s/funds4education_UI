@@ -265,15 +265,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       else if (age > 90) errs.dateofBirth = "Age cannot be more than 90 years.";
       else if (age < 10) errs.dateofBirth = "Age must be at least 10 years.";
     }
-    educationList.forEach((edu, i) => {
-      if (!nameRegex.test(edu.degree)) {
-        errs.education = `Record ${i + 1}: Course contains invalid characters.`;
-      }
-
-      if (!nameRegex.test(edu.college)) {
-        errs.education = `Record ${i + 1}: College contains invalid characters.`;
-      }
-    });
+    
     if (educationList.length === 0) {
       errs.education = "At least one qualification detail is required.";
     }
@@ -295,7 +287,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       setErrors(prev => ({ ...prev, education: "Course is required." }));
       return;
     }
-
+   {/*
     if (!qualRegex.test(education.degree)) {
       setErrors(prev => ({
         ...prev,
@@ -303,12 +295,12 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       }));
       return;
     }
-
+*/}
     if (!education.college.trim()) {
       setErrors(prev => ({ ...prev, education: "College is required." }));
       return;
     }
-
+   {/* 
     if (!qualRegex.test(education.college)) {
       setErrors(prev => ({
         ...prev,
@@ -316,7 +308,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       }));
       return;
     }
-
+*/}
     if (!education.year) {
       setErrors(prev => ({ ...prev, education: "Year is required." }));
       return;
@@ -342,6 +334,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
   const deleteEducation = (index) => {
     setEducationList(educationList.filter((_, i) => i !== index));
   };
+
 
 
   const addOrUpdateWork = () => {

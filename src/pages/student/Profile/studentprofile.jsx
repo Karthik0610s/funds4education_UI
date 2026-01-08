@@ -200,6 +200,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
 const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
 
+
 ["email", "userName"].forEach(field => {
   const value = formData[field].trim();
   if (!value) {
@@ -272,7 +273,7 @@ console.log("Errors:", errs);
       setErrors(prev => ({ ...prev, education: "Course is required." }));
       return;
     }
-
+{/*
     if (!nameRegex.test(education.degree)) {
       setErrors(prev => ({
         ...prev,
@@ -280,12 +281,12 @@ console.log("Errors:", errs);
       }));
       return;
     }
-
+  */}
     if (!education.college.trim()) {
       setErrors(prev => ({ ...prev, education: "College is required." }));
       return;
     }
-
+   {/*
     if (!nameRegex.test(education.college)) {
       setErrors(prev => ({
         ...prev,
@@ -293,6 +294,7 @@ console.log("Errors:", errs);
       }));
       return;
     }
+*/}
 
     if (!education.year) {
       setErrors(prev => ({ ...prev, education: "Year is required." }));
