@@ -234,7 +234,7 @@ const filteredApplications = useMemo(() => {
               <option>All</option>
              {/* <option>Pending</option> */}
               <option>Approved</option>
-              <option>Funded</option>
+              {/*<option>Funded</option>*/}
               <option>Rejected</option>
             </select>
           </div>
@@ -255,7 +255,7 @@ const filteredApplications = useMemo(() => {
                     </h3>
                     <p>{app.scholarshipName || "Course not specified"}</p>
                     <p>School/College: {app.schoolName}</p>
-                    <p>Funded Amount:{app.fundAmount}</p>
+                    {/*<p>Funded Amount:{app.fundAmount}</p>*/}
                     <span className={`status ${normalize(app.status)}`}>
                       {displayStatus(app.status)}
                     </span>
@@ -297,7 +297,7 @@ const filteredApplications = useMemo(() => {
 </button>
 
                     )}
-
+                  {/*
                     <button
                       className="btn btn-message"
                       onClick={(e) => {
@@ -310,6 +310,7 @@ const filteredApplications = useMemo(() => {
                     >
                       Messages ({(app.messages || []).length})
                     </button>
+*/}
                   </div>
                 </div>
               ))

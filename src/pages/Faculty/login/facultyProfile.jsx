@@ -272,16 +272,18 @@ if (!formData.userName.trim()) {
   if (!nameRegex.test(edu.college)) {
     errs.education = `Record ${i + 1}: College contains invalid characters.`;
   }
-});
-    if (educationList.length === 0)
-      errs.education = "Add at least one education record.";
+   });
+    if (educationList.length === 0) {
+    errs.education = "At least one qualification detail is required.";
+  }
 
-    setErrors(errs);
-     if (workList.length === 0)
-      errs.work = "Add at least one work record.";
+  // ✅ WORK DETAILS VALIDATION (FIXED)
+  if (workList.length === 0) {
+    errs.work = "Add at least one work record.";
+  }
 
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
+  setErrors(errs);
+  return Object.keys(errs).length === 0;
   };
 
   // ✅ Add/Update Education
@@ -782,6 +784,7 @@ navigate("/view-faculty-profile", { replace: true });
       value={work.organization}
       onChange={(e) => setWork({ ...work, organization: e.target.value })}
     />
+    
   </div>
 
   <div className="form-group">
@@ -858,6 +861,9 @@ navigate("/view-faculty-profile", { replace: true });
       {workEditIndex !== null ? "Update" : "Add"}
     </button>
   </div>*/}
+{errors.work && (
+  <p className="error-text">{errors.work}</p>
+)}
 
 {workList.length > 0 && (
   <table className="signup-table">

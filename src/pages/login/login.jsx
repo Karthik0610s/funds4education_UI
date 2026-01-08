@@ -183,10 +183,19 @@ export default function LoginPage() {
                   value={type}
                   checked={userType === type}
                   onChange={(e) => {
-                    setUserType(e.target.value);
-                    setErrors((prev) => ({ ...prev, userType: "" }));
-                    dispatch(clearError()); // ✅ IMPORTANT
-                  }}
+  setUserType(e.target.value);
+
+  // ✅ Clear ALL local validation errors
+  setErrors({
+    identifier: "",
+    password: "",
+    userType: "",
+  });
+
+  // ✅ Clear Redux/global auth error
+  dispatch(clearError());
+}}
+
                 />
                 <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
               </label>
