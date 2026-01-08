@@ -264,7 +264,15 @@ if (!formData.userName.trim()) {
       else if (age > 90) errs.dateofBirth = "Age cannot be more than 90 years.";
       else if (age < 10) errs.dateofBirth = "Age must be at least 10 years.";
     }
+     educationList.forEach((edu, i) => {
+  if (!nameRegex.test(edu.degree)) {
+    errs.education = `Record ${i + 1}: Course contains invalid characters.`;
+  }
 
+  if (!nameRegex.test(edu.college)) {
+    errs.education = `Record ${i + 1}: College contains invalid characters.`;
+  }
+});
     if (educationList.length === 0)
       errs.education = "Add at least one education record.";
 
@@ -278,26 +286,54 @@ if (!formData.userName.trim()) {
 
   // ✅ Add/Update Education
   const addOrUpdateEducation = () => {
-    if (!education.degree || !education.college || !education.year) {
-      // use global popup handled in slice, not here
-      setErrors((prev) => ({
-        ...prev,
-        education: "Please fill in all education fields.",
-      }));
-      return;
-    }
+  const qualRegex = /^[A-Za-z .-]+$/;
 
-    if (editIndex !== null) {
-      const updated = [...educationList];
-      updated[editIndex] = education;
-      setEducationList(updated);
-      setEditIndex(null);
-    } else {
-      setEducationList([...educationList, education]);
-    }
+  if (!education.degree.trim()) {
+    setErrors(prev => ({ ...prev, education: "Course is required." }));
+    return;
+  }
 
-    setEducation({ degree: "", college: "", year: "" });
-  };
+  if (!qualRegex.test(education.degree)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "Course: numbers or special characters not allowed."
+    }));
+    return;
+  }
+
+  if (!education.college.trim()) {
+    setErrors(prev => ({ ...prev, education: "College is required." }));
+    return;
+  }
+
+  if (!qualRegex.test(education.college)) {
+    setErrors(prev => ({
+      ...prev,
+      education: "College: numbers or special characters not allowed."
+    }));
+    return;
+  }
+
+  if (!education.year) {
+    setErrors(prev => ({ ...prev, education: "Year is required." }));
+    return;
+  }
+
+  // clear error
+  setErrors(prev => ({ ...prev, education: null }));
+
+  if (editIndex !== null) {
+    const updated = [...educationList];
+    updated[editIndex] = education;
+    setEducationList(updated);
+    setEditIndex(null);
+  } else {
+    setEducationList([...educationList, education]);
+  }
+
+  setEducation({ degree: "", college: "", year: "" });
+};
+
 
   // ✅ Delete Education
   const deleteEducation = (index) => {
@@ -615,25 +651,36 @@ navigate("/view-faculty-profile", { replace: true });
           <div className="row">
             <div className="form-group ">
     <label>Course *</label>
-            <input
-              type="text"
-              placeholder="Course"
-              value={education.degree}
-              onChange={(e) =>
-                setEducation({ ...education, degree: e.target.value })
-              }
-            />
+           <input
+  type="text"
+  placeholder="Course"
+  value={education.degree}
+  onInput={(e) => {
+    // ❌ hide special chars & numbers while entering
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+/>
             </div>
             <div className="form-group ">
     <label>College *</label>
             <input
-              type="text"
-              placeholder="College"
-              value={education.college}
-              onChange={(e) =>
-                setEducation({ ...education, college: e.target.value })
-              }
-            />
+  type="text"
+  placeholder="College"
+  value={education.college}
+  onInput={(e) => {
+    // ❌ hide invalid chars
+    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+  }}
+  onChange={(e) =>
+    setEducation({ ...education, college: e.target.value })
+  }
+/>
+
             </div>
               <div className="form-group ">
     <label>Year *</label>

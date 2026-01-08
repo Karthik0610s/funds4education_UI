@@ -264,7 +264,7 @@ const downloadFileFun = async (id) => {
 </div>   
 {/* Documents Section */}
 <div className="scholarship-eligibility-header">
-  <h3>Documents</h3>
+  <h3>Annexure</h3>
 </div>
 
 <div className="scholarship-detail-container">
