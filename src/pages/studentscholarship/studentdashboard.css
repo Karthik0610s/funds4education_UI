@@ -1246,8 +1246,8 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 
 /* =========================
    RESPONSIVE SWITCH
-========================= */
-@media (max-width: 768px) {
+========================= 768 */
+@media (max-width: 913px) {
   .pagination-mobile {
     display: flex;
   }
