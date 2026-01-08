@@ -554,7 +554,7 @@ const formatAmount = (val) => {
               </>
             )}
 
-            {statusNorm === "approved" && (
+          {/*  {statusNorm === "approved" && (
              <button
   className="btn btn-fund"
   onClick={(e) => {
@@ -565,7 +565,7 @@ const formatAmount = (val) => {
   Fund Student
 </button>
 
-            )}
+            )}*/}
           </div>
         </div>
       );

@@ -27,7 +27,8 @@ export default function SponsorSignUpPage() {
     // --- Validation regex ---
     const nameRegex = /^[A-Za-z\s]{1,150}$/;
   //  const emailRegex =  /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(com|org|net|edu|co\.in)$/;
-  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
+const emailRegex =
+  /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     const phoneRegex = /^[0-9]{10}$/;
     const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
@@ -120,10 +121,12 @@ const handleClear = () => {
         stepErrors.orgType = "Organization type required.";
 
     // Email
-    if (!basicDetails.email)
-        stepErrors.email = "Email is required.";
-    else if (!emailRegex.test(basicDetails.email))
-        stepErrors.email = "Invalid email (use .com, .org, .edu, etc).";
+   // Email
+if (!basicDetails.email.trim()) {
+  stepErrors.email = "Email is required.";
+} else if (!emailRegex.test(basicDetails.email.trim())) {
+  stepErrors.email = "Please enter a valid email address.";
+}
 
     // Phone
     if (!basicDetails.phone)
@@ -140,11 +143,13 @@ const handleClear = () => {
 
        if (step === 1) {
     // Username
-    if (!verification.username) {
-        stepErrors.username = "Username is required.";
-    } else if (!emailRegex.test(verification.username)) {
-        stepErrors.username = "Enter a valid email.";
-    }
+    // Username
+if (!verification.username.trim()) {
+  stepErrors.username = "Username (email) is required.";
+} else if (!emailRegex.test(verification.username.trim())) {
+  stepErrors.username = "Please enter a valid email address.";
+}
+
 
     // Password
     if (!verification.password) {
@@ -321,22 +326,15 @@ const handleClear = () => {
       <div className="form-group">
         <label>Email *</label>
         <input
-          type="email"
-          value={basicDetails.email}
-              onChange={(e) => {
-      const value = e.target.value;
+  type="email"
+  value={basicDetails.email}
+  onChange={(e) =>
+    setBasicDetails({ ...basicDetails, email: e.target.value })
+  }
+  className={errors.email ? "input-error" : ""}
+  placeholder="Email"
+/>
 
-      // allow only letters, numbers, @ and . WHILE typing
-      if (/^[A-Za-z0-9@._%-]*$/.test(value)) {
-    setBasicDetails({ ...basicDetails, email: value });
-}
-
-
-}}
-
-          className={errors.email ? "input-error" : ""}
-          placeholder="Email"
-        />
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
 
@@ -436,20 +434,16 @@ const handleClear = () => {
     <div className="row">
       <div className="form-group">
         <label>Username *</label>
-        <input
+       <input
   type="text"
-  placeholder="Username"
+  placeholder="Username (Email)"
   value={verification.username}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // allow only letters, numbers, underscore
-   if (/^[A-Za-z0-9@._%+-]*$/.test(value)){
-      setVerification({ ...verification, username: value });
-    }
-  }}
+  onChange={(e) =>
+    setVerification({ ...verification, username: e.target.value })
+  }
   className={errors.username ? "input-error" : ""}
 />
+
 
         {errors.username && <p className="error-text">{errors.username}</p>}
       </div>

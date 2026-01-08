@@ -743,6 +743,7 @@ const renderMobileLinks = (forcedVariant) => {
           }
         }}
       />
+         <span className="brand">VidyāSetu</span>
     </div>
 
     {/* RIGHT SIDE MOBILE (LOGGED IN) */}
@@ -759,9 +760,17 @@ const renderMobileLinks = (forcedVariant) => {
         />
 
         {/* MENU ICON */}
-        <div className="menu-icon" onClick={toggleMenu}>
+         <div className="menu-icon" 
+        onClick={toggleMenu}>
           {menuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
-        </div>
+        </div> 
+        {/* <button
+  onClick={toggleMenu}
+  className={`menu-toggle ${menuOpen ? "open" : ""}`}
+>
+  <FiMenu size={26} />
+</button> */}
+
       </div>
     ) : (
       /* RIGHT SIDE MOBILE (NOT LOGGED IN) */

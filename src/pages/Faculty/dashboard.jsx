@@ -543,11 +543,21 @@ const handleUploadFile = async () => {
           <div className="mobile-filter-overlay">
             <div className="left-panel  mobile-panel">
 
-              <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
+              {/*<div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
                 ✕ Close
-              </div>
+              </div>*/}
 
-              <div className="filter-title">Category</div>
+                <div className="filter-header">
+  
+
+  <span className="filter-title">Category</span>
+  <span
+    className="mobile-filter-close"
+    onClick={() => setShowFilter(false)}
+  >
+    ✕
+  </span>
+</div>
               {/* <button onClick={() => setShowFilter(false)}>✕ Close</button>*/}
 
 
