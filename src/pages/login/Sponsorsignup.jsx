@@ -433,16 +433,17 @@ if (!verification.username.trim()) {
 
     <div className="row">
       <div className="form-group">
-        <label>Username *</label>
+        <label>Email *</label>
        <input
-  type="text"
-  placeholder="Username (Email)"
+  type="email"
+  placeholder="Enter your email"
   value={verification.username}
   onChange={(e) =>
     setVerification({ ...verification, username: e.target.value })
   }
   className={errors.username ? "input-error" : ""}
 />
+
 
 
         {errors.username && <p className="error-text">{errors.username}</p>}

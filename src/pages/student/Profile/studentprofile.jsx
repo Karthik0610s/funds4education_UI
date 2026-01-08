@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { updateStudent } from "../../../app/redux/slices/studentSlice"; // SweetAlert handled inside slice
 import "../../../pages/styles.css";
-import { uploadFormFilesReq} from "../../../api/scholarshipapplication/scholarshipapplication";
- import Swal from "sweetalert2";
- import { ApiKey } from "../../../api/endpoint";
- import { publicAxios } from "../../../api/config";
- import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
- import { FiX } from "react-icons/fi";
+import { uploadFormFilesReq } from "../../../api/scholarshipapplication/scholarshipapplication";
+import Swal from "sweetalert2";
+import { ApiKey } from "../../../api/endpoint";
+import { publicAxios } from "../../../api/config";
+import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
+import { FiX } from "react-icons/fi";
 export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const dispatch = useDispatch();
 
@@ -20,23 +20,23 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     dateofBirth: "",
     gender: "",
     userName: "",
-    document:[],
-    studentId:""
+    document: [],
+    studentId: ""
   });
-const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [educationList, setEducationList] = useState([]);
   const [education, setEducation] = useState({ degree: "", college: "", year: "" });
   const [editIndex, setEditIndex] = useState(null);
   const [errors, setErrors] = useState({});
- const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
-const [filesList, setFilesList] = useState(formData?.files||[]);
-console.log(filesList,"filelist"); // display names
-const [fileSelected, setFileSelected] = useState(false);
-const [newFileSelected, setNewFileSelected] = useState(false);
- const [existingDocFiles, setExistingDocFiles] = useState([]);
-const [originalFiles, setOriginalFiles] = useState([]);
-const handleFileChange = (e) => {
-  debugger;
+  const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
+  const [filesList, setFilesList] = useState(formData?.files || []);
+  console.log(filesList, "filelist"); // display names
+  const [fileSelected, setFileSelected] = useState(false);
+  const [newFileSelected, setNewFileSelected] = useState(false);
+  const [existingDocFiles, setExistingDocFiles] = useState([]);
+  const [originalFiles, setOriginalFiles] = useState([]);
+  const handleFileChange = (e) => {
+    debugger;
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
 
@@ -68,51 +68,51 @@ const handleFileChange = (e) => {
     }
   };
   const downloadFileFun = async (id, type) => {
-      try {
-        //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
-        //const res= await 
-        const res = await publicAxios.get(
-          `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
-          { responseType: "blob" }   // <-- important for file download
-        );
-  
-  
-        const url = window.URL.createObjectURL(
-          new Blob([res.data], { type: "application/zip" })
-        );
-  
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "documents.zip"); // you can rename as needed
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
-      } catch (err) {
-        console.error("File download failed:", err);
-      }
-    };
-  
-const handleClear = () => {
-  // clear only newly selected files
-  setSelectedFiles([]);
+    try {
+      //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
+      //const res= await 
+      const res = await publicAxios.get(
+        `${ApiKey.downloadscholarshipFiles}/${id}/${type}`,
+        { responseType: "blob" }   // <-- important for file download
+      );
 
-  // 🔑 restore backend files in UI
-  setFilesList([...originalFiles]);
 
-  // 🔑 keep backend payload intact
-  setFormData(prev => ({
-    ...prev,
-    fileName: originalFiles.join("|"),
-    filePath: prev.filePath
-  }));
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/zip" })
+      );
 
-  setFileSelected(false);
-  setNewFileSelected(false);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "documents.zip"); // you can rename as needed
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      console.error("File download failed:", err);
+    }
+  };
 
-  if (fileInputRef.current) {
-    fileInputRef.current.value = null;
-  }
-};
+  const handleClear = () => {
+    // clear only newly selected files
+    setSelectedFiles([]);
+
+    // 🔑 restore backend files in UI
+    setFilesList([...originalFiles]);
+
+    // 🔑 keep backend payload intact
+    setFormData(prev => ({
+      ...prev,
+      fileName: originalFiles.join("|"),
+      filePath: prev.filePath
+    }));
+
+    setFileSelected(false);
+    setNewFileSelected(false);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
+    }
+  };
 
 
   // ✅ Load profile data
@@ -121,7 +121,7 @@ const handleClear = () => {
       debugger;
       setFormData({
         id: profile.id,
-        studentId:profile.studentId,
+        studentId: profile.studentId,
         firstName: profile.firstName || "",
         lastName: profile.lastName || "",
         email: profile.email || "",
@@ -131,9 +131,9 @@ const handleClear = () => {
           : "",
         gender: profile.gender || "",
         userName: profile.userName || "",
-       // filesList:profile.files ||""
+        // filesList:profile.files ||""
       });
- setFilesList(profile.files || []);
+      setFilesList(profile.files || []);
       try {
         if (profile.education) {
           const parsed = JSON.parse(profile.education);
@@ -144,44 +144,44 @@ const handleClear = () => {
       }
     }
   }, [profile]);
- useEffect(() => {
-  if (profile) {
-    setFilesList(profile.files || []);
-    setExistingDocFiles(profile.files || []);
-    setOriginalFiles(profile.files || []);
+  useEffect(() => {
+    if (profile) {
+      setFilesList(profile.files || []);
+      setExistingDocFiles(profile.files || []);
+      setOriginalFiles(profile.files || []);
+
+      setFormData(prev => ({
+        ...prev,
+        fileName: profile.files?.join("|") || "",
+        filePath: profile.filePath || ""
+      }));
+    }
+  }, [profile?.id]);
+
+
+  const handleRemoveSingleFile = (index) => {
+    debugger;
+    const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
+    //setExistingDocFiles(updatedFiles);
+    setFilesList(updatedFiles);
 
     setFormData(prev => ({
       ...prev,
-      fileName: profile.files?.join("|") || "",
-      filePath: profile.filePath || ""
+      files: updatedFiles,
+      fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
     }));
-  }
-}, [profile?.id]);
+    // flags
+    if (updatedFiles.length === 0) {
+      setFileSelected(false);
+      setNewFileSelected(false);
+    }
 
+    // clear input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
 
-  const handleRemoveSingleFile = (index) => { 
-    debugger;
-  const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
-  //setExistingDocFiles(updatedFiles);
-   setFilesList(updatedFiles);
-
-  setFormData(prev => ({
-    ...prev,
-    files: updatedFiles,
-    fileName: updatedFiles.length > 0 ? updatedFiles.join("|") : "",
-  }));
-   // flags
-  if (updatedFiles.length === 0) {
-    setFileSelected(false);
-    setNewFileSelected(false);
-  }
-
-  // clear input
-  if (fileInputRef.current) {
-    fileInputRef.current.value = "";
-  }
-  
-};
+  };
   // ✅ Format date for backend
   const formatDateForBackend = (dateStr) => {
     if (!dateStr) return null;
@@ -196,8 +196,19 @@ const handleClear = () => {
   const validateForm = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
-   // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
+const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+
+
+["email", "userName"].forEach(field => {
+  const value = formData[field].trim();
+  if (!value) {
+    errs[field] = "Email is required."; // if empty
+  } else if (!emailRegex.test(value)) {
+    errs[field] = "Enter a valid email address."; // if invalid format
+  }
+});
+
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
@@ -213,11 +224,11 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
-   if (!formData.email.trim()) {
-  errs.email = "Email is required.";
-} else if (!emailRegex.test(formData.email)) {
-  errs.email = "Enter a valid email address (e.g., user@example.com).";
-}
+    if (!formData.email.trim()) {
+      errs.email = "Email is required.";
+    } else if (!emailRegex.test(formData.email)) {
+      errs.email = "Enter a valid email address (e.g., user@example.com).";
+    }
 
 
     if (!formData.phone.trim()) {
@@ -227,11 +238,11 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-if (!formData.userName.trim()) {
-  errs.userName = "Email is required.";
-} else if (!emailRegex.test(formData.userName)) {
-  errs.userName = "Enter a valid email address.";
-}
+    if (!formData.userName.trim()) {
+      errs.userName = "Email is required.";
+    } else if (!emailRegex.test(formData.userName)) {
+      errs.userName = "Enter a valid email address.";
+    }
 
 
     if (!formData.dateofBirth) {
@@ -248,60 +259,60 @@ if (!formData.userName.trim()) {
 
     if (educationList.length === 0)
       errs.education = "Add at least one education record.";
-
+console.log("Errors:", errs);
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
 
   // ✅ Add/Update Education
- const addOrUpdateEducation = () => {
-  const nameRegex = /^[A-Za-z .-]+$/;
+  const addOrUpdateEducation = () => {
+    const nameRegex = /^[A-Za-z .-]+$/;
 
-  if (!education.degree.trim()) {
-    setErrors(prev => ({ ...prev, education: "Course is required." }));
-    return;
-  }
+    if (!education.degree.trim()) {
+      setErrors(prev => ({ ...prev, education: "Course is required." }));
+      return;
+    }
 
-  if (!nameRegex.test(education.degree)) {
-    setErrors(prev => ({
-      ...prev,
-      education: "Course: special characters or numbers not allowed."
-    }));
-    return;
-  }
+    if (!nameRegex.test(education.degree)) {
+      setErrors(prev => ({
+        ...prev,
+        education: "Course: special characters or numbers not allowed."
+      }));
+      return;
+    }
 
-  if (!education.college.trim()) {
-    setErrors(prev => ({ ...prev, education: "College is required." }));
-    return;
-  }
+    if (!education.college.trim()) {
+      setErrors(prev => ({ ...prev, education: "College is required." }));
+      return;
+    }
 
-  if (!nameRegex.test(education.college)) {
-    setErrors(prev => ({
-      ...prev,
-      education: "College: special characters or numbers not allowed."
-    }));
-    return;
-  }
+    if (!nameRegex.test(education.college)) {
+      setErrors(prev => ({
+        ...prev,
+        education: "College: special characters or numbers not allowed."
+      }));
+      return;
+    }
 
-  if (!education.year) {
-    setErrors(prev => ({ ...prev, education: "Year is required." }));
-    return;
-  }
+    if (!education.year) {
+      setErrors(prev => ({ ...prev, education: "Year is required." }));
+      return;
+    }
 
-  // clear education error
-  setErrors(prev => ({ ...prev, education: null }));
+    // clear education error
+    setErrors(prev => ({ ...prev, education: null }));
 
-  if (editIndex !== null) {
-    const updated = [...educationList];
-    updated[editIndex] = education;
-    setEducationList(updated);
-    setEditIndex(null);
-  } else {
-    setEducationList([...educationList, education]);
-  }
+    if (editIndex !== null) {
+      const updated = [...educationList];
+      updated[editIndex] = education;
+      setEducationList(updated);
+      setEditIndex(null);
+    } else {
+      setEducationList([...educationList, education]);
+    }
 
-  setEducation({ degree: "", college: "", year: "" });
-};
+    setEducation({ degree: "", college: "", year: "" });
+  };
 
 
   // ✅ Delete Education
@@ -316,13 +327,13 @@ if (!formData.userName.trim()) {
     if (!validateForm()) return;
 
     const loggedInName = localStorage.getItem("name") || "System";
-const isFileRemoved =
-  originalFiles.length > 0 && filesList.length === 0;
- //const finalFiles = filesList;
-   debugger;
- const payload = {
+    const isFileRemoved =
+      originalFiles.length > 0 && filesList.length === 0;
+    //const finalFiles = filesList;
+    debugger;
+    const payload = {
       id: formData.studentId,
-      studentId:formData.studentId,
+      studentId: formData.studentId,
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       email: formData.email.trim().toLowerCase(),
@@ -337,50 +348,50 @@ const isFileRemoved =
       createdDate: profile.createdDate || null,
       modifiedBy: loggedInName,
       modifiedDate: null,
-      document:null,
-   //   fileName: finalFiles.length > 0 ? filesList.join("|") : null,
-//filePath: finalFiles.length > 0 ? formData.filePath : null,
-//fileName: finalFiles.length > 0 ? finalFiles.join("|") : "",
- fileName: isFileRemoved ? "" : filesList.join("|"),
-  filePath: formData.filePath   // 👈 ALWAYS send filePath
-//filePath: formData.filePath || null   
-};
+      document: null,
+      //   fileName: finalFiles.length > 0 ? filesList.join("|") : null,
+      //filePath: finalFiles.length > 0 ? formData.filePath : null,
+      //fileName: finalFiles.length > 0 ? finalFiles.join("|") : "",
+      fileName: isFileRemoved ? "" : filesList.join("|"),
+      filePath: formData.filePath   // 👈 ALWAYS send filePath
+      //filePath: formData.filePath || null   
+    };
 
-   try {
-    debugger;
+    try {
+      debugger;
 
-    // ✅ EXACT sponsor pattern
-    const res = await dispatch(updateStudent(payload)).unwrap();
-    const userId = res?.id || profile.studentId;
+      // ✅ EXACT sponsor pattern
+      const res = await dispatch(updateStudent(payload)).unwrap();
+      const userId = res?.id || profile.studentId;
 
-    console.log("UserId:", userId);
-    console.log("Selected files:", selectedFiles);
+      console.log("UserId:", userId);
+      console.log("Selected files:", selectedFiles);
 
-    if (selectedFiles?.length > 0) {
-      await uploadFiles(userId);
+      if (selectedFiles?.length > 0) {
+        await uploadFiles(userId);
+      }
+
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Profile updated successfully!",
+      });
+      // 2️⃣ Force fresh fetch BEFORE view page
+      await dispatch(fetchStudentProfile(formData.id)).unwrap();
+
+      // 3️⃣ Now navigate
+      onSave();
+      //  onSave(payload);
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        text: "Update failed!",
+      });
     }
-
-    await Swal.fire({
-      icon: "success",
-      title: "Success",
-      text: "Profile updated successfully!",
-    });
-// 2️⃣ Force fresh fetch BEFORE view page
-await dispatch(fetchStudentProfile(formData.id)).unwrap();
-
-// 3️⃣ Now navigate
-onSave();
-  //  onSave(payload);
-  } catch (err) {
-    Swal.fire({
-      icon: "error",
-      text: "Update failed!",
-    });
   }
-}
   return (
     <div className="signup-container">
-        <div className="signup-card" style={{ position: "relative" }}>
+      <div className="signup-card" style={{ position: "relative" }}>
         <button
           type="button"
           onClick={onCancel}
@@ -403,7 +414,7 @@ onSave();
         </button>
         <h2 className="walletheader">Edit Student Profile</h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           {/* Basic Details */}
           <h3 className="section-title">Basic Details</h3>
 
@@ -443,20 +454,15 @@ onSave();
 
           <div className="row">
             <div className="form-group">
-              <label>Email *</label>
+              <label>Personal Email *</label>
               <input
-                type="email"
-                value={formData.email}
-                onInput={(e) => {
-                  e.target.value = e.target.value
-                    .toLowerCase()
-                    .replace(/\s+/g, "")
-.replace(/[^a-z0-9@._%+-]/g, "");
-                }}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-              />
+  type="email"
+  value={formData.email}
+  onChange={(e) =>
+    setFormData({ ...formData, email: e.target.value.toLowerCase().trim() })
+  }
+/>
+
               {errors.email && <p className="error-text">{errors.email}</p>}
             </div>
 
@@ -512,131 +518,131 @@ onSave();
               </select>
               {errors.gender && <p className="error-text">{errors.gender}</p>}
             </div>
-               
-          </div>
-<div className="form-group col-12">
-                <label>Upload Profile Photo</label>
-                <input
-                  type="file"
-                   accept="image/*"  
-                  name="documents"
-                  onChange={handleFileChange}
-                 // multiple
-                  ref={fileInputRef}
-                 // disabled={isViewMode}
-                />
 
-                {fileSelected && filesList.length > 0 && (
+          </div>
+          <div className="form-group col-12">
+            <label>Upload Profile Photo</label>
+            <input
+              type="file"
+              accept="image/*"
+              name="documents"
+              onChange={handleFileChange}
+              // multiple
+              ref={fileInputRef}
+            // disabled={isViewMode}
+            />
+
+            {fileSelected && filesList.length > 0 && (
+              <button
+                type="button"
+                className="btn btn-sm btn-danger mt-2"
+                onClick={handleClear}
+                style={{ marginTop: "10px" }}
+              >
+                Clear
+              </button>
+            )}
+
+            {/* Display all files: backend + newly selected */}
+            {filesList.length > 0 && (
+              <div className="d-flex flex-column mt-2 rounded" style={{ marginTop: "5px" }}>
+
+                {/* Backend + selected files */}
+                {filesList.map((fileName, index) => (
+                  <div
+                    key={`file-${index}`}
+                    className="d-flex align-items-center border rounded p-2 mb-2"
+                    style={{
+                      gap: "12px",
+                      paddingLeft: "14px",
+                      paddingRight: "12px",
+                      color: "black"
+                    }}
+                  >
+                    <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => handleRemoveSingleFile(index)}
+                      style={{ marginLeft: "5px" }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                {/* Download button (backend only) */}
+                {selectedFiles.length === 0 && profile?.files?.length > 0 && (
                   <button
                     type="button"
-                    className="btn btn-sm btn-danger mt-2"
-                    onClick={handleClear}
-                    style={{ marginTop: "10px" }}
+                    className="btn btn-sm btn-primary mt-2"
+                    onClick={() => downloadFileFun(formData.studentId, "Student")}
+                    style={{ marginTop: "5px", marginLeft: "15px" }}
+
                   >
-                    Clear
+                    Download
                   </button>
                 )}
-
-               {/* Display all files: backend + newly selected */}
-{ filesList.length > 0 && (
-  <div className="d-flex flex-column mt-2 rounded"style={{ marginTop: "5px" }}>
-
-    {/* Backend + selected files */}
-    {filesList.map((fileName, index) => (
-      <div
-        key={`file-${index}`}
-        className="d-flex align-items-center border rounded p-2 mb-2"
-        style={{
-          gap: "12px",
-          paddingLeft: "14px",
-          paddingRight: "12px",
-          color:"black"
-        }}
-      >
-        <span style={{ flex: 1 }}>{fileName || "No File Name"}</span>
-          <button
-              type="button"
-              className="btn btn-sm btn-outline-danger"
-              onClick={() => handleRemoveSingleFile(index)}
-              style={{ marginLeft: "5px" }}
-            >
-              ×
-            </button>
-      </div>
-    ))}
-
-    {/* Download button (backend only) */}
-    {selectedFiles.length === 0 && profile?.files?.length > 0 && (
-      <button
-        type="button"
-        className="btn btn-sm btn-primary mt-2"
-        onClick={() => downloadFileFun(formData.studentId,"Student")}
-        style={{marginTop:"5px",marginLeft:"15px"}}
-        
-      >
-        Download
-      </button>
-    )}
-  </div>
-)}
+              </div>
+            )}
 
 
 
-                    
-                  </div>
+
+          </div>
           {/* Education Section */}
           <h3 className="section-title">Education Details</h3>
 
           <div className="row">
             <input
-  type="text"
-  placeholder="Class/Course"
-  value={education.degree}
-  onInput={(e) => {
-    // hide numbers + special chars while entering
-    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-  }}
-  onChange={(e) =>
-    setEducation({ ...education, degree: e.target.value })
-  }
-/>
+              type="text"
+              placeholder="Class/Course"
+              value={education.degree}
+              onInput={(e) => {
+                // hide numbers + special chars while entering
+                e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+                e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+              }}
+              onChange={(e) =>
+                setEducation({ ...education, degree: e.target.value })
+              }
+            />
 
-<input
-  type="text"
-  placeholder="School/College"
-  value={education.college}
-  onInput={(e) => {
-    // hide numbers + special chars
-    e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
-    e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-  }}
-  onChange={(e) =>
-    setEducation({ ...education, college: e.target.value })
-  }
-/>
             <input
-  type="text"
-  placeholder="Year"
-  value={education.year}
-  maxLength={4}
-  onChange={(e) => {
-    let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
-    const currentYear = new Date().getFullYear();
+              type="text"
+              placeholder="School/College"
+              value={education.college}
+              onInput={(e) => {
+                // hide numbers + special chars
+                e.target.value = e.target.value.replace(/[^A-Za-z .-]/g, "");
+                e.target.value = e.target.value.replace(/\s{2,}/g, " ");
+              }}
+              onChange={(e) =>
+                setEducation({ ...education, college: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Year"
+              value={education.year}
+              maxLength={4}
+              onChange={(e) => {
+                let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
+                const currentYear = new Date().getFullYear();
 
-    if (cleaned === "") {
-      setEducation({ ...education, year: "" });
-      return;
-    }
+                if (cleaned === "") {
+                  setEducation({ ...education, year: "" });
+                  return;
+                }
 
-    const enteredYear = Number(cleaned);
+                const enteredYear = Number(cleaned);
 
-    // ❌ Block entering a future year
-    if (enteredYear > currentYear) return;
+                // ❌ Block entering a future year
+                if (enteredYear > currentYear) return;
 
-    setEducation({ ...education, year: cleaned });
-  }}
-/>
+                setEducation({ ...education, year: cleaned });
+              }}
+            />
 
             <button
               type="button"
@@ -691,14 +697,14 @@ onSave();
           )}
 
           {/* Username */}
-          <h3 className="section-title">Account</h3>
+          <h3 className="section-title">Account Details</h3>
           <div className="form-group">
-            <label>Username *</label>
+            <label>Email *</label>
             <input
   type="email"
   value={formData.userName}
   onChange={(e) =>
-    setFormData({ ...formData, userName: e.target.value })
+    setFormData({ ...formData, userName: e.target.value.toLowerCase().trim() })
   }
 />
             {errors.userName && <p className="error-text">{errors.userName}</p>}
