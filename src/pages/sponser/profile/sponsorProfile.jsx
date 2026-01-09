@@ -61,6 +61,34 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
     setFormData({ ...formData, address: clean });
   };
 
+  const isValidEmail = (email) => {
+  email = email.trim();
+ 
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!regex.test(email)) return false;
+ 
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return false;
+ 
+  if (local.startsWith(".") || local.endsWith(".")) return false;
+  if (local.includes("..")) return false;
+ 
+  if (domain.startsWith(".") || domain.endsWith(".")) return false;
+  if (domain.includes("..")) return false;
+ 
+  const domainParts = domain.split(".");
+  if (domainParts.length < 2) return false;
+ 
+  const lastIndex = domainParts.length - 1;
+  if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+ 
+  for (let part of domainParts) {
+    if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+    if (part.startsWith("-") || part.endsWith("-")) return false;
+  }
+ 
+  return true;
+};
   // -------------------------------
   // VALIDATION
   // -------------------------------
@@ -85,7 +113,7 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
 
   if (
   !formData.email || 
-  !emailRegex.test(formData.email) || 
+  !isValidEmail(formData.email) || 
   formData.email.includes("..")
 ) {
   errs.email = "Enter a valid email address.";

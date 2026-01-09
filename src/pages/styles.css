@@ -7837,7 +7837,8 @@ p {
   .va-section-content p strong {
     min-width: 120px;
     width: auto;
-    font-weight: 600;
+    font-weight: 700;
+    color: #000;
   }
 
   /* Values */
