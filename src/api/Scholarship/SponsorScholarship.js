@@ -90,19 +90,39 @@ export const updateScholarshipReq = async (data) => {
 //
 export const deleteScholarshipReq = async (id, modifiedBy) => {
   try {
+    debugger;
     const url = `${ApiKey.SponsorScholarship}/${id}?modifiedBy=${modifiedBy}`;
     const res = await publicAxios.delete(url);
-    return { error: false, data: res.data, message: "Deleted successfully" };
-  } catch (err) {
-    const errorMsg = err.response
-      ? err.response.data.detail ||
-        err.response.data.message ||
-        "Response error"
-      : err.request
-      ? "Request error"
-      : "Something went wrong, please try again later";
 
-    return { error: true, data: [], message: "", errorMsg };
+    return {
+      error: false,
+      data: res.data,
+      message: "Deleted successfully"
+    };
+  } catch (err) {
+    console.log("DELETE ERROR:", err.response); // 🔴 keep for debug
+
+    let errorMsg = "Something went wrong, please try again later";
+
+    if (err.response) {
+      // 🔥 MOST IMPORTANT FIX
+      if (typeof err.response.data === "string") {
+        errorMsg = err.response.data;
+      } else if (err.response.data?.message) {
+        errorMsg = err.response.data.message;
+      } else {
+        errorMsg = "Response error";
+      }
+    } else if (err.request) {
+      errorMsg = "Request error";
+    }
+
+    return {
+      error: true,
+      data: [],
+      message: "",
+      errorMsg
+    };
   }
 };
 export const fetchReligionsReq = async () => {

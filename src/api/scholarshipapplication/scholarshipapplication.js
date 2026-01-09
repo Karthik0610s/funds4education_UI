@@ -81,6 +81,7 @@ export const updateScholarshipApplicationReq = async (data) => {
 
 export const deleteScholarshipApplicationReq = async (actionId) => {
   try {
+    debugger;
     const res = await publicAxios.delete(`${ApiKey.ScholarshipApplication}/${actionId}`);
 
     const msg = res.data?.message;
