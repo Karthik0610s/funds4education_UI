@@ -159,6 +159,44 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   }, [profile?.id]);
 
 
+  const isValidEmail = (email) => {
+  if (!email) return false;
+
+  email = email.trim();
+
+  // Basic structure
+  const basicRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  if (!basicRegex.test(email)) return false;
+
+  const [local, domain] = email.split("@");
+
+  // Local-part rules
+  if (local.startsWith(".") || local.endsWith(".")) return false;
+  if (local.includes("..")) return false;
+
+  // Domain rules
+  if (domain.startsWith(".") || domain.endsWith(".")) return false;
+  if (domain.includes("..")) return false;
+
+  const parts = domain.split(".");
+  if (parts.length < 2) return false;
+
+  // Reject duplicate TLDs like au.au, com.com
+  const last = parts[parts.length - 1];
+  const secondLast = parts[parts.length - 2];
+  if (last === secondLast) return false;
+
+  // Validate each domain label
+  for (let part of parts) {
+    if (!/^[A-Za-z0-9-]+$/.test(part)) return false;
+    if (part.startsWith("-") || part.endsWith("-")) return false;
+  }
+
+  return true;
+};
+
+
+
   const handleRemoveSingleFile = (index) => {
     debugger;
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
@@ -197,9 +235,9 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+//const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
-
+{/* 
 ["email", "userName"].forEach(field => {
   const value = formData[field].trim();
   if (!value) {
@@ -208,6 +246,7 @@ const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
     errs[field] = "Enter a valid email address."; // if invalid format
   }
 });
+*/}
 
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
@@ -224,11 +263,11 @@ const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
-    if (!formData.email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      errs.email = "Enter a valid email address (e.g., user@example.com).";
-    }
+    if (!formData.email) {
+        errs.email = "Email is required.";
+      } else if (!isValidEmail(formData.email)) {
+        errs.email = "Enter a valid email.";
+      }
 
 
     if (!formData.phone.trim()) {
@@ -238,11 +277,7 @@ const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-    if (!formData.userName.trim()) {
-      errs.userName = "Email is required.";
-    } else if (!emailRegex.test(formData.userName)) {
-      errs.userName = "Enter a valid email address.";
-    }
+   
 
 
     if (!formData.dateofBirth) {

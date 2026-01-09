@@ -43,7 +43,7 @@ export default function SignUpPage() {
   // ✅ Updated email validation
   // Accepts typical company/college emails
   // Accept all standard valid email formats
-    const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
 
@@ -104,6 +104,11 @@ export default function SignUpPage() {
       } else if (!isValidEmail(basicDetails.email)) {
         stepErrors.email = "Enter a valid email.";
       }
+       if (!basicDetails.firstName) {
+      stepErrors.firstName = "First name is required.";
+    } else if (!nameRegex.test(basicDetails.firstName)) {
+      stepErrors.firstName = "Only alphabets allowed (max 150).";
+    }
 
 
       // Last Name

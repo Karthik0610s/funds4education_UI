@@ -21,7 +21,7 @@ const collegeRegex = /^[A-Za-z0-9(),-./\s]{0,250}$/;
 const yearRegex = /^[0-9\-]{0,10}$/;
 const gpaRegex = /^\d{0,2}(\.\d{1,2})?$/;
 const scholarshipRegex = /^[A-Za-z0-9\s]{0,250}$/;
-const text250Regex = /^[A-Za-z0-9\s.,'"%&(){}|//\-:;!?]{0,350}$/;
+const text250Regex = /^[A-Za-z0-9\s.,'"%&(){}|//\-:;!?]{0,250}$/;
 //const text250Regex = /^[A-\s\S]{0,250}$/;
 
 
@@ -33,6 +33,40 @@ const text250Regex = /^[A-Za-z0-9\s.,'"%&(){}|//\-:;!?]{0,350}$/;
 ];*/
 
 
+
+ const isValidEmail = (email) => {
+    email = email.trim();
+
+    // Basic regex: no spaces, contains @, proper chars
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
+
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
+
+    // Local part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
+
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
+
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
+
+    // Last two domain parts cannot be same (reject domain.com.com)
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+    // Each domain part must contain only letters, numbers, hyphen (no special chars)
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false; // no hyphen at start/end
+    }
+
+    return true;
+  };
 
 
 const AddApplicationModal = ({ show, handleClose, application , mode }) => {
@@ -451,10 +485,12 @@ if (name === "gpaOrMarks") {
     if (!formData.firstName.trim())
       newErrors.firstName = "First Name is required.";
 
-    if (!formData.email.trim())
-      newErrors.email = "Email is required.";
-    else if (!emailRegex.test(formData.email))
-      newErrors.email = "Enter a valid email.";
+   if (!formData.email.trim()) {
+  newErrors.email = "Email is required.";
+} else if (!isValidEmail(formData.email)) {
+  newErrors.email = "Enter a valid email address.";
+}
+
 
     if (!formData.studyLevel)
       newErrors.studyLevel = "Study Level is required.";
