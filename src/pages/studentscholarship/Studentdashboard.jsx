@@ -672,14 +672,23 @@ const ads1 = [
             </div>
  </div>
             {/* RIGHT SIDE ADS */}
-            {!loading && currentScholarships.length > 0 && (
+            {/* {!loading && currentScholarships.length > 0 && (
   <div className="right-content">
     
       <GoogleAd />
     
   </div>
-)}
+)} */}
 
+<div className="right-content">
+    <div className="ad-box" style={{marginBottom:"8px"}}>
+                <h4>{ads[currentAd].title}</h4>
+                <p>{ads[currentAd].text}</p>
+                <button>{ads[currentAd].button}</button>
+              </div>
+      {/*<GoogleAd /> */}
+   
+  </div>
          </div>
 
           {/* Scholarships Grid */}

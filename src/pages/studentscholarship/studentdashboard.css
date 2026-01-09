@@ -622,7 +622,7 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 .ad-box {
   border: 1px solid #f1f1f1;
   border-radius: 10px;
-  padding: 12px;
+  padding: 22px 18px;
   margin-bottom: 12px;
   text-align: center;
 }
@@ -699,7 +699,7 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
   width: 100%;
 }
 
-/*.left-content, .right-content {
+.left-content, .right-content {
   flex: 1; 
   box-sizing: border-box;
 }
@@ -740,7 +740,7 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 }
 
 .left-content {
-  flex: 1;
+  
   box-sizing: border-box;
   padding-bottom: 15px;
 }
@@ -764,32 +764,35 @@ background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);  color: #ff
 @media (min-width: 1024px) {
   .content-wrapper {
     display: flex;
-    align-items: flex-start;   /* RIGHT BOX stays at the TOP */
+    align-items: flex-start;   
     justify-content: space-between;
     gap: 24px;
+    
+  }
+  
+.left-content {
+  
+    min-width: 0;
   }
 
-  .left-content {
-    flex: 1;
-    min-width: 0;             /* Prevents stretching or breaking */
+  
+  
+   .right-content {
+    min-width: 0;
+    background: #fff;
+    padding: 13px;
+    border-radius: 15px;
   }
-
-  .right-content {
-    /*width: 320px;    */         /* FIXED WIDTH */
-   /* flex-shrink: 0; */          /* Prevents resizing when zoom changes */
-   max-height: 210px;
-    flex-shrink: 0;           /* Let content decide height */
-     position: relative;
-    /* top: 60px; */
-                  /* Align with top of page */
-  }
-
+  
+ 
   
 }
 @media (min-width: 1400px) {
   .right-content {
     /*top: 28px; /* reduce top when zoomed out */
+    
   }
+    
 }
 .mobile-filter-icon {
   display: none;
