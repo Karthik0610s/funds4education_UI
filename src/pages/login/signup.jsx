@@ -43,7 +43,7 @@ export default function SignUpPage() {
   // ✅ Updated email validation
   // Accepts typical company/college emails
   // Accept all standard valid email formats
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
 
 
