@@ -95,8 +95,9 @@ const ViewApplication = () => {
 
   const downloadFiles = async () => {
     try {
+      debugger;
       const res = await publicAxios.get(
-        `${ApiKey.downloadscholarshipFiles}/${data.id}`,
+        `${ApiKey.downloadscholarshipFiles}/${data.id}/${"ScholarshipApplication"}`,
         { responseType: "blob" }
       );
       const url = window.URL.createObjectURL(

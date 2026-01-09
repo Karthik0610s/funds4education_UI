@@ -159,7 +159,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   }, [profile?.id]);
 
 
-  const isValidEmail = (email) => {
+  const isValidEmails = (email) => {
   if (!email) return false;
 
   email = email.trim();
@@ -229,6 +229,34 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     const year = date.getFullYear();
     return `${month}/${day}/${year} 00:00:00`;
   };
+const isValidEmail = (email) => {
+  email = email.trim();
+
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!regex.test(email)) return false;
+
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return false;
+
+  if (local.startsWith(".") || local.endsWith(".")) return false;
+  if (local.includes("..")) return false;
+
+  if (domain.startsWith(".") || domain.endsWith(".")) return false;
+  if (domain.includes("..")) return false;
+
+  const domainParts = domain.split(".");
+  if (domainParts.length < 2) return false;
+
+  const lastIndex = domainParts.length - 1;
+  if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+  for (let part of domainParts) {
+    if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+    if (part.startsWith("-") || part.endsWith("-")) return false;
+  }
+
+  return true;
+};
 
   // ✅ Validation (same as in UserForm)
   const validateForm = () => {
@@ -242,7 +270,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const value = formData[field].trim();
   if (!value) {
     errs[field] = "Email is required."; // if empty
-  } else if (!emailRegex.test(value)) {
+  } else if (!isValidEmail(value)) {
     errs[field] = "Enter a valid email address."; // if invalid format
   }
 });
@@ -277,7 +305,11 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-   
+    {/*if (!formData.userName.trim()) {
+      errs.userName = "Email is required.";
+    } else if (!emailRegex.test(formData.userName)) {
+      errs.userName = "Enter a valid email address.";
+    }*/}
 
 
     if (!formData.dateofBirth) {
