@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo ,useRef} from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import Header from "../../app/components/header/header";
@@ -6,7 +6,7 @@ import { logout } from "../../app/redux/slices/authSlice";
 import {
   fetchScholarshipList,
   fetchFeaturedScholarships,
-  fetchCoursesByClassId,clearCourses,
+  fetchCoursesByClassId, clearCourses,
   fetchDropdownData,
 } from "../../app/redux/slices/ScholarshipSlice";
 import Swal from "sweetalert2";
@@ -21,11 +21,11 @@ const StudentDashboard = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [eligibilityTab, setEligibilityTab] = useState("all"); // default
   //const [activeTab, setActiveTab] = useState("live"); // default
-//const userId = localStorage.getItem("userId");
-//const roleId = localStorage.getItem("roleId");
-//const roleName = localStorage.getItem("roleName");
+  //const userId = localStorage.getItem("userId");
+  //const roleId = localStorage.getItem("roleId");
+  //const roleName = localStorage.getItem("roleName");
 
-// Condition: user is logged in
+  // Condition: user is logged in
 
 
   const dispatch = useDispatch();
@@ -38,8 +38,8 @@ const StudentDashboard = () => {
   const { live = [], upcoming = [], featured = [] } = data;
   const [imgError, setImgError] = useState(false);
   const { courses, courseLoading } = useSelector(
-  (state) => state.scholarship
-);
+    (state) => state.scholarship
+  );
 
 
   const roleId =
@@ -50,8 +50,8 @@ const StudentDashboard = () => {
     Number(localStorage.getItem("userId"));
   const name =
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
-const roleName = localStorage.getItem("roleName");
-const canSeeEligibility = userId && roleId && roleName;
+  const roleName = localStorage.getItem("roleName");
+  const canSeeEligibility = userId && roleId && roleName;
   const [activeTab, setActiveTab] = useState("live");
   const [searchQuery, setSearchQuery] = useState("");
   /*const [filters, setFilters] = useState({
@@ -82,22 +82,22 @@ const canSeeEligibility = userId && roleId && roleName;
   });
 
   // ✅ Load dropdowns once
-useEffect(() => {
-  const loadDropdowns = async () => {
-    const res = await dispatch(fetchDropdownData());
-    if (res && !res.error) {
-      setDropdownData({
-        ...res.data,
-        courses: res.data.courses.map(c => ({
-          id: c.courseId,
-          name: c.courseName,
-          classId: c.classId, // keep for future filtering
-        })),
-      });
-    }
-  };
-  loadDropdowns();
-}, [dispatch]);
+  useEffect(() => {
+    const loadDropdowns = async () => {
+      const res = await dispatch(fetchDropdownData());
+      if (res && !res.error) {
+        setDropdownData({
+          ...res.data,
+          courses: res.data.courses.map(c => ({
+            id: c.courseId,
+            name: c.courseName,
+            classId: c.classId, // keep for future filtering
+          })),
+        });
+      }
+    };
+    loadDropdowns();
+  }, [dispatch]);
 
   // ✅ Fetch scholarships whenever filters or tab change
   // 🔹 Load featured only once
@@ -107,20 +107,20 @@ useEffect(() => {
 
   useEffect(() => {
     debugger;
-  if (filters.class.length === 0) {
-    dispatch(clearCourses());
-    return;
-  }
+    if (filters.class.length === 0) {
+      dispatch(clearCourses());
+      return;
+    }
 
-  const classId = filters.class;
-  console.log(classId,"classID");
-  dispatch(fetchCoursesByClassId(classId));
-}, [filters.class, dispatch]);
+    const classId = filters.class;
+    console.log(classId, "classID");
+    dispatch(fetchCoursesByClassId(classId));
+  }, [filters.class, dispatch]);
 
-const sidebarRef = useRef(null);
-const paginationRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const paginationRef = useRef(null);
 
- const closeAllDropdowns = () => {
+  const closeAllDropdowns = () => {
     setFilters((prev) => ({
       ...prev,
       show_class: false,
@@ -133,35 +133,35 @@ const paginationRef = useRef(null);
   };
 
   // CLICK OUTSIDE HANDLER
- const [isMobile, setIsMobile] = useState(
-  window.matchMedia("(max-width: 920px)").matches
-);
+  const [isMobile, setIsMobile] = useState(
+    window.matchMedia("(max-width: 920px)").matches
+  );
 
-useEffect(() => {
-  const mediaQuery = window.matchMedia("(max-width: 920px)");
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 920px)");
 
-  const handleResize = () => setIsMobile(mediaQuery.matches);
+    const handleResize = () => setIsMobile(mediaQuery.matches);
 
-  mediaQuery.addEventListener("change", handleResize);
+    mediaQuery.addEventListener("change", handleResize);
 
-  return () => mediaQuery.removeEventListener("change", handleResize);
-}, []);
-useEffect(() => {
-  function handleClickOutside(event) {
-    if (!showFilter) return; // only run if sidebar is open
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (!showFilter) return; // only run if sidebar is open
 
-    const clickedOutsideSidebar =
-      sidebarRef.current && !sidebarRef.current.contains(event.target);
+      const clickedOutsideSidebar =
+        sidebarRef.current && !sidebarRef.current.contains(event.target);
 
-    if (clickedOutsideSidebar) {
-      setShowFilter(false);
-      closeAllDropdowns();
+      if (clickedOutsideSidebar) {
+        setShowFilter(false);
+        closeAllDropdowns();
+      }
     }
-  }
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, [showFilter]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showFilter]);
 
 
 
@@ -169,7 +169,7 @@ useEffect(() => {
   useEffect(() => {
     const activeFilters = {
       statusType: "both",
-      filterType:eligibilityTab,
+      filterType: eligibilityTab,
       classId: filters.class.length ? filters.class : null,
       countryId: filters.country.length ? filters.country : null,
       genderId: filters.gender.length ? filters.gender : null,
@@ -182,7 +182,7 @@ useEffect(() => {
   }, [
     dispatch,
     activeTab,
-     eligibilityTab, 
+    eligibilityTab,
     filters.class,
     filters.country,
     filters.gender,
@@ -280,31 +280,31 @@ useEffect(() => {
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-const getResponsiveValue = (breakpoints) => {
-  const width = window.innerWidth;
-  for (let i = 0; i < breakpoints.length; i++) {
-    if (width >= breakpoints[i].minWidth) return breakpoints[i].value;
-  }
-  return breakpoints[breakpoints.length - 1].value;
-};
-  // --- Responsive helpers ---
-const getItemsPerPage = () =>
-  getResponsiveValue([
-    { minWidth: 1400, value: 12 },
-    { minWidth: 1024, value: 10 },
-    { minWidth: 768, value: 6 },
-    { minWidth: 0, value: 4 },
-  ]);
-  const [scholarshipsPerPage, setScholarshipsPerPage] = useState(getItemsPerPage());
-useEffect(() => {
-  const handleResize = () => {
-    setScholarshipsPerPage(getItemsPerPage());
-  
+  const getResponsiveValue = (breakpoints) => {
+    const width = window.innerWidth;
+    for (let i = 0; i < breakpoints.length; i++) {
+      if (width >= breakpoints[i].minWidth) return breakpoints[i].value;
+    }
+    return breakpoints[breakpoints.length - 1].value;
   };
+  // --- Responsive helpers ---
+  const getItemsPerPage = () =>
+    getResponsiveValue([
+      { minWidth: 1400, value: 12 },
+      { minWidth: 1024, value: 10 },
+      { minWidth: 768, value: 6 },
+      { minWidth: 0, value: 4 },
+    ]);
+  const [scholarshipsPerPage, setScholarshipsPerPage] = useState(getItemsPerPage());
+  useEffect(() => {
+    const handleResize = () => {
+      setScholarshipsPerPage(getItemsPerPage());
 
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   //const scholarshipsPerPage = 10;
 
   useEffect(() => {
@@ -320,16 +320,16 @@ useEffect(() => {
   const totalPages = Math.ceil(
     displayedScholarships.length / scholarshipsPerPage
   );
-useEffect(() => {
-  console.log("🔍 Live scholarships:", liveScholarships.length);
-  console.log("🔍 Upcoming scholarships:", upcomingScholarships.length);
-  console.log("🔍 Active tab:", activeTab);
-  console.log("🔍 Search query:", searchQuery);
-  console.log("🔍 Displayed scholarships:", displayedScholarships.length);
-  console.log("🔍 Scholarships per page:", scholarshipsPerPage);
-  console.log("🔍 Total pages:", totalPages);
-  console.log("🔍 Current page:", currentPage);
-}, [liveScholarships, upcomingScholarships, activeTab, searchQuery, displayedScholarships, currentPage]);
+  useEffect(() => {
+    console.log("🔍 Live scholarships:", liveScholarships.length);
+    console.log("🔍 Upcoming scholarships:", upcomingScholarships.length);
+    console.log("🔍 Active tab:", activeTab);
+    console.log("🔍 Search query:", searchQuery);
+    console.log("🔍 Displayed scholarships:", displayedScholarships.length);
+    console.log("🔍 Scholarships per page:", scholarshipsPerPage);
+    console.log("🔍 Total pages:", totalPages);
+    console.log("🔍 Current page:", currentPage);
+  }, [liveScholarships, upcomingScholarships, activeTab, searchQuery, displayedScholarships, currentPage]);
   const clearAllFilters = () => {
 
     setFilters({
@@ -376,48 +376,48 @@ useEffect(() => {
       button: "Register Now",
     },
   ];
-const ads1 = [
-  {
-    title: "💻 Full-Stack Developer Course",
-    text: "MERN/Java/Python Tracks",
-    button: "Enroll Now",
-  },
-  {
-    title: "📖 Government Exam Coaching",
-    text: "SSC | Bank | UPSC | State Exams",
-    button: "Start Preparation",
-  },
-  {
-    title: "🧾 Resume & Portfolio Builder",
-    text: "Create ATS-Friendly Resume",
-    button: "Build Resume",
-  },
-  {
-    title: "📸 Graphic Design Masterclass",
-    text: "Photoshop, Illustrator & UI/UX",
-    button: "Join Workshop",
-  },
-  {
-    title: "🏦 Personal Loan Assistance",
-    text: "Instant Approval | High Eligibility",
-    button: "Check Eligibility",
-  },
-  {
-    title: "🧳 International Travel Deals",
-    text: "Cheap Flights, Hotels & Packages",
-    button: "Explore Deals",
-  },
-  {
-    title: "👩‍⚕️ Health & Fitness Coaching",
-    text: "Diet Plans, Weight Loss Programs",
-    button: "Get Plan",
-  },
-  {
-    title: "🎧 Spoken English Classes",
-    text: "Improve Communication + Fluency",
-    button: "Join Now",
-  },
-];
+  const ads1 = [
+    {
+      title: "💻 Full-Stack Developer Course",
+      text: "MERN/Java/Python Tracks",
+      button: "Enroll Now",
+    },
+    {
+      title: "📖 Government Exam Coaching",
+      text: "SSC | Bank | UPSC | State Exams",
+      button: "Start Preparation",
+    },
+    {
+      title: "🧾 Resume & Portfolio Builder",
+      text: "Create ATS-Friendly Resume",
+      button: "Build Resume",
+    },
+    {
+      title: "📸 Graphic Design Masterclass",
+      text: "Photoshop, Illustrator & UI/UX",
+      button: "Join Workshop",
+    },
+    {
+      title: "🏦 Personal Loan Assistance",
+      text: "Instant Approval | High Eligibility",
+      button: "Check Eligibility",
+    },
+    {
+      title: "🧳 International Travel Deals",
+      text: "Cheap Flights, Hotels & Packages",
+      button: "Explore Deals",
+    },
+    {
+      title: "👩‍⚕️ Health & Fitness Coaching",
+      text: "Diet Plans, Weight Loss Programs",
+      button: "Get Plan",
+    },
+    {
+      title: "🎧 Spoken English Classes",
+      text: "Improve Communication + Fluency",
+      button: "Join Now",
+    },
+  ];
 
   const [currentAd, setCurrentAd] = useState(0);
 
@@ -475,20 +475,20 @@ const ads1 = [
         <span style={{ marginLeft: "6px" }}>Filters</span>
       </div>
       <div className="dashboard-container-SC">
-       {isMobile && showFilter && (
-    <div
-      className="sidebar-overlay"
-      onClick={() => {
-        setShowFilter(false);
-        closeAllDropdowns();
-      }}
-    />
-  )}
+        {isMobile && showFilter && (
+          <div
+            className="sidebar-overlay"
+            onClick={() => {
+              setShowFilter(false);
+              closeAllDropdowns();
+            }}
+          />
+        )}
 
-  <aside
-  ref={sidebarRef}
-  className={`sidebar ${showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""}`}
->
+        <aside
+          ref={sidebarRef}
+          className={`sidebar ${showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""}`}
+        >
 
           {/* ⭐ MOBILE CLOSE BUTTON */}
           {/* <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
@@ -496,27 +496,27 @@ const ads1 = [
           </div> */}
 
           <div className="filter-header">
-  
 
-  <span className="filter-title">Category</span>
-  <span
-    className="mobile-filter-close"
-    onClick={() => setShowFilter(false)}
-  >
-    ✕
-  </span>
-</div>
+
+            <span className="filter-title">Category</span>
+            <span
+              className="mobile-filter-close"
+              onClick={() => setShowFilter(false)}
+            >
+              ✕
+            </span>
+          </div>
 
           <div className="filter-group">
             {[
-             /* { key: "class", label: "Class", options: dropdownData.classList }, */
+              /* { key: "class", label: "Class", options: dropdownData.classList }, */
               { key: "country", label: "Country", options: dropdownData.countries },
               { key: "state", label: "State", options: dropdownData.states },
               /*{ key: "gender", label: "Gender", options: dropdownData.genders },*/
               { key: "religion", label: "Religion", options: dropdownData.religions },
               { key: "gender", label: "Gender", options: dropdownData.genders },
               /*{ key: "state", label: "State", options: dropdownData.states },*/
-              { key: "class", label: "Class", options: dropdownData.classList },              
+              { key: "class", label: "Class", options: dropdownData.classList },
               { key: "course", label: "Course", options: courses },
             ].map(({ key, label, options }) => (
               <div key={key} className="filter-dropdown">
@@ -598,89 +598,92 @@ const ads1 = [
 
         {/* Main Content */}
         <main className="main-content">
-<div className="content-layout">
-          {/* LEFT SIDE */}
-          <div className="left-content" >
+          <div className="content-layout">
+            {/* LEFT SIDE */}
+            <div className="left-content" >
 
-            {/* Title */}
-            <span
-              style={{
-                fontSize: "34px",
-                display: "block",
-                margin: "12px auto",
-              }}
-            >
-              Scholarships for Indian Students
-            </span>
+              {/* Title */}
+              <span
+                style={{
+                  fontSize: "34px",
+                  display: "block",
+                  margin: "12px auto",
+                }}
+              >
+                Scholarships for Indian Students
+              </span>
 
-            {/* Search Box */}
-            <div className="tab-card-container search-card">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search by name, eligibility or award..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-
-
-            {/* Parent Tabs */}
-            <div className="tabs-wrapper">
-
-              {/* CARD 1 — Eligibility + All */}
-              <div className="tab-card-container">
-               <button
-  className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
-  onClick={() => canSeeEligibility && setEligibilityTab("eligibility")}
-  disabled={!canSeeEligibility}
->
-  Eligibility
-</button>
-
-                <button
-                  className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
-                  onClick={() => setEligibilityTab("all")}
-                >
-                  All
-                </button>
-              </div>
-
-              {/* CARD 2 — Live + Upcoming */}
-              <div className="tab-card-container">
-                <button
-                  className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
-                  onClick={() => setActiveTab("live")}
-                >
-                  Live ({liveScholarships.length})
-                </button>
-
-                <button
-                  className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
-                  onClick={() => setActiveTab("upcoming")}
-                >
-                  Upcoming ({upcomingScholarships.length})
-                </button>
+              {/* Search Box */}
+              <div className="tab-card-container search-card">
+                <FaSearch className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search by name, eligibility or award..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
 
 
 
+              {/* Parent Tabs */}
+              <div className="tabs-wrapper">
+
+                {/* CARD 1 — Eligibility + All */}
+                <div className="tab-card-container">
+                  <button
+                    className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
+                    onClick={() => canSeeEligibility && setEligibilityTab("eligibility")}
+                    disabled={!canSeeEligibility}
+                  >
+                    Eligibility
+                  </button>
+
+                  <button
+                    className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
+                    onClick={() => setEligibilityTab("all")}
+                  >
+                    All
+                  </button>
+                </div>
+
+                {/* CARD 2 — Live + Upcoming */}
+                <div className="tab-card-container">
+                  <button
+                    className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
+                    onClick={() => setActiveTab("live")}
+                  >
+                    Live ({liveScholarships.length})
+                  </button>
+
+                  <button
+                    className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
+                    onClick={() => setActiveTab("upcoming")}
+                  >
+                    Upcoming ({upcomingScholarships.length})
+                  </button>
+                </div>
 
 
+
+
+
+
+              </div>
+            </div>
+
+            <div className="right-content">
+
+              <div className="ad-box" style={{ marginBottom: "8px" }}>
+                <h4>{ads[currentAd].title}</h4>
+                <p>{ads[currentAd].text}</p>
+                <button>{ads[currentAd].button}</button>
+              </div>
 
             </div>
- </div>
-            {/* RIGHT SIDE ADS */}
-            {!loading && currentScholarships.length > 0 && (
-  <div className="right-content">
-    
-      <GoogleAd />
-    
-  </div>
-)}
 
-         </div>
+
+          </div>
 
           {/* Scholarships Grid */}
           <div className="content-layout">
@@ -744,25 +747,25 @@ const ads1 = [
                       {!activeTab.includes("upcoming") && isFeatured && (
                         <div className="featured-tag">Featured</div>
                       )}
-                     
+
 
 
                       <div className="card-header-flex">
-                         {activeTab === "live" && (
-                        <>
-                          {s.endDate === null ? (
-                            <div className="deadline-badge open">
-                              Always Open
-                            </div>
-                          ) : (
-                            daysLeftText && (
-                              <div className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"}`}>
-                                {daysLeftText}
+                        {activeTab === "live" && (
+                          <>
+                            {s.endDate === null ? (
+                              <div className="deadline-badge open">
+                                Always Open
                               </div>
-                            )
-                          )}
-                        </>
-                      )}
+                            ) : (
+                              daysLeftText && (
+                                <div className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"}`}>
+                                  {daysLeftText}
+                                </div>
+                              )
+                            )}
+                          </>
+                        )}
                         <div className="logo-wrapper">
                           {/*<img
                             src={s.logopath}
@@ -770,18 +773,18 @@ const ads1 = [
                             className="card-logo"
                           />*/}
                           {cleanLogoName ? (
-    <img
-      src={imageUrl}
-      alt={altText}
-      className="card-logo"
-      onError={(e) => {
-        e.target.style.display = "none"; // hide broken image
-      }}
-    />
-  ) : (
-    <div className="empty-logo" />
-  )}
-</div>
+                            <img
+                              src={imageUrl}
+                              alt={altText}
+                              className="card-logo"
+                              onError={(e) => {
+                                e.target.style.display = "none"; // hide broken image
+                              }}
+                            />
+                          ) : (
+                            <div className="empty-logo" />
+                          )}
+                        </div>
                       </div>
 
                       <div className="card-body">
@@ -835,36 +838,32 @@ const ads1 = [
                 <p>No scholarships found.</p>
               )}
             </div>
- {/* ===== MOBILE ONLY PAGINATION ===== */}
-  {totalPages > 1 && (
-    <div className="pagination-mobile">
-      <button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(p => p - 1)}
-        className="pagination-btn"
-      >
-        ← Previous
-      </button>
+            {/* ===== MOBILE ONLY PAGINATION ===== */}
+            {totalPages > 1 && (
+              <div className="pagination-mobile">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(p => p - 1)}
+                  className="pagination-btn"
+                >
+                  ← Previous
+                </button>
 
-      <span className="page-info">
-        Page {currentPage} of {totalPages}
-      </span>
+                <span className="page-info">
+                  Page {currentPage} of {totalPages}
+                </span>
 
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage(p => p + 1)}
-        className="pagination-btn"
-      >
-        Next →
-      </button>
-    </div>
-  )}
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(p => p + 1)}
+                  className="pagination-btn"
+                >
+                  Next →
+                </button>
+              </div>
+            )}
             <div className="ads-container">
-               {/*<div className="ad-box" style={{marginBottom:"8px"}}>
-                {/*<h4>{ads[currentAd].title}</h4>
-                <p>{ads[currentAd].text}</p>
-                <button>{ads[currentAd].button}</button>
-              </div>*/}
+
 
               {/* Featured Sidebar */}
               <aside className="featured-sidebar">
@@ -937,7 +936,7 @@ const ads1 = [
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="pagination-controls desktop-only"  ref={paginationRef}>
+              <div className="pagination-controls desktop-only" ref={paginationRef}>
                 <button
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage((p) => p - 1)}
@@ -962,7 +961,7 @@ const ads1 = [
           </div>
         </main>
       </div>
-    
+
     </div>
   );
 };
