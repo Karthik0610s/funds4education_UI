@@ -103,6 +103,36 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     }
   };
 
+const isValidEmail = (email) => {
+  email = email.trim();
+ 
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!regex.test(email)) return false;
+ 
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return false;
+ 
+  if (local.startsWith(".") || local.endsWith(".")) return false;
+  if (local.includes("..")) return false;
+ 
+  if (domain.startsWith(".") || domain.endsWith(".")) return false;
+  if (domain.includes("..")) return false;
+ 
+  const domainParts = domain.split(".");
+  if (domainParts.length < 2) return false;
+ 
+  const lastIndex = domainParts.length - 1;
+  if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+ 
+  for (let part of domainParts) {
+    if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+    if (part.startsWith("-") || part.endsWith("-")) return false;
+  }
+ 
+  return true;
+};
+
+
   const handleClear = () => {
     // clear only newly selected files
     setSelectedFiles([]);
@@ -219,7 +249,10 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     const nameRegex = /^[A-Za-z .-]+$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
     // Accept all valid emails, block consecutive dots
-    const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+    //const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+    //const emailRegex =
+///^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+
 
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
@@ -235,11 +268,14 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
-    if (!formData.email.trim()) {
-      errs.email = "Email is required.";
-    } else if (!emailRegex.test(formData.email)) {
-      errs.email = "Enter a valid email address.";
-    }
+    ["email", "userName"].forEach(field => {
+  const value = formData[field].trim();
+  if (!value) {
+    errs[field] = "Email is required."; // if empty
+  } else if (!isValidEmail(value)) {
+    errs[field] = "Enter a valid email address."; // if invalid format
+  }
+});
 
     if (!formData.phone.trim()) {
       errs.phone = "Phone number is required.";
@@ -248,11 +284,12 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     }
 
     if (!formData.gender) errs.gender = "Gender is required.";
-    if (!formData.userName.trim()) {
-      errs.userName = "Username is required.";
-    } else if (!emailRegex.test(formData.userName)) {
-      errs.userName = "Enter a valid email address.";
-    }
+   if (!formData.userName.trim()) {
+  errs.userName = "Username is required.";
+} else if (!isValidEmail(formData.userName)) {
+  errs.userName = "Enter a valid email address.";
+}
+
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";
