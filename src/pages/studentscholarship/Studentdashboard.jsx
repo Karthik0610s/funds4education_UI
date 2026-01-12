@@ -752,8 +752,7 @@ const closeAllDropdowns = () => {
                       )}
                      
 
-
-                      <div className="card-header-flex">
+                 {/*     <div className="card-header-flex">
                          {activeTab === "live" && (
                         <>
                           {s.endDate === null ? (
@@ -774,7 +773,7 @@ const closeAllDropdowns = () => {
                             src={s.logopath}
                             alt={s.logoName ?? "Scholarship Logo"}
                             className="card-logo"
-                          />*/}
+                          />
                           {cleanLogoName ? (
     <img
       src={imageUrl}
@@ -788,7 +787,33 @@ const closeAllDropdowns = () => {
     <div className="empty-logo" />
   )}
 </div>
-                      </div>
+                      </div>  */}
+
+                      <div className="card-header-flex">
+  <div className="logo-wrapper">
+    {cleanLogoName ? (
+      <img
+        src={imageUrl}
+        alt={altText}
+        className="card-logo"
+        onError={(e) => (e.target.style.display = "none")}
+      />
+    ) : (
+      <div className="empty-logo" />
+    )}
+  </div>
+ 
+  {activeTab === "live" &&
+    (s.endDate === null ? (
+      <div className="deadline-badge open">Always Open</div>
+    ) : (
+      daysLeftText && (
+        <div className={`deadline-badge ${diffDays <= 1 ? "urgent" : "warning"}`}>
+          {daysLeftText}
+        </div>
+      )
+    ))}
+</div>
 
                       <div className="card-body">
                         <h3 className="card-title">
