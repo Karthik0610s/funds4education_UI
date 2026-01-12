@@ -120,7 +120,7 @@ useEffect(() => {
 const sidebarRef = useRef(null);
 const paginationRef = useRef(null);
 
- const closeAllDropdowns = () => {
+ /*const closeAllDropdowns = () => {
     setFilters((prev) => ({
       ...prev,
       show_class: false,
@@ -130,7 +130,7 @@ const paginationRef = useRef(null);
       show_state: false,
       show_course: false,
     }));
-  };
+  };*/
 
   // CLICK OUTSIDE HANDLER
  const [isMobile, setIsMobile] = useState(
@@ -418,7 +418,10 @@ const ads1 = [
     button: "Join Now",
   },
 ];
-
+const [openDropdown, setOpenDropdown] = useState(null); // 🔥 only one dropdown
+const closeAllDropdowns = () => {
+  setOpenDropdown(null);
+};
   const [currentAd, setCurrentAd] = useState(0);
 
   useEffect(() => {
@@ -485,116 +488,110 @@ const ads1 = [
     />
   )}
 
-  <aside
-  ref={sidebarRef}
-  className={`sidebar ${showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""}`}
->
-
-          {/* ⭐ MOBILE CLOSE BUTTON */}
-          {/* <div className="mobile-filter-close" onClick={() => setShowFilter(false)}>
-            ✕ Close
-          </div> */}
-
-          <div className="filter-header">
-  
-
-  <span className="filter-title">Category</span>
-  <span
-    className="mobile-filter-close"
-    onClick={() => setShowFilter(false)}
+   <aside
+     ref={sidebarRef}
+    className={`sidebar ${
+      showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""
+    }`}
+    onClick={closeAllDropdowns} // 🔥 close dropdown on sidebar click
   >
-    ✕
-  </span>
-</div>
+    {/* HEADER */}
+    <div className="filter-header">
+      <span className="filter-title">Category</span>
+      <span
+        className="mobile-filter-close"
+        onClick={() => {
+          setShowFilter(false);
+          closeAllDropdowns();
+        }}
+      >
+        ✕
+      </span>
+    </div>
 
-          <div className="filter-group">
-            {[
-             /* { key: "class", label: "Class", options: dropdownData.classList }, */
-              { key: "country", label: "Country", options: dropdownData.countries },
-              { key: "state", label: "State", options: dropdownData.states },
-              /*{ key: "gender", label: "Gender", options: dropdownData.genders },*/
-              { key: "religion", label: "Religion", options: dropdownData.religions },
-              { key: "gender", label: "Gender", options: dropdownData.genders },
-              /*{ key: "state", label: "State", options: dropdownData.states },*/
-              { key: "class", label: "Class", options: dropdownData.classList },              
-              { key: "course", label: "Course", options: courses },
-            ].map(({ key, label, options }) => (
-              <div key={key} className="filter-dropdown">
-                <button
-                  className="dropdown-toggle"
-                  onClick={() =>
-                    setFilters((prev) => ({ ...prev, [`show_${key}`]: !prev[`show_${key}`] }))
-                  }
-                >
-                  <span>{label}</span>
-                  <span className="arrow">▼</span>
-                </button>
-
-                {filters[`show_${key}`] && (
-                  <div className="dropdown-menu">
-                    {/* Select All */}
-                    <label className="checkbox-row">
-                      <input
-                        type="checkbox"
-                        checked={filters[key].length === options.length}
-                        onChange={() => {
-                          if (filters[key].length === options.length) {
-                            setFilters((prev) => ({ ...prev, [key]: [] }));
-                          } else {
-                            setFilters((prev) => ({
-                              ...prev,
-                              [key]: options.map((opt) => opt.id),
-                            }));
-                          }
-                        }}
-                      />
-                      <span>Select All</span>
-                    </label>
-
-                    {/* All options */}
-                    {options.map((opt) => (
-                      <label key={opt.id} className="checkbox-row">
-                        <input
-                          type="checkbox"
-                          checked={filters[key].includes(opt.id)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setFilters((prev) => ({
-                                ...prev,
-                                [key]: [...prev[key], opt.id],
-                              }));
-                            } else {
-                              setFilters((prev) => ({
-                                ...prev,
-                                [key]: prev[key].filter((v) => v !== opt.id),
-                              }));
-                            }
-                          }}
-
-                        />
-                        <span>{opt.name}</span>
-
-                      </label>
-                    ))}
-                  </div>
-
-                )}
-              </div>
-            ))}
-          </div>
-
-
-          <button className="clear-filters-btn" onClick={clearAllFilters}>
-            Clear All Filters
+    {/* FILTER GROUP */}
+    <div className="filter-group">
+      {[
+        { key: "country", label: "Country", options: dropdownData.countries },
+        { key: "state", label: "State", options: dropdownData.states },
+        { key: "religion", label: "Religion", options: dropdownData.religions },
+        { key: "gender", label: "Gender", options: dropdownData.genders },
+        { key: "class", label: "Class", options: dropdownData.classList },
+        { key: "course", label: "Course", options: courses },
+      ].map(({ key, label, options }) => (
+        <div
+          key={key}
+          className="filter-dropdown"
+          onClick={(e) => e.stopPropagation()} // 🔥 prevent sidebar close
+        >
+          {/* TOGGLE */}
+          <button
+            className="dropdown-toggle"
+            onClick={() =>
+              setOpenDropdown(openDropdown === key ? null : key)
+            }
+          >
+            <span>{label}</span>
+            <span className="arrow">▼</span>
           </button>
 
-          {/*{userId ? (
-            <button className="logout-btn" onClick={handleLogout}>
-              Logout
-            </button>
-          ) : null}*/}
+          {/* DROPDOWN */}
+          {openDropdown === key && (
+            <div className="dropdown-menu">
+              {/* SELECT ALL */}
+              <label className="checkbox-row">
+                <input
+                  type="checkbox"
+                  checked={filters[key].length === options.length}
+                  onChange={() => {
+                    if (filters[key].length === options.length) {
+                      setFilters((prev) => ({ ...prev, [key]: [] }));
+                    } else {
+                      setFilters((prev) => ({
+                        ...prev,
+                        [key]: options.map((opt) => opt.id),
+                      }));
+                    }
+                  }}
+                />
+                <span>Select All</span>
+              </label>
 
-        </aside>
+              {/* OPTIONS */}
+              {options.map((opt) => (
+                <label key={opt.id} className="checkbox-row">
+                  <input
+                    type="checkbox"
+                    checked={filters[key].includes(opt.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFilters((prev) => ({
+                          ...prev,
+                          [key]: [...prev[key], opt.id],
+                        }));
+                      } else {
+                        setFilters((prev) => ({
+                          ...prev,
+                          [key]: prev[key].filter((v) => v !== opt.id),
+                        }));
+                      }
+                    }}
+                  />
+                  <span>{opt.name}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    {/* CLEAR BUTTON */}
+    <button className="clear-filters-btn" onClick={clearAllFilters}>
+      Clear All Filters
+    </button>
+
+  </aside>
 
         {/* Main Content */}
         <main className="main-content">

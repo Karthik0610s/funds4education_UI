@@ -98,7 +98,7 @@ export default function LoginPage() {
   const emailRegex =
     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.(com|com\.au|edu|edu\.in|in|au)$/;
 
-  const isValidEmail = (email) => {
+  /*const isValidEmail = (email) => {
     if (!emailRegex.test(email)) return false;
 
     const domainPart = email.split("@")[1];
@@ -107,8 +107,40 @@ export default function LoginPage() {
 
     const tldSet = new Set(tldMatches);
     return tldSet.size === tldMatches.length;
-  };
+  };*/
+const isValidEmail = (email) => {
+    email = email.trim();
 
+    // Basic regex: no spaces, contains @, proper chars
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
+
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
+
+    // Local part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
+
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
+
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
+
+    // Last two domain parts cannot be same (reject domain.com.com)
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+
+    // Each domain part must contain only letters, numbers, hyphen (no special chars)
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false; // no hyphen at start/end
+    }
+
+    return true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = { identifier: "", password: "", userType: "" };
