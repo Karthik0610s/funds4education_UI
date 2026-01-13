@@ -37,11 +37,17 @@ export default function FacultyDashboard() {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+const videosPerPage = 6;
 
 
   /* ================= SAFE VIDEO ATTACH ================= */
   const userId = localStorage.getItem("userId");
   const isLoggedIn = !!userId; // true if userId exists
+  useEffect(() => {
+  setCurrentPage(1);
+}, [course, subject, topic]);
+
   useEffect(() => {
     if (isLive && videoRef.current && streamRef.current) {
       videoRef.current.srcObject = streamRef.current;
@@ -497,11 +503,23 @@ const handleUploadFile = async () => {
   };
 
   const canProceed = courseText && subjectText && topicText;
-  const filteredVideos = allVideos.filter(v =>
-    (!course || v.course === course) &&
-    (!subject || v.subject === subject) &&
-    (!topic || v.topic === topic)
-  );
+ const filteredVideos = allVideos.filter(v =>
+  (!course || v.course === course) &&
+  (!subject || v.subject === subject) &&
+  (!topic || v.topic === topic)
+);
+
+// Pagination calculations
+const indexOfLastVideo = currentPage * videosPerPage;
+const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
+
+const currentVideos = filteredVideos.slice(
+  indexOfFirstVideo,
+  indexOfLastVideo
+);
+
+const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
+
   const formatDate = (date) => {
     const d = new Date(date);
     return `${String(d.getDate()).padStart(2, "0")}-${String(d.getMonth() + 1).padStart(2, "0")}-${d.getFullYear()}`;
@@ -617,7 +635,7 @@ const handleUploadFile = async () => {
 
           <div className="video-grid">
             {filteredVideos.length > 0 ? (
-              filteredVideos.map((v) => (
+              currentVideos.map((v) => (
                 <div className="video-card" key={v.id}>
                   <video
                     src={getVideoUrl(v.filePath, v.fileName)}
@@ -651,6 +669,29 @@ const handleUploadFile = async () => {
               </div>
             )}
           </div>
+{totalPages > 1 && (
+  <div className="pagination-controls">
+    <button
+      className="pagination-btn"
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage((p) => p - 1)}
+    >
+      ← Prev
+    </button>
+
+    <span className="page-info">
+      Page {currentPage} of {totalPages}
+    </span>
+
+    <button
+      className="pagination-btn"
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage((p) => p + 1)}
+    >
+      Next →
+    </button>
+  </div>
+)}
 
         </div>
 
