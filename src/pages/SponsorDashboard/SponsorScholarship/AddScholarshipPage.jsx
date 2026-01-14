@@ -505,7 +505,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
     }
 
     // Web Portal validation
-    if (!formData.webportaltoApply) {
+   /* if (!formData.webportaltoApply) {
       newErrors.webportaltoApply = "Web Portal to Apply is required.";
       console.log("❌ webportaltoApply missing");
     } else {
@@ -514,7 +514,17 @@ const [originalFiles, setOriginalFiles] = useState([]);
         newErrors.webportaltoApply = "Please enter a valid URL (e.g., https://example.com)";
         console.log("❌ Invalid webportaltoApply:", formData.webportaltoApply);
       }
-    }
+    }*/
+   if (formData.webportaltoApply?.trim()) {
+  const urlPattern =
+    /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-]*)*\/?$/;
+
+  if (!urlPattern.test(formData.webportaltoApply.trim())) {
+    newErrors.webportaltoApply =
+      "Please enter a valid URL (e.g., https://example.com)";
+    console.log("❌ Invalid webportaltoApply:", formData.webportaltoApply);
+  }
+}
 
     if (!formData.eligibility?.trim()) {
       newErrors.eligibility = "Eligibility is required.";
@@ -1269,7 +1279,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
                   />
                 </div>
                 <div className="form-group col-6">
-                  <label>Web Portal to Apply<Required /></label>
+                  <label>Web Portal to Apply</label>
                   <input
                     type="text"
                     name="webportaltoApply"

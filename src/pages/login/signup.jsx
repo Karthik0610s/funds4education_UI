@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef ,useEffect} from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { insertNewUser } from "../../app/redux/slices/signupSlice";
@@ -8,6 +8,8 @@ import "../../pages/styles.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Swal from "sweetalert2";
 import { uploadFormFilesReq } from "../../api/scholarshipapplication/scholarshipapplication";
+import { ApiKey } from "../../api/endpoint";
+import { publicAxios } from "../../api/config";
 export default function SignUpPage() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState("student"); // default to student
@@ -26,13 +28,30 @@ export default function SignUpPage() {
 
   const [educationList, setEducationList] = useState([]);
   const [eduErrors, setEduErrors] = useState({});
-  const [education, setEducation] = useState({ degree: "", college: "", year: "" });
+  const [education, setEducation] = useState({ degree: "", specification:"",college: "", year: "" });
   const [showEducationFields, setShowEducationFields] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
   const [verification, setVerification] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
-
+const [courses, setCourses] = useState([]);
+const [loadingCourses, setLoadingCourses] = useState(false);
+const fetchCourses = async () => {
+  try {
+    setLoadingCourses(true);
+    const res = await publicAxios.get(`${ApiKey.Class}`);
+    setCourses(res.data || []);
+  } catch (err) {
+    console.error("Failed to fetch courses", err);
+  } finally {
+    setLoadingCourses(false);
+  }
+};
+useEffect(() => {
+  if (showEducationFields || editIndex !== null) {
+    fetchCourses();
+  }
+}, [showEducationFields, editIndex]);
   // Redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -325,10 +344,10 @@ if (!basicDetails.dob) {
   let errorsObj = {};
 
   // REQUIRED validation
-  if (!education.degree.trim()) {
-    errorsObj.degree = "Class / Course is required.";
-  } else if (!courseRegex.test(education.degree)) {
-    errorsObj.degree = "Invalid Class / Course.";
+  if (!education.specification.trim()) {
+    errorsObj.specification = "Specification is required.";
+  } else if (!courseRegex.test(education.specification)) {
+    errorsObj.specification = "Invalid Specification";
   }
 
   if (!education.college.trim()) {
@@ -615,7 +634,7 @@ if (!basicDetails.dob) {
         {step === 1 && (
           <div>
             <div className="education-header">
-              <h3>Education Details</h3>
+              <h3>Current Education Details</h3>
               {!showEducationFields && editIndex === null && (
                 <button onClick={() => setShowEducationFields(true)} className="add-btn">
                   + Add Education
@@ -637,13 +656,37 @@ if (!basicDetails.dob) {
             {educationList.map((edu, index) =>
               editIndex === index ? (
                 <div className="education-grid" key={index}>
+
                   <div className="form-group">
-                    <label>Class / Course  <span className="required">*</span></label>
+                    <label>Class/Course <span className="required">*</span></label>
+                   <select
+  value={education.degree}
+  onChange={(e) =>
+    setEducation({ ...education, degree: e.target.value })
+  }
+  className={eduErrors.degree ? "input-error" : ""}
+>
+  <option value="">Select Course</option>
+
+  {courses.map((course) => (
+    <option key={course.courseId} value={course.courseName}>
+      {course.courseName}
+    </option>
+  ))}
+</select>
+
+{eduErrors.degree && (
+  <p className="error-text">{eduErrors.degree}</p>
+)}
+
+                  </div>
+                  <div className="form-group">
+                    <label>Specification <span className="required">*</span></label>
                     <input
                       type="text"
-                      placeholder="Class / Course "
-                      value={education.degree}
-                      onChange={(e) => setEducation({ ...education, degree: e.target.value })}
+                      placeholder="Specification"
+                      value={education.specification}
+                      onChange={(e) => setEducation({ ...education, specification: e.target.value })}
                     />
                   </div>
 
@@ -683,6 +726,10 @@ if (!basicDetails.dob) {
                     <span className="label">Class / Course</span>
                     <span className="value">{edu.degree}</span>
                   </div>
+                  <div className="label-value">
+                    <span className="label">Specification</span>
+                    <span className="value">{edu.specification}</span>
+                  </div>
 
                   <div className="label-value">
                     <span className="label">School / College / University</span>
@@ -716,24 +763,46 @@ if (!basicDetails.dob) {
             )}
 
 
-            {showEducationFields && editIndex === null && (
-              <div className="education-grid">
-                <div className="form-group">
-                  <label>Class / Course *</label>
+           {showEducationFields && editIndex === null && (
+  <div className="education-grid">
+
+    <div className="form-group">
+      <label>Class / Course *</label>
+
+      <select
+        value={education.degree}
+        onChange={(e) =>
+          setEducation({ ...education, degree: e.target.value })
+        }
+        className={eduErrors.degree ? "input-error" : ""}
+      >
+        <option value="">Select Class / Course</option>
+        {courses.map((course) => (
+          <option key={course.courseId} value={course.courseName}>
+            {course.courseName}
+          </option>
+        ))}
+      </select>
+
+      {eduErrors.degree && (
+        <p className="error-text">{eduErrors.degree}</p>
+      )}
+    </div>
+ <div className="form-group">
+                  <label>Specification*</label>
                   <input
                     type="text"
-                    placeholder="Class / Course"
-                    value={education.degree}
+                    placeholder="Specification"
+                    value={education.specification}
                     maxLength={150}
                     onChange={(e) =>
                       courseRegex.test(e.target.value) &&
-                      setEducation({ ...education, degree: e.target.value })
+                      setEducation({ ...education, specification: e.target.value })
                     }
-                    className={eduErrors.degree ? "input-error" : ""}
+                    className={eduErrors.specification ? "input-error" : ""}
                   />
-                  {eduErrors.degree && <p className="error-text">{eduErrors.degree}</p>}
+                  {eduErrors.specification && <p className="error-text">{eduErrors.specification}</p>}
                 </div>
-
 
                 <div className="form-group">
                   <label>School / College / University *</label>

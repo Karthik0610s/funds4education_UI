@@ -1230,7 +1230,7 @@ body,
 }
 
 .filter-header {
-  display: none;
+  display: flex;
 }
 
 /* Show only on mobile */
