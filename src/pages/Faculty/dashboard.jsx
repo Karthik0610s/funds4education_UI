@@ -24,6 +24,10 @@ export default function FacultyDashboard() {
   const [recordedBlob, setRecordedBlob] = useState(null);
   const [uploadMode, setUploadMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [duration, setDuration] = useState(0); // seconds
+  const [isMuted, setIsMuted] = useState(false);
+  const timerRef = useRef(null);
+
 
   const [isPaused, setIsPaused] = useState(false);
   const [recordedVideoUrl, setRecordedVideoUrl] = useState("");
@@ -38,7 +42,8 @@ export default function FacultyDashboard() {
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-const videosPerPage = 6;
+  const videosPerPage = 6;
+  
 
 
   /* ================= SAFE VIDEO ATTACH ================= */
@@ -146,10 +151,28 @@ const videosPerPage = 6;
     setSubjectText("");
     setTopicText("");
     setVideoName("");
+    resetTimer();
+    setIsMuted(false);
       // ✅ ADD THESE
   setUploadMode(false);
   setSelectedFile(null);
   };
+
+  const toggleMute = () => {
+  if (!streamRef.current) return;
+
+  const audioTrack = streamRef.current.getAudioTracks()[0];
+  if (!audioTrack) return;
+
+  audioTrack.enabled = !audioTrack.enabled;
+  setIsMuted(!audioTrack.enabled);
+};
+
+const formatDuration = (seconds) => {
+  const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const s = String(seconds % 60).padStart(2, "0");
+  return `${m}:${s}`;
+};
 
   /* ================= START CAMERA ================= */
   const startCamera = async () => {
@@ -176,6 +199,8 @@ const videosPerPage = 6;
       startRecording(streamRef.current);
       setIsLive(true);
       setStep(3);
+      startTimer();
+
 
       // Preview screen
       videoRef.current.srcObject = screenStream;
@@ -269,6 +294,25 @@ const handleUploadFile = async () => {
 };
 
 
+const startTimer = () => {
+  if (timerRef.current) return;
+
+  timerRef.current = setInterval(() => {
+    setDuration(prev => prev + 1);
+  }, 1000);
+};
+
+const pauseTimer = () => {
+  if (timerRef.current) {
+    clearInterval(timerRef.current);
+    timerRef.current = null;
+  }
+};
+
+const resetTimer = () => {
+  pauseTimer();
+  setDuration(0);
+};
 
   /* ================= SCREEN SHARE ================= */
   const shareScreen = async () => {
@@ -292,6 +336,8 @@ const handleUploadFile = async () => {
     if (mediaRecorderRef.current?.state === "recording") {
       mediaRecorderRef.current.pause();
       setIsPaused(true);
+      pauseTimer();
+
     }
   };
 
@@ -299,6 +345,8 @@ const handleUploadFile = async () => {
     if (mediaRecorderRef.current?.state === "paused") {
       mediaRecorderRef.current.resume();
       setIsPaused(false);
+      startTimer();
+
     }
   };
 
@@ -395,6 +443,7 @@ const handleUploadFile = async () => {
 
     // 6️⃣ Reset UI state
     setIsLive(false);
+    pauseTimer();
   };
 
 
@@ -810,24 +859,33 @@ const totalPages = Math.ceil(filteredVideos.length / videosPerPage);
                       STOP
                     </button>
                   </div> */}
-                  <div className="live-controls">
-                    <button onClick={shareScreen}>🖥 Screen</button>
-                    <button onClick={backToCamera}>🎥 Camera</button>
+                 <div className="live-header">
+  <span className="live-indicator">🔴 LIVE - </span>
+  <span className="live-duration">{formatDuration(duration)}</span>
+</div>
 
-                    {!isPaused ? (
-                      <button className="pause-btn" onClick={pauseRecording}>
-                        ⏸ Pause
-                      </button>
-                    ) : (
-                      <button className="resume-btn" onClick={resumeRecording}>
-                        ▶ Resume
-                      </button>
-                    )}
+<div className="live-controls">
+  <button onClick={shareScreen}>🖥 Screen</button>
+  <button onClick={backToCamera}>🎥 Camera</button>
 
-                    <button className="stop-btn" onClick={stopLive}>
-                      ⏹ Stop
-                    </button>
-                  </div>
+  <button onClick={toggleMute}>
+    {isMuted ? "🔇 Unmute" : "🎤 Mute"}
+  </button>
+
+  {!isPaused ? (
+    <button className="pause-btn" onClick={pauseRecording}>
+      ⏸ Pause
+    </button>
+  ) : (
+    <button className="resume-btn" onClick={resumeRecording}>
+      ▶ Resume
+    </button>
+  )}
+
+  <button className="stop-btn" onClick={stopLive}>
+    ⏹ Stop
+  </button>
+</div>
                   <video ref={videoRef} autoPlay muted />
                 </>
               )}
