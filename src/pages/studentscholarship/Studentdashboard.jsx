@@ -974,7 +974,7 @@ const closeAllDropdowns = () => {
                   onClick={() => setCurrentPage((p) => p - 1)}
                   className="pagination-btn"
                 >
-                  ← Previous
+                  ← Prev
                 </button>
 
                 <span className="page-info">
