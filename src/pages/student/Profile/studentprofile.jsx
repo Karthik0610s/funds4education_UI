@@ -20,12 +20,19 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     dateofBirth: "",
     gender: "",
     userName: "",
+    fatherOccupation: "",
+    motherOccupation: "",
+    address: "",
+    parentContactNumber: "",
+    familyIncome: "",
+    stateId: "",
+    countryId: "",
     document: [],
     studentId: ""
   });
   const fileInputRef = useRef(null);
   const [educationList, setEducationList] = useState([]);
-  const [education, setEducation] = useState({ degree: "", college: "", year: "" });
+  const [education, setEducation] = useState({ degree: "", specification:"",college: "", year: "" });
   const [editIndex, setEditIndex] = useState(null);
   const [errors, setErrors] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]); // newly selected files
@@ -131,6 +138,13 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
           : "",
         gender: profile.gender || "",
         userName: profile.userName || "",
+        fatherOccupation: profile.fatherOccupation || "",
+        motherOccupation: profile.motherOccupation || "",
+        address: profile.address || "",
+        parentContactNumber: profile.parentsContactNumber || "",
+        familyIncome: profile.familyIncome || "",
+        stateId: profile.stateId || "",
+        countryId: profile.countryId || "",
         // filesList:profile.files ||""
       });
       setFilesList(profile.files || []);
@@ -160,40 +174,40 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
 
 
   const isValidEmails = (email) => {
-  if (!email) return false;
+    if (!email) return false;
 
-  email = email.trim();
+    email = email.trim();
 
-  // Basic structure
-  const basicRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-  if (!basicRegex.test(email)) return false;
+    // Basic structure
+    const basicRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!basicRegex.test(email)) return false;
 
-  const [local, domain] = email.split("@");
+    const [local, domain] = email.split("@");
 
-  // Local-part rules
-  if (local.startsWith(".") || local.endsWith(".")) return false;
-  if (local.includes("..")) return false;
+    // Local-part rules
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
 
-  // Domain rules
-  if (domain.startsWith(".") || domain.endsWith(".")) return false;
-  if (domain.includes("..")) return false;
+    // Domain rules
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
 
-  const parts = domain.split(".");
-  if (parts.length < 2) return false;
+    const parts = domain.split(".");
+    if (parts.length < 2) return false;
 
-  // Reject duplicate TLDs like au.au, com.com
-  const last = parts[parts.length - 1];
-  const secondLast = parts[parts.length - 2];
-  if (last === secondLast) return false;
+    // Reject duplicate TLDs like au.au, com.com
+    const last = parts[parts.length - 1];
+    const secondLast = parts[parts.length - 2];
+    if (last === secondLast) return false;
 
-  // Validate each domain label
-  for (let part of parts) {
-    if (!/^[A-Za-z0-9-]+$/.test(part)) return false;
-    if (part.startsWith("-") || part.endsWith("-")) return false;
-  }
+    // Validate each domain label
+    for (let part of parts) {
+      if (!/^[A-Za-z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false;
+    }
 
-  return true;
-};
+    return true;
+  };
 
 
 
@@ -229,43 +243,97 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     const year = date.getFullYear();
     return `${month}/${day}/${year} 00:00:00`;
   };
-const isValidEmail = (email) => {
-  email = email.trim();
+  const isValidEmail = (email) => {
+    email = email.trim();
 
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!regex.test(email)) return false;
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!regex.test(email)) return false;
 
-  const [local, domain] = email.split("@");
-  if (!local || !domain) return false;
+    const [local, domain] = email.split("@");
+    if (!local || !domain) return false;
 
-  if (local.startsWith(".") || local.endsWith(".")) return false;
-  if (local.includes("..")) return false;
+    if (local.startsWith(".") || local.endsWith(".")) return false;
+    if (local.includes("..")) return false;
 
-  if (domain.startsWith(".") || domain.endsWith(".")) return false;
-  if (domain.includes("..")) return false;
+    if (domain.startsWith(".") || domain.endsWith(".")) return false;
+    if (domain.includes("..")) return false;
 
-  const domainParts = domain.split(".");
-  if (domainParts.length < 2) return false;
+    const domainParts = domain.split(".");
+    if (domainParts.length < 2) return false;
 
-  const lastIndex = domainParts.length - 1;
-  if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
+    const lastIndex = domainParts.length - 1;
+    if (domainParts[lastIndex] === domainParts[lastIndex - 1]) return false;
 
-  for (let part of domainParts) {
-    if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
-    if (part.startsWith("-") || part.endsWith("-")) return false;
-  }
+    for (let part of domainParts) {
+      if (!/^[a-zA-Z0-9-]+$/.test(part)) return false;
+      if (part.startsWith("-") || part.endsWith("-")) return false;
+    }
 
-  return true;
-};
+    return true;
+  };
+  const incomeRegex = /^(₹\s?|Rs\.?\s?)?[0-9,./-]+$/;
 
+  const addressRegex = /^[A-Za-z0-9\s,./()\-\n]+$/;
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
+  const [loadingStates, setLoadingStates] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+  const fetchCourses = async () => {
+    try {
+      setLoadingCourses(true);
+      const res = await publicAxios.get(`${ApiKey.Class}`);
+      setCourses(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch courses", err);
+    } finally {
+      setLoadingCourses(false);
+    }
+  };
+ /* useEffect(() => {
+    if (showEducationFields ) {
+      fetchCourses();
+    }
+  }, [showEducationFields]);*/
+  // Fetch countries
+  const fetchCountries = async () => {
+    try {
+      setLoadingCountries(true);
+      const res = await publicAxios.get(`${ApiKey.Country}`);
+      setCountries(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch countries", err);
+    } finally {
+      setLoadingCountries(false);
+    }
+  };
+
+  // Fetch states based on selected country
+  const fetchStates = async () => {
+    try {
+      setLoadingStates(true);
+      const res = await publicAxios.get(`${ApiKey.State}`);
+      setStates(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch states", err);
+    } finally {
+      setLoadingStates(false);
+    }
+  };
+  useEffect(() => {
+    fetchCourses();
+    fetchCountries();
+    fetchStates();// fetch countries on component mount
+  }, []);
   // ✅ Validation (same as in UserForm)
   const validateForm = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
-//const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
+    //const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
-{/* 
+    {/* 
 ["email", "userName"].forEach(field => {
   const value = formData[field].trim();
   if (!value) {
@@ -292,10 +360,10 @@ const isValidEmail = (email) => {
     }
 
     if (!formData.email) {
-        errs.email = "Email is required.";
-      } else if (!isValidEmail(formData.email)) {
-        errs.email = "Enter a valid email.";
-      }
+      errs.email = "Email is required.";
+    } else if (!isValidEmail(formData.email)) {
+      errs.email = "Enter a valid email.";
+    }
 
 
     if (!formData.phone.trim()) {
@@ -311,6 +379,14 @@ const isValidEmail = (email) => {
       errs.userName = "Enter a valid email address.";
     }*/}
 
+if (!formData.countryId) {
+    errs.country = "Country is required.";
+  }
+
+  // State
+  if (!formData.stateId) {
+    errs.state = "State is required.";
+  }
 
     if (!formData.dateofBirth) {
       errs.dateofBirth = "Date of Birth is required.";
@@ -326,7 +402,7 @@ const isValidEmail = (email) => {
 
     if (educationList.length === 0)
       errs.education = "Add at least one education record.";
-console.log("Errors:", errs);
+    console.log("Errors:", errs);
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -339,7 +415,11 @@ console.log("Errors:", errs);
       setErrors(prev => ({ ...prev, education: "Course is required." }));
       return;
     }
-{/*
+    if (!education.specification.trim()) {
+      setErrors(prev => ({ ...prev, education: "Specification is required." }));
+      return;
+    }
+    {/*
     if (!nameRegex.test(education.degree)) {
       setErrors(prev => ({
         ...prev,
@@ -352,7 +432,7 @@ console.log("Errors:", errs);
       setErrors(prev => ({ ...prev, education: "College is required." }));
       return;
     }
-   {/*
+    {/*
     if (!nameRegex.test(education.college)) {
       setErrors(prev => ({
         ...prev,
@@ -379,7 +459,7 @@ console.log("Errors:", errs);
       setEducationList([...educationList, education]);
     }
 
-    setEducation({ degree: "", college: "", year: "" });
+    setEducation({ degree: "", specification:"",college: "", year: "" });
   };
 
 
@@ -411,6 +491,13 @@ console.log("Errors:", errs);
       passwordHash: profile.passwordHash,
       gender: formData.gender,
       education: JSON.stringify(educationList),
+        FatherOccupation:formData.fatherOccupation,
+      MotherOccupation:formData.motherOccupation,
+      Address:formData.address,
+      FamilyIncome:formData.familyIncome,
+      StateId:formData.stateId,
+      countryId:formData.countryId,
+      ParentsContactNumber:formData.parentContactNumber,
       roleId: "1",
       createdBy: profile.createdBy || null,
       createdDate: profile.createdDate || null,
@@ -524,12 +611,12 @@ console.log("Errors:", errs);
             <div className="form-group">
               <label>Personal Email *</label>
               <input
-  type="email"
-  value={formData.email}
-  onChange={(e) =>
-    setFormData({ ...formData, email: e.target.value.toLowerCase().trim() })
-  }
-/>
+                type="email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value.toLowerCase().trim() })
+                }
+              />
 
               {errors.email && <p className="error-text">{errors.email}</p>}
             </div>
@@ -587,6 +674,124 @@ console.log("Errors:", errs);
               {errors.gender && <p className="error-text">{errors.gender}</p>}
             </div>
 
+          </div>
+          <div className="row">
+            <div className="form-group" >
+              <label>Father Occupation</label>
+              <input
+                type="text"
+                value={formData.fatherOccupation}
+                onChange={(e) =>
+                 
+                  setFormData({ ...formData, fatherOccupation: e.target.value })
+                }
+                className={errors.fatherOccupation ? "input-error" : ""}
+                placeholder="Father Occupation"
+              />
+              {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
+            </div>
+            <div className="form-group">
+              <label>Mother Occupation </label>
+              <input
+                type="text"
+                value={formData.motherOccupation}
+                onChange={(e) =>
+              
+                  setFormData({ ...formData, motherOccupation: e.target.value })
+                }
+                className={errors.motherOccupation ? "input-error" : ""}
+                placeholder="Mother Occupation"
+              />
+              {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
+            </div>
+          </div>
+          <div className="row">
+            <div className="form-group">
+              <label>Parent's Phone </label>
+              <input
+                type="text"
+                maxLength={10}
+                value={formData.parentContactNumber}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  // allow only numbers while typing
+                  if (/^\d*$/.test(value)) {
+                    setFormData({ ...formData, parentContactNumber: value });
+                  }
+                }}
+                className={errors.parentContactNumber ? "input-error" : ""}
+                placeholder="Parent's Number"
+              />
+              {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
+            </div>
+            <div className="form-group">
+              <label>Family Income </label>
+              <input
+                type="text"
+                value={formData.familyIncome}
+                onChange={(e) =>
+
+                  setFormData({ ...formData, familyIncome: e.target.value })
+                }
+                className={errors.familyIncome ? "input-error" : ""}
+                placeholder="Family Income"
+                maxLength={20}
+              />
+              {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
+            </div>
+          </div>
+          <div className="row">
+            <div className="form-group">
+              <label>Country <span className="required">*</span></label>
+              <select
+                value={formData.countryId}
+                onChange={(e) => setFormData({ ...formData, countryId: e.target.value, state: "" })}
+                className={errors.country ? "input-error" : ""}
+              >
+                <option value="">Select Country</option>
+                {countries.map((c) => (
+                  <option key={c.id} value={c.id}>{c.country_Name}</option>
+                ))}
+              </select>
+              {errors.country && <p className="error-text">{errors.country}</p>}
+            </div>
+
+            <div className="form-group">
+              <label>State <span className="required">*</span></label>
+              <select
+                value={formData.stateId}
+                onChange={(e) => setFormData({ ...formData, stateId: e.target.value })}
+                className={errors.state ? "input-error" : ""}
+
+              >
+                <option value="">Select State</option>
+                {states.map((s) => (
+                  <option key={s.id} value={s.id}>{s.state_Name}</option>
+                ))}
+              </select>
+              {errors.state && <p className="error-text">{errors.state}</p>}
+            </div>
+          </div>
+          <div className="row">
+            <div className="form-group">
+              <label>Address </label>
+              <textarea
+                value={formData.address}
+                maxLength={250}
+                rows={4}
+                placeholder="Address"
+                className={errors.address ? "input-error" : ""}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    address: e.target.value
+                  });
+                }}
+              />
+
+              {errors.address && <p className="error-text">{errors.address}</p>}
+            </div>
           </div>
           <div className="form-group col-12">
             <label>Upload Profile Photo</label>
@@ -659,67 +864,80 @@ console.log("Errors:", errs);
 
           </div>
           {/* Education Section */}
-          <h3 className="section-title">Education Details</h3>
+          <h3 className="section-title">Current Education Details</h3>
 
-          <div className="row">
-            <input
-              type="text"
-              placeholder="Class/Course"
-              value={education.degree}
-              onInput={(e) => {
-                // hide numbers + special chars while entering
-                e.target.value = e.target.value.replace(/[^A-Za-z0-9.,&()_"'/|{}\/\-\s]/g, "");
-                e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-              }}
-              onChange={(e) =>
-                setEducation({ ...education, degree: e.target.value })
-              }
-            />
+    
 
-            <input
-              type="text"
-              placeholder="School/College"
-              value={education.college}
-              onInput={(e) => {
-                // hide numbers + special chars
-                e.target.value = e.target.value.replace(/[^A-Za-z0-9.,&()_"'/|{}\/\-\s]/g, "");
-                e.target.value = e.target.value.replace(/\s{2,}/g, " ");
-              }}
-              onChange={(e) =>
-                setEducation({ ...education, college: e.target.value })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Year"
-              value={education.year}
-              maxLength={4}
-              onChange={(e) => {
-                let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
-                const currentYear = new Date().getFullYear();
+  {/* Row 1 → 3 fields */}
+   <div className="education-grid">
+    <div className="form-group">
+      <select
+        value={education.degree}
+        onChange={(e) =>
+          setEducation({ ...education, degree: e.target.value })
+        }
+        //className={eduErrors.degree ? "input-error" : ""}
+      >
+        <option value="">Select Class / Course</option>
+        {courses.map((course) => (
+          <option key={course.classId} value={course.className}>
+            {course.className}
+          </option>
+        ))}
+      </select>
+    </div>
 
-                if (cleaned === "") {
-                  setEducation({ ...education, year: "" });
-                  return;
-                }
+    <div className="form-group">
+      <input
+        type="text"
+        placeholder="Specification"
+        value={education.specification}
+        onChange={(e) =>
+          setEducation({ ...education, specification: e.target.value })
+        }
+      />
+    </div>
 
-                const enteredYear = Number(cleaned);
+    <div className="form-group">
+      <input
+        type="text"
+        placeholder="School/College"
+        value={education.college}
+        onChange={(e) =>
+          setEducation({ ...education, college: e.target.value })
+        }
+      />
+    </div>
+ 
 
-                // ❌ Block entering a future year
-                if (enteredYear > currentYear) return;
+  {/* Row 2 → Year + Button */}
+  
+    <div className="form-group">
+      <input
+        type="text"
+        placeholder="Year"
+        value={education.year}
+        maxLength={4}
+        onChange={(e) => {
+          let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
+          const currentYear = new Date().getFullYear();
+          if (cleaned && Number(cleaned) > currentYear) return;
+          setEducation({ ...education, year: cleaned });
+        }}
+      />
+    </div>
+  <div className="sign-action-btns">
+    <button
+      type="button"
+      className="sign-action-btn"
+      onClick={addOrUpdateEducation}
+     style={{marginTop:"-20px",justifyItems:"center"}}
+    >
+      {editIndex !== null ? "Update" : "Add"}
+    </button>
+    </div>
+ </div>
 
-                setEducation({ ...education, year: cleaned });
-              }}
-            />
-
-            <button
-              type="button"
-              className="sign-action-btn"
-              onClick={addOrUpdateEducation}
-            >
-              {editIndex !== null ? "Update" : "Add"}
-            </button>
-          </div>
 
           {errors.education && <p className="error-text">{errors.education}</p>}
 
@@ -728,6 +946,7 @@ console.log("Errors:", errs);
               <thead>
                 <tr>
                   <th>Course</th>
+                   <th>Specification</th>
                   <th>College</th>
                   <th>Year</th>
                   <th>Actions</th>
@@ -737,6 +956,7 @@ console.log("Errors:", errs);
                 {educationList.map((edu, i) => (
                   <tr key={i}>
                     <td>{edu.degree}</td>
+                    <td>{edu.specification}</td>
                     <td>{edu.college}</td>
                     <td>{edu.year}</td>
                     <td>
@@ -769,12 +989,12 @@ console.log("Errors:", errs);
           <div className="form-group">
             <label>User Name(Email) *</label>
             <input
-  type="email"
-  value={formData.userName}
-  onChange={(e) =>
-    setFormData({ ...formData, userName: e.target.value.toLowerCase().trim() })
-  }
-/>
+              type="email"
+              value={formData.userName}
+              onChange={(e) =>
+                setFormData({ ...formData, userName: e.target.value.toLowerCase().trim() })
+              }
+            />
             {errors.userName && <p className="error-text">{errors.userName}</p>}
           </div>
 

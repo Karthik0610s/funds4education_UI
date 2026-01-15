@@ -89,6 +89,34 @@ const navigate = useNavigate();
               <label>Gender:</label>
               <input type="text" value={profile.gender || ""} readOnly />
             </div>
+             <div className="detail-row">
+              <label>Father Occupation:</label>
+              <input type="text" value={profile.fatherOccupation || ""} readOnly />
+            </div>
+             <div className="detail-row">
+              <label>Mother Occupation:</label>
+              <input type="text" value={profile.motherOccupation || ""} readOnly />
+            </div>
+            <div className="detail-row">
+              <label>Parent's Phone:</label>
+              <input type="text" value={profile.parentsContactNumber || ""} readOnly />
+            </div>
+              <div className="detail-row">
+              <label>Family:</label>
+              <input type="text" value={profile.familyIncome || ""} readOnly />
+            </div>
+            <div className="detail-row">
+              <label>State:</label>
+              <input type="text" value={profile.state_Name || ""} readOnly />
+            </div>
+             <div className="detail-row">
+              <label>Country:</label>
+              <input type="text" value={profile.country_Name || ""} readOnly />
+            </div>
+            <div className="detail-row">
+              <label>Address:</label>
+              <input type="text" value={profile.address || ""} readOnly />
+            </div>
             <div className="detail-row">
               <label>Profile Photo:</label>
               <input type="text"   value={(profile.fileName || "").replace(/\|$/, "")} readOnly />

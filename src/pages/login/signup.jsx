@@ -1,4 +1,4 @@
-import React, { useState, useRef ,useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { insertNewUser } from "../../app/redux/slices/signupSlice";
@@ -23,35 +23,42 @@ export default function SignUpPage() {
     phone: "",
     dob: "",
     gender: "",
+    fatherOccupation: "",
+    motherOccupation: "",
+    address: "",
+    parentContactNumber: "",
+    familyIncome: "",
+    stateId: "",
+    countryId: "",
     documents: [],
   });
 
   const [educationList, setEducationList] = useState([]);
   const [eduErrors, setEduErrors] = useState({});
-  const [education, setEducation] = useState({ degree: "", specification:"",college: "", year: "" });
+  const [education, setEducation] = useState({ degree: "", specification: "", college: "", year: "" });
   const [showEducationFields, setShowEducationFields] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
   const [verification, setVerification] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({});
-const [courses, setCourses] = useState([]);
-const [loadingCourses, setLoadingCourses] = useState(false);
-const fetchCourses = async () => {
-  try {
-    setLoadingCourses(true);
-    const res = await publicAxios.get(`${ApiKey.Class}`);
-    setCourses(res.data || []);
-  } catch (err) {
-    console.error("Failed to fetch courses", err);
-  } finally {
-    setLoadingCourses(false);
-  }
-};
-useEffect(() => {
-  if (showEducationFields || editIndex !== null) {
-    fetchCourses();
-  }
-}, [showEducationFields, editIndex]);
+  const [courses, setCourses] = useState([]);
+  const [loadingCourses, setLoadingCourses] = useState(false);
+  const fetchCourses = async () => {
+    try {
+      setLoadingCourses(true);
+      const res = await publicAxios.get(`${ApiKey.Class}`);
+      setCourses(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch courses", err);
+    } finally {
+      setLoadingCourses(false);
+    }
+  };
+  useEffect(() => {
+    if (showEducationFields || editIndex !== null) {
+      fetchCourses();
+    }
+  }, [showEducationFields, editIndex]);
   // Redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,6 +80,11 @@ useEffect(() => {
   const courseRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,150}$/;
   const collegeRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,250}$/;
   const yearRegex = /^[0-9]{4}$/;
+  const incomeRegex = /^(₹\s?|Rs\.?\s?)?[0-9,./-]+$/;
+
+  const addressRegex = /^[A-Za-z0-9\s,./()\-\n]+$/;
+
+  const anyText350 = /^.{0,350}$/;
 
   const isValidEmail = (email) => {
     email = email.trim();
@@ -109,8 +121,40 @@ useEffect(() => {
   };
 
 
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [loadingCountries, setLoadingCountries] = useState(false);
+  const [loadingStates, setLoadingStates] = useState(false);
 
+  // Fetch countries
+  const fetchCountries = async () => {
+    try {
+      setLoadingCountries(true);
+      const res = await publicAxios.get(`${ApiKey.Country}`);
+      setCountries(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch countries", err);
+    } finally {
+      setLoadingCountries(false);
+    }
+  };
 
+  // Fetch states based on selected country
+  const fetchStates = async () => {
+    try {
+      setLoadingStates(true);
+      const res = await publicAxios.get(`${ApiKey.State}`);
+      setStates(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch states", err);
+    } finally {
+      setLoadingStates(false);
+    }
+  };
+  useEffect(() => {
+    fetchCountries();
+    fetchStates();// fetch countries on component mount
+  }, []);
 
   // --- Validation per step ---
   const validateStep = () => {
@@ -123,11 +167,11 @@ useEffect(() => {
       } else if (!isValidEmail(basicDetails.email)) {
         stepErrors.email = "Enter a valid email.";
       }
-       if (!basicDetails.firstName) {
-      stepErrors.firstName = "First name is required.";
-    } else if (!nameRegex.test(basicDetails.firstName)) {
-      stepErrors.firstName = "Only alphabets allowed (max 150).";
-    }
+      if (!basicDetails.firstName) {
+        stepErrors.firstName = "First name is required.";
+      } else if (!nameRegex.test(basicDetails.firstName)) {
+        stepErrors.firstName = "Only alphabets allowed (max 150).";
+      }
 
 
       // Last Name
@@ -138,7 +182,14 @@ useEffect(() => {
       }
 
 
+if (!basicDetails.countryId) {
+    stepErrors.country = "Country is required.";
+  }
 
+  // State
+  if (!basicDetails.stateId) {
+    stepErrors.state = "State is required.";
+  }
 
 
       // Phone
@@ -151,38 +202,78 @@ useEffect(() => {
         stepErrors.phone = "Phone number must be 10 digits and contain only numbers.";
       }
 
+      // Father Occupation (optional)
+      if (basicDetails.fatherOccupation &&
+        !nameRegex.test(basicDetails.fatherOccupation)) {
+        stepErrors.fatherOccupation = "Only alphabets allowed (max 150 characters).";
+      }
 
+      // Mother Occupation (optional)
+      if (basicDetails.motherOccupation &&
+        !nameRegex.test(basicDetails.motherOccupation)) {
+        stepErrors.motherOccupation = "Only alphabets allowed (max 150 characters).";
+      }
+
+      // Parent Contact Number (optional)
+      if (basicDetails.parentContactNumber) {
+        if (basicDetails.parentContactNumber.startsWith("0")) {
+          stepErrors.parentContactNumber = "Phone number cannot start with 0.";
+        } else if (!phoneRegex.test(basicDetails.parentContactNumber)) {
+          stepErrors.parentContactNumber = "Enter a valid 10-digit mobile number.";
+        }
+      }
+
+      if (basicDetails.familyIncome) {
+        if (basicDetails.familyIncome.length > 20) {
+          stepErrors.familyIncome = "Family income cannot exceed 20 characters.";
+        } else if (!incomeRegex.test(basicDetails.familyIncome)) {
+          stepErrors.familyIncome =
+            "Family income can include numbers, ₹, Rs, /, -, commas and dots.";
+        }
+      }
+      // Address (optional)
+      // Address (optional)
+      if (basicDetails.address) {
+        const trimmedAddress = basicDetails.address.trim();
+
+        if (trimmedAddress.length > 250) {
+          stepErrors.address = "Address cannot exceed 250 characters.";
+        } else if (!addressRegex.test(trimmedAddress)) {
+          stepErrors.address =
+            "Address can include letters, numbers, space, (), / , . and - only.";
+        }
+      }
       // Date of Birth
       if (!basicDetails.dob) {
         stepErrors.dob = "Date of birth is required.";
       }
-    // Date of Birth
-    // Date of Birth
-if (!basicDetails.dob) {
-  stepErrors.dob = "Date of birth is required.";
-} else {
-  const dob = new Date(basicDetails.dob);
-  const todayDate = new Date();
+      // Date of Birth
+      // Date of Birth
+      if (!basicDetails.dob) {
+        stepErrors.dob = "Date of birth is required.";
+      } else {
+        const dob = new Date(basicDetails.dob);
+        const todayDate = new Date();
 
-  if (dob > todayDate) {
-    stepErrors.dob = "Date of birth cannot be in the future.";
-  } else {
-    let age = todayDate.getFullYear() - dob.getFullYear();
-    const monthDiff = todayDate.getMonth() - dob.getMonth();
-    const dayDiff = todayDate.getDate() - dob.getDate();
+        if (dob > todayDate) {
+          stepErrors.dob = "Date of birth cannot be in the future.";
+        } else {
+          let age = todayDate.getFullYear() - dob.getFullYear();
+          const monthDiff = todayDate.getMonth() - dob.getMonth();
+          const dayDiff = todayDate.getDate() - dob.getDate();
 
-    // Adjust age if birthday not yet reached this year
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      age--;
-    }
+          // Adjust age if birthday not yet reached this year
+          if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+            age--;
+          }
 
-    if (age < 10) {
-      stepErrors.dob = "Age must be at least 10 years.";
-    } else if (age > 79) {
-      stepErrors.dob = "Age cannot be more than 79 years.";
-    }
-  }
-}
+          if (age < 10) {
+            stepErrors.dob = "Age must be at least 10 years.";
+          } else if (age > 79) {
+            stepErrors.dob = "Age cannot be more than 79 years.";
+          }
+        }
+      }
 
       // Gender
       if (!basicDetails.gender) {
@@ -306,6 +397,13 @@ if (!basicDetails.dob) {
       PasswordHash: verification.password,  // ✅ raw password
       RoleId: "1",
       Education: JSON.stringify(educationList),// ✅ backend expects string
+      FatherOccupation:basicDetails.fatherOccupation,
+      MotherOccupation:basicDetails.motherOccupation,
+      Address:basicDetails.address,
+      FamilyIncome:basicDetails.familyIncome,
+      StateId:basicDetails.stateId,
+      countryId:basicDetails.countryId,
+      ParentsContactNumber:basicDetails.parentContactNumber,
       CreatedBy: createdBy,
     };
 
@@ -340,43 +438,52 @@ if (!basicDetails.dob) {
   };
 
   // --- Education handlers ---
- const addEducation = () => {
-  let errorsObj = {};
-
-  // REQUIRED validation
-  if (!education.specification.trim()) {
-    errorsObj.specification = "Specification is required.";
-  } else if (!courseRegex.test(education.specification)) {
-    errorsObj.specification = "Invalid Specification";
+  const addEducation = () => {
+    let errorsObj = {};
+// Degree / Course required
+  if (!education.degree.trim()) {
+    errorsObj.degree = "Course is required.";
   }
 
-  if (!education.college.trim()) {
-    errorsObj.college = "School / College / University is required.";
-  } else if (!collegeRegex.test(education.college)) {
-    errorsObj.college = "Invalid School / College / University.";
-  }
+    // REQUIRED validation
+    if (!education.specification.trim()) {
+      errorsObj.specification = "Specification is required.";
+    } else if (!courseRegex.test(education.specification)) {
+      errorsObj.specification = "Invalid Specification";
+    }
 
-  if (!education.year.trim()) {
-    errorsObj.year = "Year is required.";
-  } else if (!yearRegex.test(education.year)) {
-    errorsObj.year = "Year must be 4 digits.";
-  }
+    if (!education.college.trim()) {
+      errorsObj.college = "School / College / University is required.";
+    } else if (!collegeRegex.test(education.college)) {
+      errorsObj.college = "Invalid School / College / University.";
+    }
 
-  if (Object.keys(errorsObj).length > 0) {
-    setEduErrors(errorsObj);
-    return;
-  }
+    if (!education.year.trim()) {
+      errorsObj.year = "Year is required.";
+    } else if (!yearRegex.test(education.year)) {
+      errorsObj.year = "Year must be 4 digits.";
+    }
 
-  setEducationList([...educationList, education]);
-  setEducation({ degree: "", college: "", year: "" });
-  setShowEducationFields(false);
-  setEduErrors({});
-};
+    if (Object.keys(errorsObj).length > 0) {
+      setEduErrors(errorsObj);
+      return;
+    }
+
+    setEducationList([...educationList, education]);
+     setEducation({ degree: "", specification:"",college: "", year: "" });
+    setShowEducationFields(false);
+    setEduErrors({});
+  };
 
 
   const updateEducation = (index) => {
     let errorsObj = {};
+    // Degree / Course - REQUIRED only
+  if (!education.degree.trim()) {
+    errorsObj.degree = "Course is required.";
+  }
     if (!courseRegex.test(education.degree)) errorsObj.degree = "Invalid course.";
+     if (!courseRegex.test(education.specification)) errorsObj.degree = "Invalid specification.";
     if (!collegeRegex.test(education.college)) errorsObj.college = "Invalid college/university.";
     if (!yearRegex.test(education.year)) errorsObj.year = "Year must be 4 digits.";
 
@@ -389,7 +496,7 @@ if (!basicDetails.dob) {
     updated[index] = education;
     setEducationList(updated);
     setEditIndex(null);
-    setEducation({ degree: "", college: "", year: "" });
+    setEducation({ degree: "", specification:"",college: "", year: "" });
     setEduErrors({});
   };
 
@@ -571,6 +678,124 @@ if (!basicDetails.dob) {
                 {errors.gender && <p className="error-text">{errors.gender}</p>}
               </div>
             </div>
+            <div className="row">
+              <div className="form-group" >
+                <label>Father Occupation</label>
+                <input
+                  type="text"
+                  value={basicDetails.fatherOccupation}
+                  onChange={(e) =>
+                    nameRegex.test(e.target.value) &&
+                    setBasicDetails({ ...basicDetails, fatherOccupation: e.target.value })
+                  }
+                  className={errors.fatherOccupation ? "input-error" : ""}
+                  placeholder="Father Occupation"
+                />
+                {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
+              </div>
+              <div className="form-group">
+                <label>Mother Occupation </label>
+                <input
+                  type="text"
+                  value={basicDetails.motherOccupation}
+                  onChange={(e) =>
+                    nameRegex.test(e.target.value) &&
+                    setBasicDetails({ ...basicDetails, motherOccupation: e.target.value })
+                  }
+                  className={errors.motherOccupation ? "input-error" : ""}
+                  placeholder="Mother Occupation"
+                />
+                {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
+              </div>
+            </div>
+            <div className="row">
+              <div className="form-group">
+                <label>Parent's Phone </label>
+                <input
+                  type="text"
+                  maxLength={10}
+                  value={basicDetails.parentContactNumber}
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    // allow only numbers while typing
+                    if (/^\d*$/.test(value)) {
+                      setBasicDetails({ ...basicDetails, parentContactNumber: value });
+                    }
+                  }}
+                  className={errors.parentContactNumber ? "input-error" : ""}
+                  placeholder="Parent's Number"
+                />
+                {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
+              </div>
+              <div className="form-group">
+                <label>Family Income </label>
+                <input
+                  type="text"
+                  value={basicDetails.familyIncome}
+                  onChange={(e) =>
+
+                    setBasicDetails({ ...basicDetails, familyIncome: e.target.value })
+                  }
+                  className={errors.familyIncome ? "input-error" : ""}
+                  placeholder="Family Income"
+                  maxLength={20}
+                />
+                {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
+              </div>
+            </div>
+            <div className="row">
+              <div className="form-group">
+                <label>Country <span className="required">*</span></label>
+                <select
+                  value={basicDetails.countryId}
+                  onChange={(e) => setBasicDetails({ ...basicDetails, countryId: e.target.value, state: "" })}
+                  className={errors.country ? "input-error" : ""}
+                >
+                  <option value="">Select Country</option>
+                  {countries.map((c) => (
+                    <option key={c.id} value={c.id}>{c.country_Name}</option>
+                  ))}
+                </select>
+                {errors.country && <p className="error-text">{errors.country}</p>}
+              </div>
+
+              <div className="form-group">
+                <label>State <span className="required">*</span></label>
+                <select
+                  value={basicDetails.stateId}
+                  onChange={(e) => setBasicDetails({ ...basicDetails, stateId: e.target.value })}
+                  className={errors.state ? "input-error" : ""}
+
+                >
+                  <option value="">Select State</option>
+                  {states.map((s) => (
+                    <option key={s.id} value={s.id}>{s.state_Name}</option>
+                  ))}
+                </select>
+                {errors.state && <p className="error-text">{errors.state}</p>}
+              </div>
+            </div>
+            <div className="row">
+              <div className="form-group">
+                <label>Address </label>
+                <textarea
+                  value={basicDetails.address}
+                  maxLength={250}
+                  rows={4}
+                  placeholder="Address"
+                  className={errors.address ? "input-error" : ""}
+                  onChange={(e) => {
+                    setBasicDetails({
+                      ...basicDetails,
+                      address: e.target.value
+                    });
+                  }}
+                />
+
+                {errors.address && <p className="error-text">{errors.address}</p>}
+              </div>
+            </div>
 
             <div className="form-group col-12">
               <label>Upload Profile Photo</label>
@@ -659,25 +884,25 @@ if (!basicDetails.dob) {
 
                   <div className="form-group">
                     <label>Class/Course <span className="required">*</span></label>
-                   <select
-  value={education.degree}
-  onChange={(e) =>
-    setEducation({ ...education, degree: e.target.value })
-  }
-  className={eduErrors.degree ? "input-error" : ""}
->
-  <option value="">Select Course</option>
+                    <select
+                      value={education.degree}
+                      onChange={(e) =>
+                        setEducation({ ...education, degree: e.target.value })
+                      }
+                      className={eduErrors.degree ? "input-error" : ""}
+                    >
+                      <option value="">Select Course</option>
 
-  {courses.map((course) => (
-    <option key={course.courseId} value={course.courseName}>
-      {course.courseName}
-    </option>
-  ))}
-</select>
+                      {courses.map((course) => (
+                        <option key={course.classId} value={course.className}>
+                          {course.className}
+                        </option>
+                      ))}
+                    </select>
 
-{eduErrors.degree && (
-  <p className="error-text">{eduErrors.degree}</p>
-)}
+                    {eduErrors.degree && (
+                      <p className="error-text">{eduErrors.degree}</p>
+                    )}
 
                   </div>
                   <div className="form-group">
@@ -763,32 +988,32 @@ if (!basicDetails.dob) {
             )}
 
 
-           {showEducationFields && editIndex === null && (
-  <div className="education-grid">
+            {showEducationFields && editIndex === null && (
+              <div className="education-grid">
 
-    <div className="form-group">
-      <label>Class / Course *</label>
+                <div className="form-group">
+                  <label>Class / Course *</label>
 
-      <select
-        value={education.degree}
-        onChange={(e) =>
-          setEducation({ ...education, degree: e.target.value })
-        }
-        className={eduErrors.degree ? "input-error" : ""}
-      >
-        <option value="">Select Class / Course</option>
-        {courses.map((course) => (
-          <option key={course.courseId} value={course.courseName}>
-            {course.courseName}
-          </option>
-        ))}
-      </select>
+                  <select
+                    value={education.degree}
+                    onChange={(e) =>
+                      setEducation({ ...education, degree: e.target.value })
+                    }
+                    className={eduErrors.degree ? "input-error" : ""}
+                  >
+                    <option value="">Select Class / Course</option>
+                    {courses.map((course) => (
+                      <option key={course.classId} value={course.className}>
+                        {course.className}
+                      </option>
+                    ))}
+                  </select>
 
-      {eduErrors.degree && (
-        <p className="error-text">{eduErrors.degree}</p>
-      )}
-    </div>
- <div className="form-group">
+                  {eduErrors.degree && (
+                    <p className="error-text">{eduErrors.degree}</p>
+                  )}
+                </div>
+                <div className="form-group">
                   <label>Specification*</label>
                   <input
                     type="text"
@@ -854,8 +1079,8 @@ if (!basicDetails.dob) {
                 </div>
               </div>
             )}
-             {/* Show errors only after clicking Save */}
-    
+            {/* Show errors only after clicking Save */}
+
           </div>
         )}
 

@@ -537,18 +537,21 @@ const [originalFiles, setOriginalFiles] = useState([]);
     }
 
     // Optional text length validations
-    if (formData.description && formData.description.length > 1000) {
-      newErrors.description = "Description cannot exceed 500 characters.";
+    if (formData.description && formData.description.length > 3000) {
+      newErrors.description = "Description cannot exceed 3000 characters.";
       console.log("❌ description too long:", formData.description.length);
     }
-    if (formData.eligibility && formData.eligibility.length > 250) {
-      newErrors.eligibility = "Eligibility cannot exceed 250 characters.";
+    if (formData.eligibility && formData.eligibility.length > 500) {
+      newErrors.eligibility = "Eligibility cannot exceed 500 characters.";
       console.log("❌ eligibility too long:", formData.eligibility.length);
     }
-    if (formData.eligibilityCriteria && formData.eligibilityCriteria.length > 1000) {
+  /*  if (formData.eligibilityCriteria && formData.eligibilityCriteria.length > 1000) {
       newErrors.eligibilityCriteria = "Eligibility Criteria cannot exceed 1000 characters.";
       console.log("❌ eligibilityCriteria too long:", formData.eligibilityCriteria.length);
-    }
+    }*/
+   if (!formData.eligibilityCriteria?.trim()) {
+  newErrors.eligibilityCriteria = "Eligibility Criteria is required.";
+}
     if (formData.renewalCriteria && formData.renewalCriteria.length > 300) {
       newErrors.renewalCriteria = "Renewal Criteria cannot exceed 300 characters.";
       console.log("❌ renewalCriteria too long:", formData.renewalCriteria.length);
@@ -746,24 +749,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
                 />
                 {errors.scholarshipCode && <p className="error-text">{errors.scholarshipCode}</p>}
               </div>
-
-              <div className="form-group col-6">
-                <label>Scholarship Name<Required /></label>
-                <input
-                  type="text"
-                  name="scholarshipName"
-                  value={formData.scholarshipName}
-                  onChange={handleChange}
-                  disabled={isView}
-                  placeholder="Merit Scholarship"
-                  className={errors.scholarshipName ? "form-field-error" : ""}
-                />
-                {errors.scholarshipName && <p className="error-text">{errors.scholarshipName}</p>}
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="form-group col-6">
+ <div className="form-group col-6">
                 <label>Scholarship Type<Required /></label>
                 <select
                   name="scholarshipType"
@@ -780,7 +766,27 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
                 {errors.scholarshipType && <p className="error-text">{errors.scholarshipType}</p>}
               </div>
+             
+            </div>
 
+            <div className="row">
+               <div className="form-group col-6">
+                <label>Scholarship Name<Required /></label>
+                <input
+                  type="text"
+                  name="scholarshipName"
+                  value={formData.scholarshipName}
+                  onChange={handleChange}
+                  disabled={isView}
+                  placeholder="Merit Scholarship"
+                  className={errors.scholarshipName ? "form-field-error" : ""}
+                />
+                {errors.scholarshipName && <p className="error-text">{errors.scholarshipName}</p>}
+              </div>
+             
+</div>
+
+            <div className="row">
               <div className="form-group col-6">
                 <label>Scholarship Amount</label>
                 <input
@@ -794,7 +800,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
               </div>
             </div>
             <div className="row">
-              <div className="form-group col-6">
+              <div className="form-group">
                 <label>Description</label>
                 <textarea
                   name="description"
@@ -804,7 +810,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
                   placeholder="Scholarship details..."
                 />
               </div>
-              <div className="form-group col-6">
+              </div>
+
+            <div className="row">
+              <div className="form-group ">
                 <label>Eligibility<Required /></label>
                 <input
                   type="text"
@@ -818,7 +827,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
                 {errors.eligibility && <p className="error-text">{errors.eligibility}</p>}
 
               </div>
-              <div className="form-group col-6">
+              </div>
+
+            <div className="row">
+              <div className="form-group ">
                 <label>Eligibility Criteria<Required /></label>
                 <textarea
                   name="eligibilityCriteria"
@@ -936,30 +948,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
               {/* Row 3 */}
               <div className="row mt-3">
 
-                {/* Class */}
-                <div className="form-group col-6">
+                
+                {/*<div className="form-group col-6">
                   <label>Class</label>
-                  {/*<Select
-            isMulti
-            options={[
-              { label: "ALL", value: "ALL" },
-              ...classes.map(cls => ({ label: cls.className, value: cls.classId.toString() }))
-            ]}
-            value={getSelectValue(filters.className, classes, "className", "classId")}
-            onChange={(selected) => {
-              handleReactSelect(
-                "className",
-                selected,
-                classes.map(cls => ({ label: cls.className, value: cls.classId.toString() })),
-                setFilters
-              );
-
-              const first = selected?.find(x => x.value !== "ALL");
-              if (first) {
-                dispatch(fetchCoursesByClass(Number(first.value)));
-              }
-            }}
-          />*/}
+                
                   <Select
                     isMulti
                     isDisabled={isView}
@@ -995,7 +987,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
                 </div>
 
-                {/* Course */}
+               
                 <div className="form-group col-6">
                   <label>Course</label>
                   <Select
@@ -1016,7 +1008,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
                       )
                     }
                   />
-                </div>
+                </div>*/}
               </div>
             </div>
 
@@ -1154,7 +1146,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
 
             <div className="row">
-              <div className="form-group col-4">
+              <div className="form-group">
                 <label>Min % / CGPA</label>
                 <input
                   type="text"
@@ -1164,8 +1156,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
                   disabled={isView}
                 />
               </div>
+</div>
 
-              <div className="form-group col-4">
+            <div className="row">
+              <div className="form-group">
                 <label>Max Family Income</label>
                 <input
                   type="text"
@@ -1175,7 +1169,9 @@ const [originalFiles, setOriginalFiles] = useState([]);
                   disabled={isView}
                 />
               </div>
+</div>
 
+            <div className="row">
               <div className="col-4 renewable-field">
                 <label>Renewable</label>
                 <input
@@ -1256,8 +1252,9 @@ const [originalFiles, setOriginalFiles] = useState([]);
                 />
 
               </div>
+              </div>
               <div className="row">
-                <div className="form-group col-6">
+                <div className="form-group">
                   <label>Documents</label>
                   <textarea
                     name="documents"
@@ -1268,7 +1265,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
                     maxLength={3000}
                   />
                 </div>
-                <div className="form-group col-6">
+                </div>
+
+            <div className="row">
+                <div className="form-group">
                   <label>Can Apply</label>
                   <textarea
                     name="canApply"
@@ -1278,7 +1278,9 @@ const [originalFiles, setOriginalFiles] = useState([]);
                     placeholder="Who can apply for this scholarship?"
                   />
                 </div>
-                <div className="form-group col-6">
+                </div>
+                 <div className="row">
+                <div className="form-group ">
                   <label>Web Portal to Apply</label>
                   <input
                     type="text"
@@ -1290,7 +1292,8 @@ const [originalFiles, setOriginalFiles] = useState([]);
                   />
                   {errors.webportaltoApply && <p className="error-text">{errors.webportaltoApply}</p>}
                 </div>
-
+</div>
+          <div className="row">
                 <div className="form-group col-6">
                   <label>Contact Details</label>
                   <textarea
@@ -1301,7 +1304,8 @@ const [originalFiles, setOriginalFiles] = useState([]);
                     placeholder="Email / Phone / Address"
                   />
                 </div>
-              </div>
+                </div>
+              
 
               {isView ? (
                 <div className="form-group col-4">
@@ -1383,7 +1387,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
                 </div>
               )}
 
-            </div>
+           
             <div className="form-group col-4">
               <label>Upload Logo</label>
 
