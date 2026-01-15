@@ -102,7 +102,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.parentsContactNumber || ""} readOnly />
             </div>
               <div className="detail-row">
-              <label>Family:</label>
+              <label>Family Income:</label>
               <input type="text" value={profile.familyIncome || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -149,6 +149,10 @@ const navigate = useNavigate();
                   <div className="detail-row">
                     <label>Degree:</label>
                     <input type="text" value={edu.degree || ""} readOnly />
+                  </div>
+                   <div className="detail-row">
+                    <label>Specification:</label>
+                    <input type="text" value={edu.specification || ""} readOnly />
                   </div>
                   <div className="detail-row">
                     <label>College:</label>
