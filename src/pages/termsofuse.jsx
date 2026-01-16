@@ -142,18 +142,21 @@ const TermsAndUse = () => {
           laws of India.
         </p>
 
-        <h3 className="terms-section-title">16. Contact Information</h3>
-        <p className="terms-text">
-          For queries or support:
-          <br />
-          <strong>Email:</strong>{" "}
-          <a href="mailto:info@lore-technology.com">
+        <h3 className="privacy-policy-section-title">
+          16. Contact Information
+        </h3>
+
+        <p className="privacy-policy-text">
+          <strong className="privacy-policy-label">Email:</strong>{" "}
+          <a
+            href="mailto:info@lore-technology.com"
+            className="privacy-policy-link"
+          >
             info@lore-technology.com
           </a>
-        </p>
-
-        <p className="terms-footer">
-          © 2026 VidyāSetu. All rights reserved.
+          <br />
+          <strong className="privacy-policy-label">Address:</strong>{" "}
+          <span className="privacy-policy-link">India</span>
         </p>
       </div>
     </div>
