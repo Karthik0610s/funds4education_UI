@@ -193,7 +193,7 @@ useEffect(() => {
               <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
               <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
               <Link to={RP.studentdashboard}>Scholarships</Link>
-               <Link to={RP.facultyDashboard}>E-Learning</Link>
+               {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
                 <Link to={RP.InstitutionsPage}>Institution</Link>
             </div>
             <div className="header-right">
@@ -307,7 +307,7 @@ useEffect(() => {
          <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
-           <Link to={RP.facultyDashboard}>E-Learning</Link>
+           {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
                 <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
 
@@ -483,7 +483,7 @@ useEffect(() => {
          <Link to="/"state={{ scrollTo: "hero" }}  >Home</Link>
             <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
             <Link to={RP.studentdashboard}>Scholarships</Link>
-            <Link to={RP.facultyDashboard}>E-Learning</Link>
+            {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
                 <Link to={RP.InstitutionsPage}>Institution</Link>
           </div>
 
@@ -631,9 +631,9 @@ const renderMobileLinks = (forcedVariant) => {
           <div className="mobile-item" onClick={() => { navigate(RP.studentdashboard); setMenuOpen(false); }}>
             Scholarships
           </div>
-          <div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
+          {/* <div className="mobile-item" onClick={() => { navigate(RP.facultyDashboard); setMenuOpen(false); }}>
             E-Learning
-          </div>
+          </div> */}
 <div className="mobile-item" onClick={() => { navigate(RP.InstitutionsPage); setMenuOpen(false); }}>
            Institution
           </div>
