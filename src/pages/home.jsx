@@ -188,19 +188,19 @@ const { sponsorCount, studentCount, activeScholarshipCount } = useSelector(
 const handleClickSponsor = () => checkAndNavigate("2", "sponsor");
 const handleClickInstitution = () => checkAndNavigate("5", "faculty");
  const testimonials = [
-    {
-      text: "VidyāSetu helped me secure a scholarship that made my education possible.",
-      author: "– Ananya S. Student",
-    },
-    {
-      text: "Thanks to VidyāSetu, I could focus on my studies without worrying about finances.",
-      author: "– Rohan K. Scholar",
-    },
-    {
-      text: "A smooth process and great support team. Highly recommended!",
-      author: "– Meera P. Graduate",
-    },
-  ];
+  {
+    text: "VidyāSetu made it easy to understand which scholarships I was eligible for.",
+    author: "– Ananya S. Student",
+  },
+  {
+    text: "The platform helped me track applications and deadlines without confusion.",
+    author: "– Rohan K. Student",
+  },
+  {
+    text: "Clear information and a smooth experience throughout.",
+    author: "– Meera P. Graduate",
+  },
+];
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -246,25 +246,25 @@ const handleClickInstitution = () => checkAndNavigate("5", "faculty");
     <div className="carousel-text-slide">
       <h2>About VidyāSetu</h2>
       <p>
-        VidyāSetu is a digital platform designed to connect deserving students with
-        sponsors and institutions. It simplifies scholarship management, making
-        education accessible to all through transparency and trust.
+         VidyāSetu is a student-focused digital platform that helps learners discover
+  scholarship opportunities, understand eligibility criteria, and track
+  applications with clarity and ease.
       </p>
     </div>
 
     <div className="carousel-text-slide">
       <h2>Our Vision</h2>
       <p>
-        To empower every learner by ensuring equal access to quality education,
-        eliminating financial barriers, and building a nation where knowledge bridges every gap.
+         To guide students toward the right educational opportunities by simplifying
+  scholarship discovery and application processes.
       </p>
     </div>
 
     <div className="carousel-text-slide">
       <h2>Our Mission</h2>
       <p>
-        To create a transparent and inclusive ecosystem that connects students,
-        sponsors, and institutions — transforming dreams into academic success through reliable scholarship support.
+         To provide a transparent and reliable platform where students can explore
+  scholarships, track progress, and receive guidance throughout their academic journey.
       </p>
     </div>
   </Carousel>
@@ -276,14 +276,14 @@ const handleClickInstitution = () => checkAndNavigate("5", "faculty");
     <div>
       <section className="bg-[#F6F6FB] py-16 px-6 md:px-20 text-center">
       <h1 className="text-4xl md:text-6xl font-extrabold leading-tight text-gray-900">
-        Free{" "}
-        <span className="text-[#fe8200]">Scholarships</span>
+       Discover the Right{" "}
+        <span className="text-[#fe8200]">Scholarship Opportunities</span>
         <br />
-        For Every Bright <br className="md:hidden" /> Student
+         For Your Education Journey
       </h1>
       <p className="text-gray-600 mt-4 text-base md:text-lg max-w-2xl mx-auto">
-        Get free scholarships for every level of education that every student who
-        achieves for a bright future can get.
+       VidyāSetu helps students explore, understand, and apply for verified
+  scholarship opportunities offered by institutions, trusts, and organizations.
       </p>
     </section>
       <button className="btn-primary" onClick={handleClickDashboard}>Find Your Path</button>
@@ -298,36 +298,37 @@ const handleClickInstitution = () => checkAndNavigate("5", "faculty");
     <h2 className="benefits-subtitle">Benefits</h2>
 
     <h1 className="benefits-title">
-      Free <span>Scholarship</span> <br /> Provider By VidyāSetu
+       Helping Students <span>Find</span> <br /> the Right Scholarships
     </h1>
 
     <p className="benefits-description">
-      Have the opportunity to go to school or college without thinking about the cost?
-      Just focus on studying and assignments given.
+      VidyāSetu helps students identify suitable scholarships, understand benefits,
+  and apply confidently — all in one place.
     </p>
   </div>
 
   {/* Right Side Cards */}
   <div className="benefits-right">
     <div className="benefit-card">
-      <h3>Learning Equipment</h3>
-      <p>All equipment to support learning activities for each student</p>
-    </div>
+  <h3>Scholarship Discovery</h3>
+  <p>Explore scholarships based on your education level and background</p>
+</div>
 
-    <div className="benefit-card">
-      <h3>Full College Cost</h3>
-      <p>Comprehensive fees for students during the course of study</p>
-    </div>
+<div className="benefit-card">
+  <h3>Eligibility Guidance</h3>
+  <p>Clear information on requirements and documents needed</p>
+</div>
 
-    <div className="benefit-card">
-      <h3>Transportation Costs</h3>
-      <p>The cost for each student's round trip from home to campus</p>
-    </div>
+<div className="benefit-card">
+  <h3>Application Tracking</h3>
+  <p>Track scholarship applications and important deadlines</p>
+</div>
 
-    <div className="benefit-card">
-      <h3>Accommodation Bills</h3>
-      <p>Comprehensive fees for students during the course of study</p>
-    </div>
+<div className="benefit-card">
+  <h3>Student Support</h3>
+  <p>Guidance and updates to help students stay informed</p>
+</div>
+
   </div>
 </section>
 
