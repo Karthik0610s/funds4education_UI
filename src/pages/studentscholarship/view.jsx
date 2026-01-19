@@ -10,6 +10,13 @@ const ScholarshipViewPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
+    const handleBack = () => {
+  navigate(
+    `/student-dashboard${location.state?.from || ""}`,
+    { replace: true }
+  );
+};
+
 
     // ✅ Get ID from location.state (preferred) OR from ?id query (fallback)
     const id = location.state?.id || searchParams.get("id");
@@ -82,7 +89,7 @@ const downloadFileFun = async (id) => {
   return (
   <div className="scholarshipview-page">
     {/* 🔙 Back Button */}
-    <button className="scholarship-back-button" onClick={() => navigate(-1)}>
+    <button className="scholarship-back-button" onClick={handleBack}>
       ← Back
     </button>
 

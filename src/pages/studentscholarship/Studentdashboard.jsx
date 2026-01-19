@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo ,useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link , useLocation} from "react-router-dom";
 import Header from "../../app/components/header/header";
 import { logout } from "../../app/redux/slices/authSlice";
 import {
@@ -19,7 +19,17 @@ import GoogleAd from "../googleads";
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [eligibilityTab, setEligibilityTab] = useState("all"); // default
+ // const [eligibilityTab, setEligibilityTab] = useState("all"); // default
+  const location = useLocation();
+const params = new URLSearchParams(location.search);
+const [activeTab, setActiveTab] = useState(
+  params.get("tab") || "live"
+);
+
+const [eligibilityTab, setEligibilityTab] = useState(
+  params.get("eligibility") || "all"
+);
+
   //const [activeTab, setActiveTab] = useState("live"); // default
 //const userId = localStorage.getItem("userId");
 //const roleId = localStorage.getItem("roleId");
@@ -40,7 +50,61 @@ const StudentDashboard = () => {
   const { courses, courseLoading } = useSelector(
   (state) => state.scholarship
 );
+/*
+const [pages, setPages] = useState(() => {
+  const p = new URLSearchParams(location.search);
+  return {
+    live: Number(p.get("livePage")) || 1,
+    upcoming: Number(p.get("upcomingPage")) || 1,
+  };
+}); */
+/*
+const [currentPage, setCurrentPage] = useState(
+  Number(params.get("page")) || 1
+); */
+const [pages, setPages] = useState(() => {
+  const p = new URLSearchParams(location.search);
+  const live = Number(p.get("livePage")) || 1;
+  const upcoming = Number(p.get("upcomingPage")) || 1;
 
+  return {
+    all: { live, upcoming },
+    eligibility: { live: 1, upcoming: 1 }, // default
+  };
+});
+
+
+  const currentPage = pages[eligibilityTab][activeTab];
+
+const changePage = (newPage) => {
+  setPages((prev) => ({
+    ...prev,
+    [eligibilityTab]: {
+      ...prev[eligibilityTab],
+      [activeTab]: newPage,
+    },
+  }));
+};
+
+
+
+
+const [searchQuery, setSearchQuery] = useState(
+  params.get("search") || ""
+);
+
+const [filters, setFilters] = useState(
+  params.get("filters")
+    ? JSON.parse(decodeURIComponent(params.get("filters")))
+    : {
+        class: [],
+        country: [],
+        gender: [],
+        religion: [],
+        state: [],
+        course: [],
+      }
+);
 
   const roleId =
     useSelector((state) => state.auth.roleId) ||
@@ -52,8 +116,8 @@ const StudentDashboard = () => {
     useSelector((state) => state.auth.name) || localStorage.getItem("name");
 const roleName = localStorage.getItem("roleName");
 const canSeeEligibility = userId && roleId && roleName;
-  const [activeTab, setActiveTab] = useState("live");
-  const [searchQuery, setSearchQuery] = useState("");
+ // const [activeTab, setActiveTab] = useState("live");
+ // const [searchQuery, setSearchQuery] = useState("");
   /*const [filters, setFilters] = useState({
     class: "All",
     country: "All",
@@ -62,6 +126,7 @@ const canSeeEligibility = userId && roleId && roleName;
     state: "All",
     course: "All",
   });*/
+  /*
   const [filters, setFilters] = useState({
     class: [],
     country: [],
@@ -69,7 +134,7 @@ const canSeeEligibility = userId && roleId && roleName;
     religion: [],
     state: [],
     course: [],
-  });
+  }); */
 
 
   const [dropdownData, setDropdownData] = useState({
@@ -104,6 +169,15 @@ useEffect(() => {
   useEffect(() => {
     dispatch(fetchFeaturedScholarships());
   }, [dispatch]);
+
+  useEffect(() => {
+  const p = new URLSearchParams(location.search);
+  p.set("livePage", pages[eligibilityTab].live);
+  p.set("upcomingPage", pages[eligibilityTab].upcoming);
+
+  navigate({ search: p.toString() }, { replace: true });
+}, [eligibilityTab]);
+
 
   useEffect(() => {
     debugger;
@@ -146,6 +220,33 @@ useEffect(() => {
 
   return () => mediaQuery.removeEventListener("change", handleResize);
 }, []);
+useEffect(() => {
+  const params = new URLSearchParams();
+
+  params.set("tab", activeTab);
+  params.set("eligibility", eligibilityTab);
+
+  params.set("livePage", pages[eligibilityTab].live);
+params.set("upcomingPage", pages[eligibilityTab].upcoming);
+
+
+  if (searchQuery) params.set("search", searchQuery);
+
+  if (Object.values(filters).some(arr => arr.length > 0)) {
+    params.set("filters", encodeURIComponent(JSON.stringify(filters)));
+  }
+
+  navigate({ search: params.toString() }, { replace: true });
+}, [
+  activeTab,
+  eligibilityTab,
+  pages,
+  searchQuery,
+  filters,
+  navigate,
+]);
+
+
 useEffect(() => {
   function handleClickOutside(event) {
     if (!showFilter) return; // only run if sidebar is open
@@ -232,6 +333,54 @@ useEffect(() => {
     navigate("/login");
   };
 
+  const handleEligibilityClick = () => {
+  setEligibilityTab("eligibility");
+
+  setPages(prev => ({
+    ...prev,
+    eligibility: {
+      live: 1,
+      upcoming: 1,
+    },
+  }));
+};
+
+const handleAllClick = () => {
+  setEligibilityTab("all");
+
+  setPages(prev => ({
+    ...prev,
+    all: {
+      live: 1,
+      upcoming: 1,
+    },
+  }));
+};
+
+   const handleLiveClick = () => {
+  setActiveTab("live");
+
+  setPages(prev => ({
+    ...prev,
+    [eligibilityTab]: {
+      ...prev[eligibilityTab],
+      live: 1, // ✅ reset ONLY on click
+    },
+  }));
+};
+
+ const handleUpcomingClick = () => {
+  setActiveTab("upcoming");
+
+  setPages(prev => ({
+    ...prev,
+    [eligibilityTab]: {
+      ...prev[eligibilityTab],
+      upcoming: 1, // ✅ reset ONLY on click
+    },
+  }));
+};
+
   const today = useMemo(() => new Date(), []);
   const getDaysLeftText = (endDate) => {
     if (!endDate) return "Always Open";   // ⭐ FIX: null means always open
@@ -256,30 +405,42 @@ useEffect(() => {
     () => featuredScholarships.map((s) => s.id || s.scholarshipId),
     [featuredScholarships]
   );
+  const searchFilteredLive = useMemo(() => {
+  if (!searchQuery) return liveScholarships;
+
+  const search = searchQuery.toLowerCase();
+  return liveScholarships.filter((s) =>
+    s.name?.toLowerCase().includes(search) ||
+    s.eligibility?.toLowerCase().includes(search) ||
+    s.amount?.toLowerCase().includes(search)
+  );
+}, [liveScholarships, searchQuery]);
+
+const searchFilteredUpcoming = useMemo(() => {
+  if (!searchQuery) return upcomingScholarships;
+
+  const search = searchQuery.toLowerCase();
+  return upcomingScholarships.filter((s) =>
+    s.name?.toLowerCase().includes(search) ||
+    s.eligibility?.toLowerCase().includes(search) ||
+    s.amount?.toLowerCase().includes(search)
+  );
+}, [upcomingScholarships, searchQuery]);
+
 
   // ✅ Apply filters + search on loaded data
   const displayedScholarships = useMemo(() => {
-    const baseList =
-      activeTab === "upcoming" ? upcomingScholarships : liveScholarships;
+  return activeTab === "upcoming"
+    ? searchFilteredUpcoming
+    : searchFilteredLive;
+}, [
+  activeTab,
+  searchFilteredLive,
+  searchFilteredUpcoming,
+]);
 
-    return baseList.filter((s) => {
-      const search = searchQuery.toLowerCase();
-      const matchesSearch =
-        s.name?.toLowerCase().includes(search) ||
-        s.eligibility?.toLowerCase().includes(search) ||
-        s.amount?.toLowerCase().includes(search);
 
-      return matchesSearch;
-    });
-  }, [
-    filters,
-    liveScholarships,
-    upcomingScholarships,
-    activeTab,
-    searchQuery,
-  ]);
-
-  const [currentPage, setCurrentPage] = useState(1);
+ // const [currentPage, setCurrentPage] = useState(1);
 const getResponsiveValue = (breakpoints) => {
   const width = window.innerWidth;
   for (let i = 0; i < breakpoints.length; i++) {
@@ -306,17 +467,24 @@ useEffect(() => {
   return () => window.removeEventListener("resize", handleResize);
 }, []);
   //const scholarshipsPerPage = 10;
-
+/*
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters, activeTab, searchQuery]);
+  }, [filters, activeTab, searchQuery]); 
+useEffect(() => {
+  if (!params.get("page")) {
+    setCurrentPage(1);
+  }
+}, [filters, activeTab, searchQuery]); */
 
   const indexOfLastScholarship = currentPage * scholarshipsPerPage;
-  const indexOfFirstScholarship = indexOfLastScholarship - scholarshipsPerPage;
-  const currentScholarships = displayedScholarships.slice(
-    indexOfFirstScholarship,
-    indexOfLastScholarship
-  );
+const indexOfFirstScholarship = indexOfLastScholarship - scholarshipsPerPage;
+
+const currentScholarships = displayedScholarships.slice(
+  indexOfFirstScholarship,
+  indexOfLastScholarship
+);
+
   const totalPages = Math.ceil(
     displayedScholarships.length / scholarshipsPerPage
   );
@@ -630,7 +798,7 @@ const closeAllDropdowns = () => {
               <div className="tab-card-container">
                <button
   className={`tab-btn ${eligibilityTab === "eligibility" ? "active" : ""}`}
-  onClick={() => canSeeEligibility && setEligibilityTab("eligibility")}
+  onClick={handleEligibilityClick}
   disabled={!canSeeEligibility}
 >
   Eligibility
@@ -638,7 +806,7 @@ const closeAllDropdowns = () => {
 
                 <button
                   className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
-                  onClick={() => setEligibilityTab("all")}
+  onClick={handleAllClick}
                 >
                   All
                 </button>
@@ -647,18 +815,19 @@ const closeAllDropdowns = () => {
               {/* CARD 2 — Live + Upcoming */}
               <div className="tab-card-container">
                 <button
-                  className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
-                  onClick={() => setActiveTab("live")}
-                >
-                  Live ({liveScholarships.length})
-                </button>
+  className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
+  onClick={handleLiveClick}
+>
+  Live ({searchFilteredLive.length})
+</button>
 
-                <button
-                  className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
-                  onClick={() => setActiveTab("upcoming")}
-                >
-                  Upcoming ({upcomingScholarships.length})
-                </button>
+<button
+  className={`tab-btn ${activeTab === "upcoming" ? "active" : ""}`}
+  onClick={handleUpcomingClick}
+>
+  Upcoming ({searchFilteredUpcoming.length})
+</button>
+
               </div>
 
 
@@ -741,11 +910,18 @@ const closeAllDropdowns = () => {
                       className="scholarship-card"
                       key={i}
                       onClick={() =>
-                        navigate(
-                          `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId
-                          }`
-                        )
-                      }
+  navigate(
+    `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId}`,
+    {
+      state: {
+        from: location.search, // ✅ FULL dashboard state
+        id: s.id || s.scholarshipId
+      },
+    }
+  )
+}
+
+
                     >
                       {!activeTab.includes("upcoming") && isFeatured && (
                         <div className="featured-tag">Featured</div>
@@ -871,7 +1047,7 @@ const closeAllDropdowns = () => {
     <div className="pagination-mobile">
       <button
         disabled={currentPage === 1}
-        onClick={() => setCurrentPage(p => p - 1)}
+  onClick={() => changePage(currentPage - 1)}
         className="pagination-btn"
       >
         ← Previous
@@ -883,7 +1059,7 @@ const closeAllDropdowns = () => {
 
       <button
         disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage(p => p + 1)}
+  onClick={() => changePage(currentPage + 1)}
         className="pagination-btn"
       >
         Next →
@@ -971,7 +1147,7 @@ const closeAllDropdowns = () => {
               <div className="pagination-controls desktop-only"  ref={paginationRef}>
                 <button
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
+                  onClick={() => changePage(currentPage - 1)}
                   className="pagination-btn"
                 >
                   ← Prev
@@ -983,7 +1159,7 @@ const closeAllDropdowns = () => {
 
                 <button
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
+                  onClick={() => changePage(currentPage + 1)}  
                   className="pagination-btn"
                 >
                   Next →
