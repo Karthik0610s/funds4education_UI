@@ -27,7 +27,11 @@ export default function LoginPage() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const [userType, setUserType] = useState(location.state?.userType || "");
+  /*const [userType, setUserType] = useState(location.state?.userType || "");*/
+  const [userType, setUserType] = useState(
+  location.state?.userType || "student"
+);
+
 
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
@@ -205,7 +209,7 @@ const isValidEmail = (email) => {
               Sign Up
             </Link>
           </p>
-
+{/*
           <div className="user-radio-group">
             {["student", "sponsor", "faculty"].map((type) => (
               <label key={type} className="user-radio-label">
@@ -234,7 +238,7 @@ const isValidEmail = (email) => {
             ))}
             <p className="error">{errors.userType || " "}</p>
           </div>
-
+*/}
           {/* === Username / Email === */}
           <div className="input-group">
             <label>Username or Email</label>
