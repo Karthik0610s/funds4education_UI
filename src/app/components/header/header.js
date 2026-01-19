@@ -680,10 +680,11 @@ const Header = ({ variant = "public" }) => {
             <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
               Reset Password
             </div>
-
+             {/* 
             <div className="mobile-item" onClick={() => { navigate("/application"); setMenuOpen(false); }}>
-              Applications
+             Applications
             </div>
+            */}
           </>
         ) : (
           renderMobileLinks("public")
@@ -700,10 +701,11 @@ const Header = ({ variant = "public" }) => {
             <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
               Reset Password
             </div>
-
+            {/* 
             <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/sponsorapplication"); setMenuOpen(false); }}>
               Applications
             </div>
+            */}
 
             <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/scholarshipPage"); setMenuOpen(false); }}>
               Sponsor Scholarship
@@ -838,13 +840,14 @@ const Header = ({ variant = "public" }) => {
                 <img src={logo} alt="Vidyasetu" className="logo" />
                 <span className="brand">VidyāSetu</span>
               </div>
-
-              <div
+              {/* 
+              <div 
                 onClick={() => navigate("/application")}
                 style={{ cursor: "pointer", fontWeight: 500 }}
               >
                 Applications
               </div>
+              */}
             </div>
           ) : isLoggedIn && roleName === "Sponsor" ? (
             <div className="left-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
