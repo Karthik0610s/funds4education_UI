@@ -54,21 +54,17 @@ const downloadFileFun = async (id) => {
 
 
 
-   const handleApplyNowClick = () => {
-    if (isLoggedIn) {
-        if (scholarship.webportaltoApply) {
-            const url = scholarship.webportaltoApply.startsWith("http")
-                ? scholarship.webportaltoApply
-                : `https://${scholarship.webportaltoApply}`;
-            window.open(url, "_blank"); // opens in new browser tab
-        } else {
-            alert("Application link not available.");
-        }
+  const handleApplyNowClick = () => {
+    if (scholarship.webportaltoApply) {
+        const url = scholarship.webportaltoApply.startsWith("http")
+            ? scholarship.webportaltoApply
+            : `https://${scholarship.webportaltoApply}`;
+        window.open(url, "_blank"); // opens in new browser tab
     } else {
-        navigate("/login", { state: { userType: "student" } });
-
+        alert("Application link not available.");
     }
 };
+
     useEffect(() => {
         if (id) {
             dispatch(fetchScholarshipById(id));
