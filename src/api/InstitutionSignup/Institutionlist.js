@@ -65,6 +65,14 @@ export const fetchCollegeTypesReq = async () => {
     return { error: true, data: [] };
   }
 };
+export const fetchCollegeReq = async () => {
+  try {
+    const res = await publicAxios.get(ApiKey.College);
+    return { error: false, data: res.data || [] };
+  } catch {
+    return { error: true, data: [] };
+  }
+};
 
 // MANAGEMENT TYPES
 export const fetchManagementsReq = async () => {

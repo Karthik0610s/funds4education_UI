@@ -13,6 +13,7 @@ import {
   fetchDistricts,
   fetchLocations,
   fetchCollegeTypes,
+  fetchCollege,
   fetchManagements,
 } from "../app/redux/slices/InstitutionlistSlice";
 export default function InstitutionsPage() {
@@ -26,6 +27,7 @@ export default function InstitutionsPage() {
     states,
     districts,
     locations,
+    colleges,
     collegeTypes,
     managements,
     totalCount,
@@ -41,6 +43,7 @@ const [showFilter, setShowFilter] = useState(false);
     state: "",
     district: "",
     location: "",
+    college:"",
     collegeType: "",
     management: "",
   });
@@ -57,6 +60,7 @@ const [showFilter, setShowFilter] = useState(false);
         state: filters.state,
         district: filters.district,
         location: filters.location,
+        college:filters.college,
         collegeType: filters.collegeType,
         management: filters.management,
       })
@@ -67,6 +71,7 @@ const [showFilter, setShowFilter] = useState(false);
   useEffect(() => {
     dispatch(fetchStates());
     dispatch(fetchLocations());
+    dispatch(fetchCollege)
     dispatch(fetchCollegeTypes());
     dispatch(fetchManagements());
   }, [dispatch]);
@@ -94,6 +99,7 @@ const [showFilter, setShowFilter] = useState(false);
       state: "",
       district: "",
       location: "",
+      college:"",
       collegeType: "",
       management: "",
     });
@@ -223,11 +229,19 @@ const [showFilter, setShowFilter] = useState(false);
       ))}
     </select>
   </div>
-
-  <div className="filter-groups">
+ <div className="filter-groups">
     <label>College Type</label>
-    <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
+    <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
       <option value="">Select College Type</option>
+      {colleges?.map(c => (
+        <option key={c.college} value={c.college}>{c.college}</option>
+      ))}
+    </select>
+  </div>
+  <div className="filter-groups">
+    <label>Sub College Type</label>
+    <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
+      <option value="">Select Sub College Type</option>
       {collegeTypes.map(c => (
         <option key={c.collegeType} value={c.collegeType}>{c.collegeType}</option>
       ))}
