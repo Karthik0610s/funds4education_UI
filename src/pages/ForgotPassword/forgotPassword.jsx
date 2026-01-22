@@ -173,9 +173,9 @@ export default function ForgotPassword() {
                   }}
                 >
                   <option value="">Select</option>
-                  <option value="sponsor">Sponsor</option>
+                 {/* <option value="sponsor">Sponsor</option> */}
                   <option value="student">Student</option>
-                  <option value="faculty">Faculty</option>
+                 {/* <option value="faculty">Faculty</option>  */}
                 </select>
               </div>
 

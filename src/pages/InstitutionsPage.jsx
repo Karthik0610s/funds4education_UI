@@ -174,7 +174,7 @@ const [showFilter, setShowFilter] = useState(false);
     className="global-search"
     value={search}
     onChange={(e) => setSearch(e.target.value)}
-    placeholder="Search by institution, location, management..."
+    placeholder="Search by institution , management..."
   />
   {/* ===== TOP BAR ===== */}
      
@@ -355,7 +355,7 @@ const [showFilter, setShowFilter] = useState(false);
 
               <div className="card-details">
                 <p>
-                  <strong>Location:</strong> {inst.location}
+                  <strong>District:</strong> {inst.district}
                 </p>
                 <p>
                   <strong>College Type:</strong> {inst.collegeType}
