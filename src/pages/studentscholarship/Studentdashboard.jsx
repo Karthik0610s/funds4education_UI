@@ -381,7 +381,7 @@ const handleAllClick = () => {
   }));
 };
 
-  };
+
 const [canShowAds, setCanShowAds] = useState(false);
 
 useEffect(() => {
@@ -553,48 +553,7 @@ useEffect(() => {
       button: "Register Now",
     },
   ];
-const ads1 = [
-  {
-    title: "💻 Full-Stack Developer Course",
-    text: "MERN/Java/Python Tracks",
-    button: "Enroll Now",
-  },
-  {
-    title: "📖 Government Exam Coaching",
-    text: "SSC | Bank | UPSC | State Exams",
-    button: "Start Preparation",
-  },
-  {
-    title: "🧾 Resume & Portfolio Builder",
-    text: "Create ATS-Friendly Resume",
-    button: "Build Resume",
-  },
-  {
-    title: "📸 Graphic Design Masterclass",
-    text: "Photoshop, Illustrator & UI/UX",
-    button: "Join Workshop",
-  },
-  {
-    title: "🏦 Personal Loan Assistance",
-    text: "Instant Approval | High Eligibility",
-    button: "Check Eligibility",
-  },
-  {
-    title: "🧳 International Travel Deals",
-    text: "Cheap Flights, Hotels & Packages",
-    button: "Explore Deals",
-  },
-  {
-    title: "👩‍⚕️ Health & Fitness Coaching",
-    text: "Diet Plans, Weight Loss Programs",
-    button: "Get Plan",
-  },
-  {
-    title: "🎧 Spoken English Classes",
-    text: "Improve Communication + Fluency",
-    button: "Join Now",
-  },
-];
+
 const [openDropdown, setOpenDropdown] = useState(null); // 🔥 only one dropdown
 const closeAllDropdowns = () => {
   setOpenDropdown(null);
@@ -611,15 +570,7 @@ const closeAllDropdowns = () => {
   return (
     <div>
       <Header variant="student-profile" />
-      {/*<div className="mobile-header">
-        <div className="mobile-menu-btn" onClick={() => setShowMobileMenu(true)}>
-          ☰
-        </div>
-
-        <h2 className="mobile-user-name">{name ?? "Student"}</h2>
-      </div>*/}
-
-      {/* ⭐ MOBILE MENU DRAWER */}
+    
       {showMobileMenu && (
         <div className="mobile-menu-drawer">
           <div className="close-menu" onClick={() => setShowMobileMenu(false)}>✕</div>
@@ -632,23 +583,7 @@ const closeAllDropdowns = () => {
         </div>
       )}
 
-      {/* {userId && roleId ? (
-        <div className="student-navbar">
-          <div className="user-info">
-            <h2>{name ?? "Student"}</h2>
-          </div>
-          <nav>
-            <Link to="/student-dashboard" className="active">
-              Dashboard
-            </Link>
-            <Link to="/application">Applications</Link>
-            /* <Link to="/scholarship-match">Matches</Link>
-            <Link to={RP.studentmessages}>Messages</Link> */
-
-            /* <Link to={RP.studentwallet}>Wallet</Link> */
-         /* </nav>
-        </div>
-      ) : null}*/}
+     
       {/* ⭐ MOBILE FILTER ICON */}
       <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
         <FaFilter />
@@ -1022,7 +957,7 @@ const closeAllDropdowns = () => {
             </div>
  {/* ===== MOBILE ONLY PAGINATION ===== */}
   {totalPages > 1 && (
-    <div className="pagination-mobile">
+    <div className="pagination-controls-scholarship">
       <button
         disabled={currentPage === 1}
   onClick={() => changePage(currentPage - 1)}
@@ -1044,12 +979,15 @@ const closeAllDropdowns = () => {
       </button>
     </div>
   )}
-            <div className="ads-container">
-               {/*<div className="ad-box" style={{marginBottom:"8px"}}>
-                {/*<h4>{ads[currentAd].title}</h4>
-                <p>{ads[currentAd].text}</p>
-                <button>{ads[currentAd].button}</button>
-              </div>*/}
+  </div>
+            <div className="right-content">
+
+      {/* ✅ GOOGLE ADS — SAFE */}
+      {canShowAds && !loading &&currentScholarships?.length>=3 && (
+        <div className="google-ad-box">
+          <GoogleAd />
+        </div>
+      )}
 
               {/* Featured Sidebar */}
               <aside className="featured-sidebar">
@@ -1120,30 +1058,8 @@ const closeAllDropdowns = () => {
               </aside>
             </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="pagination-controls desktop-only"  ref={paginationRef}>
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  className="pagination-btn"
-                >
-                  ← Prev
-                </button>
-
-                <span className="page-info">
-                  Page {currentPage} of {totalPages}
-                </span>
-
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  className="pagination-btn"
-                >
-                  Next →
-                </button>
-              </div>
-            )}
+        
+          
           </div>
         </main>
       </div>
