@@ -54,7 +54,7 @@ export default function InstitutionViewPage() {
                     <p><strong>College Type:</strong> {formatValue(institution.collegeType)}</p>
                     <p><strong>Management:</strong> {formatValue(institution.management)}</p>
                     <p><strong>Year Of Establishment:</strong> {formatValue(institution.yearOfEstablishment)}</p>
-                    <p><strong>Location:</strong> {formatValue(institution.location)}</p>
+                    {/*<p><strong>Location:</strong> {formatValue(institution.location)}</p> */}
                 </div>
 
                 {/* LOCATION DETAILS */}

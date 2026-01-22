@@ -6,6 +6,8 @@ import { ApiKey } from "../api/endpoint";
 import { useNavigate } from "react-router-dom";
 import "../pages/styles.css";
 import { FaFilter } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
+
 
 import {
   fetchInstitutionList,
@@ -33,12 +35,17 @@ export default function InstitutionsPage() {
     totalCount,
   } = useSelector((state) => state.institutionList);
 const [showFilter, setShowFilter] = useState(false);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+ // const [search, setSearch] = useState("");
+ // const [currentPage, setCurrentPage] = useState(1);
+ const [searchParams, setSearchParams] = useSearchParams();
+const [search, setSearch] = useState(searchParams.get("search") || "");
+const [currentPage, setCurrentPage] = useState(
+  Number(searchParams.get("page")) || 1
+);
 
   // 1️⃣ MOBILE OVERLAY STATE
   const [showMobileFilter, setShowMobileFilter] = useState(false);
-
+ {/* 
   const [filters, setFilters] = useState({
     state: "",
     district: "",
@@ -47,7 +54,15 @@ const [showFilter, setShowFilter] = useState(false);
     collegeType: "",
     management: "",
   });
-
+  */}
+const [filters, setFilters] = useState({
+  state: searchParams.get("state") || "",
+  district: searchParams.get("district") || "",
+  location: searchParams.get("location") || "",
+  college: searchParams.get("college") || "",
+  collegeType: searchParams.get("collegeType") || "",
+  management: searchParams.get("management") || "",
+});
   const ITEMS_PER_PAGE = 5;
 
   /* ===== FETCH LIST WITH FILTERS ===== */
@@ -66,6 +81,13 @@ const [showFilter, setShowFilter] = useState(false);
       })
     );
   }, [dispatch, currentPage, search, filters]);
+   useEffect(() => {
+  setSearchParams({
+    search,
+    page: currentPage,
+    ...filters,
+  });
+}, [search, currentPage, filters]);
 
   /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
@@ -81,11 +103,11 @@ const [showFilter, setShowFilter] = useState(false);
       dispatch(fetchDistricts(filters.state));
     }
   }, [filters.state]);
-
+ {/* 
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filters]);
-
+*/}
   /* ===== HANDLERS ===== */
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -219,7 +241,7 @@ const [showFilter, setShowFilter] = useState(false);
       ))}
     </select>
   </div>
-
+  {/*
   <div className="filter-groups">
     <label>Location</label>
     <select name="location" value={filters.location} onChange={handleFilterChange}>
@@ -229,6 +251,7 @@ const [showFilter, setShowFilter] = useState(false);
       ))}
     </select>
   </div>
+*/}
  <div className="filter-groups">
     <label>College Type</label>
     <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
@@ -392,7 +415,7 @@ const [showFilter, setShowFilter] = useState(false);
             </span>
 
             <button
-              disabled={currentPage >= totalCount}
+              disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}
             >
               Next
