@@ -424,6 +424,7 @@ font-size: 1rem;
   align-items: center;
   gap: 3rem;
   width: 100%;
+  
 }
 
 .achievement-wrapper {
@@ -522,15 +523,18 @@ font-size: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  text-align: left;
-  align-items: flex-start;
-  padding-left: 20px;
+  text-align: center;
+  align-items: center;
+  padding-left: 0;
 }
 
 .achievement-stats {
   display: flex;
   gap: 2rem;
   width: 100%;
+    max-width: 520px;  
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .achievement-stats>div {
@@ -556,9 +560,18 @@ font-size: 1rem;
   font-size: 1rem;
   line-height: 1.6;
   color: #555;
-  max-width: 50rem;
+  max-width: 600px;
   width: 100%;
-  text-align: justify;
+  text-align: center;
+  margin: 0 auto;
+}
+@media (min-width: 992px) {
+  .achievement-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+  }
 }
 
 @media screen and (min-width: 1025px) {
@@ -7098,6 +7111,7 @@ p {
   .benefits-section {
     flex-direction: row;
     padding: 3rem 5rem;
+    
   }
 }
 
