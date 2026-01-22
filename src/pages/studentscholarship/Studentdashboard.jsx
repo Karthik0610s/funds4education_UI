@@ -381,6 +381,15 @@ const handleAllClick = () => {
   }));
 };
 
+
+const [canShowAds, setCanShowAds] = useState(false);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setCanShowAds(true);
+  }, 1500);
+  return () => clearTimeout(timer);
+}, []);
   const today = useMemo(() => new Date(), []);
   const getDaysLeftText = (endDate) => {
     if (!endDate) return "Always Open";   // ⭐ FIX: null means always open
@@ -544,48 +553,7 @@ useEffect(() => {
       button: "Register Now",
     },
   ];
-const ads1 = [
-  {
-    title: "💻 Full-Stack Developer Course",
-    text: "MERN/Java/Python Tracks",
-    button: "Enroll Now",
-  },
-  {
-    title: "📖 Government Exam Coaching",
-    text: "SSC | Bank | UPSC | State Exams",
-    button: "Start Preparation",
-  },
-  {
-    title: "🧾 Resume & Portfolio Builder",
-    text: "Create ATS-Friendly Resume",
-    button: "Build Resume",
-  },
-  {
-    title: "📸 Graphic Design Masterclass",
-    text: "Photoshop, Illustrator & UI/UX",
-    button: "Join Workshop",
-  },
-  {
-    title: "🏦 Personal Loan Assistance",
-    text: "Instant Approval | High Eligibility",
-    button: "Check Eligibility",
-  },
-  {
-    title: "🧳 International Travel Deals",
-    text: "Cheap Flights, Hotels & Packages",
-    button: "Explore Deals",
-  },
-  {
-    title: "👩‍⚕️ Health & Fitness Coaching",
-    text: "Diet Plans, Weight Loss Programs",
-    button: "Get Plan",
-  },
-  {
-    title: "🎧 Spoken English Classes",
-    text: "Improve Communication + Fluency",
-    button: "Join Now",
-  },
-];
+
 const [openDropdown, setOpenDropdown] = useState(null); // 🔥 only one dropdown
 const closeAllDropdowns = () => {
   setOpenDropdown(null);
@@ -602,15 +570,7 @@ const closeAllDropdowns = () => {
   return (
     <div>
       <Header variant="student-profile" />
-      {/*<div className="mobile-header">
-        <div className="mobile-menu-btn" onClick={() => setShowMobileMenu(true)}>
-          ☰
-        </div>
-
-        <h2 className="mobile-user-name">{name ?? "Student"}</h2>
-      </div>*/}
-
-      {/* ⭐ MOBILE MENU DRAWER */}
+    
       {showMobileMenu && (
         <div className="mobile-menu-drawer">
           <div className="close-menu" onClick={() => setShowMobileMenu(false)}>✕</div>
@@ -623,23 +583,7 @@ const closeAllDropdowns = () => {
         </div>
       )}
 
-      {/* {userId && roleId ? (
-        <div className="student-navbar">
-          <div className="user-info">
-            <h2>{name ?? "Student"}</h2>
-          </div>
-          <nav>
-            <Link to="/student-dashboard" className="active">
-              Dashboard
-            </Link>
-            <Link to="/application">Applications</Link>
-            /* <Link to="/scholarship-match">Matches</Link>
-            <Link to={RP.studentmessages}>Messages</Link> */
-
-            /* <Link to={RP.studentwallet}>Wallet</Link> */
-         /* </nav>
-        </div>
-      ) : null}*/}
+     
       {/* ⭐ MOBILE FILTER ICON */}
       <div className="mobile-filter-icon" onClick={() => setShowFilter(true)}>
         <FaFilter />
@@ -763,36 +707,31 @@ const closeAllDropdowns = () => {
 
         {/* Main Content */}
         <main className="main-content">
-<div className="content-layout">
-          {/* LEFT SIDE */}
-          <div className="left-content" >
 
-            {/* Title */}
-            <span
-              style={{
-                fontSize: "34px",
-                display: "block",
-                margin: "12px auto",
-              }}
-            >
-              Scholarships for Indian Students
-            </span>
+          {/* Scholarships Grid */}
+          <div className="content-layout">
+              <div className="left-content">
 
-            {/* Search Box */}
-            <div className="tab-card-container search-card">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search by name, eligibility or award..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+      {/* Title */}
+      <h2 
+      // style={{ fontSize: "1.2rem",  fontWeight: "700",display: "block", margin: "12px auto" }}
+      >
+        Scholarships for Indian Students
+      </h2>
 
+      {/* Search Box */}
+      <div className="tab-card-container search-card">
+        <FaSearch className="search-icon" />
+        <input
+          type="text"
+          placeholder="Search by name, eligibility or award..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
 
-
-            {/* Parent Tabs */}
-            <div className="tabs-wrapper">
+      {/* Tabs */}
+      <div className="tabs-wrapper">
 
               {/* CARD 1 — Eligibility + All */}
               <div className="tab-card-container">
@@ -830,36 +769,10 @@ const closeAllDropdowns = () => {
 
               </div>
 
+      </div>
 
-
-
-
-
-            </div>
- </div>
-            {/* RIGHT SIDE ADS */}
-            {/* {!loading && currentScholarships.length > 0 && (
-  <div className="right-content">
-    
-      <GoogleAd />
-    
-  </div>
-)} */}
-
-<div className="right-content">
-    <div className="ad-box" style={{marginBottom:"8px"}}>
-                <h4>{ads[currentAd].title}</h4>
-                <p>{ads[currentAd].text}</p>
-                <button>{ads[currentAd].button}</button>
-              </div>
-      {/*<GoogleAd /> */}
-   
-  </div>
-         </div>
-
-          {/* Scholarships Grid */}
-          <div className="content-layout">
-            <div className="scholarship-grid">
+      {/* ================= SCHOLARSHIP GRID ================= */}
+     <div className="scholarship-grid">
 
               {loading &&
                 <p>Loading scholarships...</p>}
@@ -1044,7 +957,7 @@ const closeAllDropdowns = () => {
             </div>
  {/* ===== MOBILE ONLY PAGINATION ===== */}
   {totalPages > 1 && (
-    <div className="pagination-mobile">
+    <div className="pagination-controls-scholarship">
       <button
         disabled={currentPage === 1}
   onClick={() => changePage(currentPage - 1)}
@@ -1053,9 +966,9 @@ const closeAllDropdowns = () => {
         ← Previous
       </button>
 
-      <span className="page-info">
-        Page {currentPage} of {totalPages}
-      </span>
+          <span className="page-info">
+            Page {currentPage} of {totalPages}
+          </span>
 
       <button
         disabled={currentPage === totalPages}
@@ -1066,21 +979,24 @@ const closeAllDropdowns = () => {
       </button>
     </div>
   )}
-            <div className="ads-container">
-               {/*<div className="ad-box" style={{marginBottom:"8px"}}>
-                {/*<h4>{ads[currentAd].title}</h4>
-                <p>{ads[currentAd].text}</p>
-                <button>{ads[currentAd].button}</button>
-              </div>*/}
+  </div>
+            <div className="right-content">
+
+      {/* ✅ GOOGLE ADS — SAFE */}
+      {canShowAds && !loading &&currentScholarships?.length>=3 && (
+        <div className="google-ad-box">
+          <GoogleAd />
+        </div>
+      )}
 
               {/* Featured Sidebar */}
               <aside className="featured-sidebar">
                 <div className="featured-header">Featured Scholarships</div>
 
-                {featuredScholarships.length === 0 ? (
-                  <p style={{ padding: "12px" }}>No featured scholarships found.</p>
-                ) : (
-                  featuredScholarships.map((s, i) => {
+        {featuredScholarships.length === 0 ? (
+          <p style={{ padding: "12px" }}>No featured scholarships found.</p>
+        ) : (
+         featuredScholarships.map((s, i) => {
                     // const baseUrl = "https://localhost:44315";
 
                     // ✅ Clean logo name (remove trailing | and spaces)
@@ -1142,30 +1058,8 @@ const closeAllDropdowns = () => {
               </aside>
             </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="pagination-controls desktop-only"  ref={paginationRef}>
-                <button
-                  disabled={currentPage === 1}
-                  onClick={() => changePage(currentPage - 1)}
-                  className="pagination-btn"
-                >
-                  ← Prev
-                </button>
-
-                <span className="page-info">
-                  Page {currentPage} of {totalPages}
-                </span>
-
-                <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => changePage(currentPage + 1)}  
-                  className="pagination-btn"
-                >
-                  Next →
-                </button>
-              </div>
-            )}
+        
+          
           </div>
         </main>
       </div>

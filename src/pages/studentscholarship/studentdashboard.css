@@ -590,7 +590,7 @@ body,
 }
 
 .pagination-btn {
-  background-color: #007bff;
+  background-color: #fe8200;
   color: #fff;
   border: none;
   padding: 8px 14px;
@@ -895,14 +895,14 @@ body,
   }
 
   .right-content {
-    display: none !important;
+   /* display: none !important;*/
 
   }
 }
 
 @media (min-width: 851px) and (max-width: 1025px) {
   .right-content {
-    display: none !important;
+  /* display: none !important;*/
   }
 }
 
@@ -1233,6 +1233,12 @@ body,
   display: flex;
 }
 
+@media (min-width: 344px) and (max-width: 400px) {
+  .main-content {
+    margin-top: 0;
+    padding: 5px;
+  }
+}
 /* Show only on mobile */
 @media (max-width: 768px) {
   .filter-header {
@@ -1292,6 +1298,13 @@ body,
   font-weight: 500;
   color: #333;
   white-space: nowrap;
+}
+.pagination-controls-scholarship{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
 }
 
 /* =========================

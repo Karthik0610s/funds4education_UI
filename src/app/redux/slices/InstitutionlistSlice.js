@@ -6,6 +6,7 @@ import {
   fetchDistrictsReq,
   fetchLocationsReq,
   fetchManagementsReq,
+  fetchCollegeReq,
   fetchStatesReq
 } from "../../../api/InstitutionSignup/Institutionlist";
 
@@ -47,6 +48,7 @@ const institutionListSlice = createSlice({
     setDistricts(state, action) { state.districts = action.payload || []; },
     setLocations(state, action) { state.locations = action.payload || []; },
     setCollegeTypes(state, action) { state.collegeTypes = action.payload || []; },
+    setCollege(state, action) { state.college = action.payload || []; },
     setManagements(state, action) { state.managements = action.payload || []; },
   },
 });
@@ -59,6 +61,7 @@ export const {
   setDistricts,
   setLocations,
   setCollegeTypes,
+  setCollege,
   setManagements,
 } = institutionListSlice.actions;
 
@@ -101,6 +104,10 @@ export const fetchLocations = () => async (dispatch) => {
 export const fetchCollegeTypes = () => async (dispatch) => {
   const res = await fetchCollegeTypesReq();
   if (!res.error) dispatch(setCollegeTypes(res.data));
+};
+export const fetchCollege = () => async (dispatch) => {
+  const res = await fetchCollegeReq();
+  if (!res.error) dispatch(setCollege(res.data));
 };
 
 export const fetchManagements = () => async (dispatch) => {
