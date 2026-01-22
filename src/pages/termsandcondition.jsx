@@ -16,18 +16,15 @@ const TermsAndConditions = () => {
       <div className="terms-content">
         <h2 className="terms-company-name">VidyāSetu</h2>
  <p className="terms-text">
-          By accessing, registering, or using the VidyāSetu website or mobile
-          application (“Platform”), you agree to comply with and be bound by
-          these Terms and Conditions, along with our Privacy Policy and other
-          applicable policies.
+          By accessing or using the VidyāSetu website or mobile application (“Platform”), you agree to 
+          comply with and be bound by these Terms & Conditions and our Privacy Policy. 
+          If you do not agree, please do not use the Platform.
         </p>
 
         <h3 className="terms-section-title">1. About VidyāSetu</h3>
         <p className="terms-text">
-          VidyāSetu is an online platform that enables students to apply for
-          scholarships and access e-learning content, sponsors to review and
-          fund scholarships, and institutions and faculty to upload educational
-          content.
+         VidyāSetu is an online platform designed to help students discover, view, and apply for scholarship opportunities. 
+         The Platform provides informational support and application access for educational scholarships.
         </p>
 
         <h3 className="terms-section-title">2. Eligibility</h3>
@@ -48,51 +45,41 @@ const TermsAndConditions = () => {
 
         <h3 className="terms-section-title">4. Student Terms</h3>
         <ul className="terms-list">
-          <li>All application details must be true and accurate</li>
-          <li>Submission does not guarantee scholarship approval</li>
-          <li>False information may lead to account suspension</li>
+          <li>All scholarship application details submitted must be true, accurate, and complete.</li>
+          <li>Submission of an application does not guarantee scholarship selection or approval.</li>
+          <li>Providing false, misleading, or fraudulent information may result in account suspension or permanent termination.</li>
         </ul>
-
-        <h3 className="terms-section-title">5. Sponsor Terms</h3>
-        <p className="terms-text">
-          Sponsors approve or reject applications at their discretion.
-          VidyāSetu acts only as a facilitation platform and is not responsible
-          for funding disputes.
-        </p>
-
-        <h3 className="terms-section-title">
-          6. Faculty & Institution Terms
-        </h3>
-        <p className="terms-text">
-          Faculty and institutions must upload only original or authorized
-          educational content and grant VidyāSetu the right to host and display
-          such content.
-        </p>
-
-        <h3 className="terms-section-title">7. Prohibited Activities</h3>
+        <h3 className="terms-section-title">5. Prohibited Activities</h3>
         <ul className="terms-list">
           <li>Uploading false or illegal content</li>
           <li>Unauthorized system access</li>
           <li>Misuse of user data</li>
           <li>Abusive or defamatory behavior</li>
+          <li>Violation of these rules may result in immediate account suspension</li>
         </ul>
+        
 
-        <h3 className="terms-section-title">8. Intellectual Property</h3>
+        <h3 className="terms-section-title">6. Intellectual Property</h3>
         <p className="terms-text">
-          All platform design, logos, and software belong to VidyāSetu. Uploaded
-          content remains owned by the uploader.
+          All Platform design, software, logos, and trademarks are the exclusive property of VidyāSetu.
+          Users may not copy, modify, distribute, or misuse Platform content without prior written permission.
         </p>
 
-        <h3 className="terms-section-title">9. Disclaimer</h3>
+        <h3 className="terms-section-title">7. Disclaimer</h3>
         <p className="terms-text">
-          Services are provided on an “as is” basis without guarantees of
-          uninterrupted access or scholarship approval.
+          The Platform is provided on an “as is” and “as available” basis. VidyāSetu does not 
+          guarantee uninterrupted access, error-free operation, or scholarship approval of any kind.
+        </p>
+        <h3 className="terms-section-title">8. Limitation of Liability</h3>
+        <p className="terms-text">
+          VidyāSetu shall not be liable for any direct or indirect loss, damages, or inconvenience 
+          arising from the use of the Platform or reliance on scholarship information.
         </p>
 
-        <h3 className="terms-section-title">10. Governing Law</h3>
+        <h3 className="terms-section-title">9. Governing Law</h3>
         <p className="terms-text">
-          These Terms are governed by the laws of India, and courts in India
-          shall have exclusive jurisdiction.
+         These Terms & Conditions shall be governed by and interpreted in accordance with the laws of India,
+          and the courts of India shall have exclusive jurisdiction.
         </p>
 
         <p className="terms-footer">

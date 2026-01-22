@@ -10,6 +10,13 @@ const ScholarshipViewPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
+    const handleBack = () => {
+  navigate(
+    `/student-dashboard${location.state?.from || ""}`,
+    { replace: true }
+  );
+};
+
 
     // ✅ Get ID from location.state (preferred) OR from ?id query (fallback)
     const id = location.state?.id || searchParams.get("id");
@@ -47,21 +54,17 @@ const downloadFileFun = async (id) => {
 
 
 
-   const handleApplyNowClick = () => {
-    if (isLoggedIn) {
-        if (scholarship.webportaltoApply) {
-            const url = scholarship.webportaltoApply.startsWith("http")
-                ? scholarship.webportaltoApply
-                : `https://${scholarship.webportaltoApply}`;
-            window.open(url, "_blank"); // opens in new browser tab
-        } else {
-            alert("Application link not available.");
-        }
+  const handleApplyNowClick = () => {
+    if (scholarship.webportaltoApply) {
+        const url = scholarship.webportaltoApply.startsWith("http")
+            ? scholarship.webportaltoApply
+            : `https://${scholarship.webportaltoApply}`;
+        window.open(url, "_blank"); // opens in new browser tab
     } else {
-        navigate("/login", { state: { userType: "student" } });
-
+        alert("Application link not available.");
     }
 };
+
     useEffect(() => {
         if (id) {
             dispatch(fetchScholarshipById(id));
@@ -82,7 +85,7 @@ const downloadFileFun = async (id) => {
   return (
   <div className="scholarshipview-page">
     {/* 🔙 Back Button */}
-    <button className="scholarship-back-button" onClick={() => navigate(-1)}>
+    <button className="scholarship-back-button" onClick={handleBack}>
       ← Back
     </button>
 
