@@ -91,9 +91,10 @@ const [filters, setFilters] = useState({
 
   /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
+    
     dispatch(fetchStates());
     dispatch(fetchLocations());
-    dispatch(fetchCollege)
+    dispatch(fetchCollege())
     dispatch(fetchCollegeTypes());
     dispatch(fetchManagements());
   }, [dispatch]);
@@ -254,7 +255,7 @@ const [filters, setFilters] = useState({
 */}
  <div className="filter-groups">
     <label>College Type</label>
-    <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
+    <select name="college" value={filters.college} onChange={handleFilterChange}>
       <option value="">Select College Type</option>
       {colleges?.map(c => (
         <option key={c.college} value={c.college}>{c.college}</option>
@@ -335,7 +336,15 @@ const [filters, setFilters] = useState({
           ))}
         </select>
       </div>
-
+<div className="filter-groups">
+    <label>College Type</label>
+    <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
+      <option value="">Select College Type</option>
+      {colleges?.map(c => (
+        <option key={c.college} value={c.college}>{c.college}</option>
+      ))}
+    </select>
+  </div>
       <div className="filter-groups">
         <label>College Type</label>
         <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
@@ -395,7 +404,7 @@ const [filters, setFilters] = useState({
                   <strong>District:</strong> {inst.district}
                 </p>
                 <p>
-                  <strong>College Type:</strong> {inst.collegeType}
+                  <strong>Sub College Type:</strong> {inst.collegeType}
                 </p>
               </div>
             </div>
