@@ -409,7 +409,7 @@ const [filters, setFilters] = useState({
       ? [inst.college, inst.collegeType]
           .filter(Boolean)
           .join(" - ")
-      : "NA"}
+      : "N/A"}
   </p>
               </div>
             </div>
