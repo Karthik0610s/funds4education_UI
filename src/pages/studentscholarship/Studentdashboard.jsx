@@ -62,6 +62,7 @@ const [pages, setPages] = useState(() => {
 const [currentPage, setCurrentPage] = useState(
   Number(params.get("page")) || 1
 ); */
+
 const [pages, setPages] = useState(() => {
   const p = new URLSearchParams(location.search);
   const live = Number(p.get("livePage")) || 1;
@@ -89,6 +90,7 @@ const changePage = (newPage) => {
 
 
 
+
 const [searchQuery, setSearchQuery] = useState(
   params.get("search") || ""
 );
@@ -105,7 +107,8 @@ const [filters, setFilters] = useState(
         course: [],
       }
 );
-
+const prevFiltersRef = useRef(filters);
+const prevSearchRef = useRef(searchQuery);
   const roleId =
     useSelector((state) => state.auth.roleId) ||
     Number(localStorage.getItem("roleId"));
@@ -246,6 +249,33 @@ params.set("upcomingPage", pages[eligibilityTab].upcoming);
   navigate,
 ]);
 
+useEffect(() => {
+  const filtersChanged =
+    JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
+
+  const searchChanged =
+    prevSearchRef.current !== searchQuery;
+
+  if (filtersChanged || searchChanged) {
+    setPages(prev => ({
+      ...prev,
+      [eligibilityTab]: {
+        ...prev[eligibilityTab],
+        [activeTab]: 1, // ✅ reset ONLY on real change
+      },
+    }));
+  }
+
+  // update refs AFTER check
+  prevFiltersRef.current = filters;
+  prevSearchRef.current = searchQuery;
+
+}, [
+  filters,
+  searchQuery,
+  eligibilityTab,
+  activeTab,
+]);
 
 useEffect(() => {
   function handleClickOutside(event) {

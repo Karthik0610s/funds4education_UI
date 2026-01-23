@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef } from "react";
 import Header from "../app/components/header/header";
 import { useDispatch, useSelector } from "react-redux";
 import { publicAxios } from "../api/config";
@@ -7,8 +7,6 @@ import { useNavigate } from "react-router-dom";
 import "../pages/styles.css";
 import { FaFilter } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
-
-
 import {
   fetchInstitutionList,
   fetchStates,
@@ -21,6 +19,7 @@ import {
 export default function InstitutionsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
 
   const {
     institutions,
@@ -64,6 +63,8 @@ const [filters, setFilters] = useState({
   management: searchParams.get("management") || "",
 });
   const ITEMS_PER_PAGE = 5;
+const prevSearchRef = useRef(search);
+const prevFiltersRef = useRef(filters);
 
   /* ===== FETCH LIST WITH FILTERS ===== */
   useEffect(() => {
@@ -81,6 +82,8 @@ const [filters, setFilters] = useState({
       })
     );
   }, [dispatch, currentPage, search, filters]);
+
+  
    useEffect(() => {
   setSearchParams({
     search,
@@ -88,6 +91,18 @@ const [filters, setFilters] = useState({
     ...filters,
   });
 }, [search, currentPage, filters]);
+useEffect(() => {
+  const searchChanged = prevSearchRef.current !== search;
+  const filtersChanged =
+    JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
+
+  if (searchChanged || filtersChanged) {
+    setCurrentPage(1);
+  }
+
+  prevSearchRef.current = search;
+  prevFiltersRef.current = filters;
+}, [search, filters]);
 
   /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
@@ -108,6 +123,7 @@ const [filters, setFilters] = useState({
     setCurrentPage(1);
   }, [search, filters]);
 */}
+
   /* ===== HANDLERS ===== */
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
