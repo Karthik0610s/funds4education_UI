@@ -403,9 +403,14 @@ const [filters, setFilters] = useState({
                 <p>
                   <strong>District:</strong> {inst.district}
                 </p>
-                <p>
-                  <strong>Sub College Type:</strong> {inst.collegeType}
-                </p>
+               <p>
+    <strong>College Type:</strong>{" "}
+    {inst.college || inst.collegeType
+      ? [inst.college, inst.collegeType]
+          .filter(Boolean)
+          .join(" - ")
+      : "NA"}
+  </p>
               </div>
             </div>
           ))}
