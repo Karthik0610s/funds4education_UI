@@ -22,6 +22,7 @@ const institutionListSlice = createSlice({
     districts: [],
     locations: [],
     collegeTypes: [],
+    colleges:[],
     managements: [],
   },
 
@@ -48,7 +49,7 @@ const institutionListSlice = createSlice({
     setDistricts(state, action) { state.districts = action.payload || []; },
     setLocations(state, action) { state.locations = action.payload || []; },
     setCollegeTypes(state, action) { state.collegeTypes = action.payload || []; },
-    setCollege(state, action) { state.college = action.payload || []; },
+    setColleges(state, action) { state.colleges = action.payload || []; },
     setManagements(state, action) { state.managements = action.payload || []; },
   },
 });
@@ -61,7 +62,7 @@ export const {
   setDistricts,
   setLocations,
   setCollegeTypes,
-  setCollege,
+  setColleges,
   setManagements,
 } = institutionListSlice.actions;
 
@@ -106,8 +107,9 @@ export const fetchCollegeTypes = () => async (dispatch) => {
   if (!res.error) dispatch(setCollegeTypes(res.data));
 };
 export const fetchCollege = () => async (dispatch) => {
+
   const res = await fetchCollegeReq();
-  if (!res.error) dispatch(setCollege(res.data));
+  if (!res.error) dispatch(setColleges(res.data));
 };
 
 export const fetchManagements = () => async (dispatch) => {

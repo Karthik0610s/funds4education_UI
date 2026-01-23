@@ -106,9 +106,10 @@ useEffect(() => {
 
   /* ===== LOAD FILTER DATA ===== */
   useEffect(() => {
+    
     dispatch(fetchStates());
     dispatch(fetchLocations());
-    dispatch(fetchCollege)
+    dispatch(fetchCollege())
     dispatch(fetchCollegeTypes());
     dispatch(fetchManagements());
   }, [dispatch]);
@@ -270,7 +271,7 @@ useEffect(() => {
 */}
  <div className="filter-groups">
     <label>College Type</label>
-    <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
+    <select name="college" value={filters.college} onChange={handleFilterChange}>
       <option value="">Select College Type</option>
       {colleges?.map(c => (
         <option key={c.college} value={c.college}>{c.college}</option>
@@ -351,7 +352,15 @@ useEffect(() => {
           ))}
         </select>
       </div>
-
+<div className="filter-groups">
+    <label>College Type</label>
+    <select name="collegeType" value={filters.college} onChange={handleFilterChange}>
+      <option value="">Select College Type</option>
+      {colleges?.map(c => (
+        <option key={c.college} value={c.college}>{c.college}</option>
+      ))}
+    </select>
+  </div>
       <div className="filter-groups">
         <label>College Type</label>
         <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
@@ -410,9 +419,14 @@ useEffect(() => {
                 <p>
                   <strong>District:</strong> {inst.district}
                 </p>
-                <p>
-                  <strong>College Type:</strong> {inst.collegeType}
-                </p>
+               <p>
+    <strong>College Type:</strong>{" "}
+    {inst.college || inst.collegeType
+      ? [inst.college, inst.collegeType]
+          .filter(Boolean)
+          .join(" - ")
+      : "N/A"}
+  </p>
               </div>
             </div>
           ))}

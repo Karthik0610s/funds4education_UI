@@ -67,6 +67,7 @@ export const fetchCollegeTypesReq = async () => {
 };
 export const fetchCollegeReq = async () => {
   try {
+    debugger;
     const res = await publicAxios.get(ApiKey.College);
     return { error: false, data: res.data || [] };
   } catch {
