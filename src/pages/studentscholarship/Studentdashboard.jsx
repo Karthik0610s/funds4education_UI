@@ -659,7 +659,7 @@ const closeAllDropdowns = () => {
         { key: "religion", label: "Religion", options: dropdownData.religions },
         { key: "gender", label: "Gender", options: dropdownData.genders },
         { key: "class", label: "Class", options: dropdownData.classList },
-        { key: "course", label: "Course", options: courses },
+       /* { key: "course", label: "Course", options: courses }, */
       ].map(({ key, label, options }) => (
         <div
           key={key}
