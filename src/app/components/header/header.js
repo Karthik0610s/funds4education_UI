@@ -774,7 +774,9 @@ const Header = ({ variant = "public" }) => {
                 }
               }}
             />
-            {/* <span className="brand">VidyāSetu</span> */}
+            {!isLoggedIn && (
+  <span className="brand">VidyāSetu</span>
+)}
           </div>
 
           {/* RIGHT SIDE MOBILE (LOGGED IN) */}
