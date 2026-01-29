@@ -900,8 +900,7 @@ body,
 
   .left-content span {
     text-align: center;
-    
-    /* font-size: 26px !important; */
+    /*font-size: 26px !important; */
   }
 
   .right-content {
@@ -1003,7 +1002,7 @@ body,
   /* Title centered */
   .left-content span {
     text-align: center;
-    /* font-size: 26px !important; */
+    /*font-size: 26px !important; */
   }
 
   /* Search box full width */
@@ -1371,5 +1370,30 @@ body,
 
   .pagination-controls.desktop-only {
     display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-layout {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .left-content {
+    width: 100%;
+  }
+
+  .right-content {
+    width: 100%;
+    margin-top: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .pagination-controls-scholarship {
+    margin-bottom: 40px;
+  }
+
+  .page-info{
+    font-size: small;
   }
 }
