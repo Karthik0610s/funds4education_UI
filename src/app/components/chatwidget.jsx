@@ -3,7 +3,8 @@ import axios from "axios";
 import "./chatwidget.css";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
- 
+ import { useNavigate, Link , useLocation} from "react-router-dom";
+ import { routePath as RP } from "../../app/components/router/routepath";
 const ChatWidget = () => {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([
@@ -12,7 +13,7 @@ const ChatWidget = () => {
   const [input, setInput] = useState("");
   const hasClosedRef = useRef(false);
   const [sessionId, setSessionId] = useState(null);
- 
+ const navigate = useNavigate();
   const chatEndRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
  
@@ -113,9 +114,17 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
       );
  
       // 🌟 API RETURNS { answer: "...message..." }
-      const reply = res.data.answer;
+      const answer = res.data.answer;
  
-      setMessages((prev) => [...prev, { sender: "agent", text: reply }]);
+      setMessages((prev) => [...prev,
+        // { sender: "agent", text: reply }
+        {
+        sender: "agent",
+        text: `${answer.code} - ${answer.name} (Deadline: ${answer.deadline})`,
+        scholarshipId: answer.id, // ✅ store id separately
+      },
+        ]);
+      console.log(messages,"return message ");
     } catch (error) {
       console.error(error);
       setMessages((prev) => [
@@ -151,7 +160,17 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
                 className={msg.sender === "user" ? "user-msg" : "agent-msg"}
               >
                 <strong>{msg.sender === "user" ? "You" : "Agent"}:</strong>{" "}
-                {msg.text}
+                {/*{msg.text}*/}
+                <span
+          className="chat-link"
+          onClick={() =>
+            navigate(
+              `${RP.scholarshipViewPage}?id=${msg.scholarshipId}`
+            )
+          }
+        >
+          {msg.text}
+        </span>
               </p>
             ))}
              {/* ⭐ Agent Typing Indicator */}

@@ -127,3 +127,12 @@
   border-radius: 6px;
   cursor: pointer;
 }
+.chat-link {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.chat-link:hover {
+  color: #0056b3;
+}
