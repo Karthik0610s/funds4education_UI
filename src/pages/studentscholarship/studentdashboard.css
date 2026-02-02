@@ -1397,3 +1397,36 @@ body,
     font-size: small;
   }
 }
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;              /* 🔥 pushes row to bottom */
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+  width: 100%;
+  gap: 12px;
+}
+.view-more-btn {
+  padding: 0;                     /* no button padding */
+  background: transparent;
+  border: none;                   /* 🔥 remove border */
+ color :#111827;               /* normal state */
+  cursor: pointer;
+  font-weight: 600;
+  font-size: .75rem;
+  min-width: auto;
+  flex-shrink: 0;
+  transition: color 0.25s ease, transform 0.2s ease;
+}
+.view-more-btn:hover {
+  transform: translateX(2px);
+  color: rgb(255, 255, 255);
+}
+
+
+.last-updated-text {
+      font-size: .75rem;
+  color: #6b7280;
+  white-space: nowrap;          /* 🔥 stays on one line */
+}
