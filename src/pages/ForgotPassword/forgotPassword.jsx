@@ -9,24 +9,32 @@ export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const handleContinue = async () => {
-    
+
     setError("");
 
-    if (!username || !role) {
+    {/*   if (!username || !role) {
       setError("Please enter username and select role");
+      return;
+    }
+*/}
+    if (!username) {
+      setError("Please enter username");
       return;
     }
 
     try {
-      
-      const res = await publicAxios.get(`${ApiKey.EmailExistCheck}?email=${username}&role=${role}`);
+
+      //const res = await publicAxios.get(`${ApiKey.EmailExistCheck}?email=${username}&role=${role}`);
+      const res = await publicAxios.get(
+        `${ApiKey.EmailExistCheck}?email=${username}&role=student`
+      );
       const data = res.data;
 
       if (res.status == 200 && data && (data.id || data.userId)) {
@@ -57,9 +65,11 @@ export default function ForgotPassword() {
       const res = await publicAxios.put(ApiKey.ChangePassword, null, {
         params: {
           username,
-          role,
+          role: "student",
           newPassword,
         },
+
+
       });
 
       alert("Password updated successfully!");
@@ -145,39 +155,7 @@ export default function ForgotPassword() {
                 />
               </div>
 
-              {/* Role */}
-              <div style={{ marginBottom: "1.2rem", position: "relative" }}>
-                <label
-                  style={{
-                    display: "block",
-                    fontSize: "0.875rem",
-                    fontWeight: 500,
-                    color: "#1D4F56",
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  Role *
-                </label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "0.5rem 1rem",
-                    fontSize: "14px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "0.5rem",
-                    outline: "none",
-                    height: "36px",
-                    boxSizing: "border-box",
-                  }}
-                >
-                  <option value="">Select</option>
-                 {/* <option value="sponsor">Sponsor</option> */}
-                  <option value="student">Student</option>
-                 {/* <option value="faculty">Faculty</option>  */}
-                </select>
-              </div>
+
 
               <button
                 onClick={handleContinue}

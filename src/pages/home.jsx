@@ -298,7 +298,7 @@ const Home = () => {
           <h2 className="benefits-subtitle">Benefits</h2>
 
           <h1 className="benefits-title">
-            Helping Students <span>Find</span> <br /> the Right Scholarships
+            Helping Indian Nationals <br />  to <span>Find</span> <br /> the Right Scholarships
           </h1>
 
           <p className="benefits-description">
