@@ -373,13 +373,15 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     } else if (!phoneRegex.test(formData.phone)) {
       errs.phone = "Phone number must be 10 digits and cannot start with 0.";
     }
-     if (!fatherOccupationRegex.test(formData.fatherOccupation)) {
-      errs.fatherOccupation = "Only alphabets allowed (max 150 characters).";
-    }
-    if (!nameRegex.test(formData.motherOccupation)) {
-      errs.motherOccupation = "Only alphabets allowed (max 150 characters).";
-    }
-    
+    const fatherNameRegex = /^[A-Za-z\s]{1,150}$/;
+
+if (
+  formData.motherOccupation && 
+  !fatherNameRegex.test(formData.motherOccupation.trim())
+) {
+  errs.motherOccupation = "Only alphabets allowed (max 150 characters).";
+}
+
 
     if (!formData.gender) errs.gender = "Gender is required.";
     {/*if (!formData.userName.trim()) {
