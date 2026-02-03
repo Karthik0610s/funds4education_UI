@@ -620,7 +620,7 @@ if (!formData.countryId) {
 
           <div className="row">
             <div className="form-group">
-              <label>Personal Email Id *</label>
+              <label>Personal Email ID *</label>
               <input
                 type="email"
                 value={formData.email}
@@ -704,7 +704,7 @@ if (!formData.countryId) {
               {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
             </div>
             <div className="form-group" >
-              <label>Occupation Of Father</label>
+              <label>Occupation of Father</label>
               <input
                 type="text"
                 value={formData.fatherOccupation}
@@ -713,7 +713,7 @@ if (!formData.countryId) {
                   setFormData({ ...formData, fatherOccupation: e.target.value })
                 }
                 className={errors.fatherOccupation ? "input-error" : ""}
-                placeholder="Occupation Of Father"
+                placeholder="Occupation of Father"
               />
               {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
             </div>
@@ -740,7 +740,7 @@ if (!formData.countryId) {
               {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
             </div>
             <div className="form-group">
-              <label>Family Income Per Annum </label>
+              <label>Family Income per Annum </label>
               <input
                 type="text"
                 value={formData.familyIncome}
@@ -749,7 +749,7 @@ if (!formData.countryId) {
                   setFormData({ ...formData, familyIncome: e.target.value })
                 }
                 className={errors.familyIncome ? "input-error" : ""}
-                placeholder="Family Income Per Annum"
+                placeholder="Family Income per Annum"
                 maxLength={20}
               />
               {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
@@ -885,7 +885,7 @@ if (!formData.countryId) {
   {/* Row 1 → 3 fields */}
    <div className="education-grid">
     <div className="form-group">
-         <label>Class/Course <span className="required">*</span></label>
+         <label>Class / Course <span className="required">*</span></label>
       <select
         value={education.degree}
         onChange={(e) =>
@@ -930,10 +930,10 @@ if (!formData.countryId) {
   {/* Row 2 → Year + Button */}
   
     <div className="form-group">
-       <label>Year Of Studying<span className="required">*</span></label>
+       <label>Year of Studying<span className="required">*</span></label>
       <input
         type="text"
-        placeholder="Year Of Studying"
+        placeholder="Year of Studying"
         value={education.year}
         maxLength={4}
         onChange={(e) => {
@@ -944,10 +944,10 @@ if (!formData.countryId) {
         }}
       />
     </div>
-  <div className="sign-action-btns">
+  <div className="add-action-btns">
     <button
       type="button"
-      className="sign-action-btn"
+      className="add-action-btn"
       onClick={addOrUpdateEducation}
      style={{justifyItems:"center"}}
     >
@@ -1025,7 +1025,7 @@ if (!formData.countryId) {
         </div>
 
         <div className="form-group">
-          <label>Year Of Studying</label>
+          <label>Year of Studying</label>
           <p>{edu.year}</p>
         </div>
 
@@ -1058,7 +1058,7 @@ if (!formData.countryId) {
           {/* Username */}
           <h3 className="section-title">Account Details</h3>
           <div className="form-group">
-            <label>User Name(Email) *</label>
+            <label>Username (Email) *</label>
             <input
               type="email"
               value={formData.userName}

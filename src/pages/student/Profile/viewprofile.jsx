@@ -65,9 +65,9 @@ const navigate = useNavigate();
 
           {/* --- Basic Info --- */}
           <h3 className="section-title">Basic Details</h3>
-          <div className="profile-details">
+          <div className="education-item">
             <div className="detail-row">
-              <label>Candidate’s Full Name :</label>
+              <label>Candidate’s Full Name:</label>
               <input type="text" value={profile.firstName || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -75,7 +75,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.lastName || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Email Id:</label>
+              <label>Email ID:</label>
               <input type="text" value={profile.email || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -95,7 +95,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.motherOccupation || ""} readOnly />
             </div>
              <div className="detail-row">
-              <label>Occupation Of Father:</label>
+              <label>Occupation of Father:</label>
               <input type="text" value={profile.fatherOccupation || ""} readOnly />
             </div>
              
@@ -104,7 +104,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.parentsContactNumber || ""} readOnly />
             </div>
               <div className="detail-row">
-              <label>Family Income Per Annum:</label>
+              <label>Family Income per Annum:</label>
               <input type="text" value={profile.familyIncome || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -127,9 +127,9 @@ const navigate = useNavigate();
 
           {/* --- Account Info --- */}
           <h3 className="section-title">Account Info</h3>
-          <div className="profile-details">
+          <div className="education-item">
             <div className="detail-row">
-              <label>User Name(Email):</label>
+              <label>Username (Email):</label>
               <input type="text" value={profile.userName || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -149,7 +149,7 @@ const navigate = useNavigate();
               {educationArray.map((edu, index) => (
                 <div key={index} className="education-item">
                   <div className="detail-row">
-                    <label>Class/Course:</label>
+                    <label>Class / Course:</label>
                     <input type="text" value={edu.degree || ""} readOnly />
                   </div>
                    <div className="detail-row">
@@ -161,7 +161,7 @@ const navigate = useNavigate();
                     <input type="text" value={edu.college || ""} readOnly />
                   </div>
                   <div className="detail-row">
-                    <label>Year Of Studying:</label>
+                    <label>Year of Studying:</label>
                     <input type="text" value={edu.year || ""} readOnly />
                   </div>
                   {index < educationArray.length - 1 && (
