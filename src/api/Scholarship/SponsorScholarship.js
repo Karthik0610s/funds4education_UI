@@ -90,7 +90,7 @@ export const updateScholarshipReq = async (data) => {
 //
 export const deleteScholarshipReq = async (id, modifiedBy) => {
   try {
-    debugger;
+    
     const url = `${ApiKey.SponsorScholarship}/${id}?modifiedBy=${modifiedBy}`;
     const res = await publicAxios.delete(url);
 

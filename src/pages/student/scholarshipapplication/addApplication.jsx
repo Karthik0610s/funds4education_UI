@@ -576,7 +576,7 @@ if (name === "gpaOrMarks") {
     if (applicationId && selectedFiles.length > 0) {
       await uploadFiles(applicationId);
     }
-debugger;
+
     // Fetch latest data
     updatedApp = await fetchScholarshipApplicationByIdReq(applicationId);
 

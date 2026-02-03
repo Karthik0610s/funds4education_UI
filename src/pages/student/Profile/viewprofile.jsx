@@ -49,8 +49,9 @@ const navigate = useNavigate();
   if (!profile) return null;
 
   return (
-    <div className="signup-container">
+    <div >
       {!isEditing ? (
+            <div className="profile-page-wrapper">
         <div className="signup-card">
           <div className="profile-header">
             <h2 className="headers">Student Profile</h2>
@@ -66,19 +67,19 @@ const navigate = useNavigate();
           <h3 className="section-title">Basic Details</h3>
           <div className="profile-details">
             <div className="detail-row">
-              <label>First Name:</label>
+              <label>Candidate’s Full Name :</label>
               <input type="text" value={profile.firstName || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Last Name:</label>
+              <label>Candidate’s Initial:</label>
               <input type="text" value={profile.lastName || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Email:</label>
+              <label>Email Id:</label>
               <input type="text" value={profile.email || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Phone:</label>
+              <label>Phone Number:</label>
               <input type="text" value={profile.phone || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -89,20 +90,21 @@ const navigate = useNavigate();
               <label>Gender:</label>
               <input type="text" value={profile.gender || ""} readOnly />
             </div>
-             <div className="detail-row">
-              <label>Father Occupation:</label>
-              <input type="text" value={profile.fatherOccupation || ""} readOnly />
-            </div>
-             <div className="detail-row">
-              <label>Mother Occupation:</label>
+            <div className="detail-row">
+              <label>Father's Name:</label>
               <input type="text" value={profile.motherOccupation || ""} readOnly />
             </div>
+             <div className="detail-row">
+              <label>Occupation Of Father:</label>
+              <input type="text" value={profile.fatherOccupation || ""} readOnly />
+            </div>
+             
             <div className="detail-row">
-              <label>Parent's Phone:</label>
+              <label>Parent's Phone Number:</label>
               <input type="text" value={profile.parentsContactNumber || ""} readOnly />
             </div>
               <div className="detail-row">
-              <label>Family Income:</label>
+              <label>Family Income Per Annum:</label>
               <input type="text" value={profile.familyIncome || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -147,19 +149,19 @@ const navigate = useNavigate();
               {educationArray.map((edu, index) => (
                 <div key={index} className="education-item">
                   <div className="detail-row">
-                    <label>Degree:</label>
+                    <label>Class/Course:</label>
                     <input type="text" value={edu.degree || ""} readOnly />
                   </div>
                    <div className="detail-row">
-                    <label>Specification:</label>
+                    <label>Specialization:</label>
                     <input type="text" value={edu.specification || ""} readOnly />
                   </div>
                   <div className="detail-row">
-                    <label>College:</label>
+                    <label>School / College / University Name:</label>
                     <input type="text" value={edu.college || ""} readOnly />
                   </div>
                   <div className="detail-row">
-                    <label>Year:</label>
+                    <label>Year Of Studying:</label>
                     <input type="text" value={edu.year || ""} readOnly />
                   </div>
                   {index < educationArray.length - 1 && (
@@ -171,6 +173,7 @@ const navigate = useNavigate();
           ) : (
             <p>No education details available.</p>
           )}
+        </div>
         </div>
       ) : (
         // ✅ Edit Form Mode

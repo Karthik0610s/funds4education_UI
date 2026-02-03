@@ -2622,7 +2622,7 @@ body {
 .signup-container {
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 40px 0px; 
   font-family: "Segoe UI", sans-serif;
   min-height: 80vh;
   background: #f1f5f9;
@@ -3205,9 +3205,10 @@ input:not([type="radio"]):not([type="checkbox"]) {
 }
 
 .sign-action-btns {
-  display: flex;
+   display: flex; 
   gap: 5px;
 }
+
 
 /*login.css*/
 /* ==============================
@@ -4252,7 +4253,7 @@ ul.scholarship-view-text li {
 }
 
 .detail-row label {
-  width: 150px;
+  width: 200px;
   /* fixed width for alignment */
   font-weight: bold;
 
@@ -8858,4 +8859,79 @@ p {
     padding: 0 16px;
     text-align: center;
   }
+}
+@media (max-width: 830px) {
+  
+
+  .signup-table {
+    
+   
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 8px;
+        scrollbar-width: thin; /* forces horizontal scroll */
+  }
+}
+
+@media (max-width: 830px) {
+
+  /* Table becomes scroll container */
+  .signup-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+  }
+}
+  /* Hide table header */
+  /* Mobile */
+@media (max-width: 768px) {
+  .desktop-view {
+    display: none;
+  }
+  .mobile-view {
+    display: block;
+  }
+
+  .education-grid-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #fff;
+  }
+
+  
+}
+
+ @media (max-width: 768px) {
+  .education-grid {
+    grid-template-columns: 1fr; /* single column */
+  }
+
+  .education-grid .form-group label {
+    min-height: auto;
+     gap: 15px;
+  }
+}
+.education-grid {
+  
+  gap: 15px;
+}
+
+.education-grid .form-group label {
+  min-height: 42px;        /* ⭐ KEY FIX */
+  display: flex;
+  align-items:center;   /* aligns text nicely */
+  font-size: 13px;
+  text-align: center;
+}
+
+
+.profile-page-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px 15px;
 }

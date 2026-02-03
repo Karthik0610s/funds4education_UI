@@ -46,7 +46,7 @@ export default scholarshipApplicationSlice.reducer;
 // Action to add a new scholarshipApplication
 export const addNewScholarshipApplication = async (data, dispatch) => {
   try {
-    debugger;
+    
     const studentId = localStorage.getItem("userId");
     dispatch(setLoading()); // Set loading before making the API request
   const res=  await addNewScholarshipApplicationReq(data); // Call API to add a scholarshipApplication
@@ -83,7 +83,7 @@ export const fetchScholarshipApplicationById = (id) => async (dispatch) => {
 // Action to update a scholarshipApplication
 export const updateScholarshipApplication = async (data, dispatch) => {
   try {
-    debugger;
+    
 const studentId = localStorage.getItem("userId");
     dispatch(setLoading()); // Set loading before making the API request
     await updateScholarshipApplicationReq(data); // Call API to update scholarshipApplication

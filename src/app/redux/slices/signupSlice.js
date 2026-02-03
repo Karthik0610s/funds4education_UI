@@ -38,7 +38,7 @@ export default signupSlice.reducer;
 // ✅ Action to insert (signup)
 export const insertNewUser = (data, navigate) => async (dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading());
 
     const res = await insertUserReq(data);

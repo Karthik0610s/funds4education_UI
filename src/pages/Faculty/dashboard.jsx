@@ -449,7 +449,7 @@ const resetTimer = () => {
 
   /* ================= SAVE ================= */
   const saveRecordedVideo = async () => {
-    debugger;
+    
     if (!recordedBlob || !videoName) {
       Swal.fire({
         text: "Please enter video name",
@@ -487,7 +487,7 @@ const resetTimer = () => {
 
       // 🚀 Upload
       const res = await dispatch(uploadVideoContent(formData));
-      debugger;
+      
       // ✅ Success
       await Swal.fire({
         text: res.message || "Video uploaded successfully!",
@@ -514,7 +514,7 @@ const resetTimer = () => {
       showCancelButton: true,
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
-      debugger;
+      
       if (result.isConfirmed) {
         await dispatch(deleteFacultyVideo(videoId, dispatch));
       }

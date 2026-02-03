@@ -43,7 +43,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const [existingDocFiles, setExistingDocFiles] = useState([]);
   const [originalFiles, setOriginalFiles] = useState([]);
   const handleFileChange = (e) => {
-    debugger;
+    
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
 
@@ -56,7 +56,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   };
   // Upload files function returns uploaded file names
   const uploadFiles = async (applicationId) => {
-    debugger;
+    
     if (selectedFiles.length < 1) return [];
 
     const formDataPayload = new FormData();
@@ -125,7 +125,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   // ✅ Load profile data
   useEffect(() => {
     if (profile) {
-      debugger;
+      
       setFormData({
         id: profile.id,
         studentId: profile.studentId,
@@ -212,7 +212,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
 
 
   const handleRemoveSingleFile = (index) => {
-    debugger;
+    
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
     //setExistingDocFiles(updatedFiles);
     setFilesList(updatedFiles);
@@ -330,6 +330,8 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const validateForm = () => {
     const errs = {};
     const nameRegex = /^[A-Za-z .-]+$/;
+    const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
+    const initialRegex = /^[A-Za-z]{0,1}$/;
     // const emailRegex = /^[a-z0-9._%+-]+@gmail\.(com|in)$/;
     //const emailRegex = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$/;
 
@@ -348,14 +350,14 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     const phoneRegex = /^[1-9][0-9]{9}$/;
 
     if (!formData.firstName.trim()) {
-      errs.firstName = "First name is required.";
+      errs.firstName = "Candidate’s Full Name is required.";
     } else if (!nameRegex.test(formData.firstName)) {
       errs.firstName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
     if (!formData.lastName.trim()) {
-      errs.lastName = "Last name is required.";
-    } else if (!nameRegex.test(formData.lastName)) {
+      errs.lastName = "Candidate’s Initial is required.";
+    } else if (!initialRegex.test(formData.lastName)) {
       errs.lastName = "Only letters, spaces, dots, and hyphens allowed.";
     }
 
@@ -371,6 +373,13 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     } else if (!phoneRegex.test(formData.phone)) {
       errs.phone = "Phone number must be 10 digits and cannot start with 0.";
     }
+     if (!fatherOccupationRegex.test(formData.fatherOccupation)) {
+      errs.fatherOccupation = "Only alphabets allowed (max 150 characters).";
+    }
+    if (!nameRegex.test(formData.motherOccupation)) {
+      errs.motherOccupation = "Only alphabets allowed (max 150 characters).";
+    }
+    
 
     if (!formData.gender) errs.gender = "Gender is required.";
     {/*if (!formData.userName.trim()) {
@@ -470,7 +479,7 @@ if (!formData.countryId) {
 
   // ✅ Submit form
   const handleSubmit = async (e) => {
-    debugger;
+    
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -478,7 +487,7 @@ if (!formData.countryId) {
     const isFileRemoved =
       originalFiles.length > 0 && filesList.length === 0;
     //const finalFiles = filesList;
-    debugger;
+    
     const payload = {
       id: formData.studentId,
       studentId: formData.studentId,
@@ -513,7 +522,7 @@ if (!formData.countryId) {
     };
 
     try {
-      debugger;
+      
 
       // ✅ EXACT sponsor pattern
       const res = await dispatch(updateStudent(payload)).unwrap();
@@ -545,7 +554,7 @@ if (!formData.countryId) {
     }
   }
   return (
-    <div className="signup-container">
+    <div  className="signup-container">
       <div className="signup-card" style={{ position: "relative" }}>
         <button
           type="button"
@@ -575,7 +584,7 @@ if (!formData.countryId) {
 
           <div className="row">
             <div className="form-group">
-              <label>First Name *</label>
+              <label>Candidate’s Full Name *</label>
               <input
                 type="text"
                 value={formData.firstName}
@@ -586,12 +595,13 @@ if (!formData.countryId) {
                 onChange={(e) =>
                   setFormData({ ...formData, firstName: e.target.value })
                 }
+                    placeholder="Candidate’s Full Name"
               />
               {errors.firstName && <p className="error-text">{errors.firstName}</p>}
             </div>
 
             <div className="form-group">
-              <label>Last Name *</label>
+              <label>Candidate’s Initial *</label>
               <input
                 type="text"
                 value={formData.lastName}
@@ -602,6 +612,7 @@ if (!formData.countryId) {
                 onChange={(e) =>
                   setFormData({ ...formData, lastName: e.target.value })
                 }
+                  placeholder="Candidate’s Initial"
               />
               {errors.lastName && <p className="error-text">{errors.lastName}</p>}
             </div>
@@ -609,20 +620,21 @@ if (!formData.countryId) {
 
           <div className="row">
             <div className="form-group">
-              <label>Personal Email *</label>
+              <label>Personal Email Id *</label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value.toLowerCase().trim() })
                 }
+                 placeholder="Email Id"
               />
 
               {errors.email && <p className="error-text">{errors.email}</p>}
             </div>
 
             <div className="form-group">
-              <label>Phone *</label>
+              <label>Phone Number *</label>
               <input
                 type="text"
                 value={formData.phone}
@@ -639,6 +651,7 @@ if (!formData.countryId) {
                 onChange={(e) =>
                   setFormData({ ...formData, phone: e.target.value })
                 }
+                placeholder="Phone Number"
               />
               {errors.phone && <p className="error-text">{errors.phone}</p>}
             </div>
@@ -676,22 +689,8 @@ if (!formData.countryId) {
 
           </div>
           <div className="row">
-            <div className="form-group" >
-              <label>Father Occupation</label>
-              <input
-                type="text"
-                value={formData.fatherOccupation}
-                onChange={(e) =>
-                 
-                  setFormData({ ...formData, fatherOccupation: e.target.value })
-                }
-                className={errors.fatherOccupation ? "input-error" : ""}
-                placeholder="Father Occupation"
-              />
-              {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
-            </div>
-            <div className="form-group">
-              <label>Mother Occupation </label>
+             <div className="form-group">
+              <label>Father's Name </label>
               <input
                 type="text"
                 value={formData.motherOccupation}
@@ -700,14 +699,29 @@ if (!formData.countryId) {
                   setFormData({ ...formData, motherOccupation: e.target.value })
                 }
                 className={errors.motherOccupation ? "input-error" : ""}
-                placeholder="Mother Occupation"
+                placeholder="Father's Name"
               />
               {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
             </div>
+            <div className="form-group" >
+              <label>Occupation Of Father</label>
+              <input
+                type="text"
+                value={formData.fatherOccupation}
+                onChange={(e) =>
+                 
+                  setFormData({ ...formData, fatherOccupation: e.target.value })
+                }
+                className={errors.fatherOccupation ? "input-error" : ""}
+                placeholder="Occupation Of Father"
+              />
+              {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
+            </div>
+           
           </div>
           <div className="row">
             <div className="form-group">
-              <label>Parent's Phone </label>
+              <label>Parent's Phone Number </label>
               <input
                 type="text"
                 maxLength={10}
@@ -721,12 +735,12 @@ if (!formData.countryId) {
                   }
                 }}
                 className={errors.parentContactNumber ? "input-error" : ""}
-                placeholder="Parent's Number"
+                placeholder="Parent's Phone Number"
               />
               {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
             </div>
             <div className="form-group">
-              <label>Family Income </label>
+              <label>Family Income Per Annum </label>
               <input
                 type="text"
                 value={formData.familyIncome}
@@ -735,7 +749,7 @@ if (!formData.countryId) {
                   setFormData({ ...formData, familyIncome: e.target.value })
                 }
                 className={errors.familyIncome ? "input-error" : ""}
-                placeholder="Family Income"
+                placeholder="Family Income Per Annum"
                 maxLength={20}
               />
               {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
@@ -871,6 +885,7 @@ if (!formData.countryId) {
   {/* Row 1 → 3 fields */}
    <div className="education-grid">
     <div className="form-group">
+         <label>Class/Course <span className="required">*</span></label>
       <select
         value={education.degree}
         onChange={(e) =>
@@ -888,9 +903,10 @@ if (!formData.countryId) {
     </div>
 
     <div className="form-group">
+         <label>Specialization <span className="required">*</span></label>
       <input
         type="text"
-        placeholder="Specification"
+        placeholder="Specialization"
         value={education.specification}
         onChange={(e) =>
           setEducation({ ...education, specification: e.target.value })
@@ -899,9 +915,10 @@ if (!formData.countryId) {
     </div>
 
     <div className="form-group">
+        <label>School / College / University Name <span className="required">*</span></label>
       <input
         type="text"
-        placeholder="School/College"
+        placeholder="School / College / University Name"
         value={education.college}
         onChange={(e) =>
           setEducation({ ...education, college: e.target.value })
@@ -913,9 +930,10 @@ if (!formData.countryId) {
   {/* Row 2 → Year + Button */}
   
     <div className="form-group">
+       <label>Year Of Studying<span className="required">*</span></label>
       <input
         type="text"
-        placeholder="Year"
+        placeholder="Year Of Studying"
         value={education.year}
         maxLength={4}
         onChange={(e) => {
@@ -931,7 +949,7 @@ if (!formData.countryId) {
       type="button"
       className="sign-action-btn"
       onClick={addOrUpdateEducation}
-     style={{marginTop:"-20px",justifyItems:"center"}}
+     style={{justifyItems:"center"}}
     >
       {editIndex !== null ? "Update" : "Add"}
     </button>
@@ -941,14 +959,14 @@ if (!formData.countryId) {
 
           {errors.education && <p className="error-text">{errors.education}</p>}
 
-          {educationList.length > 0 && (
+          {/*{educationList.length > 0 && (
             <table className="signup-table">
               <thead>
                 <tr>
-                  <th>Course</th>
-                   <th>Specification</th>
-                  <th>College</th>
-                  <th>Year</th>
+                  <th>Class / Course</th>
+                   <th>Specialization</th>
+                  <th>School / College / University Name</th>
+                  <th>Year Of Studying</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -982,7 +1000,60 @@ if (!formData.countryId) {
                 ))}
               </tbody>
             </table>
-          )}
+
+           
+
+          )}*/}
+       
+  {educationList.length > 0 && (
+  <>
+    {educationList.map((edu, i) => (
+      <div className="education-grid" key={i}>
+        <div className="form-group">
+          <label>Class / Course</label>
+          <p>{edu.degree}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Specialization</label>
+          <p>{edu.specification}</p>
+        </div>
+
+        <div className="form-group">
+          <label>School / College / University Name</label>
+          <p>{edu.college}</p>
+        </div>
+
+        <div className="form-group">
+          <label>Year Of Studying</label>
+          <p>{edu.year}</p>
+        </div>
+
+        <div className="sign-action-btns">
+          <button
+            type="button"
+            className="sign-action-btn1"
+            onClick={() => {
+              setEducation(edu);
+              setEditIndex(i);
+            }}
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            className="sign-action-btn1 danger"
+            onClick={() => deleteEducation(i)}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ))}
+  </>
+)}
+
 
           {/* Username */}
           <h3 className="section-title">Account Details</h3>

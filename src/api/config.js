@@ -31,7 +31,7 @@ export const publicAxios = axios.create({
 // ✅ Auto-logout timer: runs on page load
 // ✅ Continuous token expiry check
 const closeChatSession = async () => {
-   debugger;
+   
   if (isSessionClosing) return;
   isSessionClosing = true;
 

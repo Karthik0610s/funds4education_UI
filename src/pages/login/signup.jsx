@@ -65,14 +65,14 @@ export default function SignUpPage() {
   const { loading, error } = useSelector((state) => state.signup);
 
   // --- Validation regex ---
-  const nameRegex = /^[A-Za-z]{0,150}$/;
+  const nameRegex = /^[A-Za-z ]{0,150}$/;
   // ✅ Updated email validation
   // Accepts typical company/college emails
   // Accept all standard valid email formats
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const initialRegex = /^[A-Za-z]{0,1}$/;
 
-
-
+const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
 
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
@@ -82,7 +82,7 @@ export default function SignUpPage() {
   const yearRegex = /^[0-9]{4}$/;
   const incomeRegex = /^(₹\s?|Rs\.?\s?)?[0-9,./-]+$/;
 
-  const addressRegex = /^[A-Za-z0-9\s,./()\-\n]+$/;
+  const addressRegex = /^[A-Za-z0-9\s,./():\-\n]+$/;
 
   const anyText350 = /^.{0,350}$/;
 
@@ -168,7 +168,7 @@ export default function SignUpPage() {
         stepErrors.email = "Enter a valid email.";
       }
       if (!basicDetails.firstName) {
-        stepErrors.firstName = "First name is required.";
+        stepErrors.firstName = "Candidate’s Full Name is required.";
       } else if (!nameRegex.test(basicDetails.firstName)) {
         stepErrors.firstName = "Only alphabets allowed (max 150).";
       }
@@ -176,8 +176,8 @@ export default function SignUpPage() {
 
       // Last Name
       if (!basicDetails.lastName) {
-        stepErrors.lastName = "Last name is required.";
-      } else if (!nameRegex.test(basicDetails.lastName)) {
+        stepErrors.lastName = "Candidate’s Inital is required.";
+      } else if (!initialRegex.test(basicDetails.lastName)) {
         stepErrors.lastName = "Only alphabets allowed (max 150).";
       }
 
@@ -204,7 +204,7 @@ if (!basicDetails.countryId) {
 
       // Father Occupation (optional)
       if (basicDetails.fatherOccupation &&
-        !nameRegex.test(basicDetails.fatherOccupation)) {
+        !fatherOccupationRegex.test(basicDetails.fatherOccupation)) {
         stepErrors.fatherOccupation = "Only alphabets allowed (max 150 characters).";
       }
 
@@ -352,7 +352,7 @@ if (!basicDetails.countryId) {
     }
   };
   const handleRemoveSingleFile = (index) => {
-    debugger;
+    
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
     //setExistingDocFiles(updatedFiles);
     setFilesList(updatedFiles);
@@ -407,7 +407,7 @@ if (!basicDetails.countryId) {
       CreatedBy: createdBy,
     };
 
-    debugger;
+    
     // 1️⃣ Insert user and get ID
     const userId = await dispatch(insertNewUser(payload));
     if (!userId) return; // stop if insertion failed
@@ -447,13 +447,13 @@ if (!basicDetails.countryId) {
 
     // REQUIRED validation
     if (!education.specification.trim()) {
-      errorsObj.specification = "Specification is required.";
+      errorsObj.specification = "Specialization is required.";
     } else if (!courseRegex.test(education.specification)) {
-      errorsObj.specification = "Invalid Specification";
+      errorsObj.specification = "Invalid Specialization";
     }
 
     if (!education.college.trim()) {
-      errorsObj.college = "School / College / University is required.";
+      errorsObj.college = "School / College / University Name is required.";
     } else if (!collegeRegex.test(education.college)) {
       errorsObj.college = "Invalid School / College / University.";
     }
@@ -477,28 +477,49 @@ if (!basicDetails.countryId) {
 
 
   const updateEducation = (index) => {
-    let errorsObj = {};
-    // Degree / Course - REQUIRED only
+  let errorsObj = {};
+
+  // Degree
   if (!education.degree.trim()) {
     errorsObj.degree = "Course is required.";
+  } else if (!courseRegex.test(education.degree)) {
+    errorsObj.degree = "Invalid course.";
   }
-    if (!courseRegex.test(education.degree)) errorsObj.degree = "Invalid course.";
-     if (!courseRegex.test(education.specification)) errorsObj.degree = "Invalid specification.";
-    if (!collegeRegex.test(education.college)) errorsObj.college = "Invalid college/university.";
-    if (!yearRegex.test(education.year)) errorsObj.year = "Year must be 4 digits.";
 
-    if (Object.keys(errorsObj).length > 0) {
-      setEduErrors(errorsObj);
-      return;
-    }
+  // Specification
+  if (!education.specification.trim()) {
+    errorsObj.specification = "Specification is required.";
+  } else if (!courseRegex.test(education.specification)) {
+    errorsObj.specification = "Invalid specification.";
+  }
 
-    const updated = [...educationList];
-    updated[index] = education;
-    setEducationList(updated);
-    setEditIndex(null);
-    setEducation({ degree: "", specification:"",college: "", year: "" });
-    setEduErrors({});
-  };
+  // College
+  if (!education.college.trim()) {
+    errorsObj.college = "College/University is required.";
+  } else if (!collegeRegex.test(education.college)) {
+    errorsObj.college = "Invalid college/university.";
+  }
+
+  // Year
+  if (!education.year.trim()) {
+    errorsObj.year = "Year is required.";
+  } else if (!yearRegex.test(education.year)) {
+    errorsObj.year = "Year must be 4 digits.";
+  }
+
+  if (Object.keys(errorsObj).length > 0) {
+    setEduErrors(errorsObj);
+    return;
+  }
+
+  const updated = [...educationList];
+  updated[index] = education;
+  setEducationList(updated);
+  setEditIndex(null);
+  setEducation({ degree: "", specification: "", college: "", year: "" });
+  setEduErrors({});
+};
+
 
   const deleteEducation = (index) => {
     const updated = educationList.filter((_, i) => i !== index);
@@ -517,7 +538,7 @@ if (!basicDetails.countryId) {
         basicDetails.firstName &&
         nameRegex.test(basicDetails.firstName) &&
         basicDetails.lastName &&
-        nameRegex.test(basicDetails.lastName) &&
+        initialRegex.test(basicDetails.lastName) &&
         basicDetails.email &&
         isValidEmail(basicDetails.email) &&
         basicDetails.phone &&
@@ -577,7 +598,7 @@ if (!basicDetails.countryId) {
 
             <div className="row">
               <div className="form-group" >
-                <label>First Name *</label>
+                <label>Candidate’s Full Name *</label>
                 <input
                   type="text"
                   value={basicDetails.firstName}
@@ -586,34 +607,35 @@ if (!basicDetails.countryId) {
                     setBasicDetails({ ...basicDetails, firstName: e.target.value })
                   }
                   className={errors.firstName ? "input-error" : ""}
-                  placeholder="First Name"
+                  placeholder="Candidate’s Full Name"
                 />
                 {errors.firstName && <p className="error-text">{errors.firstName}</p>}
               </div>
               <div className="form-group">
-                <label>Last Name *</label>
+                <label>Candidate’s Initial *</label>
                 <input
                   type="text"
                   value={basicDetails.lastName}
                   onChange={(e) =>
-                    nameRegex.test(e.target.value) &&
+                    initialRegex.test(e.target.value) &&
                     setBasicDetails({ ...basicDetails, lastName: e.target.value })
                   }
                   className={errors.lastName ? "input-error" : ""}
-                  placeholder="Last Name"
+                  placeholder="Candidate’s Initial"
+                  //maxLength={1}
                 />
                 {errors.lastName && <p className="error-text">{errors.lastName}</p>}
               </div>
             </div>
             <div className="row">
               <div className="form-group">
-                <label>Email *</label>
+                <label>Email Id *</label>
                 <input
                   type="text" // can stay email or text
                   value={basicDetails.email}
                   onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
                   className={errors.email ? "input-error" : ""}
-                  placeholder="Email"
+                  placeholder="Email Id"
                 />
 
 
@@ -621,7 +643,7 @@ if (!basicDetails.countryId) {
                 {errors.email && <p className="error-text">{errors.email}</p>}
               </div>
               <div className="form-group">
-                <label>Phone *</label>
+                <label>Phone Number *</label>
                 <input
                   type="text"
                   maxLength={10}
@@ -635,7 +657,7 @@ if (!basicDetails.countryId) {
                     }
                   }}
                   className={errors.phone ? "input-error" : ""}
-                  placeholder="Phone"
+                  placeholder="Phone Number"
                 />
                 {errors.phone && <p className="error-text">{errors.phone}</p>}
               </div>
@@ -679,22 +701,8 @@ if (!basicDetails.countryId) {
               </div>
             </div>
             <div className="row">
-              <div className="form-group" >
-                <label>Father Occupation</label>
-                <input
-                  type="text"
-                  value={basicDetails.fatherOccupation}
-                  onChange={(e) =>
-                    nameRegex.test(e.target.value) &&
-                    setBasicDetails({ ...basicDetails, fatherOccupation: e.target.value })
-                  }
-                  className={errors.fatherOccupation ? "input-error" : ""}
-                  placeholder="Father Occupation"
-                />
-                {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
-              </div>
               <div className="form-group">
-                <label>Mother Occupation </label>
+                <label>Father's Name </label>
                 <input
                   type="text"
                   value={basicDetails.motherOccupation}
@@ -703,14 +711,29 @@ if (!basicDetails.countryId) {
                     setBasicDetails({ ...basicDetails, motherOccupation: e.target.value })
                   }
                   className={errors.motherOccupation ? "input-error" : ""}
-                  placeholder="Mother Occupation"
+                  placeholder="Enter name of father"
                 />
                 {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
               </div>
+              <div className="form-group" >
+                <label>Occupation Of Father</label>
+                <input
+                  type="text"
+                  value={basicDetails.fatherOccupation}
+                  onChange={(e) =>
+                    fatherOccupationRegex.test(e.target.value) &&
+                    setBasicDetails({ ...basicDetails, fatherOccupation: e.target.value })
+                  }
+                  className={errors.fatherOccupation ? "input-error" : ""}
+                  placeholder="Father Occupation"
+                />
+                {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
+              </div>
+              
             </div>
             <div className="row">
               <div className="form-group">
-                <label>Parent's Phone </label>
+                <label>Parent's Phone Number </label>
                 <input
                   type="text"
                   maxLength={10}
@@ -724,12 +747,12 @@ if (!basicDetails.countryId) {
                     }
                   }}
                   className={errors.parentContactNumber ? "input-error" : ""}
-                  placeholder="Parent's Number"
+                  placeholder="Parent's Phone Number"
                 />
                 {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
               </div>
               <div className="form-group">
-                <label>Family Income </label>
+                <label>Family Income Per Annum </label>
                 <input
                   type="text"
                   value={basicDetails.familyIncome}
@@ -738,7 +761,7 @@ if (!basicDetails.countryId) {
                     setBasicDetails({ ...basicDetails, familyIncome: e.target.value })
                   }
                   className={errors.familyIncome ? "input-error" : ""}
-                  placeholder="Family Income"
+                  placeholder="Family Income Per Annum"
                   maxLength={20}
                 />
                 {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
@@ -906,34 +929,46 @@ if (!basicDetails.countryId) {
 
                   </div>
                   <div className="form-group">
-                    <label>Specification <span className="required">*</span></label>
+                    <label>Specialization <span className="required">*</span></label>
                     <input
                       type="text"
-                      placeholder="Specification"
+                      placeholder="Specialization"
                       value={education.specification}
                       onChange={(e) => setEducation({ ...education, specification: e.target.value })}
+                           className={eduErrors.specification ? "input-error" : ""}
                     />
+                      {eduErrors.specification && (
+                      <p className="error-text">{eduErrors.specification}</p>
+                    )}
                   </div>
 
                   <div className="form-group">
-                    <label>School / College / University <span className="required">*</span></label>
+                    <label>School / College / University Name <span className="required">*</span></label>
                     <input
                       type="text"
-                      placeholder="School / College / University"
+                      placeholder="School / College / University Name"
                       value={education.college}
                       onChange={(e) => setEducation({ ...education, college: e.target.value })}
+                         className={eduErrors.college ? "input-error" : ""}
                     />
+                     {eduErrors.college && (
+                      <p className="error-text">{eduErrors.college}</p>
+                    )}
                   </div>
 
                   <div className="form-group">
-                    <label>Year<span className="required">*</span></label>
+                    <label>Year Of Studying<span className="required">*</span></label>
                     <input
                       type="text"
-                      placeholder="Year"
+                      placeholder="Year Of Studying"
                       maxLength={4}
                       value={education.year}
                       onChange={(e) => setEducation({ ...education, year: e.target.value })}
+                         className={eduErrors.year ? "input-error" : ""}
                     />
+                     {eduErrors.year && (
+                      <p className="error-text">{eduErrors.year}</p>
+                    )}
                   </div>
 
                   <div className="sign-action-btns">
@@ -952,17 +987,17 @@ if (!basicDetails.countryId) {
                     <span className="value">{edu.degree}</span>
                   </div>
                   <div className="label-value">
-                    <span className="label">Specification</span>
+                    <span className="label">Specialization</span>
                     <span className="value">{edu.specification}</span>
                   </div>
 
                   <div className="label-value">
-                    <span className="label">School / College / University</span>
+                    <span className="label">School / College / University Name</span>
                     <span className="value">{edu.college}</span>
                   </div>
 
                   <div className="label-value">
-                    <span className="label">Year</span>
+                    <span className="label">Year Of Studying</span>
                     <span className="value">{edu.year}</span>
                   </div>
 
@@ -1014,10 +1049,10 @@ if (!basicDetails.countryId) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label>Specification*</label>
+                  <label>Specialization*</label>
                   <input
                     type="text"
-                    placeholder="Specification"
+                    placeholder="Specialization"
                     value={education.specification}
                     maxLength={150}
                     onChange={(e) =>
@@ -1030,10 +1065,10 @@ if (!basicDetails.countryId) {
                 </div>
 
                 <div className="form-group">
-                  <label>School / College / University *</label>
+                  <label>School / College / University Name *</label>
                   <input
                     type="text"
-                    placeholder="School / College / University"
+                    placeholder="School / College / University Name"
                     value={education.college}
                     maxLength={250}
                     onChange={(e) =>
@@ -1047,10 +1082,10 @@ if (!basicDetails.countryId) {
 
 
                 <div className="form-group">
-                  <label>Year *</label>
+                  <label>Year Of Studying *</label>
                   <input
                     type="text"
-                    placeholder="Year"
+                    placeholder="Year Of Studying"
                     value={education.year}
                     maxLength={4}
                     onChange={(e) => /^\d*$/.test(e.target.value) &&
@@ -1111,7 +1146,7 @@ if (!basicDetails.countryId) {
 
               </div>
               <div className="form-group">
-                <label>Password *</label>
+                <label>Password(Must be min 6 chars, include letters, numbers & special char) *</label>
 
                 <div className="password-wrapper">
                   <input

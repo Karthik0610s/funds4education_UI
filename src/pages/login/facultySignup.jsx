@@ -227,7 +227,7 @@ const handleFileChange = (e) => {
     }
   };
   const handleRemoveSingleFile = (index) => { 
-    debugger;
+    
   const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
   //setExistingDocFiles(updatedFiles);
    setFilesList(updatedFiles);
@@ -259,7 +259,7 @@ const handleClear = () => {
 
   // --- Save (Signup dispatch) ---
   const handleSave = async() => {
-    debugger;
+    
     if (!validateStep()) return;
   const createdBy = `${basicDetails.firstName} ${basicDetails.lastName}`.trim();
 const payload = {
@@ -278,7 +278,7 @@ const payload = {
   CreatedBy: createdBy,  
 };
 
-debugger;
+
    // 1️⃣ Insert user and get ID
   const userId = await dispatch(insertFacultyNewUser(payload));
   if (!userId) return; // stop if insertion failed

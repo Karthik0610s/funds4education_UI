@@ -81,7 +81,7 @@ export const updateScholarshipApplicationReq = async (data) => {
 
 export const deleteScholarshipApplicationReq = async (actionId) => {
   try {
-    debugger;
+    
     const res = await publicAxios.delete(`${ApiKey.ScholarshipApplication}/${actionId}`);
 
     const msg = res.data?.message;
@@ -142,7 +142,7 @@ export const sendScholarshipEmailReq = async (applicationId) => {
 
 export const uploadVideoReq = async (formData) => {
   try {
-    debugger;
+    
      const res = await publicAxios.post(ApiKey.uploadVideoContent,formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

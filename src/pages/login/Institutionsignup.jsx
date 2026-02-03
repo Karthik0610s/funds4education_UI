@@ -206,7 +206,7 @@ const [step, setStep] = useState(0);
       }
     };
     const handleRemoveSingleFile = (index) => { 
-    debugger;
+    
   const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
   //setExistingDocFiles(updatedFiles);
    setFilesList(updatedFiles);
@@ -267,7 +267,7 @@ const [step, setStep] = useState(0);
 
     try {
       const res = await addNewInstitutionSignup(data,dispatch);
-debugger;
+
       if (res && !res.error && res.data) {
          const userId =res.data.institutionID;
       if (!userId) return; 

@@ -3,7 +3,7 @@ import { ApiKey } from "../endpoint";
 // ✅ Signup (insert new user)//
 export const insertFacultyUserReq = async (data) => {
   try {
-    debugger;
+    
     const res = await publicAxios.post(`${ApiKey.Faculty}`, data);
     return { error: false, data: res.data, message: res.data.message || "Signup successful", errorMsg: "" };
   } catch (err) {
@@ -45,7 +45,7 @@ export const insertFacultyUserReq = async (data) => {
 // ✅ Update user profile
 export const updateFacultyUserReq = async (data) => {
   try {
-    debugger;
+    
     const res = await publicAxios.put(`${ApiKey.Faculty}`, data); // 🔐 secure with authAxios
 
     const msg = res.data?.message;
@@ -89,7 +89,7 @@ export const updateFacultyUserReq = async (data) => {
 // ✅ Fetch user profile (after login or for profile page)
 export const fetchFacultyUserProfileReq = async (idOrEmail) => {
   try {
-    debugger;
+    
     const res = await publicAxios.get(`${ApiKey.Faculty}/${idOrEmail}`);
 
     const _data = res.data;

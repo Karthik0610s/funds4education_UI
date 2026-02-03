@@ -42,7 +42,7 @@ export const addNewSponsorReq = async (data) => {
         const _data = res.data;
         return { error: false, data: _data, message: msg, errorMsg: "" };
     }catch (err) {
-      debugger;
+      
   let errorMsg  = "Something went wrong, please try again later";
 
   if (err.response) {

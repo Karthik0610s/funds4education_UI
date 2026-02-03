@@ -565,7 +565,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
 
   const handleSubmit = async (e) => {
-    debugger;
+    
     e.preventDefault();
     if (!validateForm()) return;
 

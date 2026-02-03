@@ -67,7 +67,7 @@ export const insertFacultyNewUser = (data, navigate) => async (dispatch) => {
 // ✅ Action to update user profile//
 export const updateFacultyUserProfile = (data) => async (dispatch) => {
   try {
-    debugger;
+    
     dispatch(setLoading());
     await updateFacultyUserReq(data);
 

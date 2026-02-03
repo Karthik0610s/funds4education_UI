@@ -47,7 +47,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
   const [workEditIndex, setWorkEditIndex] = useState(null);
 
   const handleFileChange = (e) => {
-    debugger;
+    
     const files = Array.from(e.target.files);
     if (!files || files.length === 0) return;
 
@@ -60,7 +60,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
   };
   // Upload files function returns uploaded file names
   const uploadFiles = async (applicationId) => {
-    debugger;
+    
     if (selectedFiles.length < 1) return [];
 
     const formDataPayload = new FormData();
@@ -159,7 +159,7 @@ const isValidEmail = (email) => {
   // ✅ Load profile data
   useEffect(() => {
     if (profile) {
-      debugger;
+      
       setFormData({
         id: profile.id,
         facultyId: profile.facultyId,
@@ -210,7 +210,7 @@ const isValidEmail = (email) => {
 
 
   const handleRemoveSingleFile = (index) => {
-    debugger;
+    
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
     //setExistingDocFiles(updatedFiles);
     setFilesList(updatedFiles);
@@ -404,7 +404,7 @@ const isValidEmail = (email) => {
 
   // ✅ Submit form
   const handleSubmit = async (e) => {
-    debugger;
+    
     e.preventDefault();
     if (isSubmitting) return;   // 🔒 BLOCK second call
     if (!validateForm()) return;
@@ -442,16 +442,16 @@ const isValidEmail = (email) => {
     };
 
     try {
-      debugger;
+      
 
       // ✅ EXACT sponsor pattern
       const res = await dispatch(updateFacultyUserProfile(payload));
-      debugger;
+      
       const userId = res?.id || profile.facultyId;
 
       console.log("UserId:", userId);
       console.log("Selected files:", selectedFiles);
-      debugger;
+      
       if (selectedFiles?.length > 0) {
         await uploadFiles(userId);
       }

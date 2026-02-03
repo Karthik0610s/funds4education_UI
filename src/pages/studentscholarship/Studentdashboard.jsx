@@ -183,7 +183,7 @@ useEffect(() => {
 
 
   useEffect(() => {
-    debugger;
+    
   if (filters.class.length === 0) {
     dispatch(clearCourses());
     return;

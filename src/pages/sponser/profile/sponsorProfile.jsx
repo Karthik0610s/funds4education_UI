@@ -179,7 +179,7 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
   };
   const downloadFileFun = async (id, type) => {
     try {
-      debugger;
+      
       //const res = await AsyncGetFiles(API.downloadScholarshipFiles + "?id=" + id);
       //const res= await 
       const res = await publicAxios.get(
@@ -217,7 +217,7 @@ export default function SponsorProfileForm({ profile, onCancel, onSave }) {
     }
   }, [profile?.id]);
   const handleRemoveSingleFile = (index) => {
-    debugger;
+    
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
     //setExistingDocFiles(updatedFiles);
     setFilesList(updatedFiles);

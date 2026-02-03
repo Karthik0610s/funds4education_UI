@@ -108,7 +108,7 @@ const handleFileChange = (e) => {
     }
   };
   const handleRemoveSingleFile = (index) => { 
-    debugger;
+    
   const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
   //setExistingDocFiles(updatedFiles);
    setFilesList(updatedFiles);
