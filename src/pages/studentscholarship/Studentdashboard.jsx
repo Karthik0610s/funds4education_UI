@@ -639,7 +639,7 @@ const closeAllDropdowns = () => {
   >
     {/* HEADER */}
     <div className="filter-header">
-      <span className="filter-title">Category</span>
+      <span className="filter-title">Filter</span>
       <span
         className="mobile-filter-close"
         onClick={() => {
@@ -658,7 +658,7 @@ const closeAllDropdowns = () => {
         { key: "state", label: "State", options: dropdownData.states },
         { key: "religion", label: "Religion", options: dropdownData.religions },
         { key: "gender", label: "Gender", options: dropdownData.genders },
-        { key: "class", label: "Class", options: dropdownData.classList },
+        { key: "class", label: "Class / Degree", options: dropdownData.classList },
        /* { key: "course", label: "Course", options: courses }, */
       ].map(({ key, label, options }) => (
         <div
@@ -754,7 +754,7 @@ const closeAllDropdowns = () => {
         <FaSearch className="search-icon" />
         <input
           type="text"
-          placeholder="Search by name, eligibility or award..."
+          placeholder="Search by Scholarshipname, Eligibility , Amount or More..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -770,8 +770,7 @@ const closeAllDropdowns = () => {
   onClick={handleEligibilityClick}
   disabled={!canSeeEligibility}
 >
-  Eligibility
-</button>
+Based on Eligibility</button>
 
                 <button
                   className={`tab-btn ${eligibilityTab === "all" ? "active" : ""}`}
@@ -852,19 +851,6 @@ const closeAllDropdowns = () => {
                     <div
                       className="scholarship-card"
                       key={i}
-                      onClick={() =>
-  navigate(
-    `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId}`,
-    {
-      state: {
-        from: location.search, // ✅ FULL dashboard state
-        id: s.id || s.scholarshipId
-      },
-    }
-  )
-}
-
-
                     >
                       {!activeTab.includes("upcoming") && isFeatured && (
                         <div className="featured-tag">Featured</div>
@@ -966,14 +952,33 @@ const closeAllDropdowns = () => {
                         )}
 
 
-                        <div className="card-footer-updated">
-                          Last Updated On{" "}
-                          {s.lastUpdatedDate
-                            ? new Date(s.lastUpdatedDate)
-                              .toISOString()
-                              .split("T")[0]
-                            : "N/A"}
-                        </div>
+                       <div className="card-footer-row">
+  <button
+    className="view-more-btn"
+    onClick={(e) => {
+      e.stopPropagation();
+      navigate(
+        `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId}`,
+        {
+          state: {
+            from: location.search,
+            id: s.id || s.scholarshipId,
+          },
+        }
+      );
+    }}
+  >
+    View Details...
+  </button>
+
+  <span className="last-updated-text">
+    Last Updated On{" "}
+    {s.lastUpdatedDate
+      ? new Date(s.lastUpdatedDate).toISOString().split("T")[0]
+      : "N/A"}
+  </span>
+</div>
+
                       </div>
                     </div>
                   );
