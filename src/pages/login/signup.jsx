@@ -656,13 +656,13 @@ if (!basicDetails.countryId) {
             </div>
             <div className="row">
               <div className="form-group">
-                <label>Email Id *</label>
+                <label>Email ID *</label>
                 <input
                   type="text" // can stay email or text
                   value={basicDetails.email}
                   onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
                   className={errors.email ? "input-error" : ""}
-                  placeholder="Email Id"
+                  placeholder="Email ID"
                 />
 
 
@@ -743,7 +743,7 @@ if (!basicDetails.countryId) {
                 {errors.motherOccupation && <p className="error-text">{errors.motherOccupation}</p>}
               </div>
               <div className="form-group" >
-                <label>Occupation Of Father</label>
+                <label>Occupation of Father</label>
                 <input
                   type="text"
                   value={basicDetails.fatherOccupation}
@@ -779,7 +779,7 @@ if (!basicDetails.countryId) {
                 {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
               </div>
               <div className="form-group">
-                <label>Family Income Per Annum </label>
+                <label>Family Income per Annum </label>
                 <input
                   type="text"
                   value={basicDetails.familyIncome}
@@ -788,7 +788,7 @@ if (!basicDetails.countryId) {
                     setBasicDetails({ ...basicDetails, familyIncome: e.target.value })
                   }
                   className={errors.familyIncome ? "input-error" : ""}
-                  placeholder="Family Income Per Annum"
+                  placeholder="Family Income per Annum"
                   maxLength={20}
                 />
                 {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
@@ -1056,10 +1056,10 @@ if (!basicDetails.countryId) {
                   </div>
 
                   <div className="form-group">
-                    <label>Year Of Studying<span className="required">*</span></label>
+                    <label>Year of Studying<span className="required">*</span></label>
                     <input
                       type="text"
-                      placeholder="Year Of Studying"
+                      placeholder="Year of Studying"
                       maxLength={4}
                       value={education.year}
                       onChange={(e) => setEducation({ ...education, year: e.target.value })}
@@ -1096,7 +1096,7 @@ if (!basicDetails.countryId) {
                   </div>
 
                   <div className="label-value">
-                    <span className="label">Year Of Studying</span>
+                    <span className="label">Year of Studying</span>
                     <span className="value">{edu.year}</span>
                   </div>
 
@@ -1236,10 +1236,10 @@ if (!basicDetails.countryId) {
 
 
                 <div className="form-group">
-                  <label>Year Of Studying *</label>
+                  <label>Year of Studying *</label>
                   <input
                     type="text"
-                    placeholder="Year Of Studying"
+                    placeholder="Year of Studying"
                     value={education.year}
                     maxLength={4}
                     onChange={(e) => /^\d*$/.test(e.target.value) &&
@@ -1281,7 +1281,7 @@ if (!basicDetails.countryId) {
             </div>
             <div className="row">
               <div className="form-group">
-                <label>User Name(Email) *</label>
+                <label>Username (Email) *</label>
                 <input
                   type="text"
                   placeholder="Enter your email"
@@ -1300,7 +1300,10 @@ if (!basicDetails.countryId) {
 
               </div>
               <div className="form-group">
-                <label>Password(Must be min 6 chars, include letters, numbers & special char) *</label>
+              <label>
+  Password<span className="hint">(Must be min 6 chars, include letters, numbers & special char)</span> *
+</label>
+
 
                 <div className="password-wrapper">
                   <input

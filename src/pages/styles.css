@@ -1782,7 +1782,15 @@ main::-webkit-scrollbar-thumb:hover {
   border-radius: 6px;
   cursor: pointer;
 }
+.detail-row label {
+  width: 200px;
+  /* fixed width for alignment */
+  font-weight: bold;
+  
+    padding-left: 30px;
 
+  /* align label text to the right */
+}
 .msg-btn:hover {
   background: #174747;
 }
@@ -2887,7 +2895,7 @@ input:not([type="radio"]) {
 }
 
 input:not([type="radio"]):not([type="checkbox"]) {
-  padding: 10px;
+  padding: 8px;
   font-size: 16px;
   flex: 1 1;
   min-width: 200px;
@@ -3207,9 +3215,14 @@ input:not([type="radio"]):not([type="checkbox"]) {
 .sign-action-btns {
    display: flex; 
   gap: 5px;
+      padding-top: 30px;
 }
 
-
+.hint {
+  font-size: 12px;
+  color: #777;
+  margin-left: 4px;
+}
 /*login.css*/
 /* ==============================
    LOGIN PAGE BASE STYLES
@@ -3891,31 +3904,73 @@ input:not([type="radio"]):not([type="checkbox"]) {
   gap: 12px;
   /* space between rows */
 }
+.education-item{
+  display: ruby;
 
+}
 .detail-row {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
 }
 
-@media (max-width: 420px) {
+/* ===============================
+   Mobile View – ALL phones
+   =============================== */
+@media (max-width: 768px) {
   .detail-row {
-    flex-direction: column;
-    /* stack label and input vertically */
+    flex-direction: column;      /* stack label + input */
     align-items: flex-start;
-    /* align them to the left */
+  }
+
+  .education-item {
+    display: grid;
+    row-gap: 12px;
   }
 
   .detail-row label {
     margin-bottom: 4px;
-    /* small gap between label and input */
     font-weight: 600;
+    padding-left: 5px;
+    width: 100%;
   }
 
   .detail-row input {
     width: 100%;
-    /* make input full width */
     font-size: 14px;
+    min-width: 0 !important;     /* 🔑 VERY IMPORTANT */
+    flex: unset;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .detail-row label {
+    width: 160px;          /* smaller than desktop */
+    min-width: 160px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .detail-row input {
+    flex: 1;
+    font-size: 15px;
+    min-width: 0;
+  }
+
+  .education-item {
+    padding: 0px;
+  }
+
+  .signup-card {
+    padding: 20px;
   }
 }
 
@@ -4252,14 +4307,21 @@ ul.scholarship-view-text li {
   gap: 16px;
 }
 
-.detail-row label {
-  width: 200px;
-  /* fixed width for alignment */
-  font-weight: bold;
 
-  /* align label text to the right */
+.add-action-btn{
+      background: #1d4f56;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 6px 10px;
 }
 
+.add-action-btns{
+  display: flex;
+  padding-top: 30px;
+}
 .detail-row input {
   flex: 1;
   /* input takes remaining space */
