@@ -10,10 +10,15 @@ import Swal from "sweetalert2";
 import { uploadFormFilesReq } from "../../api/scholarshipapplication/scholarshipapplication";
 import { ApiKey } from "../../api/endpoint";
 import { publicAxios } from "../../api/config";
+import { fetchCoursesByClassReq } from "../../api/Scholarship/SponsorScholarship";
+import CreatableSelect from "react-select/creatable";
+
 export default function SignUpPage() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState("student"); // default to student
   const [showPassword, setShowPassword] = useState(false);
+const [selectedClassId, setSelectedClassId] = useState(null);
+const [specializationList, setSpecializationList] = useState([]);
 
   const fileInputRef = useRef(null);
   const [basicDetails, setBasicDetails] = useState({
@@ -155,6 +160,28 @@ const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
     fetchCountries();
     fetchStates();// fetch countries on component mount
   }, []);
+
+  useEffect(() => {
+    debugger;
+  if (!selectedClassId) return;
+
+  const loadSpecialization = async () => {
+    try {
+      debugger;
+      const res = await fetchCoursesByClassReq(selectedClassId);
+      setSpecializationList(res.data || []);
+    } catch (err) {
+      console.error("Failed to load specialization");
+      setSpecializationList([]);
+    }
+  };
+
+  loadSpecialization();
+}, [selectedClassId]);
+const specializationOptions = specializationList.map(c => ({
+  value: c.courseId,
+  label: c.courseName
+}));
 
   // --- Validation per step ---
   const validateStep = () => {
@@ -907,7 +934,7 @@ if (!basicDetails.countryId) {
 
                   <div className="form-group">
                     <label>Class/Course <span className="required">*</span></label>
-                    <select
+                    {/*<select
                       value={education.degree}
                       onChange={(e) =>
                         setEducation({ ...education, degree: e.target.value })
@@ -921,7 +948,32 @@ if (!basicDetails.countryId) {
                           {course.className}
                         </option>
                       ))}
-                    </select>
+                    </select>*/}
+<select
+  value={education.degree}
+   onChange={(e) => {
+    const value = e.target.value;
+
+    setEducation({
+      ...education,
+      degree: value,
+      specification: ""
+    });
+
+    const selected = courses.find(c => c.className === value);
+
+    if (selected) {
+      setSelectedClassId(selected.classId);
+    }
+  }}
+>
+  <option value="">Select Class / Course</option>
+  {courses.map(course => (
+    <option key={course.classId} value={course.className}>
+      {course.className}
+    </option>
+  ))}
+</select>
 
                     {eduErrors.degree && (
                       <p className="error-text">{eduErrors.degree}</p>
@@ -930,13 +982,60 @@ if (!basicDetails.countryId) {
                   </div>
                   <div className="form-group">
                     <label>Specialization <span className="required">*</span></label>
-                    <input
+                    {/*<input
                       type="text"
                       placeholder="Specialization"
                       value={education.specification}
                       onChange={(e) => setEducation({ ...education, specification: e.target.value })}
                            className={eduErrors.specification ? "input-error" : ""}
-                    />
+                    />*/}
+                    <CreatableSelect
+  options={specializationOptions}
+  placeholder="Select or type specialization"
+  value={
+    specializationOptions.find(
+      opt => opt.label === education.specification
+    ) || (
+      education.specification
+        ? { label: education.specification, value: education.specification }
+        : null
+    )
+  }
+  onChange={(selected) => {
+    if (!selected) {
+      setEducation(prev => ({
+        ...prev,
+        specification: ""
+      }));
+      return;
+    }
+
+    setEducation(prev => ({
+      ...prev,
+      specification: selected.label
+    }));
+  }}
+  onCreateOption={(inputValue) => {
+    setEducation(prev => ({
+      ...prev,
+      specification: inputValue
+    }));
+  }}
+ isClearable
+  styles={{
+    control: (base) => ({
+      ...base,
+      borderRadius: "6px",
+      minHeight: "44px"
+    }),
+    input: (base) => ({
+      ...base,
+      boxShadow: "none"
+    })
+  }}
+/>
+
+
                       {eduErrors.specification && (
                       <p className="error-text">{eduErrors.specification}</p>
                     )}
@@ -1004,6 +1103,15 @@ if (!basicDetails.countryId) {
                   <div className="sign-action-btns">
                     <button
                       onClick={() => {
+                      
+              const selected = courses.find(
+    c => c.className === edu.degree
+  );
+
+  if (selected) {
+    setSelectedClassId(selected.classId);
+  }
+
                         setEditIndex(index);
                         setEducation(edu);
                         setShowEducationFields(false);
@@ -1031,9 +1139,21 @@ if (!basicDetails.countryId) {
 
                   <select
                     value={education.degree}
-                    onChange={(e) =>
-                      setEducation({ ...education, degree: e.target.value })
-                    }
+                   onChange={(e) => {
+    const value = e.target.value;
+
+    setEducation({
+      ...education,
+      degree: value,
+      specification: ""
+    });
+
+    const selected = courses.find(c => c.className === value);
+
+    if (selected) {
+      setSelectedClassId(selected.classId);
+    }
+  }}
                     className={eduErrors.degree ? "input-error" : ""}
                   >
                     <option value="">Select Class / Course</option>
@@ -1050,7 +1170,7 @@ if (!basicDetails.countryId) {
                 </div>
                 <div className="form-group">
                   <label>Specialization*</label>
-                  <input
+                 {/* <input
                     type="text"
                     placeholder="Specialization"
                     value={education.specification}
@@ -1060,7 +1180,41 @@ if (!basicDetails.countryId) {
                       setEducation({ ...education, specification: e.target.value })
                     }
                     className={eduErrors.specification ? "input-error" : ""}
-                  />
+                  />*/} <CreatableSelect
+  options={specializationOptions}
+  placeholder="Select or type specialization"
+  value={
+    specializationOptions.find(
+      opt => opt.label === education.specification
+    ) || (
+      education.specification
+        ? { label: education.specification, value: education.specification }
+        : null
+    )
+  }
+  onChange={(selected) => {
+    if (!selected) {
+      setEducation(prev => ({
+        ...prev,
+        specification: ""
+      }));
+      return;
+    }
+
+    setEducation(prev => ({
+      ...prev,
+      specification: selected.label
+    }));
+  }}
+  onCreateOption={(inputValue) => {
+    setEducation(prev => ({
+      ...prev,
+      specification: inputValue
+    }));
+  }}
+ isClearable
+ 
+/>
                   {eduErrors.specification && <p className="error-text">{eduErrors.specification}</p>}
                 </div>
 

@@ -949,40 +949,100 @@ const [originalFiles, setOriginalFiles] = useState([]);
               <div className="row mt-3">
 
                 
-                {/*<div className="form-group col-6">
+                <div className="form-group col-6">
                   <label>Class</label>
                 
                   <Select
-                    isMulti
-                    isDisabled={isView}
-                    options={[
-                      { label: "ALL", value: "ALL" },
-                      ...classes.map(cls => ({ label: cls.className, value: cls.classId.toString() }))
-                    ]}
-                    value={getSelectValue(filters.className, classes, "className", "classId")}
-                    onChange={(selected) => {
-                      // Store selected class IDs as "1,2,3"
-                      handleReactSelect(
-                        "className",
-                        selected,
-                        classes.map(cls => ({ label: cls.className, value: cls.classId.toString() })),
-                        setFilters
-                      );
+  isMulti
+  isDisabled={isView}
+  closeMenuOnSelect={false}
+  blurInputOnSelect={false}
+  controlShouldRenderValue={false}
+  options={[
+    { label: "ALL", value: "ALL" },
+    ...classes.map(cls => ({
+      label: cls.className,
+      value: cls.classId.toString()
+    }))
+  ]}
+  value={getSelectValue(filters.className, classes, "className", "classId")}
+  onChange={(selected) => {
+    handleReactSelect(
+      "className",
+      selected,
+      classes.map(cls => ({
+        label: cls.className,
+        value: cls.classId.toString()
+      })),
+      setFilters
+    );
+ 
+    setFilters(prev => ({ ...prev, course: "" }));
+ 
+    const selectedIds = selected
+      ?.filter(x => x.value !== "ALL")
+      .map(x => x.value)
+      .join(",");
+ 
+    if (selectedIds) {
+      dispatch(fetchCoursesByClass(selectedIds));
+    }
+  }}
+/>
+<div className="selected-values mt-2">
 
-                      // Reset course when class changes
-                      setFilters(prev => ({ ...prev, course: "" }));
+  {getSelectValue(filters.className, classes, "className", "classId")?.map(item => (
+<span key={item.value} className="selected-chip">
 
-                      // Generate "1,2,3" CSV from selected values
-                      const selectedIds = selected
-                        ?.filter(x => x.value !== "ALL")
-                        .map(x => x.value)
-                        .join(",");
+      {item.label}
+<button
 
-                      if (selectedIds) {
-                        dispatch(fetchCoursesByClass(selectedIds));
-                      }
-                    }}
-                  />
+        type="button"
+
+        className="chip-close"
+
+        onClick={() => {
+
+          const updated = getSelectValue(
+
+            filters.className,
+
+            classes,
+
+            "className",
+
+            "classId"
+
+          ).filter(x => x.value !== item.value);
+
+          handleReactSelect(
+
+            "className",
+
+            updated,
+
+            classes.map(cls => ({
+
+              label: cls.className,
+
+              value: cls.classId.toString()
+
+            })),
+
+            setFilters
+
+          );
+
+        }}
+>
+
+        ×
+</button>
+</span>
+
+  ))}
+</div>
+ 
 
 
                 </div>
@@ -990,25 +1050,70 @@ const [originalFiles, setOriginalFiles] = useState([]);
                
                 <div className="form-group col-6">
                   <label>Course</label>
-                  <Select
-                    isMulti
+                 <Select
+  isMulti
+  isDisabled={isView || !filters.className}
+  closeMenuOnSelect={false}
+  blurInputOnSelect={false}
+  controlShouldRenderValue={false}
+  options={[
+    { label: "ALL", value: "ALL" },
+    ...courses.map(c => ({
+      label: c.courseName,
+      value: c.courseId.toString()
+    }))
+  ]}
+  value={getSelectValue(filters.course, courses, "courseName", "courseId")}
+  onChange={(selected) =>
+    handleReactSelect(
+      "course",
+      selected,
+      courses.map(c => ({
+        label: c.courseName,
+        value: c.courseId.toString()
+      })),
+      setFilters
+    )
+  }
+/>
+ <div className="selected-values mt-2">
+  {getSelectValue(filters.course, courses, "courseName", "courseId")?.map(item => (
+    <span key={item.value} className="selected-chip">
+      {item.label}
+      <button
+        type="button"
+        className="chip-close"
+        onClick={() => {
+          const updated = getSelectValue(
+            filters.course,
+            courses,
+            "courseName",
+            "courseId"
+          ).filter(x => x.value !== item.value);
 
-                    isDisabled={isView || !filters.className}
-                    options={[
-                      { label: "ALL", value: "ALL" },
-                      ...courses.map(c => ({ label: c.courseName, value: c.courseId.toString() }))
-                    ]}
-                    value={getSelectValue(filters.course, courses, "courseName", "courseId")}
-                    onChange={(selected) =>
-                      handleReactSelect(
-                        "course",
-                        selected,
-                        courses.map(c => ({ label: c.courseName, value: c.courseId.toString() })),
-                        setFilters
-                      )
-                    }
-                  />
-                </div>*/}
+          handleReactSelect(
+            "course",
+            updated,
+            courses.map(c => ({
+              label: c.courseName,
+              value: c.courseId.toString()
+            })),
+            setFilters
+          );
+        }}
+      >
+        ×
+      </button>
+    </span>
+  ))}
+</div>
+ 
+
+
+
+
+
+                </div>
               </div>
             </div>
 

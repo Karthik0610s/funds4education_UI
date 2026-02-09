@@ -8,9 +8,12 @@ import { ApiKey } from "../../../api/endpoint";
 import { publicAxios } from "../../../api/config";
 import { fetchStudentProfile } from "../../../app/redux/slices/studentSlice";
 import { FiX } from "react-icons/fi";
+import CreatableSelect from "react-select/creatable";
+import { fetchCoursesByClassReq } from "../../../api/Scholarship/SponsorScholarship";
 export default function StudentProfileForm({ profile, onCancel, onSave }) {
   const dispatch = useDispatch();
-
+const [selectedClassId, setSelectedClassId] = useState(null);
+const [specializationList, setSpecializationList] = useState([]);
   const [formData, setFormData] = useState({
     id: "",
     firstName: "",
@@ -173,6 +176,7 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
   }, [profile?.id]);
 
 
+
   const isValidEmails = (email) => {
     if (!email) return false;
 
@@ -326,6 +330,27 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
     fetchCountries();
     fetchStates();// fetch countries on component mount
   }, []);
+  useEffect(() => {
+      debugger;
+    if (!selectedClassId) return;
+  
+    const loadSpecialization = async () => {
+      try {
+        debugger;
+        const res = await fetchCoursesByClassReq(selectedClassId);
+        setSpecializationList(res.data || []);
+      } catch (err) {
+        console.error("Failed to load specialization");
+        setSpecializationList([]);
+      }
+    };
+  
+    loadSpecialization();
+  }, [selectedClassId]);
+  const specializationOptions = specializationList.map(c => ({
+  value: c.courseId,
+  label: c.courseName
+}));
   // ✅ Validation (same as in UserForm)
   const validateForm = () => {
     const errs = {};
@@ -376,10 +401,14 @@ export default function StudentProfileForm({ profile, onCancel, onSave }) {
      if (!fatherOccupationRegex.test(formData.fatherOccupation)) {
       errs.fatherOccupation = "Only alphabets allowed (max 150 characters).";
     }
-    if (!nameRegex.test(formData.motherOccupation)) {
-      errs.motherOccupation = "Only alphabets allowed (max 150 characters).";
-    }
-    
+   if (
+  formData.motherOccupation &&
+  !nameRegex.test(formData.motherOccupation)
+) {
+  errs.motherOccupation =
+    "Only alphabets allowed (max 150 characters).";
+}
+
 
     if (!formData.gender) errs.gender = "Gender is required.";
     {/*if (!formData.userName.trim()) {
@@ -888,9 +917,24 @@ if (!formData.countryId) {
          <label>Class/Course <span className="required">*</span></label>
       <select
         value={education.degree}
-        onChange={(e) =>
+       /* onChange={(e) =>
           setEducation({ ...education, degree: e.target.value })
-        }
+        }*/
+      onChange={(e) => {
+    const value = e.target.value;
+
+    setEducation({
+      ...education,
+      degree: value,
+      specification: ""
+    });
+
+    const selected = courses.find(c => c.className === value);
+
+    if (selected) {
+      setSelectedClassId(selected.classId);
+    }
+  }}
         //className={eduErrors.degree ? "input-error" : ""}
       >
         <option value="">Select Class / Course</option>
@@ -904,13 +948,48 @@ if (!formData.countryId) {
 
     <div className="form-group">
          <label>Specialization <span className="required">*</span></label>
-      <input
+      {/*<input
         type="text"
         placeholder="Specialization"
         value={education.specification}
         onChange={(e) =>
           setEducation({ ...education, specification: e.target.value })
         }
+      />*/}
+       <CreatableSelect
+        options={specializationOptions}
+        placeholder="Select or type specialization"
+        value={
+          specializationOptions.find(
+            opt => opt.label === education.specification
+          ) || (
+            education.specification
+              ? { label: education.specification, value: education.specification }
+              : null
+          )
+        }
+        onChange={(selected) => {
+          if (!selected) {
+            setEducation(prev => ({
+              ...prev,
+              specification: ""
+            }));
+            return;
+          }
+      
+          setEducation(prev => ({
+            ...prev,
+            specification: selected.label
+          }));
+        }}
+        onCreateOption={(inputValue) => {
+          setEducation(prev => ({
+            ...prev,
+            specification: inputValue
+          }));
+        }}
+       isClearable
+       
       />
     </div>
 
@@ -1034,8 +1113,17 @@ if (!formData.countryId) {
             type="button"
             className="sign-action-btn1"
             onClick={() => {
+              const selected = courses.find(
+    c => c.className === edu.degree
+  );
+
+  if (selected) {
+    setSelectedClassId(selected.classId);
+  }
+
               setEducation(edu);
               setEditIndex(i);
+              
             }}
           >
             Edit
