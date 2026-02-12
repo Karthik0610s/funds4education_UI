@@ -117,14 +117,10 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
       const answer = res.data.answer;
  
       setMessages((prev) => [...prev,
-        // { sender: "agent", text: reply }
-        {
-        sender: "agent",
-        text: `${answer.code} - ${answer.name} (Deadline: ${answer.deadline})`,
-        scholarshipId: answer.id, // ✅ store id separately
-      },
+      { sender: "agent", text: answer }
+        
         ]);
-      console.log(messages,"return message ");
+     
     } catch (error) {
       console.error(error);
       setMessages((prev) => [
@@ -134,6 +130,186 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
     }
       setIsTyping(false);
   };
+
+ /*const parseScholarships = (text) => {
+  if (!text) return null;
+
+  // paragraph-only cases
+  if (
+    text.toLowerCase().includes("no matching") ||
+    text.toLowerCase().includes("no scholarship") ||
+    text.toLowerCase().includes("none.")
+  ) {
+    return null;
+  }
+
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+
+  let result = [];
+  let current = null;
+
+  lines.forEach(line => {
+    // Case 1: single-line format
+    // - SCH-002: Name — Due Date: 2025-12-31
+    let singleMatch = line.match(
+      /-\s*(.*?):\s*(.*?)\s*—\s*Due Date:\s*(.*)/i
+    );
+
+    if (singleMatch) {
+      result.push({
+        code: singleMatch[1],
+        name: singleMatch[2],
+        dueDate: singleMatch[3],
+      });
+      return;
+    }
+
+    // Case 2: multiline format start
+    if (line.startsWith("- SCH")) {
+      current = {
+        code: line.replace("-", "").trim(),
+        name: "",
+        dueDate: "",
+      };
+      result.push(current);
+      return;
+    }
+
+    // scholarship name
+    if (current && current.name === "" && line.startsWith("-")) {
+      current.name = line.replace("-", "").trim();
+      return;
+    }
+
+    // due date line
+    if (current && line.includes("Due Date:")) {
+      current.dueDate = line.split("Due Date:")[1].trim();
+      current = null;
+    }
+  });
+
+  if (result.length === 0) return null;
+
+  return result;
+};
+*/
+/*const parseScholarships = (text) => {
+  if (!text) return null;
+
+  const lower = text.toLowerCase();
+
+  // paragraph-only responses
+  if (
+    lower.includes("no scholarship") ||
+    lower.includes("no matching") ||
+    lower.includes("for reference")
+  ) {
+    return null;
+  }
+
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+
+  const results = [];
+
+  // ---------- FORMAT 1 ----------
+  // Scholarship Id | Code | Name | Due Date
+  lines.forEach(line => {
+    if (line.includes("Scholarship Id")) {
+      const idMatch = line.match(/Scholarship Id:\s*(\d+)/i);
+      const codeMatch = line.match(/Scholarship Code:\s*([^|]+)/i);
+      const nameMatch = line.match(/Name:\s*([^|]+)/i);
+      const dueMatch = line.match(/Due Date:\s*(.*)/i);
+
+      if (codeMatch && nameMatch) {
+        results.push({
+          scholarshipId: idMatch?.[1] || null,
+          code: codeMatch[1].trim(),
+          name: nameMatch[1].trim(),
+          dueDate: dueMatch?.[1]?.trim() || ""
+        });
+      }
+    }
+  });
+
+  if (results.length) return results;
+
+  // ---------- FORMAT 2 ----------
+  // - SCHxxx Name — Due Date
+  lines.forEach(line => {
+    if (line.startsWith("- SCH")) {
+      const parts = line.replace("-", "").split("—");
+
+      if (parts.length >= 2) {
+        const first = parts[0].trim();
+        const due = parts[1].replace("Due Date:", "").trim();
+
+        const code = first.split(" ")[0];
+        const name = first.replace(code, "").trim();
+
+        results.push({
+          code,
+          name,
+          dueDate: due
+        });
+      }
+    }
+  });
+
+  if (results.length) return results;
+
+  // ---------- FORMAT 3 ----------
+  // multiline block
+  let current = {};
+
+  lines.forEach(line => {
+    if (line.startsWith("- SCH")) {
+      if (current.code && current.name) results.push(current);
+
+      current = { code: line.replace("-", "").trim() };
+    }
+
+    else if (line.startsWith("-") && !line.includes("Due Date")) {
+      current.name = line.replace("-", "").trim();
+    }
+
+    else if (line.includes("Due Date")) {
+      current.dueDate = line.split(":")[1]?.trim();
+    }
+  });
+
+  if (current.code && current.name) results.push(current);
+
+  return results.length ? results : null;
+};*/
+const parseScholarships = (text) => {
+  if (!text) return null;
+
+  try {
+    const data = JSON.parse(text);
+
+    if (!data.hasMatches) {
+      return {
+        hasMatches: false,
+        message: data.message,
+        scholarships: []
+      };
+    }
+
+    return {
+      hasMatches: true,
+      message: data.message,
+      scholarships: data.scholarships || []
+    };
+
+  } catch {
+    return null;
+  }
+};
+
+
+
+
+
  
   return (
     <>
@@ -152,35 +328,75 @@ const res = await publicAxios.post(`${ApiKey.GetSessionId}?userid=${userId}`);
               ✕
             </button>
           </div>
+ <div className="chat-body">
+  {messages.map((msg, idx) => {
+    const scholarships =
+      msg.sender === "agent"
+        ? parseScholarships(msg.text)
+        : null;
  
-          <div className="chat-body">
-            {messages.map((msg, idx) => (
-              <p
-                key={idx}
-                className={msg.sender === "user" ? "user-msg" : "agent-msg"}
+    return (
+      <p
+        key={idx}
+        className={
+          msg.sender === "user" ? "user-msg" : "agent-msg"
+        }
+      >
+        <strong>
+          {msg.sender === "user" ? "You" : "Agent"}:
+        </strong>{" "}
+
+        {msg.sender === "agent" && scholarships ? (
+          <>
+    {/* Agent message */}
+    <span>{scholarships.message}</span>
+
+    {/* Show table only if matches */}
+    {scholarships.hasMatches && (
+      <table className="chat-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Scholarship</th>
+          </tr>
+        </thead>
+        <tbody>
+          {scholarships.scholarships.map((s, i) => (
+            <tr key={i}>
+              <td>{i + 1}</td>
+              <td
+                className="chat-link"
+                onClick={() =>
+                  navigate(
+                    `${RP.scholarshipViewPage}?id=${s.scholarshipId}`
+                  )
+                }
               >
-                <strong>{msg.sender === "user" ? "You" : "Agent"}:</strong>{" "}
-                {/*{msg.text}*/}
-                <span
-          className="chat-link"
-          onClick={() =>
-            navigate(
-              `${RP.scholarshipViewPage}?id=${msg.scholarshipId}`
-            )
-          }
-        >
-          {msg.text}
-        </span>
-              </p>
-            ))}
-             {/* ⭐ Agent Typing Indicator */}
+                {s.name}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </>
+        ) : (
+          <span>{msg.text}</span>
+        )}
+      </p>
+    );
+  })}
+   {/* ⭐ Typing indicator */}
   {isTyping && (
     <p className="agent-msg typing-indicator">
-      Agent is typing...<span className="dots"></span>
+      <strong>Agent is typing...<span className="dots"></span></strong>
     </p>
   )}
-            <div ref={chatEndRef} />
-          </div>
+
+  <div ref={chatEndRef} />
+</div>
+
+
  
           <div className="chat-input-area">
             <input
