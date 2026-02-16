@@ -153,7 +153,7 @@ const navigate = useNavigate();
                     <input type="text" value={edu.degree || ""} readOnly />
                   </div>
                    <div className="detail-row">
-                    <label>Specialization:</label>
+                    <label>Discipline / Specialization:</label>
                     <input type="text" value={edu.specification || ""} readOnly />
                   </div>
                   <div className="detail-row">

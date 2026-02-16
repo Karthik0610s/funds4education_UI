@@ -452,7 +452,7 @@ if (!formData.countryId) {
       return;
     }
     if (!education.specification.trim()) {
-      setErrors(prev => ({ ...prev, education: "Specification is required." }));
+      setErrors(prev => ({ ...prev, education: "Discipline / Specialization is required." }));
       return;
     }
     {/*
@@ -945,7 +945,7 @@ if (!formData.countryId) {
     </div>
 
     <div className="form-group">
-         <label>Specialization <span className="required">*</span></label>
+         <label>Discipline / Specialization <span className="required">*</span></label>
       {/*<input
         type="text"
         placeholder="Specialization"
@@ -956,7 +956,7 @@ if (!formData.countryId) {
       />*/}
        <CreatableSelect
         options={specializationOptions}
-        placeholder="Select or type specialization"
+        placeholder="Select or type discipline / specialization"
         value={
           specializationOptions.find(
             opt => opt.label === education.specification
@@ -1092,7 +1092,7 @@ if (!formData.countryId) {
         </div>
 
         <div className="form-group">
-          <label>Specialization</label>
+          <label>Discipline / Specialization</label>
           <p>{edu.specification}</p>
         </div>
 

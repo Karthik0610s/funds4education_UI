@@ -474,9 +474,9 @@ if (!basicDetails.countryId) {
 
     // REQUIRED validation
     if (!education.specification.trim()) {
-      errorsObj.specification = "Specialization is required.";
+      errorsObj.specification = "Discipline / Specialization is required.";
     } else if (!courseRegex.test(education.specification)) {
-      errorsObj.specification = "Invalid Specialization";
+      errorsObj.specification = "Invalid Discipline / Specialization";
     }
 
     if (!education.college.trim()) {
@@ -515,9 +515,9 @@ if (!basicDetails.countryId) {
 
   // Specification
   if (!education.specification.trim()) {
-    errorsObj.specification = "Specification is required.";
+    errorsObj.specification = "Discipline / Specialization is required.";
   } else if (!courseRegex.test(education.specification)) {
-    errorsObj.specification = "Invalid specification.";
+    errorsObj.specification = "Invalid Discipline / Specialization.";
   }
 
   // College
@@ -981,7 +981,7 @@ if (!basicDetails.countryId) {
 
                   </div>
                   <div className="form-group">
-                    <label>Specialization <span className="required">*</span></label>
+                    <label>Discipline / Specialization <span className="required">*</span></label>
                     {/*<input
                       type="text"
                       placeholder="Specialization"
@@ -991,7 +991,7 @@ if (!basicDetails.countryId) {
                     />*/}
                     <CreatableSelect
   options={specializationOptions}
-  placeholder="Select or type specialization"
+  placeholder="Select or type discipline / specialization"
   value={
     specializationOptions.find(
       opt => opt.label === education.specification
@@ -1086,7 +1086,7 @@ if (!basicDetails.countryId) {
                     <span className="value">{edu.degree}</span>
                   </div>
                   <div className="label-value">
-                    <span className="label">Specialization</span>
+                    <span className="label">Discipline / Specialization</span>
                     <span className="value">{edu.specification}</span>
                   </div>
 
@@ -1169,7 +1169,7 @@ if (!basicDetails.countryId) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label>Specialization*</label>
+                  <label>Discipline / Specialization*</label>
                  {/* <input
                     type="text"
                     placeholder="Specialization"
@@ -1182,7 +1182,7 @@ if (!basicDetails.countryId) {
                     className={eduErrors.specification ? "input-error" : ""}
                   />*/} <CreatableSelect
   options={specializationOptions}
-  placeholder="Select or type specialization"
+  placeholder="Select or type discipline / specialization"
   value={
     specializationOptions.find(
       opt => opt.label === education.specification
