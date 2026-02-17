@@ -9046,3 +9046,19 @@ margin-top: 5px;
 .css-19bb58m {
   background: transparent !important;
 }
+/*@media (hover: hover) {
+  .institution-card:hover {
+    background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+    color: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(255, 152, 0, 0.4);
+  }
+
+  
+  .institution-card:hover p,
+  .institution-card:hover h2,
+  .institution-card:hover strong {
+    color: #ffffff;
+  }
+}*/
+

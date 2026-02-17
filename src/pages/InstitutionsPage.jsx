@@ -41,7 +41,7 @@ const [search, setSearch] = useState(searchParams.get("search") || "");
 const [currentPage, setCurrentPage] = useState(
   Number(searchParams.get("page")) || 1
 );
-
+const [hover, setHover] = React.useState(false);
   // 1️⃣ MOBILE OVERLAY STATE
   const [showMobileFilter, setShowMobileFilter] = useState(false);
  {/* 
@@ -278,7 +278,7 @@ useEffect(() => {
       ))}
     </select>
   </div>
-  <div className="filter-groups">
+  {/*<div className="filter-groups">
     <label>Sub College Type</label>
     <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
       <option value="">Select Sub College Type</option>
@@ -286,10 +286,10 @@ useEffect(() => {
         <option key={c.collegeType} value={c.collegeType}>{c.collegeType}</option>
       ))}
     </select>
-  </div>
+  </div>*/}
 
   <div className="filter-groups">
-    <label>Management</label>
+    <label>Management / Catagory</label>
     <select name="management" value={filters.management} onChange={handleFilterChange}>
       <option value="">Select Management</option>
       {managements.map(m => (
@@ -361,7 +361,7 @@ useEffect(() => {
       ))}
     </select>
   </div>
-      <div className="filter-groups">
+      {/*<div className="filter-groups">
         <label>College Type</label>
         <select name="collegeType" value={filters.collegeType} onChange={handleFilterChange}>
           <option value="">Select College Type</option>
@@ -369,10 +369,10 @@ useEffect(() => {
             <option key={c.collegeType} value={c.collegeType}>{c.collegeType}</option>
           ))}
         </select>
-      </div>
+      </div>*/}
 
       <div className="filter-groups">
-        <label>Management</label>
+        <label>Management / Catagory</label>
         <select name="management" value={filters.management} onChange={handleFilterChange}>
           <option value="">Select Management</option>
           {managements.map(m => (
@@ -405,30 +405,56 @@ useEffect(() => {
           )}
 
           {institutions.map((inst) => (
-            <div
-              className="institution-card"
-              key={inst.id}
-              onClick={() => navigate(`/institution/view/${inst.id}`)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="card-header">
-                <h2>{inst.name}</h2>
-              </div>
+          <div
+  className="institution-card"
+  key={inst.id}
+  //onClick={() => navigate(`/institution/view/${inst.id}`)}
+  style={{ cursor: "pointer", position: "relative" , paddingBottom: "40px" }}
+>
+  <div className="card-header">
+    <h2>{inst.name}</h2>
+  </div>
 
-              <div className="card-details">
-                <p>
-                  <strong>District:</strong> {inst.district}
-                </p>
-               <p>
-    <strong>College Type:</strong>{" "}
-    {inst.college || inst.collegeType
-      ? [inst.college, inst.collegeType]
-          .filter(Boolean)
-          .join(" - ")
-      : "N/A"}
-  </p>
-              </div>
-            </div>
+  <div className="card-details">
+    <p>
+      <strong>District:</strong> {inst.district}
+    </p>
+
+    {/*<p>
+      <strong>College Type:</strong>{" "}
+      {inst.college || inst.collegeType
+        ? [inst.college, inst.collegeType]
+            .filter(Boolean)
+            .join(" - ")
+        : "N/A"}
+    </p>*/}
+  </div>
+
+  {/* View Details button */}
+  <button
+  className="view-more-btn"
+  style={{
+    position: "absolute",
+    right: "15px",
+    bottom: "15px",
+    backgroundColor: hover ? "#fb8c00" : "",
+    color: hover ? "#fff" : "",
+    border: "none",
+    padding: "6px 12px",
+    borderRadius: "4px",
+    cursor: "pointer"
+  }}
+  onMouseEnter={() => setHover(true)}
+  onMouseLeave={() => setHover(false)}
+  onClick={(e) => {
+    e.stopPropagation();
+    navigate(`/institution/view/${inst.id}`);
+  }}
+>
+  View Details...
+</button>
+</div>
+
           ))}
 
           {/* ===== PAGINATION ===== */}

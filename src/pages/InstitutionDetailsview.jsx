@@ -51,7 +51,7 @@ export default function InstitutionViewPage() {
                 <h3 className="institution-section">College Details</h3>
                 <div className="institution-card">
                     <p><strong>AISHE Code:</strong> {formatValue(institution.aisheCode)}</p>
-<p>
+{/*<p>
   <strong>College Type:</strong>{" "}
   {institution.college || institution.collegeType
     ? [institution.college, institution.collegeType]
@@ -59,7 +59,7 @@ export default function InstitutionViewPage() {
         .map(formatValue)
         .join(" - ")
     : "N/A"}
-</p>                    <p><strong>Management:</strong> {formatValue(institution.management)}</p>
+</p>  */}                  <p><strong>Management / Catagory:</strong> {formatValue(institution.management)}</p>
                     <p><strong>Year Of Establishment:</strong> {formatValue(institution.yearOfEstablishment)}</p>
                     {/*<p><strong>Location:</strong> {formatValue(institution.location)}</p> */}
                 </div>
