@@ -40,7 +40,7 @@ const [specializationList, setSpecializationList] = useState([]);
 
   const [educationList, setEducationList] = useState([]);
   const [eduErrors, setEduErrors] = useState({});
-  const [education, setEducation] = useState({ degree: "", specification: "", college: "", year: "" });
+const [education, setEducation] = useState({degree: "", specification: "", college: "", year: ""});
   const [showEducationFields, setShowEducationFields] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
@@ -84,7 +84,7 @@ const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
   const phoneRegex = /^[1-9]\d{9}$/;
   const courseRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,150}$/;
   const collegeRegex = /^[A-Za-z0-9.,(){}"':;/|\/\-\s]{0,250}$/;
-  const yearRegex = /^[0-9]{4}$/;
+  const yearRegex = /^[A-Za-z0-9\s]{1,50}$/;
   const incomeRegex = /^(₹\s?|Rs\.?\s?)?[0-9,./-]+$/;
 
   const addressRegex = /^[A-Za-z0-9\s,./():\-\n]+$/;
@@ -469,7 +469,7 @@ if (!basicDetails.countryId) {
     let errorsObj = {};
 // Degree / Course required
   if (!education.degree.trim()) {
-    errorsObj.degree = "Course is required.";
+    errorsObj.degree = "Course / Class is required.";
   }
 
     // REQUIRED validation
@@ -486,10 +486,8 @@ if (!basicDetails.countryId) {
     }
 
     if (!education.year.trim()) {
-      errorsObj.year = "Year is required.";
-    } else if (!yearRegex.test(education.year)) {
-      errorsObj.year = "Year must be 4 digits.";
-    }
+      errorsObj.year = "Year of Study required.";
+    } 
 
     if (Object.keys(errorsObj).length > 0) {
       setEduErrors(errorsObj);
@@ -508,7 +506,7 @@ if (!basicDetails.countryId) {
 
   // Degree
   if (!education.degree.trim()) {
-    errorsObj.degree = "Course is required.";
+    errorsObj.degree = "Course / Class is required.";
   } else if (!courseRegex.test(education.degree)) {
     errorsObj.degree = "Invalid course.";
   }
@@ -529,9 +527,7 @@ if (!basicDetails.countryId) {
 
   // Year
   if (!education.year.trim()) {
-    errorsObj.year = "Year is required.";
-  } else if (!yearRegex.test(education.year)) {
-    errorsObj.year = "Year must be 4 digits.";
+    errorsObj.year = "Year of Study required.";
   }
 
   if (Object.keys(errorsObj).length > 0) {
@@ -1058,13 +1054,20 @@ if (!basicDetails.countryId) {
                   <div className="form-group">
                     <label>Year of Studying<span className="required">*</span></label>
                     <input
-                      type="text"
-                      placeholder="Year of Studying"
-                      maxLength={4}
-                      value={education.year}
-                      onChange={(e) => setEducation({ ...education, year: e.target.value })}
-                         className={eduErrors.year ? "input-error" : ""}
-                    />
+  type="text"
+  placeholder="Class 10 / 12th / 1st Year..."
+  value={education.year}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // Allow letters, numbers, spaces only
+    if (/^[A-Za-z0-9\s]*$/.test(value)) {
+      setEducation({ ...education, year: value });
+    }
+  }}
+  className={eduErrors.year ? "input-error" : ""}
+/>
+
                      {eduErrors.year && (
                       <p className="error-text">{eduErrors.year}</p>
                     )}
@@ -1238,15 +1241,20 @@ if (!basicDetails.countryId) {
                 <div className="form-group">
                   <label>Year of Studying *</label>
                   <input
-                    type="text"
-                    placeholder="Year of Studying"
-                    value={education.year}
-                    maxLength={4}
-                    onChange={(e) => /^\d*$/.test(e.target.value) &&
-                      setEducation({ ...education, year: e.target.value })
-                    }
-                    className={eduErrors.year ? "input-error" : ""}
-                  />
+  type="text"
+  placeholder="Class 10 / 12th / 1st Year..."
+  value={education.year}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // Allow letters, numbers, spaces only
+    if (/^[A-Za-z0-9\s]*$/.test(value)) {
+      setEducation({ ...education, year: value });
+    }
+  }}
+  className={eduErrors.year ? "input-error" : ""}
+/>
+
                   {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
                 </div>
 

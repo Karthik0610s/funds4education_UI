@@ -448,7 +448,7 @@ if (!formData.countryId) {
     const nameRegex = /^[A-Za-z .-]+$/;
 
     if (!education.degree.trim()) {
-      setErrors(prev => ({ ...prev, education: "Course is required." }));
+      setErrors(prev => ({ ...prev, education: "Course / Class is required." }));
       return;
     }
     if (!education.specification.trim()) {
@@ -479,7 +479,7 @@ if (!formData.countryId) {
 */}
 
     if (!education.year) {
-      setErrors(prev => ({ ...prev, education: "Year is required." }));
+      setErrors(prev => ({ ...prev, education: "Year of Study is required." }));
       return;
     }
 
@@ -1009,17 +1009,20 @@ if (!formData.countryId) {
     <div className="form-group">
        <label>Year of Studying<span className="required">*</span></label>
       <input
-        type="text"
-        placeholder="Year of Studying"
-        value={education.year}
-        maxLength={4}
-        onChange={(e) => {
-          let cleaned = e.target.value.replace(/\D/g, "").slice(0, 4);
-          const currentYear = new Date().getFullYear();
-          if (cleaned && Number(cleaned) > currentYear) return;
-          setEducation({ ...education, year: cleaned });
-        }}
-      />
+  type="text"
+  placeholder="Class 10 / 12th / 1st Year..."
+  value={education.year}
+  maxLength={50}
+  onChange={(e) => {
+    const value = e.target.value;
+
+    // allow letters, numbers, space only (no special chars)
+    if (/^[A-Za-z0-9\s]*$/.test(value)) {
+      setEducation({ ...education, year: value });
+    }
+  }}
+/>
+
     </div>
   <div className="add-action-btns">
     <button
