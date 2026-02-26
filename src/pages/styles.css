@@ -9062,3 +9062,35 @@ margin-top: 5px;
   }
 }*/
 
+/* Blur only modal content */
+.modal-blur {
+    filter: blur(1px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Loader overlay */
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Spinner */
+.loader {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

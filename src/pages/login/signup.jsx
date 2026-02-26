@@ -1172,7 +1172,7 @@ if (!basicDetails.countryId) {
                   )}
                 </div>
                 <div className="form-group">
-                  <label>Discipline / Specialization*</label>
+                  <label>Discipline / Specialization *</label>
                  {/* <input
                     type="text"
                     placeholder="Specialization"

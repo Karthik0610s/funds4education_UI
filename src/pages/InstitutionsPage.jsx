@@ -409,7 +409,7 @@ useEffect(() => {
   className="institution-card"
   key={inst.id}
   //onClick={() => navigate(`/institution/view/${inst.id}`)}
-  style={{ cursor: "pointer", position: "relative" , paddingBottom: "40px" }}
+  style={{ cursor: "pointer", position: "relative" , paddingBottom: "30px" }}
 >
   <div className="card-header">
     <h2>{inst.name}</h2>
@@ -428,6 +428,9 @@ useEffect(() => {
             .join(" - ")
         : "N/A"}
     </p>*/}
+     {/* <p>
+      <strong>Management / Catagory:</strong> {inst.management}
+    </p> */}
   </div>
 
   {/* View Details button */}

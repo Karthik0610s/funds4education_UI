@@ -161,7 +161,7 @@ const navigate = useNavigate();
                     <input type="text" value={edu.college || ""} readOnly />
                   </div>
                   <div className="detail-row">
-                    <label>Year of Studying:</label>
+                    <label>Year of Study:</label>
                     <input type="text" value={edu.year || ""} readOnly />
                   </div>
                   {index < educationArray.length - 1 && (

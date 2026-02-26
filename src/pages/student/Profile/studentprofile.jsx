@@ -445,6 +445,7 @@ if (!formData.countryId) {
 
   // ✅ Add/Update Education
   const addOrUpdateEducation = () => {
+    debugger;
     const nameRegex = /^[A-Za-z .-]+$/;
 
     if (!education.degree.trim()) {
@@ -912,7 +913,7 @@ if (!formData.countryId) {
   {/* Row 1 → 3 fields */}
    <div className="education-grid">
     <div className="form-group">
-         <label>Class / Course <span className="required">*</span></label>
+         <label>Class / Course *</label>
       <select
         value={education.degree}
        /* onChange={(e) =>
@@ -945,7 +946,7 @@ if (!formData.countryId) {
     </div>
 
     <div className="form-group">
-         <label>Discipline / Specialization <span className="required">*</span></label>
+         <label>Discipline / Specialization *</label>
       {/*<input
         type="text"
         placeholder="Specialization"
@@ -992,7 +993,7 @@ if (!formData.countryId) {
     </div>
 
     <div className="form-group">
-        <label>School / College / University Name <span className="required">*</span></label>
+        <label>School / College / University Name *</label>
       <input
         type="text"
         placeholder="School / College / University Name"
@@ -1007,7 +1008,7 @@ if (!formData.countryId) {
   {/* Row 2 → Year + Button */}
   
     <div className="form-group">
-       <label>Year of Studying<span className="required">*</span></label>
+       <label>Year of Study * </label>
       <input
   type="text"
   placeholder="Class 10 / 12th / 1st Year..."
@@ -1105,7 +1106,7 @@ if (!formData.countryId) {
         </div>
 
         <div className="form-group">
-          <label>Year of Studying</label>
+          <label>Year of Study</label>
           <p>{edu.year}</p>
         </div>
 
