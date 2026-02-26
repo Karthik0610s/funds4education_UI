@@ -71,11 +71,11 @@ const navigate = useNavigate();
               <input type="text" value={profile.firstName || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Candidate’s Initial:</label>
+              <label>Candidate’s Initial(s):</label>
               <input type="text" value={profile.lastName || ""} readOnly />
             </div>
             <div className="detail-row">
-              <label>Email ID:</label>
+              <label>Email Address:</label>
               <input type="text" value={profile.email || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -104,7 +104,7 @@ const navigate = useNavigate();
               <input type="text" value={profile.parentsContactNumber || ""} readOnly />
             </div>
               <div className="detail-row">
-              <label>Family Income per Annum:</label>
+              <label>Annual Family Income:</label>
               <input type="text" value={profile.familyIncome || ""} readOnly />
             </div>
             <div className="detail-row">
@@ -161,7 +161,7 @@ const navigate = useNavigate();
                     <input type="text" value={edu.college || ""} readOnly />
                   </div>
                   <div className="detail-row">
-                    <label>Year of Studying:</label>
+                    <label>Year of Study:</label>
                     <input type="text" value={edu.year || ""} readOnly />
                   </div>
                   {index < educationArray.length - 1 && (

@@ -639,7 +639,7 @@ const closeAllDropdowns = () => {
   >
     {/* HEADER */}
     <div className="filter-header">
-      <span className="filter-title">Filter</span>
+      <span className="filter-title">Filters</span>
       <span
         className="mobile-filter-close"
         onClick={() => {
@@ -754,7 +754,7 @@ const closeAllDropdowns = () => {
         <FaSearch className="search-icon" />
         <input
           type="text"
-          placeholder="Search by Scholarshipname, Eligibility , Amount or More..."
+          placeholder="Search by Scholarship Name, Eligibility , Amount or More..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

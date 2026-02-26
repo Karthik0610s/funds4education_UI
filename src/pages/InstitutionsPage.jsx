@@ -219,7 +219,7 @@ useEffect(() => {
     className="global-search"
     value={search}
     onChange={(e) => setSearch(e.target.value)}
-    placeholder="Search by institution , management..."
+    placeholder="Search by Institution , Management..."
   />
   {/* ===== TOP BAR ===== */}
      
@@ -232,7 +232,7 @@ useEffect(() => {
       <div className="content-layouts">
         {/* Desktop only */}
 <aside className="filter-card desktop-only">
-  <div className="filters-title">Filter</div>
+  <div className="filters-title">Filters</div>
 
   <div className="filter-groups">
     <label>State</label>
@@ -289,7 +289,7 @@ useEffect(() => {
   </div>*/}
 
   <div className="filter-groups">
-    <label>Management / Catagory</label>
+    <label>Management / Category</label>
     <select name="management" value={filters.management} onChange={handleFilterChange}>
       <option value="">Select Management</option>
       {managements.map(m => (

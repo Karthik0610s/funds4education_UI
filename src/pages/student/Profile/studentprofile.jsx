@@ -647,7 +647,7 @@ if (!formData.countryId) {
 
           <div className="row">
             <div className="form-group">
-              <label>Personal Email ID *</label>
+              <label>Personal Email Address *</label>
               <input
                 type="email"
                 value={formData.email}
@@ -767,7 +767,7 @@ if (!formData.countryId) {
               {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
             </div>
             <div className="form-group">
-              <label>Family Income per Annum </label>
+              <label>Annual Family Income </label>
               <input
                 type="text"
                 value={formData.familyIncome}
@@ -1007,7 +1007,7 @@ if (!formData.countryId) {
   {/* Row 2 → Year + Button */}
   
     <div className="form-group">
-       <label>Year of Studying<span className="required">*</span></label>
+       <label>Year of Study <span className="required">*</span></label>
       <input
   type="text"
   placeholder="Class 10 / 12th / 1st Year..."
