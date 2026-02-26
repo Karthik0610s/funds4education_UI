@@ -37,7 +37,7 @@ const AddScholarshipModal = ({ show, handleClose, scholarship, mode }) => {
   const isEdit = mode === "edit";
   const isAdd = mode === "add";
 
-
+const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialData = {
     scholarshipCode: "",
@@ -567,8 +567,10 @@ const [originalFiles, setOriginalFiles] = useState([]);
   const handleSubmit = async (e) => {
     
     e.preventDefault();
+     if (isSubmitting) return;
+    // prevent double click
     if (!validateForm()) return;
-
+ setIsSubmitting(true);   // ✅ START LOADING HERE
     const payload = {
       ...formData,
       fileName: formData.fileName ?? "",
@@ -596,7 +598,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
     };
 
     try {
-
+ 
       let res;
       let scholarshipId;
 
@@ -657,7 +659,9 @@ const [originalFiles, setOriginalFiles] = useState([]);
       Swal.fire({ text: "Error saving scholarship!", icon: "error" });
     }
     // 🖼 Upload logo if selected
-
+finally {
+    setIsSubmitting(false);   // ✅ STOP LOADING
+  }
 
   };
 
@@ -726,7 +730,13 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
+      <div className={`modal ${isSubmitting ? "modal-blur" : ""}`}>
+
+    {isSubmitting && (
+      <div className="loader-overlay">
+        <div className="loader"></div>
+      </div>
+    )}
         <div className="modal-header">
           <span><strong>
             {isView ? "View Scholarship" : isEdit ? "Edit Scholarship" : "Add Scholarship"}
@@ -1252,7 +1262,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
             <div className="row">
               <div className="form-group">
-                <label>Min % / CGPA</label>
+                <label>Minimum % / CGPA</label>
                 <input
                   type="text"
                   name="minPercentageOrCGPA"
@@ -1265,7 +1275,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
             <div className="row">
               <div className="form-group">
-                <label>Max Family Income</label>
+                <label>Maximum Family Income</label>
                 <input
                   type="text"
                   name="maxFamilyIncome"
@@ -1360,7 +1370,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
               </div>
               <div className="row">
                 <div className="form-group">
-                  <label>Documents</label>
+                  <label>Required Documents</label>
                   <textarea
                     name="documents"
                     value={formData.documents || ""}
@@ -1374,7 +1384,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
 
             <div className="row">
                 <div className="form-group">
-                  <label>Can Apply</label>
+                  <label>Who Can Apply?</label>
                   <textarea
                     name="canApply"
                     value={formData.canApply || ""}
@@ -1386,7 +1396,7 @@ const [originalFiles, setOriginalFiles] = useState([]);
                 </div>
                  <div className="row">
                 <div className="form-group ">
-                  <label>Web Portal to Apply</label>
+                  <label>Application Portal (Web URL)</label>
                   <input
                     type="text"
                     name="webportaltoApply"
@@ -1556,9 +1566,13 @@ const [originalFiles, setOriginalFiles] = useState([]);
           </button>
 
           {!isView && (
-            <button className="sign-action-btn1" onClick={handleSubmit}>
-              {isEdit ? "Update" : "Add"}
-            </button>
+           <button
+  className="sign-action-btn1"
+  onClick={handleSubmit}
+  disabled={isSubmitting}
+>
+  {isSubmitting ? "Processing..." : isEdit ? "Update" : "Add"}
+</button>
           )}
         </div>
       </div>
