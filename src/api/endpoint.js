@@ -51,5 +51,5 @@ Faculty:"/faculty",
   Districts : "/Filter/districts",
   States : "/Filter/state",
   GetSessionClosed:"Chat/close-session",
-
+ Year:"/Class/GetYearByClassId"
 };
