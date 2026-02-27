@@ -683,7 +683,7 @@ if (!formData.countryId) {
 
           <div className="row">
             <div className="form-group">
-              <label>Personal Email ID *</label>
+              <label>Personal Email Address *</label>
               <input
                 type="email"
                 value={formData.email}
@@ -803,7 +803,7 @@ if (!formData.countryId) {
               {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
             </div>
             <div className="form-group">
-              <label>Family Income per Annum </label>
+              <label>Annual Family Income </label>
               <input
                 type="text"
                 value={formData.familyIncome}

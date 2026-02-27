@@ -603,11 +603,11 @@ const fetchYearsByClassId = async (classId) => {
       <div className="signup-card">
         {/* Header */}
         <div className="signup-header">
-          <h2>Student Sign up</h2>
+          <h2>Student Sign Up</h2>
           <p>
             Already a member?{" "}
             <Link to={RP.login} state={{ userType }} className="signup-link">
-              Sign in
+              Sign In
             </Link>
           </p>
         </div>
@@ -676,13 +676,13 @@ const fetchYearsByClassId = async (classId) => {
             </div>
             <div className="row">
               <div className="form-group">
-                <label>Email ID *</label>
+                <label>Email Address *</label>
                 <input
                   type="text" // can stay email or text
                   value={basicDetails.email}
                   onChange={(e) => setBasicDetails({ ...basicDetails, email: e.target.value })}
                   className={errors.email ? "input-error" : ""}
-                  placeholder="Email ID"
+                  placeholder="Email Address"
                 />
 
 
@@ -799,7 +799,7 @@ const fetchYearsByClassId = async (classId) => {
                 {errors.parentContactNumber && <p className="error-text">{errors.parentContactNumber}</p>}
               </div>
               <div className="form-group">
-                <label>Family Income per Annum </label>
+                <label>Annual Family Income</label>
                 <input
                   type="text"
                   value={basicDetails.familyIncome}
@@ -808,7 +808,7 @@ const fetchYearsByClassId = async (classId) => {
                     setBasicDetails({ ...basicDetails, familyIncome: e.target.value })
                   }
                   className={errors.familyIncome ? "input-error" : ""}
-                  placeholder="Family Income per Annum"
+                  placeholder="Annual Family Income"
                   maxLength={20}
                 />
                 {errors.familyIncome && <p className="error-text">{errors.familyIncome}</p>}
