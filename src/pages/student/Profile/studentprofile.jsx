@@ -655,7 +655,7 @@ if (!formData.countryId) {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value.toLowerCase().trim() })
                 }
-                 placeholder="Email Id"
+                 placeholder="Email Address"
               />
 
               {errors.email && <p className="error-text">{errors.email}</p>}

@@ -1052,7 +1052,7 @@ if (!basicDetails.countryId) {
                   </div>
 
                   <div className="form-group">
-                    <label>Year of Studying<span className="required">*</span></label>
+                    <label>Year of Study<span className="required">*</span></label>
                     <input
   type="text"
   placeholder="Class 10 / 12th / 1st Year..."
@@ -1099,7 +1099,7 @@ if (!basicDetails.countryId) {
                   </div>
 
                   <div className="label-value">
-                    <span className="label">Year of Studying</span>
+                    <span className="label">Year of Study</span>
                     <span className="value">{edu.year}</span>
                   </div>
 
@@ -1239,7 +1239,7 @@ if (!basicDetails.countryId) {
 
 
                 <div className="form-group">
-                  <label>Year of Studying *</label>
+                  <label>Year of Study *</label>
                   <input
   type="text"
   placeholder="Class 10 / 12th / 1st Year..."

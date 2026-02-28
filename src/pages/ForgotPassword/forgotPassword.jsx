@@ -15,6 +15,7 @@ export default function ForgotPassword() {
   const [error, setError] = useState("");
   const [showNewPass, setShowNewPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [dob, setDob] = useState("");
   const handleContinue = async () => {
 
     setError("");
@@ -24,17 +25,17 @@ export default function ForgotPassword() {
       return;
     }
 */}
-    if (!username) {
-      setError("Please enter username");
-      return;
-    }
+    if (!username || !dob) {
+  setError("Please enter username and Date of Birth");
+  return;
+}
 
     try {
 
       //const res = await publicAxios.get(`${ApiKey.EmailExistCheck}?email=${username}&role=${role}`);
       const res = await publicAxios.get(
-        `${ApiKey.EmailExistCheck}?email=${username}&role=student`
-      );
+  `${ApiKey.EmailExistCheck}?email=${username}&role=student&dob=${dob}`
+);
       const data = res.data;
 
       if (res.status == 200 && data && (data.id || data.userId)) {
@@ -153,6 +154,33 @@ export default function ForgotPassword() {
                     boxSizing: "border-box",
                   }}
                 />
+                <label
+  style={{
+    display: "block",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    color: "#1D4F56",
+    marginBottom: "0.25rem",
+  }}
+>
+  DOB *
+</label>
+
+<input
+  type="date"
+  value={dob}
+  onChange={(e) => setDob(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "0.5rem 1rem",
+    fontSize: "14px",
+    border: "1px solid #d1d5db",
+    borderRadius: "0.5rem",
+    outline: "none",
+    height: "36px",
+    boxSizing: "border-box",
+  }}
+/>
               </div>
 
 
