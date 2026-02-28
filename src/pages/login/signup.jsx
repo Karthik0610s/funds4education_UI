@@ -17,9 +17,9 @@ export default function SignUpPage() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState("student"); // default to student
   const [showPassword, setShowPassword] = useState(false);
-const [selectedClassId, setSelectedClassId] = useState(null);
-const [specializationList, setSpecializationList] = useState([]);
-
+  const [selectedClassId, setSelectedClassId] = useState(null);
+  const [specializationList, setSpecializationList] = useState([]);
+const shouldShowYear = ![1, 2, 3].includes(Number(selectedClassId));
   const fileInputRef = useRef(null);
   const [basicDetails, setBasicDetails] = useState({
     firstName: "",
@@ -40,7 +40,7 @@ const [specializationList, setSpecializationList] = useState([]);
 
   const [educationList, setEducationList] = useState([]);
   const [eduErrors, setEduErrors] = useState({});
-const [education, setEducation] = useState({degree: "", specification: "", college: "", year: ""});
+  const [education, setEducation] = useState({ degree: "", specification: "", college: "", year: "" });
   const [showEducationFields, setShowEducationFields] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
 
@@ -48,6 +48,30 @@ const [education, setEducation] = useState({degree: "", specification: "", colle
   const [errors, setErrors] = useState({});
   const [courses, setCourses] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
+
+  const [years, setYears] = useState([]);
+const [loadingYears, setLoadingYears] = useState(false);
+useEffect(() => {
+  if ([1, 2, 3].includes(Number(selectedClassId))) {
+    setEducation(prev => ({ ...prev, year: "" }));
+  }
+}, [selectedClassId]);
+const fetchYearsByClassId = async (classId) => {
+  try {
+    setLoadingYears(true);
+
+    const res = await publicAxios.get(
+      `${ApiKey.Year}/${classId}`
+    );
+
+    setYears(res.data || []);
+  } catch (err) {
+    console.error("Failed to fetch years", err);
+    setYears([]);
+  } finally {
+    setLoadingYears(false);
+  }
+};
   const fetchCourses = async () => {
     try {
       setLoadingCourses(true);
@@ -75,9 +99,9 @@ const [education, setEducation] = useState({degree: "", specification: "", colle
   // Accepts typical company/college emails
   // Accept all standard valid email formats
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const initialRegex = /^[A-Za-z]{0,1}$/;
+  const initialRegex = /^[A-Za-z]{0,1}$/;
 
-const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
+  const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
 
   const usernameRegex = /^[A-Za-z0-9_]{3,20}$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
@@ -163,25 +187,25 @@ const fatherOccupationRegex = /^[A-Za-z /-]{0,150}$/;
 
   useEffect(() => {
     debugger;
-  if (!selectedClassId) return;
+    if (!selectedClassId) return;
 
-  const loadSpecialization = async () => {
-    try {
-      debugger;
-      const res = await fetchCoursesByClassReq(selectedClassId);
-      setSpecializationList(res.data || []);
-    } catch (err) {
-      console.error("Failed to load specialization");
-      setSpecializationList([]);
-    }
-  };
+    const loadSpecialization = async () => {
+      try {
+        debugger;
+        const res = await fetchCoursesByClassReq(selectedClassId);
+        setSpecializationList(res.data || []);
+      } catch (err) {
+        console.error("Failed to load specialization");
+        setSpecializationList([]);
+      }
+    };
 
-  loadSpecialization();
-}, [selectedClassId]);
-const specializationOptions = specializationList.map(c => ({
-  value: c.courseId,
-  label: c.courseName
-}));
+    loadSpecialization();
+  }, [selectedClassId]);
+  const specializationOptions = specializationList.map(c => ({
+    value: c.courseId,
+    label: c.courseName
+  }));
 
   // --- Validation per step ---
   const validateStep = () => {
@@ -209,14 +233,14 @@ const specializationOptions = specializationList.map(c => ({
       }
 
 
-if (!basicDetails.countryId) {
-    stepErrors.country = "Country is required.";
-  }
+      if (!basicDetails.countryId) {
+        stepErrors.country = "Country is required.";
+      }
 
-  // State
-  if (!basicDetails.stateId) {
-    stepErrors.state = "State is required.";
-  }
+      // State
+      if (!basicDetails.stateId) {
+        stepErrors.state = "State is required.";
+      }
 
 
       // Phone
@@ -379,7 +403,7 @@ if (!basicDetails.countryId) {
     }
   };
   const handleRemoveSingleFile = (index) => {
-    
+
     const updatedFiles = existingDocFiles.filter((_, i) => i !== index);
     //setExistingDocFiles(updatedFiles);
     setFilesList(updatedFiles);
@@ -424,17 +448,17 @@ if (!basicDetails.countryId) {
       PasswordHash: verification.password,  // ✅ raw password
       RoleId: "1",
       Education: JSON.stringify(educationList),// ✅ backend expects string
-      FatherOccupation:basicDetails.fatherOccupation,
-      MotherOccupation:basicDetails.motherOccupation,
-      Address:basicDetails.address,
-      FamilyIncome:basicDetails.familyIncome,
-      StateId:basicDetails.stateId,
-      countryId:basicDetails.countryId,
-      ParentsContactNumber:basicDetails.parentContactNumber,
+      FatherOccupation: basicDetails.fatherOccupation,
+      MotherOccupation: basicDetails.motherOccupation,
+      Address: basicDetails.address,
+      FamilyIncome: basicDetails.familyIncome,
+      StateId: basicDetails.stateId,
+      countryId: basicDetails.countryId,
+      ParentsContactNumber: basicDetails.parentContactNumber,
       CreatedBy: createdBy,
     };
 
-    
+
     // 1️⃣ Insert user and get ID
     const userId = await dispatch(insertNewUser(payload));
     if (!userId) return; // stop if insertion failed
@@ -467,10 +491,10 @@ if (!basicDetails.countryId) {
   // --- Education handlers ---
   const addEducation = () => {
     let errorsObj = {};
-// Degree / Course required
-  if (!education.degree.trim()) {
-    errorsObj.degree = "Course / Class is required.";
-  }
+    // Degree / Course required
+    if (!education.degree.trim()) {
+      errorsObj.degree = "Course / Class is required.";
+    }
 
     // REQUIRED validation
     if (!education.specification.trim()) {
@@ -485,9 +509,9 @@ if (!basicDetails.countryId) {
       errorsObj.college = "Invalid School / College / University.";
     }
 
-    if (!education.year.trim()) {
-      errorsObj.year = "Year of Study required.";
-    } 
+   if (shouldShowYear && !education.year.trim()) {
+  errorsObj.year = "Year of Study required.";
+}
 
     if (Object.keys(errorsObj).length > 0) {
       setEduErrors(errorsObj);
@@ -495,53 +519,53 @@ if (!basicDetails.countryId) {
     }
 
     setEducationList([...educationList, education]);
-     setEducation({ degree: "", specification:"",college: "", year: "" });
+    setEducation({ degree: "", specification: "", college: "", year: "" });
     setShowEducationFields(false);
     setEduErrors({});
   };
 
 
   const updateEducation = (index) => {
-  let errorsObj = {};
+    let errorsObj = {};
 
-  // Degree
-  if (!education.degree.trim()) {
-    errorsObj.degree = "Course / Class is required.";
-  } else if (!courseRegex.test(education.degree)) {
-    errorsObj.degree = "Invalid course.";
-  }
+    // Degree
+    if (!education.degree.trim()) {
+      errorsObj.degree = "Course / Class is required.";
+    } else if (!courseRegex.test(education.degree)) {
+      errorsObj.degree = "Invalid course.";
+    }
 
-  // Specification
-  if (!education.specification.trim()) {
-    errorsObj.specification = "Discipline / Specialization is required.";
-  } else if (!courseRegex.test(education.specification)) {
-    errorsObj.specification = "Invalid Discipline / Specialization.";
-  }
+    // Specification
+    if (!education.specification.trim()) {
+      errorsObj.specification = "Discipline / Specialization is required.";
+    } else if (!courseRegex.test(education.specification)) {
+      errorsObj.specification = "Invalid Discipline / Specialization.";
+    }
 
-  // College
-  if (!education.college.trim()) {
-    errorsObj.college = "College/University is required.";
-  } else if (!collegeRegex.test(education.college)) {
-    errorsObj.college = "Invalid college/university.";
-  }
+    // College
+    if (!education.college.trim()) {
+      errorsObj.college = "College/University is required.";
+    } else if (!collegeRegex.test(education.college)) {
+      errorsObj.college = "Invalid college/university.";
+    }
 
-  // Year
-  if (!education.year.trim()) {
-    errorsObj.year = "Year of Study required.";
-  }
+    // Year
+    if (shouldShowYear && !education.year.trim()) {
+  errorsObj.year = "Year of Study required.";
+}
 
-  if (Object.keys(errorsObj).length > 0) {
-    setEduErrors(errorsObj);
-    return;
-  }
+    if (Object.keys(errorsObj).length > 0) {
+      setEduErrors(errorsObj);
+      return;
+    }
 
-  const updated = [...educationList];
-  updated[index] = education;
-  setEducationList(updated);
-  setEditIndex(null);
-  setEducation({ degree: "", specification: "", college: "", year: "" });
-  setEduErrors({});
-};
+    const updated = [...educationList];
+    updated[index] = education;
+    setEducationList(updated);
+    setEditIndex(null);
+    setEducation({ degree: "", specification: "", college: "", year: "" });
+    setEduErrors({});
+  };
 
 
   const deleteEducation = (index) => {
@@ -645,7 +669,7 @@ if (!basicDetails.countryId) {
                   }
                   className={errors.lastName ? "input-error" : ""}
                   placeholder="Candidate’s Initial"
-                  //maxLength={1}
+                //maxLength={1}
                 />
                 {errors.lastName && <p className="error-text">{errors.lastName}</p>}
               </div>
@@ -752,7 +776,7 @@ if (!basicDetails.countryId) {
                 />
                 {errors.fatherOccupation && <p className="error-text">{errors.fatherOccupation}</p>}
               </div>
-              
+
             </div>
             <div className="row">
               <div className="form-group">
@@ -945,31 +969,36 @@ if (!basicDetails.countryId) {
                         </option>
                       ))}
                     </select>*/}
-<select
-  value={education.degree}
-   onChange={(e) => {
-    const value = e.target.value;
+                    <select
+                      value={education.degree}
+                      onChange={(e) => {
+                        const value = e.target.value;
 
-    setEducation({
-      ...education,
-      degree: value,
-      specification: ""
-    });
+                        setEducation({
+                          ...education,
+                          degree: value,
+                          specification: "",
+                          year:""
+                        });
 
-    const selected = courses.find(c => c.className === value);
+                        const selected = courses.find(c => c.className === value);
 
-    if (selected) {
-      setSelectedClassId(selected.classId);
-    }
-  }}
->
-  <option value="">Select Class / Course</option>
-  {courses.map(course => (
-    <option key={course.classId} value={course.className}>
-      {course.className}
-    </option>
-  ))}
-</select>
+                        if (selected) {
+                          setSelectedClassId(selected.classId);
+                           fetchYearsByClassId(selected.classId);
+                        }
+                        else{
+                          setYears([]);
+                        }
+                      }}
+                    >
+                      <option value="">Select Class / Course</option>
+                      {courses.map(course => (
+                        <option key={course.classId} value={course.className}>
+                          {course.className}
+                        </option>
+                      ))}
+                    </select>
 
                     {eduErrors.degree && (
                       <p className="error-text">{eduErrors.degree}</p>
@@ -986,53 +1015,53 @@ if (!basicDetails.countryId) {
                            className={eduErrors.specification ? "input-error" : ""}
                     />*/}
                     <CreatableSelect
-  options={specializationOptions}
-  placeholder="Select or type discipline / specialization"
-  value={
-    specializationOptions.find(
-      opt => opt.label === education.specification
-    ) || (
-      education.specification
-        ? { label: education.specification, value: education.specification }
-        : null
-    )
-  }
-  onChange={(selected) => {
-    if (!selected) {
-      setEducation(prev => ({
-        ...prev,
-        specification: ""
-      }));
-      return;
-    }
+                      options={specializationOptions}
+                      placeholder="Select or type discipline / specialization"
+                      value={
+                        specializationOptions.find(
+                          opt => opt.label === education.specification
+                        ) || (
+                          education.specification
+                            ? { label: education.specification, value: education.specification }
+                            : null
+                        )
+                      }
+                      onChange={(selected) => {
+                        if (!selected) {
+                          setEducation(prev => ({
+                            ...prev,
+                            specification: ""
+                          }));
+                          return;
+                        }
 
-    setEducation(prev => ({
-      ...prev,
-      specification: selected.label
-    }));
-  }}
-  onCreateOption={(inputValue) => {
-    setEducation(prev => ({
-      ...prev,
-      specification: inputValue
-    }));
-  }}
- isClearable
-  styles={{
-    control: (base) => ({
-      ...base,
-      borderRadius: "6px",
-      minHeight: "44px"
-    }),
-    input: (base) => ({
-      ...base,
-      boxShadow: "none"
-    })
-  }}
-/>
+                        setEducation(prev => ({
+                          ...prev,
+                          specification: selected.label
+                        }));
+                      }}
+                      onCreateOption={(inputValue) => {
+                        setEducation(prev => ({
+                          ...prev,
+                          specification: inputValue
+                        }));
+                      }}
+                      isClearable
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          borderRadius: "6px",
+                          minHeight: "44px"
+                        }),
+                        input: (base) => ({
+                          ...base,
+                          boxShadow: "none"
+                        })
+                      }}
+                    />
 
 
-                      {eduErrors.specification && (
+                    {eduErrors.specification && (
                       <p className="error-text">{eduErrors.specification}</p>
                     )}
                   </div>
@@ -1044,35 +1073,40 @@ if (!basicDetails.countryId) {
                       placeholder="School / College / University Name"
                       value={education.college}
                       onChange={(e) => setEducation({ ...education, college: e.target.value })}
-                         className={eduErrors.college ? "input-error" : ""}
+                      className={eduErrors.college ? "input-error" : ""}
                     />
-                     {eduErrors.college && (
+                    {eduErrors.college && (
                       <p className="error-text">{eduErrors.college}</p>
                     )}
                   </div>
-
+{shouldShowYear && (
                   <div className="form-group">
                     <label>Year of Study<span className="required">*</span></label>
-                    <input
-  type="text"
-  placeholder="Class 10 / 12th / 1st Year..."
+                    <select
   value={education.year}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // Allow letters, numbers, spaces only
-    if (/^[A-Za-z0-9\s]*$/.test(value)) {
-      setEducation({ ...education, year: value });
-    }
-  }}
+  onChange={(e) =>
+    setEducation({ ...education, year: e.target.value })
+  }
   className={eduErrors.year ? "input-error" : ""}
-/>
+  disabled={!education.degree}
+>
+  {/*<option value="">
+    {loadingYears ? "Loading..." : "Select Year"}
+  </option>*/}
+   <option value="">Select Year</option>
 
-                     {eduErrors.year && (
+  {years.map((item, index) => (
+    <option key={index} value={item.year}>
+      {item.year}
+    </option>
+  ))}
+</select>
+
+                    {eduErrors.year && (
                       <p className="error-text">{eduErrors.year}</p>
                     )}
                   </div>
-
+)}
                   <div className="sign-action-btns">
                     <button onClick={() => updateEducation(index)} className="sign-action-btn">Save</button>
                     <button onClick={() => {
@@ -1097,23 +1131,23 @@ if (!basicDetails.countryId) {
                     <span className="label">School / College / University Name</span>
                     <span className="value">{edu.college}</span>
                   </div>
-
+{shouldShowYear && (
                   <div className="label-value">
                     <span className="label">Year of Study</span>
                     <span className="value">{edu.year}</span>
                   </div>
-
+)}
                   <div className="sign-action-btns">
                     <button
                       onClick={() => {
-                      
-              const selected = courses.find(
-    c => c.className === edu.degree
-  );
 
-  if (selected) {
-    setSelectedClassId(selected.classId);
-  }
+                        const selected = courses.find(
+                          c => c.className === edu.degree
+                        );
+
+                        if (selected) {
+                          setSelectedClassId(selected.classId);
+                        }
 
                         setEditIndex(index);
                         setEducation(edu);
@@ -1142,21 +1176,26 @@ if (!basicDetails.countryId) {
 
                   <select
                     value={education.degree}
-                   onChange={(e) => {
-    const value = e.target.value;
+                    onChange={(e) => {
+                      const value = e.target.value;
 
-    setEducation({
-      ...education,
-      degree: value,
-      specification: ""
-    });
+                      setEducation({
+                        ...education,
+                        degree: value,
+                        specification: "",
+                         year:""
+                      });
 
-    const selected = courses.find(c => c.className === value);
+                      const selected = courses.find(c => c.className === value);
 
-    if (selected) {
-      setSelectedClassId(selected.classId);
-    }
-  }}
+                      if (selected) {
+                        setSelectedClassId(selected.classId);
+                       fetchYearsByClassId(selected.classId);
+                        }
+                        else{
+                          setYears([]);
+                        }
+                    }}
                     className={eduErrors.degree ? "input-error" : ""}
                   >
                     <option value="">Select Class / Course</option>
@@ -1173,7 +1212,7 @@ if (!basicDetails.countryId) {
                 </div>
                 <div className="form-group">
                   <label>Discipline / Specialization *</label>
-                 {/* <input
+                  {/* <input
                     type="text"
                     placeholder="Specialization"
                     value={education.specification}
@@ -1184,40 +1223,40 @@ if (!basicDetails.countryId) {
                     }
                     className={eduErrors.specification ? "input-error" : ""}
                   />*/} <CreatableSelect
-  options={specializationOptions}
-  placeholder="Select or type discipline / specialization"
-  value={
-    specializationOptions.find(
-      opt => opt.label === education.specification
-    ) || (
-      education.specification
-        ? { label: education.specification, value: education.specification }
-        : null
-    )
-  }
-  onChange={(selected) => {
-    if (!selected) {
-      setEducation(prev => ({
-        ...prev,
-        specification: ""
-      }));
-      return;
-    }
+                    options={specializationOptions}
+                    placeholder="Select or type discipline / specialization"
+                    value={
+                      specializationOptions.find(
+                        opt => opt.label === education.specification
+                      ) || (
+                        education.specification
+                          ? { label: education.specification, value: education.specification }
+                          : null
+                      )
+                    }
+                    onChange={(selected) => {
+                      if (!selected) {
+                        setEducation(prev => ({
+                          ...prev,
+                          specification: ""
+                        }));
+                        return;
+                      }
 
-    setEducation(prev => ({
-      ...prev,
-      specification: selected.label
-    }));
-  }}
-  onCreateOption={(inputValue) => {
-    setEducation(prev => ({
-      ...prev,
-      specification: inputValue
-    }));
-  }}
- isClearable
- 
-/>
+                      setEducation(prev => ({
+                        ...prev,
+                        specification: selected.label
+                      }));
+                    }}
+                    onCreateOption={(inputValue) => {
+                      setEducation(prev => ({
+                        ...prev,
+                        specification: inputValue
+                      }));
+                    }}
+                    isClearable
+
+                  />
                   {eduErrors.specification && <p className="error-text">{eduErrors.specification}</p>}
                 </div>
 
@@ -1237,26 +1276,31 @@ if (!basicDetails.countryId) {
                   {eduErrors.college && <p className="error-text">{eduErrors.college}</p>}
                 </div>
 
-
+{shouldShowYear && (
                 <div className="form-group">
                   <label>Year of Study *</label>
-                  <input
-  type="text"
-  placeholder="Class 10 / 12th / 1st Year..."
+                   <select
   value={education.year}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // Allow letters, numbers, spaces only
-    if (/^[A-Za-z0-9\s]*$/.test(value)) {
-      setEducation({ ...education, year: value });
-    }
-  }}
+  onChange={(e) =>
+    setEducation({ ...education, year: e.target.value })
+  }
   className={eduErrors.year ? "input-error" : ""}
-/>
+  disabled={!education.degree}
+>
+  {/*<option value="">
+    {loadingYears ? "Loading..." : "Select Year"}
+  </option>*/}
+   <option value="">Select Year</option>
+
+  {years.map((item, index) => (
+    <option key={index} value={item.year}>
+      {item.year}
+    </option>
+  ))}
+</select>
 
                   {eduErrors.year && <p className="error-text">{eduErrors.year}</p>}
-                </div>
+                </div>)}
 
 
                 <div className="sign-action-btns">
@@ -1308,9 +1352,9 @@ if (!basicDetails.countryId) {
 
               </div>
               <div className="form-group">
-              <label>
-  Password<span className="hint">(Must be min 6 chars, include letters, numbers & special char)</span> *
-</label>
+                <label>
+                  Password<span className="hint">(Must be min 6 chars, include letters, numbers & special char)</span> *
+                </label>
 
 
                 <div className="password-wrapper">

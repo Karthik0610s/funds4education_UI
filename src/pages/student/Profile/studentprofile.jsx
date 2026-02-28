@@ -101,7 +101,25 @@ const [specializationList, setSpecializationList] = useState([]);
       console.error("File download failed:", err);
     }
   };
+const fetchYearsByClassId = async (classId) => {
+  try {
+    setLoadingYears(true);
 
+    const res = await publicAxios.get(
+      `${ApiKey.Year}/${classId}`
+    );
+
+   const data = res.data || [];
+
+    setYears(data);
+    return data; // 🔥 REQUIRED for .then chaining
+  } catch (err) {
+    console.error("Failed to fetch years", err);
+    setYears([]);
+  } finally {
+    setLoadingYears(false);
+  }
+};
   const handleClear = () => {
     // clear only newly selected files
     setSelectedFiles([]);
@@ -284,6 +302,23 @@ const [specializationList, setSpecializationList] = useState([]);
   const [loadingStates, setLoadingStates] = useState(false);
   const [courses, setCourses] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(false);
+  const shouldShowYear = ![1, 2, 3].includes(Number(selectedClassId));
+   const [years, setYears] = useState([]);
+  const [loadingYears, setLoadingYears] = useState(false);
+ useEffect(() => {
+  if (!selectedClassId) return;
+
+  const classId = Number(selectedClassId);
+
+  if ([1, 2, 3].includes(classId)) {
+    // Hide year
+    setEducation(prev => ({ ...prev, year: "" }));
+    setYears([]);
+  } else {
+    // Fetch years
+    fetchYearsByClassId(classId);
+  }
+}, [selectedClassId]);
   const fetchCourses = async () => {
     try {
       setLoadingCourses(true);
@@ -479,7 +514,7 @@ if (!formData.countryId) {
     }
 */}
 
-    if (!education.year) {
+    if (shouldShowYear && !education.year) {
       setErrors(prev => ({ ...prev, education: "Year of Study is required." }));
       return;
     }
@@ -925,14 +960,17 @@ if (!formData.countryId) {
     setEducation({
       ...education,
       degree: value,
-      specification: ""
+      specification: "",
+      year:""
     });
 
     const selected = courses.find(c => c.className === value);
 
     if (selected) {
       setSelectedClassId(selected.classId);
-    }
+    // ✅ Call year API manually
+    
+  }
   }}
         //className={eduErrors.degree ? "input-error" : ""}
       >
@@ -1006,25 +1044,30 @@ if (!formData.countryId) {
  
 
   {/* Row 2 → Year + Button */}
-  
+  {shouldShowYear && (
     <div className="form-group">
        <label>Year of Study * </label>
-      <input
-  type="text"
-  placeholder="Class 10 / 12th / 1st Year..."
+      <select
   value={education.year}
-  maxLength={50}
-  onChange={(e) => {
-    const value = e.target.value;
-
-    // allow letters, numbers, space only (no special chars)
-    if (/^[A-Za-z0-9\s]*$/.test(value)) {
-      setEducation({ ...education, year: value });
-    }
-  }}
-/>
+  onChange={(e) =>
+    setEducation({ ...education, year: e.target.value })
+  }
+  //className={eduErrors.year ? "input-error" : ""}
+  disabled={!education.degree}
+>
+  {/*<option value="">
+    {loadingYears ? "Loading..." : "Select Year"}
+  </option>*/}
+   <option value="">Select Year</option>
+{years.map((item, index) => (
+  <option key={index} value={item.year}>
+    {item.year}
+  </option>
+))}
+</select>
 
     </div>
+  )}
   <div className="add-action-btns">
     <button
       type="button"
@@ -1104,28 +1147,51 @@ if (!formData.countryId) {
           <label>School / College / University Name</label>
           <p>{edu.college}</p>
         </div>
-
+{![1,2,3].includes(
+  Number(
+    courses.find(c => c.className === edu.degree)?.classId
+  )
+) && (
         <div className="form-group">
           <label>Year of Study</label>
           <p>{edu.year}</p>
         </div>
-
+)}
         <div className="sign-action-btns">
           <button
             type="button"
             className="sign-action-btn1"
-            onClick={() => {
-              const selected = courses.find(
+            onClick={async () => {
+              debugger;
+  const selected = courses.find(
     c => c.className === edu.degree
   );
 
-  if (selected) {
-    setSelectedClassId(selected.classId);
-  }
+  setEditIndex(i);
 
-              setEducation(edu);
-              setEditIndex(i);
-              
+  if (selected) {
+    const classId = selected.classId;
+
+    setSelectedClassId(classId);
+
+    let yearList = [];
+
+    if (![1, 2, 3].includes(Number(classId))) {
+      yearList = await fetchYearsByClassId(classId);
+      debugger;
+    } else {
+      yearList = [];
+    }
+
+    setEducation({
+      degree: edu.degree || "",
+      specification: edu.specification || "",
+      college: edu.college || "",
+      year: edu.year || ""
+    });
+  } else {
+    setEducation(edu);
+  }
             }}
           >
             Edit
