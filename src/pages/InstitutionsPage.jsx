@@ -41,7 +41,8 @@ const [search, setSearch] = useState(searchParams.get("search") || "");
 const [currentPage, setCurrentPage] = useState(
   Number(searchParams.get("page")) || 1
 );
-const [hover, setHover] = React.useState(false);
+//const [hover, setHover] = React.useState(false);
+const [hoveredId, setHoveredId] = React.useState(null);
   // 1️⃣ MOBILE OVERLAY STATE
   const [showMobileFilter, setShowMobileFilter] = useState(false);
  {/* 
@@ -434,21 +435,21 @@ useEffect(() => {
   </div>
 
   {/* View Details button */}
-  <button
+ <button
   className="view-more-btn"
   style={{
     position: "absolute",
     right: "15px",
     bottom: "15px",
-    backgroundColor: hover ? "#fb8c00" : "",
-    color: hover ? "#fff" : "",
+    backgroundColor: hoveredId === inst.id ? "#fb8c00" : "",
+    color: hoveredId === inst.id ? "#fff" : "",
     border: "none",
     padding: "6px 12px",
     borderRadius: "4px",
     cursor: "pointer"
   }}
-  onMouseEnter={() => setHover(true)}
-  onMouseLeave={() => setHover(false)}
+  onMouseEnter={() => setHoveredId(inst.id)}
+  onMouseLeave={() => setHoveredId(null)}
   onClick={(e) => {
     e.stopPropagation();
     navigate(`/institution/view/${inst.id}`);
