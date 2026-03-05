@@ -20,6 +20,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     dateofBirth: "",
     gender: "",
     userName: "",
+    // document: [],
     document: [],
     facultyId: ""
   });
