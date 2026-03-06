@@ -22,6 +22,7 @@ export default function FacultyProfileForm({ profile, onCancel, onSave }) {
     userName: "",
     // document: [],
     document: [],
+    // facultyId: ""
     facultyId: ""
   });
   const fileInputRef = useRef(null);
