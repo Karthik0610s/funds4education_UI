@@ -214,7 +214,7 @@ const handleFundPopup = (application) => {
         localStorage.clear();
         sessionStorage.clear();
       } finally {
-        window.location.replace("https://funds4education.in");
+        window.location.replace("https://vidyasetuedu.com/");
       }
     };
 

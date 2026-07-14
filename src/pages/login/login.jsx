@@ -35,7 +35,7 @@ export default function LoginPage() {
   // ✅ Update API base URL to match your backend
   const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL ||
-    "https://funds4education.in/api/v1/Auth";
+    "https://vidyasetuedu.com/api/v1/Auth";
 
   const handleOAuthLogin = (provider) => {
     if (!userType) {
@@ -48,7 +48,7 @@ export default function LoginPage() {
 
     // Redirect to backend OAuth endpoint
     // window.location.href = `${API_BASE_URL}/${provider}/login?role=${userType}`;
-    window.location.href = `https://funds4education.in/api/v1/Auth/${provider}/${userType}/login`;
+    window.location.href = `https://vidyasetuedu.com/api/v1/Auth/${provider}/${userType}/login`;
   };
 
   /* 
