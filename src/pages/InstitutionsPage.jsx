@@ -6,7 +6,6 @@ import { ApiKey } from "../api/endpoint";
 import { useNavigate } from "react-router-dom";
 import "../pages/styles.css";
 import { FaFilter } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
 import {
   fetchInstitutionList,
   fetchStates,
@@ -36,11 +35,8 @@ export default function InstitutionsPage() {
 const [showFilter, setShowFilter] = useState(false);
  // const [search, setSearch] = useState("");
  // const [currentPage, setCurrentPage] = useState(1);
- const [searchParams, setSearchParams] = useSearchParams();
-const [search, setSearch] = useState(searchParams.get("search") || "");
-const [currentPage, setCurrentPage] = useState(
-  Number(searchParams.get("page")) || 1
-);
+const [search, setSearch] = useState("");
+const [currentPage, setCurrentPage] = useState(1);
 //const [hover, setHover] = React.useState(false);
 const [hoveredId, setHoveredId] = React.useState(null);
   // 1️⃣ MOBILE OVERLAY STATE
@@ -56,12 +52,12 @@ const [hoveredId, setHoveredId] = React.useState(null);
   });
   */}
 const [filters, setFilters] = useState({
-  state: searchParams.get("state") || "",
-  district: searchParams.get("district") || "",
-  location: searchParams.get("location") || "",
-  college: searchParams.get("college") || "",
-  collegeType: searchParams.get("collegeType") || "",
-  management: searchParams.get("management") || "",
+  state: "",
+  district: "",
+  location: "",
+  college: "",
+  collegeType: "",
+  management: "",
 });
   const ITEMS_PER_PAGE = 5;
 const prevSearchRef = useRef(search);
@@ -85,13 +81,6 @@ const prevFiltersRef = useRef(filters);
   }, [dispatch, currentPage, search, filters]);
 
   
-   useEffect(() => {
-  setSearchParams({
-    search,
-    page: currentPage,
-    ...filters,
-  });
-}, [search, currentPage, filters]);
 useEffect(() => {
   const searchChanged = prevSearchRef.current !== search;
   const filtersChanged =
@@ -452,7 +441,9 @@ useEffect(() => {
   onMouseLeave={() => setHoveredId(null)}
   onClick={(e) => {
     e.stopPropagation();
-    navigate(`/institution/view/${inst.id}`);
+    navigate("/institution/view/details", {
+      state: { institutionId: inst.id },
+    });
   }}
 >
   View Details...

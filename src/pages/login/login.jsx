@@ -9,7 +9,7 @@ import {
   FaPinterest,
   FaFacebook,
 } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,12 +25,9 @@ export default function LoginPage() {
     userType: "",
   });
 
-  const location = useLocation();
   const navigate = useNavigate();
   /*const [userType, setUserType] = useState(location.state?.userType || "");*/
-  const [userType, setUserType] = useState(
-  location.state?.userType || "student"
-);
+  const userType = "student";
 
 
   const dispatch = useDispatch();
@@ -210,7 +207,7 @@ const isValidEmail = (email) => {
             </Link>
           </p>
 
-          <div className="user-radio-group">
+          {/* <div className="user-radio-group">
             {["student", "sponsor", "faculty"].map((type) => (
               <label key={type} className="user-radio-label">
                 <input
@@ -237,7 +234,7 @@ const isValidEmail = (email) => {
               </label>
             ))}
             <p className="error">{errors.userType || " "}</p>
-          </div>
+          </div> */}
 
           {/* === Username / Email === */}
           <div className="input-group">

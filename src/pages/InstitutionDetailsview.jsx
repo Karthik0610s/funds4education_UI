@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../app/components/header/header";
 import "../../src/pages/styles.css"; // global CSS
@@ -7,7 +7,8 @@ import "../../src/pages/styles.css"; // global CSS
 import { fetchInstitutionList } from "../app/redux/slices/InstitutionlistSlice";
 
 export default function InstitutionViewPage() {
-    const { id } = useParams(); // get id from URL
+    const location = useLocation();
+    const id = location.state?.institutionId;
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -31,7 +32,9 @@ export default function InstitutionViewPage() {
     }, [dispatch, institutions.length]);
 
     // Find the institution
-    const institution = institutions.find((i) => i.id.toString() === id);
+    const institution = institutions.find(
+        (i) => String(i.id) === String(id)
+    );
 
     if (loading) return <p>Loading institution details...</p>;
     if (!institution) return <p>No institution found</p>;

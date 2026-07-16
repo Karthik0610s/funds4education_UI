@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo ,useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link , useLocation} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Header from "../../app/components/header/header";
 import { logout } from "../../app/redux/slices/authSlice";
 import {
@@ -20,15 +20,9 @@ const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
  // const [eligibilityTab, setEligibilityTab] = useState("all"); // default
-  const location = useLocation();
-const params = new URLSearchParams(location.search);
-const [activeTab, setActiveTab] = useState(
-  params.get("tab") || "live"
-);
+const [activeTab, setActiveTab] = useState("live");
 
-const [eligibilityTab, setEligibilityTab] = useState(
-  params.get("eligibility") || "all"
-);
+const [eligibilityTab, setEligibilityTab] = useState("all");
 
   //const [activeTab, setActiveTab] = useState("live"); // default
 //const userId = localStorage.getItem("userId");
@@ -64,12 +58,8 @@ const [currentPage, setCurrentPage] = useState(
 ); */
 
 const [pages, setPages] = useState(() => {
-  const p = new URLSearchParams(location.search);
-  const live = Number(p.get("livePage")) || 1;
-  const upcoming = Number(p.get("upcomingPage")) || 1;
-
   return {
-    all: { live, upcoming },
+    all: { live: 1, upcoming: 1 },
     eligibility: { live: 1, upcoming: 1 }, // default
   };
 });
@@ -91,22 +81,16 @@ const changePage = (newPage) => {
 
 
 
-const [searchQuery, setSearchQuery] = useState(
-  params.get("search") || ""
-);
+const [searchQuery, setSearchQuery] = useState("");
 
-const [filters, setFilters] = useState(
-  params.get("filters")
-    ? JSON.parse(decodeURIComponent(params.get("filters")))
-    : {
-        class: [],
-        country: [],
-        gender: [],
-        religion: [],
-        state: [],
-        course: [],
-      }
-);
+const [filters, setFilters] = useState({
+  class: [],
+  country: [],
+  gender: [],
+  religion: [],
+  state: [],
+  course: [],
+});
 const prevFiltersRef = useRef(filters);
 const prevSearchRef = useRef(searchQuery);
   const roleId =
@@ -174,15 +158,6 @@ useEffect(() => {
   }, [dispatch]);
 
   useEffect(() => {
-  const p = new URLSearchParams(location.search);
-  p.set("livePage", pages[eligibilityTab].live);
-  p.set("upcomingPage", pages[eligibilityTab].upcoming);
-
-  navigate({ search: p.toString() }, { replace: true });
-}, [eligibilityTab]);
-
-
-  useEffect(() => {
     
   if (filters.class.length === 0) {
     dispatch(clearCourses());
@@ -223,32 +198,6 @@ useEffect(() => {
 
   return () => mediaQuery.removeEventListener("change", handleResize);
 }, []);
-useEffect(() => {
-  const params = new URLSearchParams();
-
-  params.set("tab", activeTab);
-  params.set("eligibility", eligibilityTab);
-
-  params.set("livePage", pages[eligibilityTab].live);
-params.set("upcomingPage", pages[eligibilityTab].upcoming);
-
-
-  if (searchQuery) params.set("search", searchQuery);
-
-  if (Object.values(filters).some(arr => arr.length > 0)) {
-    params.set("filters", encodeURIComponent(JSON.stringify(filters)));
-  }
-
-  navigate({ search: params.toString() }, { replace: true });
-}, [
-  activeTab,
-  eligibilityTab,
-  pages,
-  searchQuery,
-  filters,
-  navigate,
-]);
-
 useEffect(() => {
   const filtersChanged =
     JSON.stringify(prevFiltersRef.current) !== JSON.stringify(filters);
@@ -958,10 +907,16 @@ Based on Eligibility</button>
     onClick={(e) => {
       e.stopPropagation();
       navigate(
-        `${RP.scholarshipViewPage}?id=${s.id || s.scholarshipId}`,
+        RP.scholarshipViewPage.replace(":id", "view"),
         {
           state: {
-            from: location.search,
+            from: {
+              activeTab,
+              eligibilityTab,
+              pages,
+              searchQuery,
+              filters,
+            },
             id: s.id || s.scholarshipId,
           },
         }

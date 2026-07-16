@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchScholarshipById } from "../../app/redux/slices/ScholarshipSlice";
 import { publicAxios } from "../../api/config";
 import { ApiKey } from "../../api/endpoint";
@@ -9,17 +9,13 @@ const ScholarshipViewPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const [searchParams] = useSearchParams();
     const handleBack = () => {
-  navigate(
-    `/student-dashboard${location.state?.from || ""}`,
-    { replace: true }
-  );
+  navigate("/student-dashboard", { replace: true });
 };
 
 
     // ✅ Get ID from location.state (preferred) OR from ?id query (fallback)
-    const id = location.state?.id || searchParams.get("id");
+    const id = location.state?.id;
 
     const isLoggedIn = useSelector((state) => state.auth.token);
     const { selectedScholarship: scholarship, loading } = useSelector(
