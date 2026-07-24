@@ -136,7 +136,7 @@ export default function ForgotPassword() {
                     marginBottom: "0.25rem",
                   }}
                 >
-                  Username/Email *
+                 Email *
                 </label>
                 <input
                   type="text"

@@ -129,7 +129,7 @@ const navigate = useNavigate();
           <h3 className="section-title">Account Info</h3>
           <div className="education-item">
             <div className="detail-row">
-              <label>Username (Email):</label>
+              <label>Email:</label>
               <input type="text" value={profile.userName || ""} readOnly />
             </div>
             <div className="detail-row">

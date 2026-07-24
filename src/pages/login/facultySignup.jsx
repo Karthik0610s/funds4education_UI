@@ -163,7 +163,7 @@ if (!basicDetails.dob) {
 
 
      if (step === 2) {
-    // Username / Email
+    // Email / Email
     const username = verification.username.trim();
 
      if (!username) {

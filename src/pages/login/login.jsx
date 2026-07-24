@@ -148,7 +148,7 @@ const isValidEmail = (email) => {
 
     if (!userType) newErrors.userType = "Please select a user type";
 
-    // if (!identifier.trim()) newErrors.identifier = "Username or Email is required";
+    // if (!identifier.trim()) newErrors.identifier = "Email or Email is required";
     if (!identifier.trim()) {
       newErrors.identifier = "Email is required";
     } else if (!isValidEmail(identifier)) {
@@ -236,9 +236,9 @@ const isValidEmail = (email) => {
             <p className="error">{errors.userType || " "}</p>
           </div> */}
 
-          {/* === Username / Email === */}
+          {/* === Email / Email === */}
           <div className="input-group">
-            <label>Username or Email</label>
+            <label>Email</label>
             <input
               type="text"
               value={identifier}
@@ -247,7 +247,7 @@ const isValidEmail = (email) => {
                 setErrors((prev) => ({ ...prev, identifier: "" }));
                 dispatch(clearError()); 
               }}
-              placeholder="Enter username or email"
+              placeholder="Enter email"
             />
             <p className="error">{errors.identifier || " "}</p>
           </div>

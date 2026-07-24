@@ -113,7 +113,7 @@ try {
           <h3 className="section-title">Account Info</h3>
           <div className="profile-details">
             <div className="detail-row">
-              <label>User Name:</label>
+              <label>Email:</label>
               <input type="text" value={profile.userName || ""} readOnly />
             </div>
             <div className="detail-row">

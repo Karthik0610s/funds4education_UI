@@ -1333,7 +1333,7 @@ const fetchYearsByClassId = async (classId) => {
             </div>
             <div className="row">
               <div className="form-group">
-                <label>Username (Email) *</label>
+                <label>Email *</label>
                 <input
                   type="text"
                   placeholder="Enter your email"

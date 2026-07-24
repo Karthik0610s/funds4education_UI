@@ -287,7 +287,7 @@ const isValidEmail = (email) => {
 
     if (!formData.gender) errs.gender = "Gender is required.";
    if (!formData.userName.trim()) {
-  errs.userName = "Username is required.";
+  errs.userName = "Email is required.";
 } else if (!isValidEmail(formData.userName)) {
   errs.userName = "Enter a valid email address.";
 }
@@ -956,7 +956,7 @@ const isValidEmail = (email) => {
             </table>
           )}
 
-          {/* Username */}
+          {/* Email */}
           <h3 className="section-title">Account</h3>
           <div className="form-group">
             <label>User Name(Email) *</label>

@@ -52,9 +52,9 @@ export const addNewSponsorReq = async (data) => {
     // ✅ SQL duplicate username case (TOP priority)
     if (
       status === 500 &&
-      data?.detail?.includes("Username already exists")
+      data?.detail?.includes("Email already exists")
     ) {
-      errorMsg = "Username already exists. Please choose another one.";
+      errorMsg = "Email already exists. Please choose another one.";
     }
     // ✅ Validation errors
     else if (data?.errors) {
@@ -93,9 +93,9 @@ export const updateSponsorReq = async (data) => {
     // ✅ SQL duplicate username case (TOP priority)
     if (
       status === 500 &&
-      data?.detail?.includes("Username already exists")
+      data?.detail?.includes("Email already exists")
     ) {
-      errorMsg = "Username already exists. Please choose another one.";
+      errorMsg = "Email already exists. Please choose another one.";
     }
     // ✅ Validation errors
     else if (data?.errors) {

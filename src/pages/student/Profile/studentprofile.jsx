@@ -1211,10 +1211,10 @@ if (!formData.countryId) {
 )}
 
 
-          {/* Username */}
+          {/* Email */}
           <h3 className="section-title">Account Details</h3>
           <div className="form-group">
-            <label>Username (Email) *</label>
+            <label>Email *</label>
             <input
               type="email"
               value={formData.userName}

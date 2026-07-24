@@ -172,8 +172,8 @@ const handleClear = () => {
 }
 
        if (step === 1) {
-    // Username
-    // Username
+    // Email
+    // Email
 const username = verification.username.trim();
       if (!username) {
         stepErrors.username = "Email is required.";

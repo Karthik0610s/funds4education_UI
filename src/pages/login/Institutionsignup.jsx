@@ -592,11 +592,11 @@ const [step, setStep] = useState(0);
             <h3 className="section-title">Verification</h3>
             <div className="row">
               {/*<div className="form-group">
-                <label>Username *</label>
+                <label>Email *</label>
                 <input
                   type="text"
                   name="username"
-                  placeholder="Username"
+                  placeholder="Email"
                   value={verification.username}
                   onChange={handleVerificationChange}
                   className={errors.username ? "input-error" : ""}
@@ -605,10 +605,10 @@ const [step, setStep] = useState(0);
                 {errors.username && <p className="error-text">{errors.username}</p>}
               </div>*/}
                <div className="form-group">
-        <label>Username *</label>
+        <label>Email *</label>
         <input
   type="text"
-  placeholder="Username"
+  placeholder="Email"
   value={verification.username}
  onChange={(e) => { const value = e.target.value; // allow only letters, numbers, underscore 
  if (/^[A-Za-z0-9@._%+-]*$/.test(value)){ setVerification({ ...verification, username: value }); } }} className={errors.username ? "input-error" : ""} />
