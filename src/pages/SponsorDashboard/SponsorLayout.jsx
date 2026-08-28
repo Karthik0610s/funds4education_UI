@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 
-const SponsorLayout = ({ children, name, handleLogout }) => {
+const SponsorLayout = ({ children, name, handleLogout, scholarshipOnly = false }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -37,19 +37,21 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
       <aside className={`sponsor-drawer ${drawerOpen ? "open" : ""}`}>
         <nav className="sponsor-drawer-nav">
 
-          <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
+          {!scholarshipOnly && (
+            <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
+          )}
 
-          <Link to="/sponsor-dashboard/sponsorapplication" className="sponsor-drawer-item">
+          {/* <Link to="/sponsor-dashboard/sponsorapplication" className="sponsor-drawer-item">
             Applications
-          </Link>
+          </Link> */}
 
           <Link to="/sponsor-dashboard/scholarshipPage" className="sponsor-drawer-item">
             Sponsored Scholarship
           </Link>
 
-          <Link to="/Sponsored-Scholarship" className="sponsor-drawer-item">
+          {/* <Link to="/Sponsored-Scholarship" className="sponsor-drawer-item">
             Approved Applications
-          </Link>
+          </Link> */}
 
           {/* <Link to="/sponsor-dashboard/report" className="sponsor-drawer-item">
             Reports
@@ -71,10 +73,16 @@ const SponsorLayout = ({ children, name, handleLogout }) => {
 
 
         <nav className="sidebar-nav">
-          <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/sponsor-dashboard/sponsorapplication" className="nav-link">Applications</Link>
+          {!scholarshipOnly && (
+            <>
+              <Link to="/sponsor-dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/sponsor-dashboard/sponsorapplication" className="nav-link">Applications</Link>
+            </>
+          )}
           <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Sponsored Scholarship</Link>
-          <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
+          {!scholarshipOnly && (
+            <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
+          )}
           {/* <Link to="/sponsor-dashboard/report" className="nav-link">Reports</Link> */}
           {/* <Link to={RP.ViewSponsorProfile} className="nav-link">Profile</Link>
           { <Link to={RP.resetPassword}>Reset Password</Link> }*/}

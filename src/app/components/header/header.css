@@ -122,6 +122,11 @@
   color: #ff8a00;
 }
 
+.nav-bar a.active,
+.nav-bar a.active:hover {
+  color: #ff8a00;
+}
+
 /* ==============================
    AUTH LINKS (RIGHT)
 ============================== */
@@ -713,6 +718,10 @@
   gap: 16px;
   position: relative;
   /*width: 100%; */
+}
+
+.student-profile-header .right-section > span {
+  white-space: nowrap;
 }
 
 .desktop-welcome {

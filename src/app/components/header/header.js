@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiBell, FiMenu, FiX, FiLogOut } from "react-icons/fi";
 
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -13,6 +13,7 @@ import { publicAxios } from "../../../api/config";
 import { ApiKey } from "../../../api/endpoint";
 
 const Header = ({ variant = "public" }) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -22,6 +23,18 @@ const Header = ({ variant = "public" }) => {
   const userName = localStorage.getItem("name");
 
   const isLoggedIn = userId && roleId;
+
+  const getNavClass = (path, scrollTo) => {
+    if (path === "/") {
+      if (location.pathname !== "/") return "";
+      return location.state?.scrollTo === scrollTo ||
+        (!location.state?.scrollTo && scrollTo === "hero")
+        ? "active"
+        : "";
+    }
+
+    return location.pathname === path ? "active" : "";
+  };
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -187,18 +200,19 @@ const Header = ({ variant = "public" }) => {
       case "public":
         return (
           <>
-            {!isLoggedIn && (
+            {(!isLoggedIn || roleName === "Student") && (
               <div className="nav-wrapper">
                 <div className="nav-bar">
-                  <Link to="/" state={{ scrollTo: "hero" }}  >Home</Link>
-                  <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
-                  <Link to={RP.studentdashboard}>Scholarships</Link>
+                  <Link className={getNavClass("/", "hero")} to="/" state={{ scrollTo: "hero" }}>Home</Link>
+                  <Link className={getNavClass("/", "benefits-section")} to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+                  <Link className={getNavClass(RP.studentdashboard)} to={RP.studentdashboard}>Scholarships</Link>
                   {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
-                  <Link to={RP.InstitutionsPage}>Institution</Link>
+                  <Link className={getNavClass(RP.InstitutionsPage)} to={RP.InstitutionsPage}>Institution</Link>
                 </div>
-                <div className="header-right">
-                  <Link to="/login">Login</Link>
-                 { /*<Link
+                {!isLoggedIn && (
+                  <div className="header-right">
+                    <Link to="/login">Login</Link>
+                    { /*<Link
                     to="#"
                     className="signup-btn"
                     onClick={(e) => {
@@ -209,11 +223,12 @@ const Header = ({ variant = "public" }) => {
                     Sign Up
                   </Link>
                   */}
-                  <Link to={RP.signup} className="signup-btn">
-  Sign Up
-</Link>
+                    <Link to={RP.signup} className="signup-btn">
+                      Sign Up
+                    </Link>
 
-                </div>
+                  </div>
+                )}
               </div>
             )}
             <div className="header-actions student-profile-header" ref={dropdownRef}>
@@ -292,6 +307,7 @@ const Header = ({ variant = "public" }) => {
                     <FiLogOut
                       size={22}
                       className="logout-icon"
+                      title="Logout"
                       onClick={handleLogout}
                       style={{ cursor: "pointer" }}
                     />
@@ -309,11 +325,11 @@ const Header = ({ variant = "public" }) => {
             {!isLoggedIn && (
               <div className="nav-wrapper">
                 <div className="nav-bar">
-                  <Link to="/" state={{ scrollTo: "hero" }}  >Home</Link>
-                  <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
-                  <Link to={RP.studentdashboard}>Scholarships</Link>
+                  <Link className={getNavClass("/", "hero")} to="/" state={{ scrollTo: "hero" }}>Home</Link>
+                  <Link className={getNavClass("/", "benefits-section")} to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+                  <Link className={getNavClass(RP.studentdashboard)} to={RP.studentdashboard}>Scholarships</Link>
                   {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
-                  <Link to={RP.InstitutionsPage}>Institution</Link>
+                  <Link className={getNavClass(RP.InstitutionsPage)} to={RP.InstitutionsPage}>Institution</Link>
                 </div>
 
                 <div className="header-right">
@@ -334,6 +350,16 @@ const Header = ({ variant = "public" }) => {
 
 
 
+                </div>
+              </div>
+            )}
+            {isLoggedIn && roleName === "Student" && (
+              <div className="nav-wrapper">
+                <div className="nav-bar">
+                  <Link className={getNavClass("/", "hero")} to="/" state={{ scrollTo: "hero" }}>Home</Link>
+                  <Link className={getNavClass("/", "benefits-section")} to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+                  <Link className={getNavClass(RP.studentdashboard)} to={RP.studentdashboard}>Scholarships</Link>
+                  <Link className={getNavClass(RP.InstitutionsPage)} to={RP.InstitutionsPage}>Institution</Link>
                 </div>
               </div>
             )}
@@ -399,6 +425,7 @@ const Header = ({ variant = "public" }) => {
                     <FiLogOut
                       size={22}
                       className="logout-icon"
+                      title="Logout"
                       onClick={handleLogout}
                       style={{ cursor: "pointer" }}
                     />
@@ -478,6 +505,7 @@ const Header = ({ variant = "public" }) => {
                 <FiLogOut
                   size={22}
                   className="logout-icon"
+                  title="Logout"
                   onClick={handleLogout}
                   style={{ cursor: "pointer" }}
                 />
@@ -491,11 +519,11 @@ const Header = ({ variant = "public" }) => {
             {!isLoggedIn && (
               <div className="nav-wrapper">
                 <div className="nav-bar">
-                  <Link to="/" state={{ scrollTo: "hero" }}  >Home</Link>
-                  <Link to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
-                  <Link to={RP.studentdashboard}>Scholarships</Link>
+                  <Link className={getNavClass("/", "hero")} to="/" state={{ scrollTo: "hero" }}>Home</Link>
+                  <Link className={getNavClass("/", "benefits-section")} to="/" state={{ scrollTo: "benefits-section" }}>About Us</Link>
+                  <Link className={getNavClass(RP.studentdashboard)} to={RP.studentdashboard}>Scholarships</Link>
                   {/* <Link to={RP.facultyDashboard}>E-Learning</Link> */}
-                  <Link to={RP.InstitutionsPage}>Institution</Link>
+                  <Link className={getNavClass(RP.InstitutionsPage)} to={RP.InstitutionsPage}>Institution</Link>
                 </div>
 
                 <div className="header-right">
@@ -594,6 +622,7 @@ const Header = ({ variant = "public" }) => {
                     <FiLogOut
                       size={22}
                       className="logout-icon"
+                      title="Logout"
                       onClick={handleLogout}
                       style={{ cursor: "pointer" }}
                     />
@@ -613,6 +642,10 @@ const Header = ({ variant = "public" }) => {
             </button>
           </div>
         );
+
+      case "Institutions-list":
+      case "Institution-view":
+        return renderVariantLinks("public");
 
       case "profile-role-based":
         if (!isLoggedIn) return renderVariantLinks("public");
@@ -657,22 +690,42 @@ const Header = ({ variant = "public" }) => {
               Sign Up
             </div>*/}
             <div
-  className="mobile-item"
-  onClick={() => {
-    navigate(RP.signup);
-    setMenuOpen(false);
-  }}
->
-  Sign Up
-</div>
+              className="mobile-item"
+              onClick={() => {
+                navigate(RP.signup);
+                setMenuOpen(false);
+              }}
+            >
+              Sign Up
+            </div>
 
           </>
         );
+
+      case "Institutions-list":
+      case "Institution-view":
+        return renderMobileLinks("public");
 
       /* ---------- STUDENT PROFILE ---------- */
       case "student-profile":
         return isLoggedIn ? (
           <>
+            <div className="mobile-item" onClick={() => { navigate("/", { state: { scrollTo: "hero" } }); setMenuOpen(false); }}>
+              Home
+            </div>
+
+            <div className="mobile-item" onClick={() => { navigate("/", { state: { scrollTo: "benefits-section" } }); setMenuOpen(false); }}>
+              About Us
+            </div>
+
+            <div className="mobile-item" onClick={() => { navigate(RP.studentdashboard); setMenuOpen(false); }}>
+              Scholarships
+            </div>
+
+            <div className="mobile-item" onClick={() => { navigate(RP.InstitutionsPage); setMenuOpen(false); }}>
+              Institution
+            </div>
+
             <div className="mobile-item" onClick={() => { navigate("/view-profile"); setMenuOpen(false); }}>
               Profile
             </div>
@@ -680,7 +733,7 @@ const Header = ({ variant = "public" }) => {
             <div className="mobile-item" onClick={() => { navigate("/reset-password"); setMenuOpen(false); }}>
               Reset Password
             </div>
-             {/* 
+            {/* 
             <div className="mobile-item" onClick={() => { navigate("/application"); setMenuOpen(false); }}>
              Applications
             </div>
@@ -775,8 +828,8 @@ const Header = ({ variant = "public" }) => {
               }}
             />
             {!isLoggedIn && (
-  <span className="brand">VidyāSetu</span>
-)}
+              <span className="brand">VidyāSetu</span>
+            )}
           </div>
 
           {/* RIGHT SIDE MOBILE (LOGGED IN) */}
@@ -789,6 +842,7 @@ const Header = ({ variant = "public" }) => {
               <FiLogOut
                 size={22}
                 className="logout-icon"
+                title="Logout"
                 onClick={handleLogout}
               />
 
@@ -896,6 +950,7 @@ const Header = ({ variant = "public" }) => {
                     <FiLogOut
                       size={22}
                       className="logout-icon"
+                      title="Logout"
                       onClick={handleLogout}
                     />
 

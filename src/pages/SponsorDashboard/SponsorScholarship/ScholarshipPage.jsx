@@ -165,14 +165,22 @@ const sliceLen = useResponsiveSlice();
 
         {/* LEFT SIDEBAR */}
         <div className="left-container">
-          <SponsorLayout name={name} handleLogout={handleLogout} />
+          <SponsorLayout
+            name={name}
+            handleLogout={handleLogout}
+            scholarshipOnly
+          />
         </div>
 
         {/* RIGHT MAIN */}
         <div className="right-container">
 
           <div className="mobile-sponsor">
-            <SponsorLayout name={name} handleLogout={handleLogout} />
+            <SponsorLayout
+              name={name}
+              handleLogout={handleLogout}
+              scholarshipOnly
+            />
           </div>
 
           <div className="container">

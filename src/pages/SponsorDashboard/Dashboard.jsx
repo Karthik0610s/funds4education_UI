@@ -248,7 +248,11 @@ const formatAmount = (val) => {
     <>
      <Header variant="sponsor-profile" />
     <div className="dashboard-container">
-      <SponsorLayout name={name} handleLogout={handleLogout}></SponsorLayout>
+      <SponsorLayout
+        name={name}
+        handleLogout={handleLogout}
+        scholarshipOnly
+      />
       {/* ⭐ MOBILE BAR */}
     {/* <div className="sponsor-mobile-bar">
   <button
