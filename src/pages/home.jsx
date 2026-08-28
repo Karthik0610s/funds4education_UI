@@ -364,15 +364,18 @@ const Home = () => {
             </div>
             <div className="achievement-stats">
               <div>
-                <h2>{activeScholarshipCount}+</h2>
+                {/* <h2>{activeScholarshipCount}+</h2> */}
+                <h2>1000+</h2>
                 <p>Scholarship</p>
               </div>
               <div>
-                <h2>{studentCount}+</h2>
+                {/* <h2>{studentCount}+</h2> */}
+                <h2>50+</h2>
                 <p>Students</p>
               </div>
               <div>
-                <h2>{sponsorCount}+</h2>
+                {/* <h2>{sponsorCount}+</h2> */}
+                <h2>100+</h2>
                 <p>Partner Group</p>
               </div>
             </div>

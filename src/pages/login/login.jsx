@@ -9,11 +9,11 @@ import {
   FaPinterest,
   FaFacebook,
 } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { routePath as RP } from "../../app/components/router/routepath";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser , clearError  } from "../../app/redux/slices/authSlice";
+import { loginUser, clearError } from "../../app/redux/slices/authSlice";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,8 +26,9 @@ export default function LoginPage() {
   });
 
   const navigate = useNavigate();
-  /*const [userType, setUserType] = useState(location.state?.userType || "");*/
-  const userType = "student";
+   const location = useLocation();
+ const [userType, setUserType] = useState(location.state?.userType || "student");
+  //const userType = "student";
 
 
   const dispatch = useDispatch();
@@ -109,7 +110,7 @@ export default function LoginPage() {
     const tldSet = new Set(tldMatches);
     return tldSet.size === tldMatches.length;
   };*/
-const isValidEmail = (email) => {
+  const isValidEmail = (email) => {
     email = email.trim();
 
     // Basic regex: no spaces, contains @, proper chars
@@ -169,7 +170,7 @@ const isValidEmail = (email) => {
         else if (roleId === 4) navigate("/institution-dashboard");
         else if (roleId === 5) navigate("/facultydashboard");
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   return (
@@ -193,12 +194,12 @@ const isValidEmail = (email) => {
                   return;
                 }
 
-                const path =
-                  userType === "student"
-                    ? RP.signup
-                    : userType === "sponsor"
-                    ? RP.signupSponsor
-                    : RP.facultySignup;
+                const path =RP.signup;
+                  // userType === "student"
+                  //   ? RP.signup
+                  //   : userType === "sponsor"
+                  //     ? RP.signupSponsor
+                  //     : RP.facultySignup;
 
                 navigate(path, { state: { userType } });
               }}
@@ -207,8 +208,8 @@ const isValidEmail = (email) => {
             </Link>
           </p>
 
-          {/* <div className="user-radio-group">
-            {["student", "sponsor", "faculty"].map((type) => (
+          <div className="user-radio-group">
+            {["student", "sponsor"].map((type) => (
               <label key={type} className="user-radio-label">
                 <input
                   type="radio"
@@ -216,25 +217,25 @@ const isValidEmail = (email) => {
                   value={type}
                   checked={userType === type}
                   onChange={(e) => {
-  setUserType(e.target.value);
+                    setUserType(e.target.value);
 
-  // ✅ Clear ALL local validation errors
-  setErrors({
-    identifier: "",
-    password: "",
-    userType: "",
-  });
+                    // ✅ Clear ALL local validation errors
+                    setErrors({
+                      identifier: "",
+                      password: "",
+                      userType: "",
+                    });
 
-  // ✅ Clear Redux/global auth error
-  dispatch(clearError());
-}}
+                    // ✅ Clear Redux/global auth error
+                    dispatch(clearError());
+                  }}
 
                 />
                 <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
               </label>
             ))}
             <p className="error">{errors.userType || " "}</p>
-          </div> */}
+          </div>
 
           {/* === Email / Email === */}
           <div className="input-group">
@@ -245,7 +246,7 @@ const isValidEmail = (email) => {
               onChange={(e) => {
                 setIdentifier(e.target.value);
                 setErrors((prev) => ({ ...prev, identifier: "" }));
-                dispatch(clearError()); 
+                dispatch(clearError());
               }}
               placeholder="Enter email"
             />
@@ -317,7 +318,7 @@ const isValidEmail = (email) => {
             <button type="button" onClick={() => handleOAuthLogin("facebook")}>
               <FaFacebook /> Facebook
             </button>
-           {/* <button type="button" onClick={() => handleOAuthLogin("linkedin")}>
+            {/* <button type="button" onClick={() => handleOAuthLogin("linkedin")}>
               <FaLinkedin /> LinkedIn
             </button>
             <button type="button" onClick={() => handleOAuthLogin("instagram")}>
