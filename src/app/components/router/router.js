@@ -98,13 +98,13 @@ function Layout({ children }) {
   const location = useLocation();
 
   // ⭐ CHANGED: ChatWidget now stays mounted for logged-out users too.
-  // We only hide it on pages where it makes no sense to show it (home,
-  // login, signup screens). We no longer key this off token/expiry —
+  // We only hide it on pages where it makes no sense to show it (login,
+  // signup screens). We show it on home page and all other pages so users
+  // can access FAQ and Help & Support. We no longer key this off token/expiry —
   // the widget's own FAQ button must work without login, and
   // ChatWidget already prompts for login internally when someone taps
   // "Chat with AI" or "Raise a Query" while logged out.
   const hideChat =
-    location.pathname === "/" ||
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
     location.pathname === "/sponsor/signup" ||

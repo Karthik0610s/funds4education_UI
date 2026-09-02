@@ -170,19 +170,8 @@ useEffect(() => {
 }, [filters.class, dispatch]);
 
 const sidebarRef = useRef(null);
+const dropdownRef = useRef(null);
 const paginationRef = useRef(null);
-
- /*const closeAllDropdowns = () => {
-    setFilters((prev) => ({
-      ...prev,
-      show_class: false,
-      show_country: false,
-      show_gender: false,
-      show_religion: false,
-      show_state: false,
-      show_course: false,
-    }));
-  };*/
 
   // CLICK OUTSIDE HANDLER
  const [isMobile, setIsMobile] = useState(
@@ -225,23 +214,6 @@ useEffect(() => {
   eligibilityTab,
   activeTab,
 ]);
-
-useEffect(() => {
-  function handleClickOutside(event) {
-    if (!showFilter) return; // only run if sidebar is open
-
-    const clickedOutsideSidebar =
-      sidebarRef.current && !sidebarRef.current.contains(event.target);
-
-    if (clickedOutsideSidebar) {
-      setShowFilter(false);
-      closeAllDropdowns();
-    }
-  }
-
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => document.removeEventListener("mousedown", handleClickOutside);
-}, [showFilter]);
 
 
 
@@ -534,9 +506,33 @@ useEffect(() => {
   ];
 
 const [openDropdown, setOpenDropdown] = useState(null); // 🔥 only one dropdown
+
 const closeAllDropdowns = () => {
   setOpenDropdown(null);
 };
+
+// Helper function to get selected values display text - show all values with line wrapping
+const getSelectedValuesText = (key) => {
+  const selected = filters[key] || [];
+  if (selected.length === 0) return "Select options";
+  
+  // Find the dropdown data for this key
+  let options = [];
+  if (key === "country") options = dropdownData.countries;
+  else if (key === "state") options = dropdownData.states;
+  else if (key === "religion") options = dropdownData.religions;
+  else if (key === "gender") options = dropdownData.genders;
+  else if (key === "class") options = dropdownData.classList;
+  else if (key === "course") options = dropdownData.courses;
+  
+  const selectedNames = options
+    .filter(opt => selected.includes(opt.id))
+    .map(opt => opt.name);
+  
+  // Return all selected values joined by comma and space, allowing wrapping
+  return selectedNames.join(", ");
+};
+
   const [currentAd, setCurrentAd] = useState(0);
 
   useEffect(() => {
@@ -546,6 +542,33 @@ const closeAllDropdowns = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // ✅ IMPROVED CLICK OUTSIDE HANDLER - closes dropdown anywhere
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Only process if a dropdown is open
+      if (!openDropdown) return;
+
+      // Check if click is outside the sidebar/dropdown area
+      const clickedOutsideSidebar =
+        sidebarRef.current && !sidebarRef.current.contains(event.target);
+      const clickedOutsideDropdown =
+        dropdownRef.current && !dropdownRef.current.contains(event.target);
+
+      // Close dropdown if clicked outside
+      if (clickedOutsideSidebar || clickedOutsideDropdown) {
+        closeAllDropdowns();
+        // On mobile, also close the sidebar
+        if (isMobile) {
+          setShowFilter(false);
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openDropdown, isMobile]);
+
   return (
     <div>
       <Header variant="student-profile" />
@@ -584,7 +607,6 @@ const closeAllDropdowns = () => {
     className={`sidebar ${
       showFilter ? (isMobile ? "mobile-open" : "desktop-open") : ""
     }`}
-    onClick={closeAllDropdowns} // 🔥 close dropdown on sidebar click
   >
     {/* HEADER */}
     <div className="filter-header">
@@ -601,7 +623,7 @@ const closeAllDropdowns = () => {
     </div>
 
     {/* FILTER GROUP */}
-    <div className="filter-group">
+    <div className="filter-group" ref={dropdownRef}>
       {[
         { key: "country", label: "Country", options: dropdownData.countries },
         { key: "state", label: "State", options: dropdownData.states },
@@ -613,10 +635,10 @@ const closeAllDropdowns = () => {
         <div
           key={key}
           className="filter-dropdown"
-          onClick={(e) => e.stopPropagation()} // 🔥 prevent sidebar close
         >
           {/* TOGGLE */}
           <button
+            type="button"
             className="dropdown-toggle"
             onClick={() =>
               setOpenDropdown(openDropdown === key ? null : key)
@@ -626,6 +648,13 @@ const closeAllDropdowns = () => {
             <span className="arrow">▼</span>
           </button>
 
+          {/* SELECTED VALUES DISPLAY */}
+          {filters[key].length > 0 && openDropdown !== key && (
+            <div className="selected-values">
+              {getSelectedValuesText(key)}
+            </div>
+          )}
+
           {/* DROPDOWN */}
           {openDropdown === key && (
             <div className="dropdown-menu">
@@ -633,7 +662,7 @@ const closeAllDropdowns = () => {
               <label className="checkbox-row">
                 <input
                   type="checkbox"
-                  checked={filters[key].length === options.length}
+                  checked={filters[key].length === options.length && options.length > 0}
                   onChange={() => {
                     if (filters[key].length === options.length) {
                       setFilters((prev) => ({ ...prev, [key]: [] }));
@@ -678,7 +707,7 @@ const closeAllDropdowns = () => {
     </div>
 
     {/* CLEAR BUTTON */}
-    <button className="clear-filters-btn" onClick={clearAllFilters}>
+    <button type="button" className="clear-filters-btn" onClick={clearAllFilters}>
       Clear All Filters
     </button>
 
