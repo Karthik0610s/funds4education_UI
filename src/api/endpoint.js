@@ -51,5 +51,10 @@ Faculty:"/faculty",
   Districts : "/Filter/districts",
   States : "/Filter/state",
   GetSessionClosed:"Chat/close-session",
- Year:"/Class/GetYearByClassId"
+ Year:"/Class/GetYearByClassId",
+ RaiseQuery: "/Query",
+  ReplyToQuery: "/Query/reply",
+  GetMyTickets: "/Query/student", // append /{studentId}
+  GetTicketConversation: "/Query", // append /{id}/conversation
+  GetAllQueries: "/Query/all",
 };

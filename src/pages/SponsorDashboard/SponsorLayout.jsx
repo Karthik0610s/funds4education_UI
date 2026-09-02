@@ -80,6 +80,8 @@ const SponsorLayout = ({ children, name, handleLogout, scholarshipOnly = false }
             </>
           )}
           <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Sponsored Scholarship</Link>
+          <Link to={RP.studentQueries} className="nav-link">Student Queries</Link>
+
           {!scholarshipOnly && (
             <Link to="/Sponsored-Scholarship" className="nav-link">Approved Applications</Link>
           )}

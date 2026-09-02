@@ -3,10 +3,18 @@
   right: 25px;
   bottom: 70px;
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 10001;
+}
+
+/* Row holding the round icon + label — was previously the whole container */
+.chat-float-row {
+  display: flex;
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  z-index: 9999;
 }
 
 /* Round Chat Icon */
@@ -23,7 +31,7 @@
   box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
 }
 
-/* “Chat Us” Label */
+/* “Chat Us” Label — fixed width so it matches the hover menu buttons below */
 .chat-float-text {
   background: #fe8200;
   color: white;
@@ -32,12 +40,61 @@
   font-size: 16px;
   white-space: nowrap;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+  width: 190px;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 /* Hover effect */
 .chat-float-container:hover .chat-float-btn,
 .chat-float-container:hover .chat-float-text {
   background: #e66400ff;
+}
+
+/* ── Help & Support hover menu ────────────────────────────────────────
+   Appears above the floating button when .chat-float-container is
+   hovered (menu list is only rendered in JSX while hoverMenu is true). */
+.chat-float-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  animation: chatFloatMenuIn 0.15s ease-out;
+}
+
+/* Same fixed width as .chat-float-text so all three buttons line up */
+.chat-float-menu-item {
+  background: #fff;
+  border: 1.5px solid #fe8200;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  width: 190px;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.chat-float-menu-item:hover {
+  background: #fe8200;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+@keyframes chatFloatMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Floating Chat Button */
@@ -63,7 +120,7 @@
 .chat-popup {
   position: fixed;
   right: 25px;
-  bottom: 100px;
+  bottom: 150px;
   width: 320px;
   height: 420px;
   background: #fff;
@@ -135,4 +192,352 @@
 
 .chat-link:hover {
   color: #0056b3;
+}
+
+/* ── Raise a Query — full-screen overlay ──────────────────────────── */
+.raise-query-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002;
+}
+
+.raise-query-fullscreen {
+  position: static; /* override .chat-popup's fixed positioning */
+  width: 92%;
+  max-width: 680px;
+  height: 85vh;       /* fixed, not auto — keeps every view (form / tickets / thread) the same size */
+  max-height: 620px;  /* cap so it doesn't get too tall on large screens */
+  display: flex;
+  flex-direction: column;
+}
+
+.raise-query-popup {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header row now holds title + (My Tickets button + close) on the right */
+.raise-query-header {
+  gap: 10px;
+}
+
+.raise-query-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.my-tickets-btn {
+  background: #fff;
+  color: #fe8200;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.my-tickets-btn:hover {
+  background: #fff3e8;
+}
+
+.raise-query-body {
+  flex: 1;
+  min-height: 0; /* required so overflow-y:auto works inside the fixed-height flex column */
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.raise-query-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 6px;
+}
+
+.raise-query-input {
+  width: 100%;
+  height: 42px !important;
+  max-height: 42px !important;
+  min-height: 0 !important;
+  padding: 0 12px !important;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box !important;
+  flex: 0 0 42px !important; /* fixed size — never stretches in the flex column */
+  resize: none;
+}
+
+.raise-query-input:focus {
+  outline: none !important;
+  border: 1px solid #fe8200 !important;
+}
+
+.raise-query-textarea {
+  width: 100%;
+  height: 180px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.raise-query-textarea:focus {
+  outline: none !important;
+  border: 1px solid #fe8200 !important;
+}
+
+.raise-query-success {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #1a7a1a;
+  line-height: 1.5;
+}
+
+.raise-query-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid #ddd;
+}
+
+.raise-query-footer .send-btn {
+  margin-left: 0;
+  background: #fe8200;
+}
+
+.raise-query-footer .send-btn:disabled {
+  background: #f2c08f;
+  cursor: not-allowed;
+}
+
+.raise-query-footer .cancel-btn {
+  padding: 10px 14px;
+  background: #fff;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.raise-query-footer .cancel-btn:hover {
+  background: #f2f2f2;
+}
+
+/* ── Ticket Thread — chat bubble messages ─────────────────────────── */
+.ticket-thread-body {
+  gap: 12px;
+}
+
+.ticket-thread-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+}
+
+.ticket-thread-msg.from-support {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.ticket-thread-msg.from-me {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.ticket-thread-msg-sender {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 3px;
+  padding: 0 4px;
+}
+
+.ticket-thread-msg-bubble {
+  font-size: 13px;
+  padding: 9px 13px;
+  border-radius: 12px;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.ticket-thread-msg.from-support .ticket-thread-msg-bubble {
+  background: #eef0f4;
+  color: #14171f;
+  border-bottom-left-radius: 4px;
+}
+
+.ticket-thread-msg.from-me .ticket-thread-msg-bubble {
+  background: #fe8200;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.ticket-thread-msg-time {
+  font-size: 10px;
+  color: #aaa;
+  margin-top: 3px;
+  padding: 0 4px;
+}
+
+/* ── My Tickets list view ─────────────────────────────────────────── */
+.ticket-list-body {
+  gap: 12px;
+}
+
+.ticket-empty-state {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 30px 0;
+}
+
+.ticket-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.ticket-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.ticket-activity {
+  display: inline-block;
+  background: #eaf3ff;
+  color: #1a5fb4;
+  font-size: 11px;
+  font-style: italic;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.ticket-status-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.ticket-status-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ── FAQ popup ─────────────────────────────────────────────────────── */
+.faq-body {
+  gap: 0;
+}
+
+.faq-item {
+  border-bottom: 1px solid #eee;
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 12px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.faq-item.open .faq-question {
+  color: #fe8200;
+}
+
+.faq-caret {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fe8200;
+  flex-shrink: 0;
+}
+
+.faq-answer {
+  padding: 0 4px 14px;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ── Login required prompt ────────────────────────────────────────── */
+.login-alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10060; /* above everything, including the reply popup at 10050 */
+}
+
+.login-alert-box {
+  background: #fff;
+  width: 90%;
+  max-width: 340px;
+  border-radius: 12px;
+  padding: 22px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.login-alert-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.login-alert-text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+.login-alert-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.login-alert-actions .send-btn {
+  margin-left: 0;
+  background: #fe8200;
 }

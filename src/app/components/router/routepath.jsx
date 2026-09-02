@@ -43,7 +43,7 @@ addscholarshippage:"/sponsor-dashboard/addscholarshipPage",
  facultyProfile:"/faculty-profile",
  InstitutionsPage:"/Institutions-list",
 InstitutionViewPage: "/institution/view/:id",
- 
+  studentQueries: "/sponsor-dashboard/student-queries",  
  
 };
 

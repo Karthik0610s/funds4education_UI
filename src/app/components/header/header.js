@@ -764,8 +764,11 @@ const Header = ({ variant = "public" }) => {
               Sponsor Scholarship
             </div>
 
-            <div className="mobile-item" onClick={() => { navigate("/Sponsored-Scholarship"); setMenuOpen(false); }}>
+            {/*<div className="mobile-item" onClick={() => { navigate("/Sponsored-Scholarship"); setMenuOpen(false); }}>
               Approved Scholarship
+            </div>*/}
+            <div className="mobile-item" onClick={() => { navigate("/sponsor-dashboard/student-queries"); setMenuOpen(false); }}>
+              Student Queries
             </div>
           </>
         ) : (

@@ -1,0 +1,139 @@
+VIDYASETU – FREQUENTLY ASKED QUESTIONS
+
+SCHOLARSHIP FAQs
+
+1.  Which scholarships are shown under Featured Scholarships? Answer:
+    Featured Scholarships are the recently added or recently modified
+    scholarships, including scholarships with a higher scholarship
+    amount, that are currently live.
+
+2.  What is a Live Scholarship? Answer: A Live Scholarship is a
+    scholarship that is currently ongoing and open for eligible students
+    to apply.
+
+3.  What is an Upcoming Scholarship? Answer: An Upcoming Scholarship is
+    a scholarship that is scheduled to open in the future and is not
+    currently available for application.
+
+4.  What is an All Scholarship? Answer: The All Scholarships section
+    displays all the available scholarships, allowing students to browse
+    scholarships without applying eligibility filters based on their
+    profile.
+
+5.  What is an Eligible Scholarship? Answer: Eligible Scholarships are
+    scholarships that are displayed based on the educational details
+    provided by the student, such as their current course, discipline or
+    specialization, and year of study.
+
+6.  Do I need to log in to view Eligible Scholarships? Answer: Yes.
+    Students need to log in and provide their educational details to
+    view scholarships for which they are eligible.
+
+7.  Can I view scholarships without logging in? Answer: Yes. Without
+    logging in, students can browse the All Scholarships section, but
+    personalized eligibility-based scholarship recommendations are not
+    displayed.
+
+8.  How are Eligible Scholarships shown to students? Answer: After a
+    student logs in and provides their educational details, the system
+    matches those details with scholarship eligibility criteria and
+    displays the relevant eligible scholarships.
+
+9.  Why can’t I see the Eligible Scholarships option before logging in?
+    Answer: The Eligible Scholarships option is based on the student’s
+    educational information. Therefore, it is available only after the
+    student logs in and provides the required educational details.
+
+10. Can I see scholarships related to my education without logging in?
+    Answer: You can browse scholarships under All Scholarships, but
+    personalized eligibility-based results require you to log in and
+    provide your educational details.
+
+STUDENT SIGN UP – BASIC DETAILS
+
+11. How can I create a student account? Answer: Click Sign Up and
+    complete the registration process by providing your basic details,
+    educational details, and verification information.
+
+12. What basic details are required during student registration? Answer:
+    You need to provide details such as your full name, initials, email
+    address, phone number, date of birth, gender, country, and state.
+
+EDUCATION DETAILS
+
+13. What educational details do I need to provide? Answer: You need to
+    provide your current studying education details.
+
+14. Why do I need to provide my educational details?
+    Answer: Educational details are used to determine and display the 
+    scholarships that match your eligibility.
+
+15. What is Class/Course? Answer: Class/Course refers to the academic
+    program or level you are currently studying.
+
+16. What is Discipline/Specialization? Answer: Discipline/Specialization
+    refers to your specific field of study or specialization within your
+    current course.
+
+17. Why is Year of Study required? Answer: Your Year of Study helps the
+    system identify scholarships that are applicable to your current
+    academic year or level.
+
+18. How does my education determine scholarship eligibility? Answer: The
+    system compares your current educational details with the
+    eligibility criteria of available scholarships and displays matching
+    scholarships under Eligible Scholarships.
+
+HELP & SUPPORT
+
+19. How can I use Chat with AI? Answer: Hover over Help & Support and
+    select Chat with AI. You can ask questions related to scholarships
+    and receive assistance from the AI.
+
+20. What type of questions can I ask Chat with AI? Answer: Chat with AI
+    can answer scholarship-related questions, such as information about
+    available scholarships link.
+
+21. Can I ask Chat with AI about my scholarship application status?
+    Answer: No. Chat with AI is intended for scholarship-related
+    information and general doubts, not website (VidyaSetu)-related
+    queries.
+
+22. Can Chat with AI resolve a website-related issue? Answer: No. For
+    website (VidyaSetu)-related issues or concerns, use the Raise a
+    Query option.
+
+23. When should I use Raise a Query? Answer: Use Raise a Query when you
+    have a specific query or issue that requires assistance, especially
+    for website (VidyaSetu)-related concerns.
+
+24. Can I raise a scholarship application-related query? Answer:
+    No. Raise a Query is intended for website (VidyaSetu)-related
+    queries or concerns, not scholarship application-related queries.
+
+25. What is the Frequently Asked Questions section? Answer: The
+    Frequently Asked Questions (FAQ) section provides answers to
+    commonly asked questions about the scholarship platform and
+    application process.
+
+26. Where can I find answers about the application process? Answer: You
+    can check the Frequently Asked Questions section under Help &
+    Support for commonly asked questions about the application process.
+
+27. What should I do if my question is already answered in the FAQ?
+    Answer: Check the FAQ section first to find an answer to your
+    question. If your question is not covered, use Chat with AI for
+    scholarship-related questions or Raise a Query for website
+    (VidyaSetu)-related concerns.
+
+HELP & SUPPORT – QUICK GUIDE
+
+Chat with AI - Use for scholarship-related doubts and general
+scholarship information. - Example: “What scholarships are available for
+graduates?” - Do not use it for website (VidyaSetu)-related issues.
+
+Raise a Query - Use for website (VidyaSetu)-related queries or
+concerns. - Do not use it for scholarship application-related queries.
+
+Frequently Asked Questions - Use it to find answers to commonly asked
+questions about the scholarship platform and application process.

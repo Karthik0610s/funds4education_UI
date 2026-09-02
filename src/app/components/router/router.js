@@ -22,6 +22,7 @@ import MessagesPage from "../../../pages/student/message.jsx";
 import MonetizationAds from "../../../pages/MonetizationAds/MonetizationAds";
 import SponsorAdDashboard from "../../../pages/SponsorAdDashboard/SponsorAdDashboard";
 import SponsorApplications from "../../../pages/SponsorDashboard/SponsorApplications";
+import QueryAdminList from "../../../pages/SponsorDashboard/QuerryAdminList.jsx";
 import ScholarshipPage from "../../../pages/SponsorDashboard/SponsorScholarship/ScholarshipPage.jsx";
 import AddScholarshipPage from "../../../pages/SponsorDashboard/SponsorScholarship/AddScholarshipPage.jsx"
 import ApplicationsPage from "../../../pages/student/scholarshipapplication/studentApplication.jsx";
@@ -76,6 +77,7 @@ const routeToVariant = {
   [RP.applications]: "student-profile",
   [RP.addapplication]: "student-profile",
   [RP.sponsorapplication]:"sponsorapplication",
+  [RP.studentQueries]:"sponsorapplication",
   [RP.SponsorSignUpPage]:"sponsorsignup",
   [RP.scholarshipPage]:"scholarshippage",
  [RP.scholarshipViewPage]: "student-profile",
@@ -92,23 +94,21 @@ const routeToVariant = {
 
 // 🔹 Layout wrapper
 function Layout({ children }) {
-  
+
   const location = useLocation();
 
-  // get token + expiry from localStorage
-  const token = localStorage.getItem("token");
-  const expiry = localStorage.getItem("expiresAt");
-
-  // Condition: hide chat if NO token or NO expiry or homepage
+  // ⭐ CHANGED: ChatWidget now stays mounted for logged-out users too.
+  // We only hide it on pages where it makes no sense to show it (home,
+  // login, signup screens). We no longer key this off token/expiry —
+  // the widget's own FAQ button must work without login, and
+  // ChatWidget already prompts for login internally when someone taps
+  // "Chat with AI" or "Raise a Query" while logged out.
   const hideChat =
     location.pathname === "/" ||
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
     location.pathname === "/sponsor/signup" ||
-    location.pathname === "/institution/signup" ||
-    !token ||
-    !expiry;
-
+    location.pathname === "/institution/signup";
 
   const variant = routeToVariant[location.pathname] || "public";
 
@@ -116,7 +116,8 @@ function Layout({ children }) {
     <>
       <Header variant={variant} />
 
-      {/* ⭐ Hide ChatWidget based on your conditions */}
+      {/* ⭐ Hide ChatWidget only on the pages listed above — otherwise
+          show it regardless of login state, so FAQ is always reachable */}
       {!hideChat && <ChatWidget />}
 
       <main>{children}</main>
@@ -152,6 +153,7 @@ function App() {
           <Route path={RP.sponsoraddashboard} element={<SponsorAdDashboard />} />
           <Route path={RP.sponsorapplication} element={<SponsorApplications />} />
           <Route path={RP.scholarshipPage} element={<ScholarshipPage />} />
+          <Route path={RP.studentQueries} element={<QueryAdminList />} />
           <Route path={RP.applications} element={<ApplicationsPage />} />
           <Route path={RP.addapplication} element={<AddApplicationPage />} />
           <Route path={RP.settings} element={<SponsorSettings />} />

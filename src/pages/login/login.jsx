@@ -15,6 +15,14 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, clearError } from "../../app/redux/slices/authSlice";
 
+// ⭐ Display labels for the user-type radio buttons. Keys are the actual
+// values sent to the backend / stored in state — only the label shown
+// to the user changes ("sponsor" now displays as "Admin").
+const USER_TYPE_LABELS = {
+  student: "Student",
+  sponsor: "Admin",
+};
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [identifier, setIdentifier] = useState("");
@@ -231,7 +239,9 @@ export default function LoginPage() {
                   }}
 
                 />
-                <span>{type.charAt(0).toUpperCase() + type.slice(1)}</span>
+                {/* ⭐ Show the mapped label ("Admin" for sponsor) while the
+                    radio's value stays "sponsor" */}
+                <span>{USER_TYPE_LABELS[type]}</span>
               </label>
             ))}
             <p className="error">{errors.userType || " "}</p>
