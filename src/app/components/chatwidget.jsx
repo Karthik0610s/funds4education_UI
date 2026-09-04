@@ -420,7 +420,7 @@ const ChatWidget = () => {
       };
 
       const res = await publicAxios.post(ApiKey.InsertChat, payload);
-
+debugger;
       // 🌟 API RETURNS { answer: "...message..." }
       const answer = res.data.answer;
 
@@ -635,33 +635,39 @@ const ChatWidget = () => {
                         <span>{scholarships.message}</span>
 
                         {/* Show table only if matches */}
-                        {scholarships.hasMatches && (
-                          <table className="chat-table">
-                            <thead>
-                              <tr>
-                                <th>S.No</th>
-                                <th>Scholarship</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {scholarships.scholarships.map((s, i) => (
-                                <tr key={i}>
-                                  <td>{i + 1}</td>
-                                  <td
-                                    className="chat-link"
-                                    onClick={() =>
-                                      navigate(
-                                        `${RP.scholarshipViewPage}?id=${s.scholarshipId}`
-                                      )
-                                    }
-                                  >
-                                    {s.name}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        )}
+                   {scholarships.hasMatches && (
+  <table className="chat-table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Scholarship</th>
+      </tr>
+    </thead>
+    <tbody>
+      {scholarships.scholarships.map((s, i) => (
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td
+            className="chat-link"
+            onClick={() => {
+              setShowChat(false); // 👉 close the chat popup first
+              navigate(
+                RP.scholarshipViewPage.replace(":id", "view"),
+                {
+                  state: {
+                    id: s.id || s.scholarshipId,
+                  },
+                }
+              );
+            }}
+          >
+            {s.name}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
                       </>
                     ) : (
                       <span>{msg.text}</span>
@@ -775,7 +781,7 @@ const ChatWidget = () => {
             <div className="chat-header raise-query-header">
               <span>
                 {raiseQueryView === "tickets"
-                  ? "My Tickets"
+                  ? "My Queries"
                   : raiseQueryView === "thread"
                   ? activeTicket
                     ? `Query #${activeTicket.ticketId} — ${activeTicket.subject}`
@@ -805,7 +811,7 @@ const ChatWidget = () => {
                     className="my-tickets-btn"
                     onClick={openMyTickets}
                   >
-                    My Tickets
+                    My Queries
                   </button>
                 )}
                 <button
