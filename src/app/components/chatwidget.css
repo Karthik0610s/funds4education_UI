@@ -450,6 +450,35 @@
   color: #333;
 }
 
+/* ── FAQ SEARCH INPUT ──────────────────────────────────────────────── */
+.faq-search-container {
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.faq-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #333;
+  background: white;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.faq-search-input:focus {
+  outline: none;
+  border-color: #fe8200;
+  box-shadow: 0 0 0 3px rgba(254, 130, 0, 0.1);
+}
+
+.faq-search-input::placeholder {
+  color: #999;
+}
+
 /* ── FAQ popup ─────────────────────────────────────────────────────── */
 .faq-body {
   gap: 0;

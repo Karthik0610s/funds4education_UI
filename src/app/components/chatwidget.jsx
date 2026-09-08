@@ -83,6 +83,7 @@ const ChatWidget = () => {
   const [faqData, setFaqData] = useState([]);
   const [faqLoading, setFaqLoading] = useState(false);
   const [faqError, setFaqError] = useState(null);
+  const [faqSearchQuery, setFaqSearchQuery] = useState("");
 
   // 👉 Login-required prompt state (shown instead of Chat AI / Raise Query
   // when the person isn't logged in)
@@ -162,6 +163,11 @@ const ChatWidget = () => {
   const goToLogin = () => {
     setShowLoginAlert(false);
     navigate(RP.login);
+  };
+
+  const goToSignup = () => {
+    setShowLoginAlert(false);
+    navigate(RP.signup);
   };
 
   // 👉 OPEN CHAT → CHECK SESSION OR CREATE NEW
@@ -251,6 +257,18 @@ const ChatWidget = () => {
 
   const toggleFaq = (idx) => {
     setOpenFaqIndex((prev) => (prev === idx ? null : idx));
+  };
+
+  // 👉 Filter FAQs based on search query
+  const getFilteredFaqs = () => {
+    if (!faqSearchQuery.trim()) return faqData;
+    
+    const query = faqSearchQuery.toLowerCase();
+    return faqData.filter(
+      (item) =>
+        item.q.toLowerCase().includes(query) ||
+        item.a.toLowerCase().includes(query)
+    );
   };
 
   // 👉 MY TICKETS → switch the same card to a ticket-list view
@@ -546,7 +564,7 @@ debugger;
               className="chat-float-menu-item"
               onClick={handleOpenFAQ}
             >
-              ❓ FAQ
+              ❓ FAQs
             </button>
           </div>
         )}
@@ -570,10 +588,12 @@ debugger;
             className="login-alert-box"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="login-alert-title">Please log in</div>
+            <div className="login-alert-title">Please login / Sign up</div>
             <p className="login-alert-text">
-              You need to be logged in to use this feature. Log in to
-              continue.
+              
+             
+             Already have an account? Log in. 
+             New here? Sign up to access this feature.
             </p>
             <div className="login-alert-actions">
               <button
@@ -582,6 +602,14 @@ debugger;
                 onClick={() => setShowLoginAlert(false)}
               >
                 Cancel
+              </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                style={{ borderColor: "#fe8200", color: "#fe8200" }}
+                onClick={goToSignup}
+              >
+                Sign Up
               </button>
               <button
                 type="button"
@@ -709,7 +737,10 @@ debugger;
       {showFAQ && (
         <div
           className="raise-query-overlay"
-          onClick={() => setShowFAQ(false)}
+          onClick={() => {
+            setShowFAQ(false);
+            setFaqSearchQuery("");
+          }}
         >
           <div
             className="chat-popup raise-query-popup raise-query-fullscreen"
@@ -719,10 +750,24 @@ debugger;
               <span>Frequently Asked Questions</span>
               <button
                 className="close-chat"
-                onClick={() => setShowFAQ(false)}
+                onClick={() => {
+                  setShowFAQ(false);
+                  setFaqSearchQuery("");
+                }}
               >
                 ✕
               </button>
+            </div>
+
+            {/* FAQ SEARCH INPUT */}
+            <div className="faq-search-container">
+              <input
+                type="text"
+                className="faq-search-input"
+                placeholder="Search FAQs..."
+                value={faqSearchQuery}
+                onChange={(e) => setFaqSearchQuery(e.target.value)}
+              />
             </div>
 
             <div className="raise-query-body faq-body">
@@ -740,9 +785,15 @@ debugger;
                 </div>
               )}
 
+              {!faqLoading && !faqError && faqData.length > 0 && getFilteredFaqs().length === 0 && (
+                <div className="ticket-empty-state">
+                  No FAQs match your search.
+                </div>
+              )}
+
               {!faqLoading &&
                 !faqError &&
-                faqData.map((item, idx) => {
+                getFilteredFaqs().map((item, idx) => {
                   const isOpen = openFaqIndex === idx;
                   return (
                     <div
