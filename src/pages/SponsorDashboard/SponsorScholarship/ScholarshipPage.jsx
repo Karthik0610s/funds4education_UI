@@ -185,9 +185,9 @@ const sliceLen = useResponsiveSlice();
 
           <div className="container">
             <div className="scholarship-page mt-5">
-              <h2 className="page-title mt-5">My Sponsored Scholarships</h2>
+              <h2 className="page-title mt-5">Scholarships</h2>
               <p className="page-subtitle">
-                Manage your scholarships and filter them by status or title.
+                Manage scholarships and filter them by status or title.
               </p>
 
               {/* SEARCH & FILTER */}

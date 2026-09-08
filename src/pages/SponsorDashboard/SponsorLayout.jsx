@@ -46,7 +46,7 @@ const SponsorLayout = ({ children, name, handleLogout, scholarshipOnly = false }
           </Link> */}
 
           <Link to="/sponsor-dashboard/scholarshipPage" className="sponsor-drawer-item">
-            Sponsored Scholarship
+             Scholarships
           </Link>
 
           {/* <Link to="/Sponsored-Scholarship" className="sponsor-drawer-item">
@@ -79,7 +79,7 @@ const SponsorLayout = ({ children, name, handleLogout, scholarshipOnly = false }
               <Link to="/sponsor-dashboard/sponsorapplication" className="nav-link">Applications</Link>
             </>
           )}
-          <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Sponsored Scholarship</Link>
+          <Link to="/sponsor-dashboard/scholarshipPage" className="nav-link">Scholarships</Link>
           <Link to={RP.studentQueries} className="nav-link">Student Queries</Link>
 
           {!scholarshipOnly && (
