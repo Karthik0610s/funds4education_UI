@@ -823,7 +823,7 @@ const Header = ({ variant = "public" }) => {
               onClick={() => {
                 if (isLoggedIn) {
                   if (roleName === "Student") navigate("/student-dashboard");
-                  else if (roleName === "Sponsor") navigate("/sponsor-dashboard");
+                  else if (roleName === "Sponsor") navigate("/sponsor-dashboard/scholarshipPage");
                   else if (roleName === "Faculty") navigate("/facultydashboard");
                 } else {
                   navigate("/");
@@ -911,7 +911,7 @@ const Header = ({ variant = "public" }) => {
           ) : isLoggedIn && roleName === "Sponsor" ? (
             <div className="left-section" style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <div
-                onClick={() => navigate("/sponsor-dashboard")}
+                onClick={() => navigate("/sponsor-dashboard/scholarshipPage")}
                 style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
               >
                 <img src={logo} alt="Vidyasetu" className="logo" />

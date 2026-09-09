@@ -174,7 +174,7 @@ export default function LoginPage() {
       .then((res) => {
         const roleId = res.roleId;
         if (roleId === 1) navigate("/student-dashboard");
-        else if (roleId === 2) navigate("/sponsor-dashboard");
+        else if (roleId === 2) navigate("/sponsor-dashboard/scholarshipPage");
         else if (roleId === 4) navigate("/institution-dashboard");
         else if (roleId === 5) navigate("/facultydashboard");
       })
