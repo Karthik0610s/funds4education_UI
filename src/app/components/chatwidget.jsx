@@ -46,7 +46,7 @@ const ChatWidget = () => {
   const [showChat, setShowChat] = useState(false);
   const [hoverMenu, setHoverMenu] = useState(false);
   const [messages, setMessages] = useState([
-    { sender: "agent", text: "Hi! Search your Scholarship" },
+    { sender: "agent", text: "Hi! 👋 I can help you find relevant scholarship opportunities." },
   ]);
   const [input, setInput] = useState("");
   const hasClosedRef = useRef(false);
