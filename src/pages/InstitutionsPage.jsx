@@ -15,6 +15,24 @@ import {
   fetchCollege,
   fetchManagements,
 } from "../app/redux/slices/InstitutionlistSlice";
+
+// ─────────────────────────────────────────────────────────────
+// 🔹 Persistence helpers: keep search/filters/page alive across
+//    navigating to an institution's detail page and back.
+//    sessionStorage clears when the tab closes, but survives a
+//    "View Details" → back-button round trip.
+// ─────────────────────────────────────────────────────────────
+const STORAGE_KEY = "institutionsPageFilters";
+
+const loadSavedState = () => {
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+};
+
 export default function InstitutionsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,8 +53,12 @@ export default function InstitutionsPage() {
 const [showFilter, setShowFilter] = useState(false);
  // const [search, setSearch] = useState("");
  // const [currentPage, setCurrentPage] = useState(1);
-const [search, setSearch] = useState("");
-const [currentPage, setCurrentPage] = useState(1);
+const [search, setSearch] = useState(
+  () => loadSavedState()?.search || ""
+);
+const [currentPage, setCurrentPage] = useState(
+  () => loadSavedState()?.currentPage || 1
+);
 //const [hover, setHover] = React.useState(false);
 const [hoveredId, setHoveredId] = React.useState(null);
   // 1️⃣ MOBILE OVERLAY STATE
@@ -51,13 +73,18 @@ const [hoveredId, setHoveredId] = React.useState(null);
     management: "",
   });
   */}
-const [filters, setFilters] = useState({
-  state: "",
-  district: "",
-  location: "",
-  college: "",
-  collegeType: "",
-  management: "",
+const [filters, setFilters] = useState(() => {
+  const saved = loadSavedState();
+  return (
+    saved?.filters || {
+      state: "",
+      district: "",
+      location: "",
+      college: "",
+      collegeType: "",
+      management: "",
+    }
+  );
 });
   const ITEMS_PER_PAGE = 5;
 const prevSearchRef = useRef(search);
@@ -114,6 +141,20 @@ useEffect(() => {
     setCurrentPage(1);
   }, [search, filters]);
 */}
+
+// ─────────────────────────────────────────────────────────────
+// 🔹 Persist search / filters / currentPage to sessionStorage any
+//    time they change, so a "View Details" navigation + back
+//    button restores them exactly.
+// ─────────────────────────────────────────────────────────────
+useEffect(() => {
+  const stateToSave = { search, filters, currentPage };
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  } catch {
+    // sessionStorage unavailable (e.g. private browsing) — fail silently
+  }
+}, [search, filters, currentPage]);
 
   /* ===== HANDLERS ===== */
   const handleFilterChange = (e) => {

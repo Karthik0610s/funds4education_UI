@@ -16,13 +16,36 @@ import { routePath as RP } from "../../app/components/router/routepath";
 import { publicAxios } from "../../api/config";
 import { FaSearch, FaBars, FaFilter } from "react-icons/fa";
 import GoogleAd from "../googleads";
+
+// ─────────────────────────────────────────────────────────────
+// 🔹 Persistence helpers: keep filters/search/tabs/pages alive
+//    across navigating to a scholarship's detail page and back.
+//    sessionStorage is used so it clears when the tab is closed,
+//    but survives a "View Details" → back-button round trip.
+// ─────────────────────────────────────────────────────────────
+const STORAGE_KEY = "studentDashboardFilters";
+
+const loadSavedState = () => {
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch {
+    return null;
+  }
+};
+
 const StudentDashboard = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
  // const [eligibilityTab, setEligibilityTab] = useState("all"); // default
-const [activeTab, setActiveTab] = useState("live");
 
-const [eligibilityTab, setEligibilityTab] = useState("all");
+const [activeTab, setActiveTab] = useState(
+  () => loadSavedState()?.activeTab || "live"
+);
+
+const [eligibilityTab, setEligibilityTab] = useState(
+  () => loadSavedState()?.eligibilityTab || "all"
+);
 
   //const [activeTab, setActiveTab] = useState("live"); // default
 //const userId = localStorage.getItem("userId");
@@ -58,10 +81,13 @@ const [currentPage, setCurrentPage] = useState(
 ); */
 
 const [pages, setPages] = useState(() => {
-  return {
-    all: { live: 1, upcoming: 1 },
-    eligibility: { live: 1, upcoming: 1 }, // default
-  };
+  const saved = loadSavedState();
+  return (
+    saved?.pages || {
+      all: { live: 1, upcoming: 1 },
+      eligibility: { live: 1, upcoming: 1 }, // default
+    }
+  );
 });
 
 
@@ -81,15 +107,22 @@ const changePage = (newPage) => {
 
 
 
-const [searchQuery, setSearchQuery] = useState("");
+const [searchQuery, setSearchQuery] = useState(
+  () => loadSavedState()?.searchQuery || ""
+);
 
-const [filters, setFilters] = useState({
-  class: [],
-  country: [],
-  gender: [],
-  religion: [],
-  state: [],
-  course: [],
+const [filters, setFilters] = useState(() => {
+  const saved = loadSavedState();
+  return (
+    saved?.filters || {
+      class: [],
+      country: [],
+      gender: [],
+      religion: [],
+      state: [],
+      course: [],
+    }
+  );
 });
 const prevFiltersRef = useRef(filters);
 const prevSearchRef = useRef(searchQuery);
@@ -215,6 +248,26 @@ useEffect(() => {
   activeTab,
 ]);
 
+// ─────────────────────────────────────────────────────────────
+// 🔹 Persist activeTab / eligibilityTab / searchQuery / filters /
+//    pages to sessionStorage any time they change, so a "View
+//    Details" navigation + back button restores them exactly.
+// ─────────────────────────────────────────────────────────────
+useEffect(() => {
+  const stateToSave = {
+    activeTab,
+    eligibilityTab,
+    searchQuery,
+    filters,
+    pages,
+  };
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  } catch {
+    // sessionStorage unavailable (e.g. private browsing) — fail silently
+  }
+}, [activeTab, eligibilityTab, searchQuery, filters, pages]);
+
 
 
   // 🔹 Scholarships reload when filters change
@@ -274,6 +327,11 @@ useEffect(() => {
 
   const handleLogout = () => {
     dispatch(logout());
+    try {
+      sessionStorage.removeItem(STORAGE_KEY); // 👈 clear saved filters on logout
+    } catch {
+      // ignore
+    }
     Swal.fire({
       icon: "success",
       title: "Logout Successful",
